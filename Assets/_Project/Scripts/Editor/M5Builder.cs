@@ -17,7 +17,7 @@ namespace NisitSimulator.EditorTools
     // ใช้: เมนู  Nisit -> Build M5 Gameplay   (ทำหลัง M1 + M3 + Make It Pretty)
     public static class M5Builder
     {
-        const string FontSdf = "Assets/_Project/Art/Fonts/LeelawadeeUI SDF.asset";
+        const string FontSdf = "Assets/_Project/Art/Fonts/Mitr SDF.asset";
         const string MatDir = "Assets/_Project/Art/Materials/";
         static TMP_FontAsset thai;
         static Sprite uiSprite;

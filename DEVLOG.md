@@ -57,6 +57,168 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - Save/Load: GameSession + SaveManager + GameplayBootstrap (ออโต้เซฟทุกวัน, ลบเซฟเมื่อจบเกม)
 - พื้นหลังเมนู 3D: กล้องหมุนรอบมหาลัย + ตัวละครยืนไอเดิล
 
+### เมนูหลัก — ยกเครื่องงานภาพ (2026-07-24)
+- **MenuPolish** (Nisit → Polish Menu Layout): การ์ดกลางจอมุมโค้ง+เงา+vignette, หัวเรื่องไล่สีทอง+เงา+เส้นคั่น, ปุ่มไล่สีมีมิติ+เรืองแสงตามสี+hover ยกตัว, footer
+- **พื้นหลังเลือกได้ 3 แบบ** (คำสั่งแยก):
+  - `Epic Menu Background` — 2D เจนทีละพิกเซล: พระอาทิตย์ตก + aurora + lens flare + ดาวตก + เมฆ + เงาเมือง/ภูเขา + หิ่งห้อย (กดซ้ำ = สุ่มใหม่)
+  - `Day Campus Background` — 2D เจน: ฟ้ากลางวัน + เมฆก้อนฟู + ตึกโรงเรียน + ต้นไม้ + สนามหญ้า
+  - `Use 3D Background` / `Menu Background (3D)` — ฉาก 3D จริง กล้องหมุนรอบ
+- **ฉาก 3D ใช้โมเดล KayKit จริง**: ต้นไม้ Forest (Tree/Bush/Rock สุ่มแบบ), ตึก City 9 หลัง + หอเก็บน้ำ, ถนนกากบาท + เสาไฟ + รถ, NPC เดิน 3 ตัว
+  - ถนน **วัดขนาดกระเบื้องจริงจาก Renderer bounds** แล้ววางต่อกัน → ไม่ขาด/ทับ ทุกสเกล
+  - ปรับขนาดง่ายด้วยค่าคงที่บนสุดไฟล์: `TreeScale` / `BuildingScale` / `RoadScaleMul` / `DecoScale`
+- **Runtime ใหม่** (ใช้ในเกมจริงได้): `MenuParallax` (เลื่อนเลเยอร์ตามเมาส์), `UIButtonHover` (ยกตัว+เรืองแสง), `MenuNPCWalker` (NPC เดินตาม waypoint + อนิเมชัน Speed)
+- ภาพ/รูปทรง UI เจนเองเป็น PNG (มุมโค้ง 9-slice, vignette, glow, ปุ่ม gradient) เก็บที่ `Art/UI/`
+- บทเรียน: เขียนไฟล์ PNG ใน Editor ต้องใช้ **absolute path** (`Application.dataPath`) ไม่งั้นไฟล์หลงที่; ระวัง **CS0136** ตั้งชื่อ local ซ้ำ (เคสตัวแปร `path`)
+
+### Phase B — ระบบสอบ + ฤดูกาล/เดือน (2026-07-24)
+- **ระบบสอบ** ([Systems/ExamController.cs](Assets/_Project/Scripts/Systems/ExamController.cs) + [Editor/M6ExamBuilder.cs](Assets/_Project/Scripts/Editor/M6ExamBuilder.cs))
+  - Quiz ป็อปอัป 4 ตัวเลือก (คลังข้อสอบ 12 ข้อ เรื่องการเรียน/วิชาการ)
+  - คะแนน = ตอบถูก 60% + ความพร้อม (ความรู้สะสม ÷ เป้าปี) 40% → เกรด A-F + **GPA สะสม**
+  - เกรดดี = ได้ความรู้/EXP/ความพอใจ/ทุนการศึกษา (A=100฿), เกรดตก = หักความพอใจ
+  - หยุดเวลา + ล็อกเดิน + โชว์เมาส์ ระหว่างสอบ · ปลายภาคคูณรางวัล ×1.5
+- **ระบบฤดูกาล + เดือน** ([Systems/AcademicCalendar.cs](Assets/_Project/Scripts/Systems/AcademicCalendar.cs) · [Systems/SeasonManager.cs](Assets/_Project/Scripts/Systems/SeasonManager.cs) · [Editor/M7SeasonBuilder.cs](Assets/_Project/Scripts/Editor/M7SeasonBuilder.cs))
+  - **ปีละ 12 วัน = 12 เดือน** (มิ.ย.→พ.ค. ตามปีการศึกษาไทย, 1 วัน = 1 เดือน)
+  - 3 ภาคเรียน/ฤดู: ภาคต้น(ฝน) 5 + ภาคปลาย(หนาว) 5 + ภาคฤดูร้อน(ร้อน) 2
+  - โทนสีจอเปลี่ยนตามฤดู (overlay ใต้ HUD) + ป้ายบอกเดือน/ภาค/ฤดู + Toast ตอนเปลี่ยนภาค
+  - `AcademicCalendar` เป็นศูนย์กลาง: แก้ `TermDays` ที่เดียว เดือน/ฤดู/วันสอบขยับตามอัตโนมัติ
+- **ตารางสอบ 5 ครั้ง/ปี**: วันที่ 3,5 (ต้น) · 8,10 (ปลาย) · 12 (ฤดูร้อน — ปลายภาคอย่างเดียว)
+- ปรับ [ProgressionManager](Assets/_Project/Scripts/Systems/ProgressionManager.cs): `daysPerYear` 3→12, เป้าความรู้ 180/420/720/1080
+- บทเรียน: ค่าที่ serialize บน component ในซีน **ทับ** ค่า default ในโค้ด → ต้องตั้งผ่าน Editor tool (`EditorUtility.SetDirty` + save scene)
+
+### Phase B — ภารกิจ + เหตุการณ์ + งาน + แอคชันจริง (2026-07-24)
+- **ระบบภารกิจรายวัน** ([Systems/QuestSystem.cs](Assets/_Project/Scripts/Systems/QuestSystem.cs) · [Editor/M8QuestBuilder.cs](Assets/_Project/Scripts/Editor/M8QuestBuilder.cs))
+  - สุ่ม 3/วันจากคลัง 11 แบบ (เรียน/การเงิน/ดูแลตัวเอง) · ติดตามจากค่าสถานะอัตโนมัติ · รีเซ็ตทุกวัน · รางวัลเงิน/EXP/พอใจ
+- **ระบบสุ่มเหตุการณ์** ([Systems/EventManager.cs](Assets/_Project/Scripts/Systems/EventManager.cs) · [Editor/M9EventBuilder.cs](Assets/_Project/Scripts/Editor/M9EventBuilder.cs))
+  - เช้าวันใหม่ ~55% (เว้นวันสอบ) · คลัง 10 เหตุการณ์ · มีทั้งเลือกทาง 2 ทาง + ผลทันที
+- **แอคชันตัวละครจริง** ([Player/PlayerActionController.cs](Assets/_Project/Scripts/Player/PlayerActionController.cs))
+  - เข้าเรียน/ทำกิจกรรม = ตัวละคร**นั่งทำจริง**ก่อนได้ผล (ไม่ใช่เด้งตัวเลขทันที) · รองรับเสียบคลิป Mixamo ใหม่ (ส่งชื่อ animBool)
+- **สอบเป็นกิจกรรมจริงในโลก** ([Interaction/ExamStation.cs](Assets/_Project/Scripts/Interaction/ExamStation.cs))
+  - วันสอบต้องเดินไป **ExamDesk** กด E → ตัวละครนั่งลง → quiz โผล่ตอนนั่ง → ลุกเมื่อเสร็จ (ไม่ auto-pop) · ไม่ไป = พลาดสอบ
+- **งานพาร์ทไทม์** ([Interaction/WorkStation.cs](Assets/_Project/Scripts/Interaction/WorkStation.cs) · [Editor/M10JobBuilder.cs](Assets/_Project/Scripts/Editor/M10JobBuilder.cs))
+  - 2 งาน: ร้านกาแฟ (+60฿ แต่เปลืองแรง) / ผู้ช่วยห้องสมุด (+45฿ +ความรู้) · จำกัด 2 กะ/วัน · ทำงานจริงก่อนได้ค่าจ้าง
+- **งานภาพ/แอนิเมชัน** ([UI/UIPopupAnim.cs](Assets/_Project/Scripts/UI/UIPopupAnim.cs) · [Systems/WeatherOverlay.cs](Assets/_Project/Scripts/Systems/WeatherOverlay.cs))
+  - ป็อปอัปสอบ/เหตุการณ์ **เด้งเข้า** (scale+fade, ใช้ unscaledTime) · เกรดเด้งโชว์
+  - **ฝน/ละอองหนาว/ละอองแดด** ตกจริงตามฤดู + โทนสีค่อย ๆ ไล่เปลี่ยน (fade)
+- แพทเทิร์นกลาง **"เดินไปทำจริง"**: PlayerActionController.Perform/BeginHold–EndHold → ใช้ซ้ำกับสอบ/งาน/กิจกรรม
+
+**ข้อจำกัดที่รู้อยู่ (ต้องเก็บต่อ):**
+- ท่าทำกิจกรรมยังเป็น **"นั่ง" เหมือนกันหมด** (เรียน/ทำงาน/กิน) เพราะมีแค่คลิป เดิน/วิ่ง/นั่ง — ต้องโหลดท่าเฉพาะจาก Mixamo (อ่าน/กิน/ชงกาแฟ)
+- **สุ่มเหตุการณ์ยังเป็นป็อปอัป** เลือกแล้วบวก/ลบค่า — ยังไม่เดินไปทำในโลกจริง (เช่น เลือก "ไปนอน" ยังไม่เดินไปหอ)
+- ระบบที่ "จริงในโลก" แล้ว = เดิน/เข้าเรียน/สอบ/ทำงาน/กิจกรรม (เดินไป + ลงมือทำ)
+
+### Phase B — ระบบคณะ (data-driven) + ผูกอาคารจริง + หน้าสรุป (2026-07-24)
+- **ระบบคณะแบบ data-driven** ([Systems/FacultyCatalog.cs](Assets/_Project/Scripts/Systems/FacultyCatalog.cs))
+  - 4 คณะ: IT / บริหารธุรกิจ / วิทยาศาสตร์ / นิเทศศาสตร์ · ข้อสอบ = ข้อทั่วไป + ข้อเฉพาะคณะ
+  - คณะเก็บเป็น **ค่าต่อผู้เล่น** (`GameSession.SelectedFacultyIndex`) → ออกแบบเผื่อ multiplayer (เพื่อนเลือกคณะเองได้)
+- **หน้าเลือกคณะในเมนู** ([Editor/M11FacultyBuilder.cs](Assets/_Project/Scripts/Editor/M11FacultyBuilder.cs) + แก้ MainMenuController)
+  - กด New Game → เลือกคณะ → เข้าเกม · ExamController ดึงข้อสอบตามคณะที่เลือก
+- **ผูกสอบ/งานกับอาคารจริงในฉาก** ([Editor/M10JobBuilder.cs](Assets/_Project/Scripts/Editor/M10JobBuilder.cs) → "Place Exam & Jobs at Buildings")
+  - จุดโต้ตอบล่องหนหน้าประตูอาคารเดิม: สอบ→อาคารเรียน, งานกาแฟ→โรงอาหาร, งานห้องสมุด→ห้องสมุด (อ่านตำแหน่งจาก Door_*)
+- **ข้อสอบ IT** เพิ่มในคลัง (บิต/ไบต์, HTML, RAM, SQL, Queue, ภาษาโปรแกรม ฯลฯ)
+- **หน้าสรุปจบเกม** ([UI/EndScreenController.cs](Assets/_Project/Scripts/UI/EndScreenController.cs)) โชว์ คณะ / ชั้นปี / GPA / คะแนนรวม
+- แก้บั๊ก: แผงภารกิจย้ายไปมุมซ้าย (ไม่ทับ HUD ขวา)
+
+**สถานะระบบคณะ:** เลือกคณะ + ข้อสอบแยกคณะ = ทำงานจริง · แต่**มีตึกคณะเดียว (IT)** — คณะอื่นยังไม่มีตึก (สอบที่อาคารเรียนรวม) · เพิ่มตึก 4 คณะ = เฟสถัดไป (ถ้าทำ multiplayer)
+
+### Event → ลงมือทำในโลก + แผนคลิปท่า Mixamo (2026-07-24)
+- **เหตุการณ์สุ่มทำแบบกิจกรรมแล้ว** ([Systems/EventManager.cs](Assets/_Project/Scripts/Systems/EventManager.cs)): เลือกในป็อปอัป → ตัวละครทำท่า (Perform ~1.8 วิ) → ค่อยได้ผล (เหมือน ActivityStation ไม่ใช่บวกเลขทันที)
+- **แผนคลิปท่า Mixamo** (ทำให้สมจริง — ต้องโหลดเพิ่ม, retarget Humanoid เป็น Ch29):
+  - เรียน/สอบ/ห้องสมุด → "Reading" (param `Reading`)
+  - โรงอาหาร/กิน → "Eating" (`Eating`) · หอพัก/นอน → "Sleeping" (`Sleeping`) · งานกาแฟ → "Typing" (`Working`)
+  - เสริม: "Cheering" (จบ/เกรดดี), "Sick" (event ป่วย)
+  - โค้ดรองรับแล้ว: `PlayerActionController.Perform(dur, onDone, "<param>")` — ไม่มี param จะ fallback เป็นนั่ง
+  - ขั้นตอน: Mixamo (FBX, Without Skin, In Place) → Rig=Humanoid, Copy From Ch29 Avatar → เพิ่ม state+bool param → บอกให้ผูก station
+
+### สอบแยกตามคณะ "ตึกใครตึกมัน" (2026-07-24)
+- **ExamStation มี `facultyIndex`** ([Interaction/ExamStation.cs](Assets/_Project/Scripts/Interaction/ExamStation.cs)): สอบได้เฉพาะคณะที่เรียน (คณะอื่น → "ไม่ใช่คณะคุณ")
+- **จุดสอบ 4 คณะ ที่ตึกจริง** ([Editor/M10JobBuilder.cs](Assets/_Project/Scripts/Editor/M10JobBuilder.cs)) — ใช้ตึกที่มีอยู่ (ไม่วางตึกใหม่ให้เสี่ยงทับ):
+  - IT → คณะ IT · บริหาร → อาคารบริหาร · วิทย์ → อาคารเรียน · นิเทศ → อาคารชมรม
+- เล่น: เลือกคณะ → ไปสอบที่ตึกคณะตัวเอง → ข้อสอบตรงคณะ · ไปตึกคณะอื่นสอบไม่ได้
+- ต่อยอด: ถ้าอยากได้ตึกชื่อคณะจริง 4 หลัง + ป้ายชื่อ ค่อยเพิ่ม (ตอนนี้ reuse ตึกเดิม 8 หลัง)
+
+### Phase C — QoL + ยกเครื่อง UI/UX + จูนระบบ (2026-08-04)
+- **ฟีเจอร์ตาม storyboard PDF ที่ขาด**:
+  - **กระโดด (Space)** ([Player/PlayerMovement.cs](Assets/_Project/Scripts/Player/PlayerMovement.cs))
+  - **โทรศัพท์ (TAB)** ([UI/PhoneController.cs](Assets/_Project/Scripts/UI/PhoneController.cs) · [Editor/M12PhoneBuilder.cs](Assets/_Project/Scripts/Editor/M12PhoneBuilder.cs))
+  - **Minimap (กด M เปิด/ปิด)** ([UI/MinimapFollow.cs](Assets/_Project/Scripts/UI/MinimapFollow.cs) · [UI/MinimapToggle.cs](Assets/_Project/Scripts/UI/MinimapToggle.cs) · [Editor/M13MinimapBuilder.cs](Assets/_Project/Scripts/Editor/M13MinimapBuilder.cs)) — กล้อง top-down ตามตัว + หมุนตามกล้องหลัก (ทิศตรงกับฉาก)
+- **โทรศัพท์เป็นแอปจริง**: หน้าโฮม + 5 แอป (สถานะ/ปฏิทิน/ภารกิจ/เกรด/แผนที่) · แตะแอป+ปุ่มย้อนกลับ · **สไลด์สลับหน้า** (unscaled) · **แผนที่โชว์ใหญ่ในเครื่อง** (RawImage รับ MinimapRT, เปิดกล้องเฉพาะตอนดู)
+  - ดีไซน์หรู: ขอบทอง + เงาลอย + การ์ดไล่เฉด (วาด sprite เอง) + วงไอคอนฝ้า + **wallpaper จอ** (ไล่เฉด/ใส่รูปเองที่ `Art/UI/phone_wallpaper.png`)
+- **ฟอนต์ Mitr** ([Editor/M14FontTool.cs](Assets/_Project/Scripts/Editor/M14FontTool.cs)): สร้าง Mitr SDF (Dynamic รองรับไทย) + เปลี่ยนฟอนต์ทั้ง 2 ฉากคลิกเดียว · อัปเดต 11 builder ให้ใช้ Mitr
+- **Kenney UI skin** ([Editor/M15KenneySkin.cs](Assets/_Project/Scripts/Editor/M15KenneySkin.cs)): สลับกรอบ/ปุ่ม (Type=Sliced) เป็นสไตล์ Kenney โค้งมน — ไม่แตะบาร์ (Filled)
+- **ไอคอนสถานะวาดเอง** ([Editor/M16StatIcons.cs](Assets/_Project/Scripts/Editor/M16StatIcons.cs)): ⚡สายฟ้า/❤️หัวใจ/🍴ส้อม (vector→PNG) วางทับวงกลมบาร์ (Kenney ไม่มีไอคอนพวกนี้)
+- **แก้บั๊ก emoji เป็นกล่อง □**: Mitr ไม่มี glyph emoji → เอา emoji ออกจากข้อความในเกมทั้งหมด (phone/event/quest/exam/sleep/endscreen) · emoji ในกล่อง dialog editor ไม่กระทบ
+- **HUD ธีมดำ-ทอง หรูหรา** ([Editor/M3HudBuilder.cs](Assets/_Project/Scripts/Editor/M3HudBuilder.cs)): แผงครามทึบ (อ่านง่าย) + นาฬิกาชิปทอง + บาร์สีการ์ตูนสด + ตัวหนังสือใหญ่ขึ้น · panel ภารกิจเข้าธีม
+- **เวลาเดินเหมือนนาฬิกาจริง**: `gameMinutesPerRealSecond` 20→**1** (ติ๊กทีละนาที) — จบวันด้วยการ **"นอน"** (ไม่ต้องรอเวลาครบ)
+- **บันทึกคณะลงเซฟ** (แก้บั๊ก): [SaveData](Assets/_Project/Scripts/SaveLoad/SaveData.cs) + `facultyIndex` · [SaveManager](Assets/_Project/Scripts/SaveLoad/SaveManager.cs) เซฟ/โหลด → "เล่นต่อ" คณะไม่รีเซ็ตเป็น IT อีก
+- **จูนบาลานซ์** ([Editor/M17BalanceTune.cs](Assets/_Project/Scripts/Editor/M17BalanceTune.cs) คลิกเดียว): หิว 0.5→0.12, เหนื่อย 0.2→0.05, เดิน 0.6→0.15, วิ่ง 1.4→0.4 (ให้พอดีเวลาช้า) + ตั้งเวลา=1 ให้ด้วย
+
+### Phase C — เหตุการณ์แบบเกมจริง + ระบบเสียง (2026-08-04)
+- **สุ่มเหตุการณ์ = เกมจริง (A+B)** ([Systems/EventManager.cs](Assets/_Project/Scripts/Systems/EventManager.cs)) — 3 ชนิด:
+  - **Instant** — ป็อปอัป → ทำท่า → บวก/ลบค่า
+  - **Effect (B)** ([Player/PlayerEffects.cs](Assets/_Project/Scripts/Player/PlayerEffects.cs)) — ผลทั้งวัน หายเมื่อนอน: 🤧ป่วย (เดินช้า+เหนื่อยเร็ว, ผูก PlayerMovement+StatDecay) · 🔥ไฟแรง (เข้าเรียนความรู้ ×1.5, ผูก ClassStation)
+  - **GoTo (A)** — เลือก "ไป..." → เกิด **เสาแสง** ปักที่อาคารจริง (อ่านตำแหน่งจาก Door_*) → เดินไปถึง (3 ม.) → ทำท่า → ได้ผล · ข้ามวัน = พลาด
+- **หมุดภารกิจมืออาชีพ**:
+  - [Systems/BeaconFX.cs](Assets/_Project/Scripts/Systems/BeaconFX.cs) — เสาแสงเด้งขึ้นลง + วงแสงพื้นพัลส์/หมุน + เรืองแสง (URP emission)
+  - [UI/ObjectiveHUD.cs](Assets/_Project/Scripts/UI/ObjectiveHUD.cs) — แถบภารกิจค้างบนจอ + **ลูกศรทองหมุนชี้ทาง** (คำนวณทิศบนจอ) + บอกระยะ (ม.) · ลูกศรวาดเอง (สามเหลี่ยม→PNG ใน M9)
+  - คลังเหตุการณ์ผสม 8 แบบ (GoTo: กินข้าว→โรงอาหาร, ชีทเก่า→ห้องสมุด, ชมรม→อาคารชมรม)
+- **ระบบเสียงครบวงจร** — สังเคราะห์เสียงเอง (WAV) ไม่ต้องโหลด:
+  - [Core/SFXManager.cs](Assets/_Project/Scripts/Core/SFXManager.cs) — SFX one-shot + เพลง loop · volume จาก vol_sfx/vol_music (Master ผ่าน AudioListener) · ได้เงิน=เหรียญอัตโนมัติ
+  - [UI/ButtonSound.cs](Assets/_Project/Scripts/UI/ButtonSound.cs) — เสียงคลิกทุกปุ่ม (Editor แปะให้อัตโนมัติ)
+  - [Editor/M18AudioBuilder.cs](Assets/_Project/Scripts/Editor/M18AudioBuilder.cs) — สังเคราะห์ 9 SFX + เพลง ambient (chord pad สแนปให้วนเนียน) · สร้าง AudioManager 2 ฉาก · **ใช้ไฟล์ที่โหลดเองก่อนได้** (Audio/custom/&lt;ชื่อ&gt;.wav/ogg/mp3 → ไม่มีค่อยสังเคราะห์)
+  - Hook: Toast→แจ้งเตือน · เดิน→ฝีเท้า · Space→กระโดด · สอบผ่าน/ตก→สำเร็จ/ผิด · นอน→เสียงนอน
+- บทเรียน: ฟอนต์ Mitr ไม่มี emoji → เลี่ยง emoji ในข้อความในเกม (ใช้รูปวาด PNG แทน เช่นไอคอนสถานะ/ลูกศร)
+
+### แก้บั๊ก + เก็บงาน (2026-08-05)
+- 🐛 **ปุ่มเลือกคณะกดแล้วไม่เข้าเกม** — เหตุ: ต่อ `onClick` แบบ lambda ตอน Editor ซึ่ง Unity **ไม่เซฟลงฉาก** (ต่างจากปุ่มเมนูอื่นที่ต่อตอน runtime) → แก้ด้วย [UI/FacultyButton.cs](Assets/_Project/Scripts/UI/FacultyButton.cs) (ต่อสายตอน runtime, index≥0=เลือกคณะ / <0=ย้อนกลับ) + แก้ M11 ให้ AddComponent แทน lambda
+- 📐 **หน้าเลือกคณะล้นจอ** — จัด layout กระชับ (startY 150, gap 92, ปุ่ม 520×74) พอดีจอทุกอัตราส่วน
+- 🎧 **ใส่เสียงจริง** — copy จาก Kenney (Interface/RPG/Digital) + Pixabay (`the_mountain-life-story`) → `Assets/_Project/Audio/custom/` ตั้งชื่อตามช่อง (click/notify/coin/success/error/footstep/jump/sleep/whoosh/music) → Build Audio จับใช้แทนเสียงสังเคราะห์
+- 🧹 **กล่องสถานีเก่าลอยกลางแมป** (ห้องเรียน/โรงอาหาร/หอพัก จาก M5) → [Editor/M19CleanStations.cs](Assets/_Project/Scripts/Editor/M19CleanStations.cs): ย้ายไปหน้าตึกจริง + ซ่อน mesh + collider เป็น trigger (ยังเข้าเรียน/กิน/นอนได้ แต่ไม่เห็นกล่อง)
+- บทเรียนสำคัญ: **listener แบบ lambda/anonymous ที่เพิ่มใน Editor ไม่ถูก serialize** — ปุ่มที่สร้างด้วย Editor tool ต้องต่อสายตอน runtime (component) หรือใช้ `UnityEventTools.AddPersistentListener`
+
+### ท่าทาง Mixamo — กิน/เรียน/นอน (สุ่มท่า) (2026-08-05)
+- **นำเข้าท่า Mixamo 9 ท่า** ที่ `Art/Characters/` (Typing, Drinking, Sitting Drinking, Laying Sleeping, Sleeping Idle, Cheering, Talking, Waving, Laying Severe Cough)
+- **[Editor/M20CharacterAnims.cs](Assets/_Project/Scripts/Editor/M20CharacterAnims.cs)** (Nisit ▸ Setup Character Animations): ตั้ง import เป็น Humanoid + CopyFromOther(Ch29 avatar) + loopTime · เพิ่ม state เข้า `PlayerAnimator`/`NisitCharacter` controller · ต่อโรงอาหารให้สุ่มท่ากิน
+- **[Player/PlayerActionController.cs](Assets/_Project/Scripts/Player/PlayerActionController.cs)** — เพิ่ม `PerformState(dur, onDone, params string[] states)`: CrossFade ไป state (สุ่มถ้าหลายท่า) แล้วกลับ locomotion ด้วย `baseHash` ที่จับไว้ (ไม่ต้องรู้ชื่อ state เดิม) · `HasState` กันพังถ้าไม่มีท่า
+- ต่อเข้ากิจกรรม: เรียน/ทำงาน → **Typing** · กิน → **สุ่ม** Eating_A/B · นอน → **สุ่ม** Sleeping_A/B (SleepStation เล่นท่านอน 2 วิ ก่อนข้ามวัน)
+- ท่าเสริมพร้อมใช้ (ยังไม่ต่อ): Cheering (จบ) · Coughing (ป่วย) · Talking/Waving (NPC)
+- แนวคิด: state แบบ **CrossFade by name** (ไม่ผูก bool param/transition) → เพิ่มท่าใหม่ง่าย + สุ่มได้
+
+### เอกสารปริญญานิพนธ์ + กระเป๋า + ปุ่มเล่นหลายคน (2026-08-06)
+- 📄 **เอกสารปริญญานิพนธ์ฉบับเต็ม** (บท 1-5 + สารบัญ/ตาราง/ภาพ + อ้างอิง + ภาคผนวก) → `ปริญญานิพนธ์_ฉบับเต็ม.md` + แปลงเป็น **Word (.docx)** จัดรูปแบบเสร็จ (หัวข้อ/ตาราง/ตัวหนา ฟอนต์ TH Sarabun) ด้วยสคริปต์ `md2docx.py` (python-docx)
+  - ยึดเนื้อหา ปพ.1 เป็นหลัก · ระบบที่ยังไม่เสร็จ (multiplayer/customization/trading) คงไว้เป็น "แผนพัฒนาต่อ" (บท 5.3) · จุดแทรกภาพจริงทุกจุด
+  - ข้อมูลจากโค้ดจริง: **4 คณะ** (IT/บริหาร/วิทย์/นิเทศ, [FacultyCatalog.cs](Assets/_Project/Scripts/Systems/FacultyCatalog.cs)) · เงื่อนไขจบ = Graduated(ครบปี 4)/Flunked(ความรู้ไม่ถึงเป้า)/Died(พลังงาน/สุขภาพหมด, [EndReason.cs](Assets/_Project/Scripts/Core/EndReason.cs))
+  - **หมายเหตุ:** Claude for Microsoft 365 add-in ใช้แก้เอกสารในหน้า Word ได้ (ล็อกอินบัญชี Claude) — คู่กับที่ผมสร้าง .docx ให้
+- 🔊 **Voice + Ambient Volume** — เพิ่ม 2 แถบเสียงในหน้าตั้งค่า (รวมเป็น 5: Master/Music/SFX/Voice/Ambient) · [UI/SettingsController.cs](Assets/_Project/Scripts/UI/SettingsController.cs) เก็บ `vol_voice`/`vol_ambient` ใน PlayerPrefs · [M4MenuBuilder.cs](Assets/_Project/Scripts/Editor/M4MenuBuilder.cs) สร้างแถบเพิ่ม (แพตเทิร์น PlayerPrefs ไม่ใช่ AudioMixer)
+- 🎒 **ระบบกระเป๋า Inventory (เวอร์ชันย่อ)** — ปิดแถว "กระเป๋า" ในตาราง 3.2 + ยกออกจากแผนพัฒนาต่อ:
+  - [Systems/InventoryManager.cs](Assets/_Project/Scripts/Systems/InventoryManager.cs) — singleton, **ใช้ ShopItem ซ้ำเป็นข้อมูลไอเทม** (ไม่ต้องสร้าง SO ใหม่) · Add/Use/นับ · OnChanged event · save/load เป็นชื่อไอเทม
+  - [UI/InventoryUI.cs](Assets/_Project/Scripts/UI/InventoryUI.cs) — เปิดด้วยปุ่ม **I** · กริดช่อง · คลิกไอเทม→ใช้ (บวกค่าสถานะ) · [UI/InventoryCloseButton.cs](Assets/_Project/Scripts/UI/InventoryCloseButton.cs) (runtime-wire ปุ่มปิด)
+  - [Editor/M21InventoryBuilder.cs](Assets/_Project/Scripts/Editor/M21InventoryBuilder.cs) (Nisit ▸ Build Inventory) — สร้างหน้าต่าง + ต่อทุกอย่าง + ตั้งร้านค้าให้ `storeToInventory`
+  - [Systems/ShopController.cs](Assets/_Project/Scripts/Systems/ShopController.cs) — เพิ่มโหมด `storeToInventory` (ร้านค้า=เก็บเข้ากระเป๋า / โรงอาหาร=กินทันที) · [SaveLoad/SaveManager.cs](Assets/_Project/Scripts/SaveLoad/SaveManager.cs) บันทึก/โหลดไอเทม (ช่อง `inventoryItemIds` มีอยู่แล้วใน SaveData)
+- 🕹️ **ปุ่ม "เล่นหลายคน" (แบบโชว์)** — เมนูเป็น 5 ปุ่ม · กดปุ่มทอง → ป็อปอัป **"กำลังพัฒนา"** (ตรง storyboard ปพ.1 แต่ยังไม่ต่อ Netcode) · [UI/MainMenuController.cs](Assets/_Project/Scripts/UI/MainMenuController.cs) + M4MenuBuilder + MenuPolish (จัด 5 ปุ่ม/parallax/intro)
+- 🖼️ **แก้เมนูหาย/พื้นทึบ** — พบว่า **Build M4 Menu สร้างเมนูใหม่หมด → ลบงาน Polish/พื้นหลังทิ้ง** ทุกครั้ง → ต้องกดเรียง: Build M4 Menu → Polish Menu Layout → Day Campus Background (หรือ Use 3D Background)
+- บทเรียน: `InventoryManager` reuse `ShopItem` ลดงานเยอะ · ห้ามเขียนโค้ด Netcode ก่อนติดตั้ง package (ทั้งโปรเจกต์จะคอมไพล์ไม่ผ่าน)
+
+### ธีมการ์ตูนพาสเทล + ตัวช่วยแคป + ปุ่มรวมกดครั้งเดียว (2026-08-06)
+- 📸 **ScreenshotHelper** ([Core/ScreenshotHelper.cs](Assets/_Project/Scripts/Core/ScreenshotHelper.cs) + [Editor/M22ScreenshotHelper.cs](Assets/_Project/Scripts/Editor/M22ScreenshotHelper.cs), Nisit ▸ Add Screenshot Helper) — สำหรับแคปรูปทำเอกสาร: **F9** แคป (เซฟที่ `Screenshots/`, แถบช่วยจำไม่ติดในรูป) · **F5/F6/F7** เรียกหน้าจบ (จบ/ตาย/ตก) · **F8** เปิดหน้าสอบ (แข็งแรง + บอกเหตุผลใน Console) · แคปได้แล้ว 7 หน้า
+- 🎨 **ยกเครื่อง UI เป็นธีมการ์ตูนพาสเทล** ทุกหน้าเข้าชุดกัน:
+  - โทนพาสเทล (มินต์/พีช/ฟ้า/ลาเวนเดอร์/ชมพู) + **ตัวอักษรกรมเข้ม** (อ่านชัดกว่าขาวบนพาสเทล) + **ขอบดำหนา 5px** (สไตล์การ์ตูน) + ปุ่มลูกกวาด (ฐานหนา+เงาวาว+tint hover)
+  - ครอบคลุม: เมนู ([MenuPolish](Assets/_Project/Scripts/Editor/MenuPolish.cs)) · เลือกคณะ ([M11](Assets/_Project/Scripts/Editor/M11FacultyBuilder.cs) — การ์ดกลางทึบ) · สอบ ([M6](Assets/_Project/Scripts/Editor/M6ExamBuilder.cs)) · ตั้งค่า/ป็อปอัป ([M4](Assets/_Project/Scripts/Editor/M4MenuBuilder.cs) — dim+การ์ด, แถบเสียง 5 ตัวสไตล์ใหม่) · กระเป๋า ([M21](Assets/_Project/Scripts/Editor/M21InventoryBuilder.cs)) · หน้าจบเกม ([M3HudBuilder](Assets/_Project/Scripts/Editor/M3HudBuilder.cs))
+- 🌟 **★ Rebuild All UI (กดครั้งเดียว)** ([Editor/M23RebuildAll.cs](Assets/_Project/Scripts/Editor/M23RebuildAll.cs)) — สร้าง/อัปเดต UI ทั้งเกมในคลิกเดียว (HUD+จบ → สอบ → กระเป๋า → เมนู+คณะ+พื้นหลัง) · เพิ่ม `SuppressDialog` ทุก builder (M3/M4/M6/M11/M21/MenuPolish) เพื่อปิด popup ระหว่าง chain → เด้ง dialog สรุปครั้งเดียว
+- 🔧 **แก้เชนเมนูให้ครบ** — Build M4 Menu **auto-chain** Polish + Day Campus Background + Faculty Select อัตโนมัติ (จบปัญหา "เมนูโล้น/คณะหาย/พื้นทึบ" ที่ต้องไล่กดหลาย tool)
+- 🐛 **แก้บั๊กของไม่เข้ากระเป๋า** — เหตุ: M21 ไม่ได้ `SaveScene` → พอ tool อื่นเปิดฉากใหม่จากดิสก์ InventoryManager+flag หลุด → แก้ให้ M21 **เซฟทันที** + ตั้ง `storeToInventory` บนทุก ShopController ที่ไม่ใช่โรงอาหาร (หาแบบรวม inactive) + ShopController หา InventoryManager กันพลาด (สร้างใหม่ถ้าไม่มี)
+- 🖼️ **แก้ layout หน้าจบเกม** — คะแนน 4 บรรทัด (คณะ/ชั้นปี/GPA/รวม) ล้นกล่องเตี้ย → ทับข้อความ+ปุ่ม → ขยายการ์ด (520→660) + กล่องคะแนน 200px + จัดระยะ หัวเรื่อง/ข้อความ/คะแนน/ปุ่ม (ใช้ร่วม 3 หน้าจบ)
+- 🧹 **แก้ Canvas ปนข้ามฉาก** — พบเมนู+HUD+หน้าจบโผล่พร้อมกัน (Canvas หลงข้ามฉาก) → M4 ลบ Canvas เกม (HUD/End/Exam/Inventory/Shop/…) ที่หลงเข้าฉากเมนู · M3 ลบ Menu Canvas ที่หลงเข้าฉากเกม → หน้าจบต้องแคปในฉาก **01_Gameplay** เท่านั้น (มี GameManager/End Canvas)
+- บทเรียนสำคัญ: **UI ที่ Editor tool สร้าง = "อบ" ลงฉากแล้ว** → แก้โค้ด builder เฉยๆ ไม่เปลี่ยนของเก่า **ต้องกด tool สร้างใหม่เสมอ** · child ของปุ่ม render บนตัวปุ่มเสมอ (base shadow ต้องเป็น sibling ไม่ใช่ child) · warning (เหลือง) ≠ error (แดง) — warning ไม่บล็อกคอมไพล์ · หน้าจบ/สอบ/GameManager อยู่ในฉากเกม (01_Gameplay) ไม่ใช่ฉากเมนู
+
+### เหตุการณ์ต่อเนื่อง (ไม่มีป็อปอัพ) + NPC/สัตว์ (2026-08-20)
+- 🎲 **เพิ่มเหตุการณ์เป็น 17 อัน** ([Systems/EventManager.cs](Assets/_Project/Scripts/Systems/EventManager.cs)) — GoTo 7 (เดินไปทำที่ อาคารเรียน/บริหาร/ห้องสมุด/โรงอาหาร/ร้านค้า/ชมรม/หอพัก) · Effect 4 · Instant 6
+- 🎬 **โหมดไม่มีป็อปอัพ (เกมต่อเนื่อง)** — `Trigger()` แยกทาง: **GoTo** → โผล่เสาแสง+แจ้งเตือนในโลกเลย เดินไปเก็บเอง/ปล่อยผ่านได้ · **Effect** → แจ้งเตือน(เล่าเหตุการณ์)+ติดผลทั้งวันทันที · **Instant ปุ่มเดียว** → แจ้งเตือน+ได้ผลเลย · เหลือป็อปอัพเฉพาะ Instant ที่**เลือกได้จริง** (16/17 ลื่นไม่เด้ง) · helper `FindGoTo`/`FindEffect`
+- 👥 **NPC คุยได้** ([Interaction/TalkNPC.cs](Assets/_Project/Scripts/Interaction/TalkNPC.cs) + [Editor/M26TalkNPCs.cs](Assets/_Project/Scripts/Editor/M26TalkNPCs.cs), Nisit ▸ Build Talk NPCs) — เข้าใกล้ **โบกมือ (Waving)** · กด E **คุย (Talking)** สุ่มบทพูด + พอใจ +5 (cooldown) · **ยืนคุยหน้าตึกจริง 4** (หาประตูอัตโนมัติ) + **เดินไปมาคุยได้ 3** (reuse `MenuNPCWalker`, หยุดเดินตอนทำท่า) · ใช้ท่า Waving/Talking ที่ [M20](Assets/_Project/Scripts/Editor/M20CharacterAnims.cs) โหลดไว้แล้ว
+- 🎨 **ย้อมสี NPC + รองรับหลายโมเดล** ([Interaction/CharacterTint.cs](Assets/_Project/Scripts/Interaction/CharacterTint.cs)) — ย้อม 7 โทนด้วย MaterialPropertyBlock (ไม่แตะ material asset) → แม้โมเดลเดียวก็ดูไม่ซ้ำ · M26 **สแกนโฟลเดอร์ Characters ทุกโมเดลอัตโนมัติ** (วาง Mixamo เพิ่ม = หลากหลายทันที, ต้องตั้ง Rig=Humanoid)
+- 🐾 **ระบบสัตว์ (พร้อมรอโมเดล)** ([Interaction/PetAnimal.cs](Assets/_Project/Scripts/Interaction/PetAnimal.cs) + [Editor/M27AnimalBuilder.cs](Assets/_Project/Scripts/Editor/M27AnimalBuilder.cs), Nisit ▸ Build Animals) — เดินไปมา + กด E ลูบ (พอใจ +6) · อ่านโมเดลจาก `Art/Models/Animals/` (ว่าง = แจ้งให้ไปวางก่อน ไม่พัง) · เดาชื่อไทยจากชื่อไฟล์ (cat→แมว ฯลฯ) · แนะนำ Quaternius/KayKit (ฟรี CC0)
+- ⚙️ **★ Rebuild All** ([M23](Assets/_Project/Scripts/Editor/M23RebuildAll.cs)) รวม M26 (NPC) + M27 (สัตว์) เข้าคลิกเดียวแล้ว
+- หมายเหตุ: EventManager เป็น logic → apply ตอน Play · NPC/สัตว์ ถูก "อบ" ลงฉาก → **ต้องรัน tool** (Build Talk NPCs / Build Animals / ★ Rebuild All)
+
 ---
 
 ## Version Control
@@ -66,14 +228,26 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 ---
 
 ## เหลือทำ (ตามขอบเขตปริญญานิพนธ์)
-- **Phase B — เนื้อหาเกม**: ภารกิจ, สอบกลางภาค/ปลายภาค, สุ่มเหตุการณ์, งานพาร์ทไทม์, เนื้อหาแต่ละชั้นปี
-- ปรับแต่งตัวละคร (เพศ/ผม/ชุด) · Minimap
-- Multiplayer + Trading (Netcode/Photon)
-- แก้จุดที่เอกสารขัดกัน 7 จุด (Netcode vs Photon, บรรณานุกรม ฯลฯ)
+- **Phase B — เนื้อหาเกม**: ~~สอบ~~ ✅ ~~ฤดูกาล/เดือน~~ ✅ ~~ภารกิจ~~ ✅ ~~สุ่มเหตุการณ์~~ ✅ ~~งานพาร์ทไทม์~~ ✅ ~~แอคชันตัวละคร~~ ✅ ~~ระบบคณะ+ข้อสอบแยกคณะ~~ ✅
+- **Phase C — UI/UX + จูน**: ~~กระโดด~~ ✅ ~~โทรศัพท์(TAB)~~ ✅ ~~Minimap~~ ✅ ~~ฟอนต์ Mitr~~ ✅ ~~Kenney UI~~ ✅ ~~ไอคอนสถานะ~~ ✅ ~~HUD ดำ-ทอง~~ ✅ ~~เวลาเดินสมจริง~~ ✅ ~~บันทึกคณะลงเซฟ~~ ✅ ~~จูนบาลานซ์~~ ✅
+- **Phase C+ — เกมจริง/เสียง**: ~~เหตุการณ์เดินไปทำ (GoTo)~~ ✅ ~~ผลกระทบทั้งวัน (ป่วย/ไฟแรง)~~ ✅ ~~หมุด/ลูกศรนำทาง~~ ✅ ~~ระบบเสียง+เพลง~~ ✅
+- ~~คลิปท่า Mixamo (เรียน/กิน/นอน สุ่มท่า)~~ ✅ · ~~เสียงจริง Kenney/Pixabay~~ ✅
+- ~~ระบบกระเป๋า Inventory~~ ✅ · ~~Voice/Ambient Volume~~ ✅ · ~~เอกสารปริญญานิพนธ์ บท 1-5 + .docx~~ ✅ · ~~ปุ่มเล่นหลายคน (โชว์ "กำลังพัฒนา")~~ ✅
+- ~~ธีมการ์ตูนพาสเทลทุกหน้า~~ ✅ · ~~ตัวช่วยแคปรูป (F9/F5-F8)~~ ✅ · ~~ปุ่มรวม ★ Rebuild All UI~~ ✅ · แคปรูปเอกสารแล้ว 7/10 หน้า (เหลือ 3 หน้าจบ F5/F6/F7)
+- **เหลือ**: 🏗️ Build .exe + playtest · ต่อท่าเสริม (Cheering จบ / Coughing ป่วย) · ตึก 4 คณะ (มีแต่ IT) · เนื้อหาเฉพาะชั้นปี · คู่มือ
+- ปรับแต่งตัวละคร (เพศ/ผม/ชุด) · **Multiplayer จริง** + Trading (Netcode/Photon — ยังไม่เริ่ม, มีแต่ปุ่มโชว์)
+- แก้จุดที่เอกสารขัดกัน 7 จุด (Netcode vs Photon, บรรณานุกรม, E vs F ฯลฯ)
 
 ---
 
 ## เครื่องมือ (Editor Tools) ที่สร้างไว้
 เมนู **Nisit →** : Build M1 Scene · Build M3 HUD · Make It Pretty · Add Depth & Mood ·
 Build M5 Gameplay · Setup Character (M2) · Fix Character Materials · Fix Animation Loops ·
-Build M4 Menu · Menu Background (3D) · CampusBuilder · InteriorBuilder · ShopBuilder ฯลฯ
+Build M4 Menu · Menu Background (3D) · **Polish Menu Layout** · **Epic Menu Background** ·
+**Day Campus Background** · **Use 3D Background** · **Build Exam System** · **Build Season System** ·
+**Build Quest System** · **Build Event System** · **Place Exam & Jobs at Buildings** ·
+**Build Faculty Select** · **Build Phone (TAB)** · **Build Minimap** · **Build Stat Icons** ·
+**Apply Mitr Font (All UI)** · **Apply Kenney UI Skin** · **Balance Tune** · **Build Audio** ·
+**Clean Placeholder Stations** · **Setup Character Animations** · **Build Inventory** · **Build Cafeteria** ·
+**★ Rebuild All UI (กดครั้งเดียว)** · **Add Screenshot Helper** ·
+CampusBuilder · InteriorBuilder · ShopBuilder ฯลฯ

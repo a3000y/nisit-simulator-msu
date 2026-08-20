@@ -18,14 +18,21 @@ namespace NisitSimulator.EditorTools
     // ใช้: เมนู  Nisit -> Build M3 HUD
     public static class M3HudBuilder
     {
-        // สีธีมการ์ตูน
-        static readonly Color Ink       = new Color(0.16f, 0.13f, 0.20f, 1f);     // ขอบ/เส้นเข้ม
-        static readonly Color PanelCol  = new Color(0.20f, 0.17f, 0.28f, 0.92f);  // พื้นแผง
-        static readonly Color SlotCol   = new Color(0.12f, 0.10f, 0.16f, 1f);     // ร่องแถบ (ว่าง)
+        // สีธีมการ์ตูน ดำ-ทอง หรูหรา
+        static readonly Color Ink       = new Color(0.05f, 0.05f, 0.10f, 1f);     // ขอบเข้ม (การ์ตูนป็อป)
+        static readonly Color PanelCol  = new Color(0.14f, 0.15f, 0.27f, 0.96f);  // พื้นแผง (คราม ทึบขึ้น อ่านง่าย)
+        static readonly Color SlotCol   = new Color(0.07f, 0.07f, 0.13f, 1f);     // ร่องแถบ (ว่าง)
+        static readonly Color Gold      = new Color(0.96f, 0.80f, 0.36f, 1f);     // ทอง (แอกเซนต์หรู)
+        static readonly Color OnGold    = new Color(0.13f, 0.11f, 0.18f, 1f);     // ข้อความบนทอง
 
         const string UIDir = "Assets/_Project/UI";
         static Sprite Round  => GetSprite("round",  64, 20);   // สี่เหลี่ยมมุมมน (9-slice)
+        static Sprite Pill   => AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/ui_pill2.png") ?? Round;
+        static Sprite Gloss  => AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/ui_gloss.png");
+        static Color Shift(Color c, float d) => new Color(Mathf.Clamp01(c.r + d), Mathf.Clamp01(c.g + d), Mathf.Clamp01(c.b + d), c.a);
         static Sprite Circle => GetSprite("circle", 96, -1);   // วงกลม
+
+        public static bool SuppressDialog = false;   // ปิด popup เมื่อเรียกจาก Rebuild All
 
         [MenuItem("Nisit/Build M3 HUD")]
         public static void BuildHud()
@@ -37,6 +44,8 @@ namespace NisitSimulator.EditorTools
                 return;
             }
 
+            DestroyIfExists("Menu Canvas");   // กันพื้นหลังเมนูหลงมาในฉากเกม (ปนกัน)
+
             // ---- ระบบ ----
             if (player.GetComponent<StatDecay>() == null) player.AddComponent<StatDecay>();
             var gm = GameObject.Find("GameManager");
@@ -44,7 +53,7 @@ namespace NisitSimulator.EditorTools
             if (gm.GetComponent<GameClock>() == null) gm.AddComponent<GameClock>();
             if (gm.GetComponent<GameOverWatcher>() == null) gm.AddComponent<GameOverWatcher>();
             if (gm.GetComponent<ProgressionManager>() == null) gm.AddComponent<ProgressionManager>();
-            gm.GetComponent<GameClock>().gameMinutesPerRealSecond = 20f;   // 1 วินาทีจริง = 20 นาทีเกม → 1 วัน ≈ 72 วิ
+            gm.GetComponent<GameClock>().gameMinutesPerRealSecond = 1f;   // ติ๊กเหมือนนาฬิกาจริง: 1 วิจริง = 1 นาทีเกม → นาทีขยับทีละ 1 (จบวันด้วยการนอน)
 
             // ---- Canvas ----
             DestroyIfExists("HUD Canvas");
@@ -62,16 +71,16 @@ namespace NisitSimulator.EditorTools
 
             // ===== พอร์ตเทรตตัวละคร (ซ้ายบน) + แถบสถานะข้างขวา =====
             Portrait(root);
-            hud.energyFill = CartoonBar(root, "Energy", 0, new Color(0.42f, 0.85f, 0.32f), "พลังงาน", out var eVal); hud.energyText = eVal;
-            hud.healthFill = CartoonBar(root, "Health", 1, new Color(0.95f, 0.36f, 0.42f), "สุขภาพ",  out var hVal); hud.healthText = hVal;
-            hud.hungerFill = CartoonBar(root, "Hunger", 2, new Color(1.00f, 0.72f, 0.22f), "ความอิ่ม", out var uVal); hud.hungerText = uVal;
+            hud.energyFill = CartoonBar(root, "Energy", 0, new Color(0.40f, 0.86f, 0.40f), "พลังงาน", out var eVal); hud.energyText = eVal;
+            hud.healthFill = CartoonBar(root, "Health", 1, new Color(1.00f, 0.44f, 0.46f), "สุขภาพ",  out var hVal); hud.healthText = hVal;
+            hud.hungerFill = CartoonBar(root, "Hunger", 2, new Color(1.00f, 0.73f, 0.24f), "ความอิ่ม", out var uVal); hud.hungerText = uVal;
 
             // ===== ข้อมูล (ขวาบน) แบบชิปแยก =====
             // นาฬิกา (ชิปเด่นสุด สีทอง)
-            var clockChip = MakeImage(root, "ClockChip", new Vector2(1, 1), new Vector2(-24, -24), new Vector2(292, 68), Round, PanelCol);
+            var clockChip = MakeImage(root, "ClockChip", new Vector2(1, 1), new Vector2(-24, -24), new Vector2(292, 68), Round, Gold);
             clockChip.rectTransform.pivot = new Vector2(1, 1);
             Deco(clockChip, 5f);
-            hud.clockText = MakeTMP(clockChip.transform, "ClockTxt", "08:00 AM", 46, TextAlignmentOptions.Center, new Color(1f, 0.86f, 0.42f), FontStyles.Bold);
+            hud.clockText = MakeTMP(clockChip.transform, "ClockTxt", "08:00 AM", 46, TextAlignmentOptions.Center, OnGold, FontStyles.Bold);
             var crt = hud.clockText.rectTransform; crt.anchorMin = Vector2.zero; crt.anchorMax = Vector2.one; crt.offsetMin = crt.offsetMax = Vector2.zero;
             // แถบความรู้ (fill + ข้อความทับ)
             hud.knowledgeFill = KnowledgeBar(root, -102, out var kTxt); hud.knowledgeText = kTxt;
@@ -97,6 +106,7 @@ namespace NisitSimulator.EditorTools
             Selection.activeGameObject = canvasGo;
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             Debug.Log($"<color=cyan>[Nisit] สร้าง HUD การ์ตูน 3D สำเร็จ! (ใส่ฟอนต์ไทย {fontN} ข้อความ) กด Ctrl+S แล้ว Play</color>");
+            if (!SuppressDialog)
             EditorUtility.DisplayDialog("Nisit Simulator",
                 "สร้าง HUD การ์ตูน 3D เสร็จแล้ว!\n\nกด Ctrl+S แล้ว Play\n\n※ ถ้าไทยเป็นสี่เหลี่ยม กด Nisit -> Fix Thai Font (HUD)", "เยี่ยม!");
         }
@@ -205,12 +215,12 @@ namespace NisitSimulator.EditorTools
             srt.offsetMin = new Vector2(6, 4); srt.offsetMax = new Vector2(-6, 0);
 
             // ป้ายซ้าย + ตัวเลขขวา
-            var lbl = MakeTMP(slot.transform, name + "Label", label, 18, TextAlignmentOptions.Left, Color.white, FontStyles.Bold);
+            var lbl = MakeTMP(slot.transform, name + "Label", label, 20, TextAlignmentOptions.Left, Color.white, FontStyles.Bold);
             var lrt = lbl.rectTransform;
             lrt.anchorMin = Vector2.zero; lrt.anchorMax = Vector2.one;
             lrt.offsetMin = new Vector2(14, 0); lrt.offsetMax = new Vector2(-42, 0);
 
-            valueText = MakeTMP(slot.transform, name + "Val", "100", 18, TextAlignmentOptions.Right, Color.white, FontStyles.Bold);
+            valueText = MakeTMP(slot.transform, name + "Val", "100", 20, TextAlignmentOptions.Right, Color.white, FontStyles.Bold);
             var vrt = valueText.rectTransform;
             vrt.anchorMin = Vector2.zero; vrt.anchorMax = Vector2.one;
             vrt.offsetMin = new Vector2(10, 0); vrt.offsetMax = new Vector2(-12, 0);
@@ -239,7 +249,7 @@ namespace NisitSimulator.EditorTools
             var chip = MakeImage(root, "KChip", new Vector2(1, 1), new Vector2(-24, y), new Vector2(292, 44), Round, SlotCol);
             chip.rectTransform.pivot = new Vector2(1, 1);
             Deco(chip, 4f);
-            var fill = MakeImage(chip.transform, "KFill", Vector2.zero, Vector2.zero, Vector2.zero, Round, new Color(0.40f, 0.64f, 1f));
+            var fill = MakeImage(chip.transform, "KFill", Vector2.zero, Vector2.zero, Vector2.zero, Round, new Color(0.42f, 0.68f, 1f));
             fill.type = Image.Type.Filled; fill.fillMethod = Image.FillMethod.Horizontal; fill.fillOrigin = 0; fill.fillAmount = 0.1f;
             var frt = fill.rectTransform;
             frt.anchorMin = Vector2.zero; frt.anchorMax = Vector2.one;
@@ -331,16 +341,18 @@ namespace NisitSimulator.EditorTools
             var dim = MakeImage(canvasGo.transform, "Panel", new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero, null, new Color(0f, 0f, 0f, 0.72f));
             var drt = dim.rectTransform; drt.anchorMin = Vector2.zero; drt.anchorMax = Vector2.one; drt.offsetMin = drt.offsetMax = Vector2.zero;
 
-            // การ์ดกลางจอ
-            var card = MakeImage(dim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(720, 520), Round, PanelCol);
+            // การ์ดกลางจอ (สูงขึ้นให้พอดีคะแนน 4 บรรทัด)
+            var card = MakeImage(dim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(760, 660), Round, PanelCol);
             Deco(card, 6f);
 
-            var title = CardText(card.transform, "GAME OVER", 150, 78, Color.white, FontStyles.Bold, false);
-            var msg   = CardText(card.transform, "ข้อความ", 40, 34, new Color(0.9f, 0.9f, 0.95f), FontStyles.Normal, true);
-            var score = CardText(card.transform, "คะแนนรวม: 0", -55, 46, new Color(1f, 0.86f, 0.42f), FontStyles.Bold, false);
+            var title = CardText(card.transform, "GAME OVER", 238, 72, Color.white, FontStyles.Bold, false);
+            var msg   = CardText(card.transform, "ข้อความ", 150, 30, new Color(0.9f, 0.9f, 0.95f), FontStyles.Normal, true);
+            var score = CardText(card.transform, "คะแนนรวม: 0", -25, 30, new Color(1f, 0.86f, 0.42f), FontStyles.Bold, false);
+            score.rectTransform.sizeDelta = new Vector2(660, 200);   // รองรับ 4 บรรทัด (คณะ/ชั้นปี/GPA/คะแนน)
+            score.lineSpacing = 12f;
 
-            var restart = EndButton(card.transform, "เริ่มใหม่", new Vector2(-135, -170), new Color(0.35f, 0.70f, 0.42f));
-            var quit    = EndButton(card.transform, "ออก",       new Vector2(135, -170),  new Color(0.85f, 0.40f, 0.40f));
+            var restart = EndButton(card.transform, "เริ่มใหม่", new Vector2(-145, -268), new Color(0.60f, 0.86f, 0.68f));  // มินต์พาสเทล
+            var quit    = EndButton(card.transform, "ออก",       new Vector2(145, -268),  new Color(0.99f, 0.74f, 0.78f));  // ชมพูพาสเทล
 
             ctrl.panel = dim.gameObject;
             ctrl.titleText = title; ctrl.messageText = msg; ctrl.scoreText = score;
@@ -363,19 +375,43 @@ namespace NisitSimulator.EditorTools
             return t;
         }
 
+        // ปุ่มลูกกวาด: ฐานหนา + พิลล์ + เงาวาว + ขอบหนา + ตัวอักษรเข้ม
         static Button EndButton(Transform parent, string label, Vector2 pos, Color col)
         {
+            var size = new Vector2(240, 78);
+            var sprite = Pill;
+            var gl = Gloss;
+
+            var baseGo = new GameObject(label + "Base", typeof(Image));
+            baseGo.transform.SetParent(parent, false);
+            var bimg = baseGo.GetComponent<Image>();
+            bimg.sprite = sprite; bimg.type = Image.Type.Sliced; bimg.color = Shift(col, -0.24f); bimg.raycastTarget = false;
+            var brt = bimg.rectTransform; brt.anchorMin = brt.anchorMax = brt.pivot = new Vector2(0.5f, 0.5f); brt.anchoredPosition = pos + new Vector2(0, -6); brt.sizeDelta = size;
+
             var go = new GameObject(label + "Btn", typeof(Image), typeof(Button));
             go.transform.SetParent(parent, false);
             var img = go.GetComponent<Image>();
-            img.sprite = Round; img.type = Image.Type.Sliced; img.color = col;
+            img.sprite = sprite; img.type = Image.Type.Sliced; img.color = col;
             var rt = go.GetComponent<RectTransform>();
             rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
-            rt.anchoredPosition = pos; rt.sizeDelta = new Vector2(230, 74);
-            Deco(img, 4f);
-            var txt = MakeTMP(go.transform, "Text", label, 32, TextAlignmentOptions.Center, Color.white, FontStyles.Bold);
+            rt.anchoredPosition = pos; rt.sizeDelta = size;
+            Deco(img, 5f);
+
+            if (gl != null)
+            {
+                var g = new GameObject("Gloss", typeof(Image)); g.transform.SetParent(go.transform, false);
+                var gi = g.GetComponent<Image>(); gi.sprite = gl; gi.type = Image.Type.Simple; gi.color = new Color(1f, 1f, 1f, 0.42f); gi.raycastTarget = false;
+                var grt = gi.rectTransform; grt.anchorMin = grt.anchorMax = grt.pivot = new Vector2(0.5f, 0.5f); grt.sizeDelta = new Vector2(size.x * 0.9f, size.y * 0.5f); grt.anchoredPosition = new Vector2(0, size.y * 0.22f);
+            }
+
+            var btn = go.GetComponent<Button>();
+            btn.transition = Selectable.Transition.ColorTint; btn.targetGraphic = img;
+            var cb = btn.colors; cb.normalColor = col; cb.highlightedColor = Shift(col, 0.12f); cb.pressedColor = Shift(col, -0.10f); cb.fadeDuration = 0.1f; btn.colors = cb;
+
+            var txt = MakeTMP(go.transform, "Text", label, 32, TextAlignmentOptions.Center, new Color(0.20f, 0.22f, 0.38f), FontStyles.Bold);
             var trt = txt.rectTransform; trt.anchorMin = Vector2.zero; trt.anchorMax = Vector2.one; trt.offsetMin = trt.offsetMax = Vector2.zero;
-            return go.GetComponent<Button>();
+            txt.transform.SetAsLastSibling();
+            return btn;
         }
 
         static void DestroyIfExists(string name)

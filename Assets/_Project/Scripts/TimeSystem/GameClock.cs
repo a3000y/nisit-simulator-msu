@@ -9,7 +9,7 @@ namespace NisitSimulator.TimeSystem
     public class GameClock : MonoBehaviour
     {
         [Header("ความเร็วเวลา")]
-        [Tooltip("เวลาจริง 1 วินาที = กี่นาทีในเกม")]
+        [Tooltip("เวลาจริง 1 วินาที = กี่นาทีในเกม (1 = ติ๊กเหมือนนาฬิกาจริง; จบวันด้วยการนอน)")]
         public float gameMinutesPerRealSecond = 1f;
 
         [Header("เวลาเริ่มต้น")]
@@ -60,6 +60,16 @@ namespace NisitSimulator.TimeSystem
         public int Hour => Mathf.FloorToInt(totalGameMinutes / 60f) % 24;
         public int Minute => Mathf.FloorToInt(totalGameMinutes % 60f);
         public int Day => currentDay;
+        public float TotalMinutes => totalGameMinutes;
+
+        // คืนค่าเวลาจากเซฟ — ไม่ยิง OnDayChanged (กันชนกับ ProgressionManager นับวันซ้ำ)
+        public void RestoreClock(int day, float minutes)
+        {
+            currentDay = Mathf.Max(1, day);
+            totalGameMinutes = Mathf.Clamp(minutes, 0f, 24f * 60f);
+            lastMinute = -1;
+            OnTimeChanged?.Invoke(Hour, Minute);
+        }
 
         // แปลงเป็นข้อความ เช่น "10:30 AM" (ตามดีไซน์ HUD ในเอกสาร)
         public string GetTimeString()

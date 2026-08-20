@@ -1,6 +1,7 @@
 using UnityEngine;
 using NisitSimulator.Stats;
 using NisitSimulator.TimeSystem;
+using NisitSimulator.Player;
 using NisitSimulator.UI;
 
 namespace NisitSimulator.Interaction
@@ -32,8 +33,17 @@ namespace NisitSimulator.Interaction
                 return;
             }
 
-            if (Clock != null) Clock.SkipToNextMorning(wakeHour);
+            var action = interactor.GetComponent<PlayerActionController>()
+                         ?? interactor.AddComponent<PlayerActionController>();
+            if (action.IsBusy) { HUDController.Toast("กำลังทำกิจกรรมอยู่"); return; }
 
+            NisitSimulator.Core.SFXManager.Sleep();
+            action.PerformState(2f, () => WakeUp(interactor), "Sleeping_A", "Sleeping_B");   // นอนท่าสุ่มก่อน
+        }
+
+        private void WakeUp(GameObject interactor)
+        {
+            if (Clock != null) Clock.SkipToNextMorning(wakeHour);
             if (interactor.TryGetComponent<PlayerStats>(out var s))
             {
                 s.ChangeEnergy(999f);       // เต็ม
@@ -41,7 +51,7 @@ namespace NisitSimulator.Interaction
                 s.ChangeHunger(-25f);       // ตื่นมาหิว → ต้องไปกินข้าว
                 s.ChangeSatisfaction(5f);
             }
-            HUDController.Toast("หลับสบาย! พลังงานเต็ม ☀️ (แต่หิวแล้ว)");
+            HUDController.Toast("หลับสบาย! พลังงานเต็ม (แต่หิวแล้ว)");
         }
     }
 }

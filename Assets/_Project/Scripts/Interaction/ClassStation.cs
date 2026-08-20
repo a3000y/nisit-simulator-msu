@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NisitSimulator.Stats;
 using NisitSimulator.TimeSystem;
+using NisitSimulator.Player;
 using NisitSimulator.UI;
 
 namespace NisitSimulator.Interaction
@@ -45,14 +46,26 @@ namespace NisitSimulator.Interaction
                 return;
             }
 
+            var action = interactor.GetComponent<PlayerActionController>()
+                         ?? interactor.AddComponent<PlayerActionController>();
+            if (action.IsBusy) { HUDController.Toast("กำลังทำกิจกรรมอยู่"); return; }
+
             attendedToday.Add(session);
+            HUDController.Toast("เข้าเรียน... ตั้งใจฟังเลกเชอร์");
+            action.PerformState(2.5f, () => GrantClass(interactor), "Typing");   // นั่งเรียน (พิมพ์/จด)
+        }
+
+        private void GrantClass(GameObject interactor)
+        {
             if (interactor.TryGetComponent<PlayerStats>(out var stats))
             {
-                stats.ChangeKnowledge(knowledgePerClass);
+                float kMult = interactor.TryGetComponent<PlayerEffects>(out var fx) ? fx.knowledgeMult : 1f;
+                float k = knowledgePerClass * kMult;
+                stats.ChangeKnowledge(k);
                 stats.AddExp(expPerClass);
                 stats.ChangeEnergy(-energyCost);
                 stats.ChangeSatisfaction(3f);
-                HUDController.Toast($"เข้าเรียนสำเร็จ +{knowledgePerClass:0} ความรู้");
+                HUDController.Toast($"เรียนจบคาบ +{k:0} ความรู้" + (kMult > 1f ? " (ไฟแรง!)" : ""));
             }
         }
 

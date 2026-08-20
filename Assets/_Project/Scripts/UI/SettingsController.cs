@@ -10,6 +10,8 @@ namespace NisitSimulator.UI
         public Slider masterSlider;
         public Slider musicSlider;
         public Slider sfxSlider;
+        public Slider voiceSlider;     // เสียงพูด NPC / ตอบรับปุ่ม
+        public Slider ambientSlider;   // เสียงบรรยากาศ (ลม/นก/ในตึก)
         public Button closeButton;
         public GameObject panel;
 
@@ -18,12 +20,16 @@ namespace NisitSimulator.UI
             float m  = PlayerPrefs.GetFloat("vol_master", 1f);
             float mu = PlayerPrefs.GetFloat("vol_music", 0.8f);
             float sf = PlayerPrefs.GetFloat("vol_sfx", 0.9f);
+            float vo = PlayerPrefs.GetFloat("vol_voice", 0.9f);
+            float am = PlayerPrefs.GetFloat("vol_ambient", 0.7f);
 
             AudioListener.volume = m;
 
-            if (masterSlider) { masterSlider.value = m;  masterSlider.onValueChanged.AddListener(SetMaster); }
-            if (musicSlider)  { musicSlider.value = mu;  musicSlider.onValueChanged.AddListener(v => Save("vol_music", v)); }
-            if (sfxSlider)    { sfxSlider.value = sf;    sfxSlider.onValueChanged.AddListener(v => Save("vol_sfx", v)); }
+            if (masterSlider)  { masterSlider.value = m;   masterSlider.onValueChanged.AddListener(SetMaster); }
+            if (musicSlider)   { musicSlider.value = mu;   musicSlider.onValueChanged.AddListener(v => Save("vol_music", v)); }
+            if (sfxSlider)     { sfxSlider.value = sf;     sfxSlider.onValueChanged.AddListener(v => Save("vol_sfx", v)); }
+            if (voiceSlider)   { voiceSlider.value = vo;   voiceSlider.onValueChanged.AddListener(v => Save("vol_voice", v)); }
+            if (ambientSlider) { ambientSlider.value = am; ambientSlider.onValueChanged.AddListener(v => Save("vol_ambient", v)); }
             if (closeButton && panel) closeButton.onClick.AddListener(() => panel.SetActive(false));
         }
 

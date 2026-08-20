@@ -1,6 +1,7 @@
 using UnityEngine;
 using NisitSimulator.Stats;
 using NisitSimulator.Systems;
+using NisitSimulator.TimeSystem;
 
 namespace NisitSimulator.SaveLoad
 {
@@ -27,12 +28,23 @@ namespace NisitSimulator.SaveLoad
             var prog = Object.FindFirstObjectByType<ProgressionManager>();
             if (prog != null) { data.currentYear = prog.CurrentYear; data.dayInYear = prog.DayInYear; }
 
+            data.facultyIndex = GameSession.SelectedFacultyIndex;   // เก็บคณะลงเซฟ
+
             var player = GameObject.Find("Player");
             if (player != null)
             {
                 var p = player.transform.position;
                 data.posX = p.x; data.posY = p.y; data.posZ = p.z;
             }
+
+            var inv = Object.FindFirstObjectByType<InventoryManager>();
+            if (inv != null) data.inventoryItemIds = inv.ToSaveList();   // เก็บไอเทมในกระเป๋า
+
+            var exam = Object.FindFirstObjectByType<ExamController>();
+            if (exam != null) data.gradePoints = exam.GetGradePoints();  // ประวัติเกรด (GPA)
+
+            var clock = Object.FindFirstObjectByType<GameClock>();
+            if (clock != null) { data.gameDay = clock.Day; data.gameMinutes = clock.TotalMinutes; }  // เวลา
 
             SaveSystem.Save(data);
         }
@@ -46,6 +58,8 @@ namespace NisitSimulator.SaveLoad
             var data = SaveSystem.Load();
             if (data == null) return;
 
+            GameSession.SelectedFacultyIndex = data.facultyIndex;   // คืนคณะจากเซฟ (ไม่รีเซ็ตเป็น IT อีก)
+
             var stats = Object.FindFirstObjectByType<PlayerStats>();
             if (stats != null)
                 stats.LoadState(data.energy, data.health, data.hunger, data.knowledge,
@@ -53,6 +67,15 @@ namespace NisitSimulator.SaveLoad
 
             var prog = Object.FindFirstObjectByType<ProgressionManager>();
             if (prog != null) prog.RestoreState(data.currentYear, data.dayInYear);
+
+            var inv = Object.FindFirstObjectByType<InventoryManager>();
+            if (inv != null) inv.LoadFromList(data.inventoryItemIds);   // คืนไอเทมในกระเป๋า
+
+            var exam = Object.FindFirstObjectByType<ExamController>();
+            if (exam != null) exam.RestoreGrades(data.gradePoints);     // คืน GPA
+
+            var clock = Object.FindFirstObjectByType<GameClock>();
+            if (clock != null) clock.RestoreClock(data.gameDay, data.gameMinutes);  // คืนเวลา
 
             var player = GameObject.Find("Player");
             if (player != null)

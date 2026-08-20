@@ -8,25 +8,31 @@ namespace NisitSimulator.Stats
     [RequireComponent(typeof(PlayerStats))]
     public class StatDecay : MonoBehaviour
     {
-        [Header("อัตราลดต่อวินาที")]
-        public float hungerDecayPerSec = 0.5f;   // หิวขึ้นเรื่อยๆ
-        public float energyDecayPerSec = 0.2f;    // เหนื่อยตามเวลา
+        [Header("อัตราลดต่อวินาที (จูนให้พอดีเวลาช้า 1 นาที/วิ)")]
+        public float hungerDecayPerSec = 0.12f;   // หิวขึ้นเรื่อยๆ
+        public float energyDecayPerSec = 0.05f;   // เหนื่อยตามเวลา
 
         [Header("เมื่อหิวจัด (ความอิ่ม = 0)")]
-        public float starvingEnergyDrain = 1f;    // หิวจัดทำให้พลังงานลดเร็ว
-        public float starvingHealthDrain = 0.5f;  // และเริ่มเสียสุขภาพ
+        public float starvingEnergyDrain = 0.4f;  // หิวจัดทำให้พลังงานลดเร็ว
+        public float starvingHealthDrain = 0.25f; // และเริ่มเสียสุขภาพ
 
         private PlayerStats stats;
+        private NisitSimulator.Player.PlayerEffects effects;
 
-        void Awake() => stats = GetComponent<PlayerStats>();
+        void Awake()
+        {
+            stats = GetComponent<PlayerStats>();
+            effects = GetComponent<NisitSimulator.Player.PlayerEffects>() ?? gameObject.AddComponent<NisitSimulator.Player.PlayerEffects>();
+        }
 
         void Update()
         {
             if (GameManager.Instance != null && !GameManager.Instance.IsActive) return;
             float dt = Time.deltaTime;
+            float drainMult = effects != null ? effects.energyDrainMult : 1f;
 
             stats.ChangeHunger(-hungerDecayPerSec * dt);
-            stats.ChangeEnergy(-energyDecayPerSec * dt);
+            stats.ChangeEnergy(-energyDecayPerSec * drainMult * dt);
 
             // ถ้าความอิ่มหมด → เริ่มหักพลังงานและสุขภาพ
             if (stats.Hunger <= 0f)

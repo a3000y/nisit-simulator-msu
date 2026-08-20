@@ -1,5 +1,6 @@
 using UnityEngine;
 using NisitSimulator.Stats;
+using NisitSimulator.Player;
 using NisitSimulator.UI;
 
 namespace NisitSimulator.Interaction
@@ -12,6 +13,9 @@ namespace NisitSimulator.Interaction
         [Header("ป้ายบอก")]
         [SerializeField] private string activityName = "ทำกิจกรรม";
 
+        [Header("ท่าทาง (ว่าง = นั่งปกติ · หลายท่า = สุ่ม)")]
+        public string[] actionStates;
+
         [Header("ผลของกิจกรรม (บวก=เพิ่ม, ลบ=ลด)")]
         [SerializeField] private float energyChange = 0f;
         [SerializeField] private float hungerChange = 0f;
@@ -23,6 +27,19 @@ namespace NisitSimulator.Interaction
         public string GetPrompt() => $"กด E เพื่อ{activityName}";
 
         public void Interact(GameObject interactor)
+        {
+            var action = interactor.GetComponent<PlayerActionController>()
+                         ?? interactor.AddComponent<PlayerActionController>();
+            if (action.IsBusy) { HUDController.Toast("กำลังทำกิจกรรมอยู่"); return; }
+
+            HUDController.Toast($"กำลัง{activityName}...");
+            if (actionStates != null && actionStates.Length > 0)
+                action.PerformState(1.8f, () => Grant(interactor), actionStates);   // ท่าเจาะจง (สุ่ม)
+            else
+                action.Perform(1.8f, () => Grant(interactor));                       // นั่งปกติ
+        }
+
+        private void Grant(GameObject interactor)
         {
             if (interactor.TryGetComponent<PlayerStats>(out var stats))
             {

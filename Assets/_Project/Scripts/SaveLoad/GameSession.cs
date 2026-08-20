@@ -7,5 +7,8 @@ namespace NisitSimulator.SaveLoad
         public const string GameplayScene = "01_Gameplay"; // ฉากเล่นเกม
 
         public static bool PendingLoad = false;  // true = ให้โหลดเซฟตอนเข้าฉากเกม
+
+        // คณะของผู้เล่น (0=IT, 1=บริหาร, 2=วิทย์, 3=นิเทศ) — เป็นค่าต่อผู้เล่น เผื่อ multiplayer ในอนาคต
+        public static int SelectedFacultyIndex = 0;
     }
 }

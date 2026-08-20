@@ -17,9 +17,12 @@ namespace NisitSimulator.EditorTools
     {
         const string MenuPath = "Assets/Scenes/Scene1.unity";
         const string GameplayPath = "Assets/_Project/Scenes/01_Gameplay.unity";
-        const string FontSdf = "Assets/_Project/Art/Fonts/LeelawadeeUI SDF.asset";
+        const string FontSdf = "Assets/_Project/Art/Fonts/Mitr SDF.asset";
         static TMP_FontAsset thai;
-        static Sprite ui;
+        static Sprite ui, round, pill, gloss, circle;
+        static Sprite LoadUI(string f) => AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/" + f);
+
+        public static bool SuppressDialog = false;   // ปิด popup เมื่อเรียกจาก Rebuild All
 
         [MenuItem("Nisit/Build M4 Menu")]
         public static void Build()
@@ -29,6 +32,8 @@ namespace NisitSimulator.EditorTools
 
             thai = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontSdf);
             ui = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
+            round  = LoadUI("ui_round.png"); pill = LoadUI("ui_pill2.png");
+            gloss  = LoadUI("ui_gloss.png"); circle = LoadUI("ui_circle.png");   // สไปรต์ลูกกวาด (จาก Polish)
 
             // ===== 1) ฉากเกม: ใส่ GameplayBootstrap ที่ GameManager =====
             var gp = EditorSceneManager.OpenScene(GameplayPath, OpenSceneMode.Single);
@@ -51,9 +56,27 @@ namespace NisitSimulator.EditorTools
                 new EditorBuildSettingsScene(GameplayPath, true),
             };
 
-            Debug.Log("<color=lime>[Nisit] สร้างเมนู M4 เสร็จ!</color>");
+            // ===== 4) ต่อ Polish + พื้นหลัง + หน้าเลือกคณะ อัตโนมัติ (กดครั้งเดียวจบ ไม่ต้องไล่กด) =====
+            MenuPolish.SuppressDialog = true;
+            M11FacultyBuilder.SuppressDialog = true;
+            try
+            {
+                MenuPolish.Run();                  // ปุ่มลูกกวาด + โลโก้เงานูน + parallax/intro
+                MenuPolish.DayCampusBackground();  // พื้นหลังมหาลัยกลางวันสดใส
+                M11FacultyBuilder.Build();         // หน้าเลือกคณะ (สไตล์เดียวกัน อยู่บนสุด)
+            }
+            catch (System.Exception e) { Debug.LogWarning("[Nisit] ต่อเมนูอัตโนมัติมีปัญหา: " + e.Message); }
+            finally
+            {
+                MenuPolish.SuppressDialog = false;
+                M11FacultyBuilder.SuppressDialog = false;
+            }
+            EditorSceneManager.OpenScene(MenuPath, OpenSceneMode.Single);   // กลับมาที่ฉากเมนูให้ผู้ใช้พร้อม Play
+
+            Debug.Log("<color=lime>[Nisit] สร้างเมนู M4 + Polish + พื้นหลัง + คณะ เสร็จครบ!</color>");
+            if (!SuppressDialog)
             EditorUtility.DisplayDialog("Nisit Simulator",
-                "สร้างเมนูหลัก (M4) เสร็จแล้ว! 🎬\n\nตอนนี้อยู่ที่ฉากเมนู (Scene1)\nกด Play เพื่อทดสอบ:\n- เล่นคนเดียว → เข้าเกม\n- ตั้งค่า → ปรับเสียง\n- จบเกมแล้วกด 'ออก' → กลับเมนู\n- เล่นต่อ → โหลดเซฟล่าสุด\n\n(เซฟอัตโนมัติทุกวันในเกม)", "เยี่ยม!");
+                "สร้างเมนูครบทุกอย่างในคลิกเดียว! 🎬✨\n\n✓ ปุ่มลูกกวาดเงาวาว 5 ปุ่ม\n✓ พื้นหลังมหาลัยสดใส\n✓ หน้าเลือกคณะ (สไตล์เดียวกัน)\n✓ เสียง 5 ระดับ\n\nกด Play ที่ฉากเมนู (Scene1) ได้เลย", "เยี่ยม!");
         }
 
         static void BuildMenuUI()
@@ -62,8 +85,12 @@ namespace NisitSimulator.EditorTools
             var cam = Camera.main;
             if (cam != null) { cam.clearFlags = CameraClearFlags.SolidColor; cam.backgroundColor = new Color(0.16f, 0.20f, 0.30f); }
 
+            // ลบ Menu Canvas เก่า + Canvas ของฉากเกมที่หลงเข้ามาในฉากเมนู (กันปนกัน)
+            string[] strayInMenu = { "Menu Canvas", "HUD Canvas", "End Canvas", "Exam Canvas",
+                "Inventory Canvas", "Shop Canvas", "Cafeteria Canvas", "Quest Canvas",
+                "Event Canvas", "Minimap Canvas", "Phone Canvas", "Tutorial Canvas" };
             foreach (var c in Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None))
-                if (c.name == "Menu Canvas") Object.DestroyImmediate(c.gameObject);
+                if (System.Array.IndexOf(strayInMenu, c.name) >= 0) Object.DestroyImmediate(c.gameObject);
 
             var canvasGo = new GameObject("Menu Canvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             var canvas = canvasGo.GetComponent<Canvas>();
@@ -87,31 +114,45 @@ namespace NisitSimulator.EditorTools
             MakeText(root, "Sub", "จำลองชีวิตนิสิต", 40, new Vector2(0.5f, 1f), new Vector2(0, -280),
                  new Vector2(1000, 60), Color.white, FontStyles.Normal);
 
-            // ปุ่ม
+            // ปุ่ม (5 ปุ่ม)
             var mc = canvasGo.AddComponent<MainMenuController>();
-            mc.newGameButton  = MakeButton(root, "เล่นคนเดียว", new Vector2(0, 40),   new Color(0.30f, 0.62f, 0.38f));
-            mc.continueButton = MakeButton(root, "เล่นต่อ",     new Vector2(0, -50),  new Color(0.30f, 0.52f, 0.70f));
-            mc.settingsButton = MakeButton(root, "ตั้งค่า",      new Vector2(0, -140), new Color(0.45f, 0.42f, 0.58f));
-            mc.quitButton     = MakeButton(root, "ออก",         new Vector2(0, -230), new Color(0.62f, 0.34f, 0.34f));
+            mc.newGameButton     = MakeButton(root, "เล่นคนเดียว", new Vector2(0, 78),   new Color(0.60f, 0.86f, 0.68f));
+            mc.multiplayerButton = MakeButton(root, "เล่นหลายคน", new Vector2(0, -12),  new Color(0.99f, 0.82f, 0.62f));
+            mc.continueButton    = MakeButton(root, "เล่นต่อ",     new Vector2(0, -102), new Color(0.62f, 0.80f, 0.96f));
+            mc.settingsButton    = MakeButton(root, "ตั้งค่า",      new Vector2(0, -192), new Color(0.80f, 0.72f, 0.96f));
+            mc.quitButton        = MakeButton(root, "ออก",         new Vector2(0, -282), new Color(0.99f, 0.74f, 0.78f));
 
-            // ===== แผงตั้งค่าเสียง =====
-            var panel = MakeImage(root, "SettingsPanel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Color(0.15f, 0.18f, 0.28f, 0.98f));
-            panel.rectTransform.sizeDelta = new Vector2(700, 560);
-            MakeText(panel.transform, "STitle", "ตั้งค่าเสียง", 48, new Vector2(0.5f, 1f), new Vector2(0, -40), new Vector2(600, 60), new Color(1f, 0.86f, 0.42f), FontStyles.Bold);
+            // ===== แผงตั้งค่าเสียง (dim เต็มจอ + การ์ดกลาง) =====
+            var sDim = MakeImage(root, "SettingsPanel", Vector2.zero, Vector2.one, new Color(0.04f, 0.06f, 0.12f, 0.62f));
+            sDim.rectTransform.offsetMin = Vector2.zero; sDim.rectTransform.offsetMax = Vector2.zero;
+            var sCard = MakeRounded(sDim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(660, 720), new Color(0.11f, 0.14f, 0.24f, 0.99f));
+            Deco(sCard);
+            MakeText(sCard.transform, "STitle", "ตั้งค่าเสียง", 46, new Vector2(0.5f, 1f), new Vector2(0, -46), new Vector2(600, 60), new Color(1f, 0.9f, 0.5f), FontStyles.Bold);
 
-            var sc = panel.gameObject.AddComponent<SettingsController>();
-            sc.panel = panel.gameObject;
-            sc.masterSlider = LabeledSlider(panel.transform, "เสียงรวม (Master)", -60);
-            sc.musicSlider  = LabeledSlider(panel.transform, "เพลง (Music)", -160);
-            sc.sfxSlider    = LabeledSlider(panel.transform, "เอฟเฟกต์ (SFX)", -260);
-            sc.closeButton  = MakeButton(panel.transform, "ปิด", new Vector2(0, 120 - 560 / 2f + 30), new Color(0.5f, 0.4f, 0.4f), 0.5f, 0f);
-            // ปุ่มปิดจัดที่ล่างแผง
-            var crt = sc.closeButton.GetComponent<RectTransform>();
-            crt.anchorMin = crt.anchorMax = crt.pivot = new Vector2(0.5f, 0f);
-            crt.anchoredPosition = new Vector2(0, 40);
+            var sc = sCard.gameObject.AddComponent<SettingsController>();
+            sc.panel = sDim.gameObject;
+            sc.masterSlider  = LabeledSlider(sCard.transform, "เสียงรวม (Master)", -120);
+            sc.musicSlider   = LabeledSlider(sCard.transform, "เพลง (Music)", -216);
+            sc.sfxSlider     = LabeledSlider(sCard.transform, "เอฟเฟกต์ (SFX)", -312);
+            sc.voiceSlider   = LabeledSlider(sCard.transform, "เสียงพูด (Voice)", -408);
+            sc.ambientSlider = LabeledSlider(sCard.transform, "บรรยากาศ (Ambient)", -504);
+            sc.closeButton   = MakeButton(sCard.transform, "ปิด", new Vector2(0, 28), new Color(0.80f, 0.72f, 0.96f), 0.5f, 0f);
 
-            mc.settingsPanel = panel.gameObject;
-            panel.gameObject.SetActive(false);
+            mc.settingsPanel = sDim.gameObject;
+            sDim.gameObject.SetActive(false);
+
+            // ===== ป็อปอัป "กำลังพัฒนา" (dim + การ์ด) =====
+            var csDim = MakeImage(root, "ComingSoonPanel", Vector2.zero, Vector2.one, new Color(0.04f, 0.06f, 0.12f, 0.62f));
+            csDim.rectTransform.offsetMin = Vector2.zero; csDim.rectTransform.offsetMax = Vector2.zero;
+            var csCard = MakeRounded(csDim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(680, 360), new Color(0.11f, 0.14f, 0.24f, 0.99f));
+            Deco(csCard);
+            MakeText(csCard.transform, "CSTitle", "กำลังพัฒนา", 46, new Vector2(0.5f, 1f), new Vector2(0, -48), new Vector2(640, 62), new Color(1f, 0.9f, 0.5f), FontStyles.Bold);
+            var csBody = MakeText(csCard.transform, "CSBody", "โหมดเล่นหลายคน (Multiplayer)\nจะเปิดให้เล่นในเวอร์ชันถัดไป", 27, new Vector2(0.5f, 1f), new Vector2(0, -140), new Vector2(600, 110), new Color(0.92f, 0.94f, 0.88f), FontStyles.Normal);
+            csBody.enableWordWrapping = true; csBody.alignment = TextAlignmentOptions.Center;
+            var csClose = MakeButton(csCard.transform, "เข้าใจแล้ว", new Vector2(0, 30), new Color(0.80f, 0.72f, 0.96f), 0.5f, 0f);
+            mc.comingSoonPanel = csDim.gameObject;
+            mc.comingSoonCloseButton = csClose;
+            csDim.gameObject.SetActive(false);
         }
 
         // ---------- helpers ----------
@@ -144,25 +185,51 @@ namespace NisitSimulator.EditorTools
 
         static Button MakeButton(Transform parent, string label, Vector2 pos, Color col, float ax = 0.5f, float ay = 0.5f)
         {
+            var size = new Vector2(360, 76);
+            var sprite = pill ?? ui;
+            var anchor = new Vector2(ax, ay);
+
+            // ฐานเงาเข้ม (หลังปุ่ม)
+            var baseGo = new GameObject(label + "Base", typeof(Image));
+            baseGo.transform.SetParent(parent, false);
+            var bimg = baseGo.GetComponent<Image>();
+            bimg.sprite = sprite; bimg.type = Image.Type.Sliced; bimg.color = Shift(col, -0.26f); bimg.raycastTarget = false;
+            var brt = bimg.rectTransform; brt.anchorMin = brt.anchorMax = brt.pivot = anchor; brt.anchoredPosition = pos + new Vector2(0, -7); brt.sizeDelta = size;
+
             var go = new GameObject(label + "Btn", typeof(Image), typeof(Button));
             go.transform.SetParent(parent, false);
             var img = go.GetComponent<Image>();
-            img.sprite = ui; img.type = Image.Type.Sliced; img.color = col;
+            img.sprite = sprite; img.type = Image.Type.Sliced; img.color = col;
             var rt = img.rectTransform;
-            rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(ax, ay);
-            rt.anchoredPosition = pos; rt.sizeDelta = new Vector2(360, 76);
+            rt.anchorMin = rt.anchorMax = rt.pivot = anchor;
+            rt.anchoredPosition = pos; rt.sizeDelta = size;
+            Deco(img);
 
-            var txt = MakeText(go.transform, "Text", label, 34, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(360, 76), Color.white, FontStyles.Bold);
+            if (gloss != null)
+            {
+                var gGo = new GameObject("Gloss", typeof(Image));
+                gGo.transform.SetParent(go.transform, false);
+                var g = gGo.GetComponent<Image>();
+                g.sprite = gloss; g.type = Image.Type.Simple; g.color = new Color(1f, 1f, 1f, 0.5f); g.raycastTarget = false;
+                var grt = g.rectTransform; grt.anchorMin = grt.anchorMax = grt.pivot = new Vector2(0.5f, 0.5f);
+                grt.sizeDelta = new Vector2(size.x * 0.9f, size.y * 0.55f); grt.anchoredPosition = new Vector2(0, size.y * 0.2f);
+            }
+
+            var btn = go.GetComponent<Button>();
+            btn.transition = Selectable.Transition.ColorTint; btn.targetGraphic = img;
+            var cb = btn.colors; cb.normalColor = col; cb.highlightedColor = Shift(col, 0.12f); cb.pressedColor = Shift(col, -0.10f); cb.fadeDuration = 0.1f; btn.colors = cb;
+
+            var txt = MakeText(go.transform, "Text", label, 34, new Vector2(0.5f, 0.5f), Vector2.zero, size, new Color(0.20f, 0.22f, 0.38f), FontStyles.Bold);
             var trt = txt.rectTransform;
             trt.anchorMin = Vector2.zero; trt.anchorMax = Vector2.one; trt.offsetMin = trt.offsetMax = Vector2.zero;
-
-            return go.GetComponent<Button>();
+            txt.transform.SetAsLastSibling();
+            return btn;
         }
 
         static Slider LabeledSlider(Transform parent, string label, float y)
         {
-            MakeText(parent, label + "Lbl", label, 28, new Vector2(0.5f, 1f), new Vector2(0, y), new Vector2(600, 40), Color.white, FontStyles.Normal);
-            return MakeSlider(parent, new Vector2(0, y - 44), new Vector2(560, 30));
+            MakeText(parent, label + "Lbl", label, 26, new Vector2(0.5f, 1f), new Vector2(0, y), new Vector2(560, 36), new Color(0.95f, 0.96f, 0.92f), FontStyles.Bold);
+            return MakeSlider(parent, new Vector2(0, y - 46), new Vector2(540, 26));
         }
 
         static Slider MakeSlider(Transform parent, Vector2 pos, Vector2 size)
@@ -172,36 +239,56 @@ namespace NisitSimulator.EditorTools
             var rt = (RectTransform)go.transform;
             rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 1f); rt.pivot = new Vector2(0.5f, 1f);
             rt.anchoredPosition = pos; rt.sizeDelta = size;
-            var bg = go.GetComponent<Image>(); bg.sprite = ui; bg.type = Image.Type.Sliced; bg.color = new Color(0, 0, 0, 0.5f);
+            var bg = go.GetComponent<Image>(); bg.sprite = round ?? ui; bg.type = Image.Type.Sliced; bg.color = new Color(0f, 0f, 0f, 0.40f);
             var slider = go.GetComponent<Slider>();
 
             var fillArea = new GameObject("Fill Area", typeof(RectTransform));
             fillArea.transform.SetParent(go.transform, false);
             var fart = (RectTransform)fillArea.transform;
-            fart.anchorMin = new Vector2(0, 0.25f); fart.anchorMax = new Vector2(1, 0.75f);
-            fart.offsetMin = new Vector2(8, 0); fart.offsetMax = new Vector2(-8, 0);
+            fart.anchorMin = new Vector2(0, 0f); fart.anchorMax = new Vector2(1, 1f);
+            fart.offsetMin = new Vector2(4, 4); fart.offsetMax = new Vector2(-4, -4);
             var fill = new GameObject("Fill", typeof(RectTransform), typeof(Image));
             fill.transform.SetParent(fillArea.transform, false);
-            var fImg = fill.GetComponent<Image>(); fImg.sprite = ui; fImg.type = Image.Type.Sliced; fImg.color = new Color(0.45f, 0.8f, 0.45f);
+            var fImg = fill.GetComponent<Image>(); fImg.sprite = round ?? ui; fImg.type = Image.Type.Sliced; fImg.color = new Color(0.30f, 0.85f, 0.48f);
             ((RectTransform)fill.transform).sizeDelta = new Vector2(10, 0);
 
             var hsa = new GameObject("Handle Slide Area", typeof(RectTransform));
             hsa.transform.SetParent(go.transform, false);
             var hart = (RectTransform)hsa.transform;
             hart.anchorMin = new Vector2(0, 0); hart.anchorMax = new Vector2(1, 1);
-            hart.offsetMin = new Vector2(12, 0); hart.offsetMax = new Vector2(-12, 0);
+            hart.offsetMin = new Vector2(14, 0); hart.offsetMax = new Vector2(-14, 0);
             var handle = new GameObject("Handle", typeof(RectTransform), typeof(Image));
             handle.transform.SetParent(hsa.transform, false);
-            var hImg = handle.GetComponent<Image>(); hImg.sprite = ui; hImg.color = Color.white;
-            ((RectTransform)handle.transform).sizeDelta = new Vector2(26, 0);
+            var hImg = handle.GetComponent<Image>(); hImg.sprite = circle ?? ui; hImg.color = Color.white;
+            var hrt = (RectTransform)handle.transform; hrt.sizeDelta = new Vector2(32, 0);
 
             slider.fillRect = (RectTransform)fill.transform;
-            slider.handleRect = (RectTransform)handle.transform;
+            slider.handleRect = hrt;
             slider.targetGraphic = hImg;
             slider.direction = Slider.Direction.LeftToRight;
             slider.minValue = 0f; slider.maxValue = 1f; slider.value = 1f;
             return slider;
         }
+
+        // ---------- helper สไตล์ลูกกวาด ----------
+        static Image MakeRounded(Transform parent, string name, Vector2 anchor, Vector2 pos, Vector2 size, Color col)
+        {
+            var go = new GameObject(name, typeof(Image));
+            go.transform.SetParent(parent, false);
+            var img = go.GetComponent<Image>();
+            img.sprite = round ?? ui; img.type = Image.Type.Sliced; img.color = col; img.raycastTarget = false;
+            var rt = img.rectTransform;
+            rt.anchorMin = rt.anchorMax = rt.pivot = anchor; rt.anchoredPosition = pos; rt.sizeDelta = size;
+            return img;
+        }
+
+        static void Deco(Graphic g)
+        {
+            var o = g.gameObject.AddComponent<Outline>(); o.effectColor = new Color(0.12f, 0.14f, 0.24f, 1f); o.effectDistance = new Vector2(5, -5); o.useGraphicAlpha = false;
+            var s = g.gameObject.AddComponent<Shadow>(); s.effectColor = new Color(0f, 0f, 0f, 0.35f); s.effectDistance = new Vector2(3, -5);
+        }
+
+        static Color Shift(Color c, float d) => new Color(Mathf.Clamp01(c.r + d), Mathf.Clamp01(c.g + d), Mathf.Clamp01(c.b + d), c.a);
     }
 }
 #endif

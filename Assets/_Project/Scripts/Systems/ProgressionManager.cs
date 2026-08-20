@@ -11,9 +11,9 @@ namespace NisitSimulator.Systems
     public class ProgressionManager : MonoBehaviour
     {
         [Header("ตั้งค่าปีการศึกษา")]
-        public int daysPerYear = 3;
+        public int daysPerYear = 12;  // 12 เดือน: ต้น 5 + ปลาย 5 + ฤดูร้อน 2
         // เป้าความรู้สะสมของแต่ละปี (เพิ่มขึ้นเรื่อยๆ ตามเอกสาร 1.3.4.1)
-        public float[] knowledgeTargets = { 80f, 180f, 300f, 440f };
+        public float[] knowledgeTargets = { 180f, 420f, 720f, 1080f };
 
         public int CurrentYear { get; private set; } = 1;
         public int DayInYear { get; private set; } = 1;
@@ -41,7 +41,22 @@ namespace NisitSimulator.Systems
 
             OnYearChanged?.Invoke(CurrentYear, CurrentTarget);
             OnDayInYearChanged?.Invoke(DayInYear, daysPerYear);
+            Invoke(nameof(ShowYearIntro), 1.2f);   // แจ้งธีมชั้นปีตอนเข้าเกม
         }
+
+        // ธีมประจำแต่ละชั้นปี (แสดงตอนเริ่ม/ขึ้นปี · ให้แอปโทรศัพท์เรียกได้)
+        public string YearTheme(int year)
+        {
+            switch (year)
+            {
+                case 1:  return "น้องใหม่ — ปรับตัว + รับน้อง";
+                case 2:  return "ลุยวิชาเอก + กิจกรรมชมรม";
+                case 3:  return "วิชาเข้มข้น + ฝึกงาน";
+                default: return "ปีสุดท้าย — โปรเจกต์จบ + เตรียมทำงาน";
+            }
+        }
+
+        void ShowYearIntro() => UI.HUDController.Toast($"ปี {CurrentYear}: {YearTheme(CurrentYear)}");
 
         void OnDestroy()
         {
@@ -80,7 +95,13 @@ namespace NisitSimulator.Systems
                     DayInYear = 1;
                     OnYearChanged?.Invoke(CurrentYear, CurrentTarget);
                     OnDayInYearChanged?.Invoke(DayInYear, daysPerYear);
-                    UI.HUDController.Toast($"ผ่านขึ้นปี {CurrentYear}! เป้าใหม่ {CurrentTarget:0} ความรู้");
+                    UI.HUDController.Toast($"ขึ้นปี {CurrentYear}! {YearTheme(CurrentYear)} (เป้า {CurrentTarget:0})");
+
+                    // ท่าดีใจ + เสียงแฟนแฟร์ตอนเลื่อนชั้นปี
+                    var pl = GameObject.Find("Player");
+                    var pac = pl != null ? pl.GetComponent<Player.PlayerActionController>() : null;
+                    if (pac != null) pac.PerformState(2.5f, null, "Cheering");
+                    SFXManager.Fanfare();
                 }
             }
             else

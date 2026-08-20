@@ -118,6 +118,7 @@ namespace NisitSimulator.UI
         public static void Toast(string msg)
         {
             if (Instance != null) Instance.ShowToast(msg);
+            NisitSimulator.Core.SFXManager.Notify();
             Debug.Log($"[Toast] {msg}");
         }
 

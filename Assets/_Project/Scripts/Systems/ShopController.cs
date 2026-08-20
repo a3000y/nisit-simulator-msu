@@ -36,6 +36,10 @@ namespace NisitSimulator.Systems
         [Header("สินค้าในร้าน")]
         public List<ShopItem> catalog = new List<ShopItem>();
 
+        [Header("โหมด")]
+        [Tooltip("true = ซื้อแล้วเก็บเข้ากระเป๋า (ร้านค้า) · false = ใช้ผลทันที (โรงอาหาร)")]
+        public bool storeToInventory = false;
+
         public bool IsOpen { get; private set; }
 
         private PlayerStats stats;
@@ -127,17 +131,38 @@ namespace NisitSimulator.Systems
             for (int i = 0; i < catalog.Count; i++) total += qty[i] * catalog[i].price;
             if (total <= 0) return;
             if (!stats.TrySpendMoney(total)) { HUDController.Toast("เงินไม่พอ!"); return; }
+
+            // หา InventoryManager แบบกันพลาด (Instance → หาในฉากรวม inactive → สร้างใหม่ถ้าไม่มี)
+            InventoryManager inv = null;
+            if (storeToInventory)
+            {
+                inv = InventoryManager.Instance
+                      ?? Object.FindFirstObjectByType<InventoryManager>(FindObjectsInactive.Include);
+                if (inv == null)
+                {
+                    var gmObj = GameObject.Find("GameManager");
+                    inv = (gmObj != null ? gmObj : new GameObject("InventoryManager")).AddComponent<InventoryManager>();
+                }
+            }
             for (int i = 0; i < catalog.Count; i++)
                 if (qty[i] > 0)
                 {
                     var it = catalog[i]; int q = qty[i];
-                    stats.ChangeEnergy(it.energy * q);
-                    stats.ChangeHunger(it.hunger * q);
-                    stats.ChangeHealth(it.health * q);
-                    stats.ChangeKnowledge(it.knowledge * q);
-                    stats.ChangeSatisfaction(it.satisfaction * q);
+                    if (inv != null)
+                    {
+                        inv.Add(it, q);                       // ร้านค้า: เก็บเข้ากระเป๋า (กดใช้ทีหลัง)
+                    }
+                    else
+                    {
+                        stats.ChangeEnergy(it.energy * q);    // โรงอาหาร: กินทันที
+                        stats.ChangeHunger(it.hunger * q);
+                        stats.ChangeHealth(it.health * q);
+                        stats.ChangeKnowledge(it.knowledge * q);
+                        stats.ChangeSatisfaction(it.satisfaction * q);
+                    }
                 }
-            HUDController.Toast($"ซื้อสำเร็จ!  -{total}฿");
+            HUDController.Toast(inv != null ? $"ซื้อเข้ากระเป๋าแล้ว!  -{total}฿" : $"ซื้อสำเร็จ!  -{total}฿");
+            if (inv == null) NisitSimulator.Core.SFXManager.Eat();   // โรงอาหาร = กินทันที → เสียงกิน
             ClearCart();
         }
 

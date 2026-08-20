@@ -16,7 +16,7 @@ namespace NisitSimulator.EditorTools
     {
         const string MatDir  = "Assets/_Project/Art/Materials/";
         const string FontTtf = "Assets/_Project/Art/Fonts/LeelawadeeUI.ttf";
-        const string FontSdf = "Assets/_Project/Art/Fonts/LeelawadeeUI SDF.asset";
+        const string FontSdf = "Assets/_Project/Art/Fonts/Mitr SDF.asset";
 
         [MenuItem("Nisit/Make It Pretty")]
         public static void Beautify()

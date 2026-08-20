@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using NisitSimulator.Core;
 using NisitSimulator.Systems;
+using NisitSimulator.SaveLoad;
 
 namespace NisitSimulator.UI
 {
@@ -45,13 +46,23 @@ namespace NisitSimulator.UI
         {
             if (panel != null) panel.SetActive(true);
 
+            // หยุดตัวละคร + ปลดล็อกเมาส์ (กดปุ่มได้ + ไม่เดินหลังฉากจบ)
+            var playerGo = GameObject.Find("Player");
+            if (playerGo != null)
+            {
+                var mv = playerGo.GetComponent<NisitSimulator.Player.PlayerMovement>();
+                if (mv != null) mv.enabled = false;
+            }
+            Cursor.visible = true; Cursor.lockState = CursorLockMode.None;
+
             string title, msg;
             Color color;
             switch (reason)
             {
                 case EndReason.Graduated:
                     title = "GRADUATION!"; color = new Color(1f, 0.85f, 0.3f);
-                    msg = "ยินดีด้วย! คุณเรียนจบการศึกษาสำเร็จ 🎓";
+                    msg = "ยินดีด้วย! คุณเรียนจบการศึกษาสำเร็จ";
+                    NisitSimulator.Core.SFXManager.Fanfare();   // เสียงแฟนแฟร์ตอนจบการศึกษา
                     break;
                 case EndReason.Flunked:
                     title = "FLUNKED OUT"; color = new Color(0.9f, 0.4f, 0.3f);
@@ -67,8 +78,18 @@ namespace NisitSimulator.UI
             if (messageText != null) messageText.text = msg;
 
             var prog = Object.FindFirstObjectByType<ProgressionManager>();
+            var exam = Object.FindFirstObjectByType<ExamController>();
             int score = prog != null ? prog.CalculateScore() : 0;
-            if (scoreText != null) scoreText.text = $"คะแนนรวม: {score}";
+            int year = prog != null ? prog.CurrentYear : 1;
+            float gpa = exam != null ? exam.GPA : 0f;
+            string faculty = FacultyCatalog.NameOf(GameSession.SelectedFacultyIndex);
+
+            if (scoreText != null)
+                scoreText.text =
+                    $"คณะ: {faculty}\n" +
+                    $"ชั้นปีที่ไปถึง: {year}\n" +
+                    $"เกรดเฉลี่ย (GPA): {gpa:0.00}\n" +
+                    $"คะแนนรวม: {score}";
         }
 
         // โหลดฉากปัจจุบันใหม่ = เริ่มเกมใหม่
