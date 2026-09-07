@@ -58,6 +58,7 @@ namespace NisitSimulator.Systems
         private readonly List<Question> current = new List<Question>();
         private int index, correctCount;
         private bool isFinal;
+        private int examSem;   // ภาคเรียนของการสอบที่กำลังทำ (ไว้บันทึกว่าสอบเสร็จแล้ว)
 
         void Start()
         {
@@ -93,9 +94,9 @@ namespace NisitSimulator.Systems
             int semDay = AcademicCalendar.SemesterDay(dayInYear);
             int mid = Mathf.Max(1, Mathf.CeilToInt(len / 2f));
 
-            if (semDay == len && Mark(sem, "final"))
+            if (semDay == len && !Completed(sem, "final"))
                 SetPending(true, sem);
-            else if (AcademicCalendar.HasMidterm(sem) && semDay == mid && Mark(sem, "mid"))
+            else if (AcademicCalendar.HasMidterm(sem) && semDay == mid && !Completed(sem, "mid"))
                 SetPending(false, sem);
         }
 
@@ -120,20 +121,16 @@ namespace NisitSimulator.Systems
             Begin(pendingFinal, pendingSem);
         }
 
-        // กันสอบซ้ำในภาคเดิม (คืน true = ยังไม่เคยสอบ)
-        private bool Mark(int sem, string type)
-        {
-            string key = (prog != null ? prog.CurrentYear : 0) + "-" + sem + "-" + type;
-            if (done.Contains(key)) return false;
-            done.Add(key);
-            return true;
-        }
+        // key ประจำการสอบ (ปี-ภาค-ชนิด) · Completed = สอบเสร็จแล้วหรือยัง (กันสอบซ้ำ/save-scum)
+        private string Key(int sem, string type) => (prog != null ? prog.CurrentYear : 0) + "-" + sem + "-" + type;
+        private bool Completed(int sem, string type) => done.Contains(Key(sem, type));
 
         // ---------- เริ่มสอบ ----------
         public void Begin(bool final, int sem)
         {
             if (panel == null) return;
             isFinal = final;
+            examSem = sem;
             index = 0; correctCount = 0;
             current.Clear();
             current.AddRange(PickQuestions(questionsPerExam));
@@ -192,6 +189,7 @@ namespace NisitSimulator.Systems
             if (isFinal) { kBonus *= 1.5f; exp = Mathf.RoundToInt(exp * 1.5f); }
 
             gradePoints.Add(gp);
+            done.Add(Key(examSem, isFinal ? "final" : "mid"));   // ทำเสร็จแล้ว → กันสอบซ้ำ (แม้โหลดเซฟ)
             float sum = 0f; foreach (var g in gradePoints) sum += g;
             GPA = gradePoints.Count > 0 ? sum / gradePoints.Count : 0f;
 
@@ -244,6 +242,14 @@ namespace NisitSimulator.Systems
             if (gp != null) gradePoints.AddRange(gp);
             float sum = 0f; foreach (var g in gradePoints) sum += g;
             GPA = gradePoints.Count > 0 ? sum / gradePoints.Count : 0f;
+        }
+
+        // เซฟ/โหลด "สอบเสร็จแล้ว" (กัน save-scum สอบซ้ำ) — ต้อง RestoreDoneExams ก่อน ProgressionManager.RestoreState
+        public List<string> GetDoneExams() => new List<string>(done);
+        public void RestoreDoneExams(List<string> keys)
+        {
+            done.Clear();
+            if (keys != null) foreach (var k in keys) done.Add(k);
         }
 
         static Color GradeColor(string g)

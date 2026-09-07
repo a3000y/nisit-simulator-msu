@@ -219,6 +219,29 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - ⚙️ **★ Rebuild All** ([M23](Assets/_Project/Scripts/Editor/M23RebuildAll.cs)) รวม M26 (NPC) + M27 (สัตว์) เข้าคลิกเดียวแล้ว
 - หมายเหตุ: EventManager เป็น logic → apply ตอน Play · NPC/สัตว์ ถูก "อบ" ลงฉาก → **ต้องรัน tool** (Build Talk NPCs / Build Animals / ★ Rebuild All)
 
+### ตัวละครหลากหลาย + แยกบทบาท + สัตว์ Quaternius + ปุ่มเดียวจบ (2026-09-04)
+- 🧍 **โมเดลคน 12 ตัว** — เพิ่ม Mixamo ซีรีส์ Ch## (Ch06/07/12/21/22/23/27/33/41/46 + Remy) เข้า `Art/Characters/` (สไตล์การ์ตูนเข้าชุดกับ Ch29)
+- 🔧 **M28SetupNPCModels** ([Editor/M28SetupNPCModels.cs](Assets/_Project/Scripts/Editor/M28SetupNPCModels.cs), Nisit ▸ Setup NPC Models) — โมเดล Mixamo โหลดมาเป็น **Generic** → แปลงเป็น **Humanoid** (CreateFromThisModel) ทั้งโฟลเดอร์ทีเดียว (ไม่งั้นเล่นท่า Waving/Talking ไม่ได้)
+- 👨‍🏫 **แยกบทบาทอาจารย์ vs นักเรียน** ([M26](Assets/_Project/Scripts/Editor/M26TalkNPCs.cs)) — บุคลากร (อาจารย์/บรรณารักษ์): ตัวใหญ่ ×1.10 + โทนเทาสุภาพ + จองโมเดลผู้ใหญ่ (Remy/teacher/prof) อัตโนมัติ · นักเรียน: พาสเทลสดใส + เดินไปมา · M26 สแกนโมเดล Characters ทุกตัว + ย้อมสีไม่ซ้ำ
+- 🐾 **สัตว์ Quaternius (Ultimate Animated Animals)** — ก๊อป Deer/Fox/Husky/ShibaInu เข้า `Art/Models/Animals/` · [M27](Assets/_Project/Scripts/Editor/M27AnimalBuilder.cs) **สร้าง AnimatorController อัตโนมัติ** (อ่านคลิป Idle/Walk ในไฟล์ → state machine Speed-driven + ตั้ง loop + ปิด root motion) → สัตว์เดินมีท่าจริง · ชื่อไทยจากชื่อไฟล์ (Husky→หมา)
+- 🐕 **"ตัวเดียวหลายตัว"** — เปลี่ยน M27 เป็น `plan` ระบุประชากรได้ (หมา 3 ตัว + จิ้งจอก + กวาง) · `SectorRoute()` กระจายเป็นวงรอบแมพ แต่ละตัวลาดตระเวนคนละมุม
+- ⚙️ **★ Rebuild All = ปุ่มเดียวจบทุกอย่าง** — เพิ่ม M28 (Humanoid) + M20 (ท่าตัวละคร) เข้าลูกโซ่ (เพิ่ม `SuppressDialog` ให้ทั้งคู่) → กดครั้งเดียว: แปลง Humanoid → ท่า → UI → NPC(อาจารย์/นักเรียน) → สัตว์ → เมนู
+- สถานะ NPC ปัจจุบัน: เดิน + โบกมือ + คุย(สุ่มบทพูด +พอใจ) · **ยังไม่มี**: ทำกิจกรรม/ให้ภารกิจ/ขายของ/มองตาม (เป็นงานต่อไปที่เสนอไว้)
+
+### Phase 1 — พฤติกรรม NPC ครบชุด + Phase 2 — จูน SP ให้นิ่ง (2026-09-07)
+- 🎭 **NPC พฤติกรรมครบ 4 อย่าง** ([Interaction/TalkNPC.cs](Assets/_Project/Scripts/Interaction/TalkNPC.cs)):
+  - **A) กิจกรรม idle** — ตัวยืนสุ่มทำท่าเป็นระยะ (อาจารย์→Talking · นักเรียน→Talking/Waving/Cheering)
+  - **D) มองตามผู้เล่น** — ตัวยืนหันหน้าตามเวลาเข้าใกล้ (Slerp นุ่มนวล)
+  - **B) ให้ภารกิจ (quest-giver)** — คุยรุ่นพี่/อาจารย์ → ปักหมุดเดินไปทำ (reuse `EventManager.StartObjectiveExternal()` ใหม่) → ได้รางวัล
+  - **C) เปิดร้าน (vendor)** — คุยแม่ค้า → เปิด `ShopController` (เลือก shop/cafeteria จาก `storeToInventory`) · ตั้งบทบาทใน [M26](Assets/_Project/Scripts/Editor/M26TalkNPCs.cs) `ConfigRole()`
+- 🌐 **MP tech = Unity Netcode for GameObjects (NGO)** — เคลียร์ความขัดแย้งในเอกสาร (เดิม Netcode vs Photon) → ยึด NGO
+- 🔧 **Phase 2 — แก้บั๊ก/จุดเปราะ 4 จุด (จากผลสแกน)**:
+  1. [PlayerMovement.cs](Assets/_Project/Scripts/Player/PlayerMovement.cs) — กัน NRE ถ้า `cameraTransform` null (หากล้องใหม่/ข้ามเฟรม)
+  2. [PlayerInteraction.cs](Assets/_Project/Scripts/Player/PlayerInteraction.cs) — ไม่รับ E ตอน `timeScale=0` (กันหน้าต่างซ้อน) + **NPC/สัตว์ +1.2m** ในการเลือกเป้า (กันบังประตู/ห้องสอบ)
+  3. [EventManager.cs](Assets/_Project/Scripts/Systems/EventManager.cs) — เลื่อนเหตุการณ์ถ้าผู้เล่นติดหน้าต่าง (movement ปิด) + **Esc ปิดป็อปอัพ** (failsafe กันค้าง)
+  4. [ExamController.cs](Assets/_Project/Scripts/Systems/ExamController.cs) — กัน save-scum สอบซ้ำ: จำ "สอบเสร็จแล้ว" (`done` mark ตอน Finish แทน offer) + เซฟลง [SaveData](Assets/_Project/Scripts/SaveLoad/SaveData.cs).`doneExams` (คืนก่อน `RestoreState`)
+- ยังเหลือ (บรรเทาแล้ว/ผลกระทบต่ำ): modal manager กลาง (1A) · action ค้างถ้าตายกลางท่า (1D) · quest/objective ไม่เซฟ
+
 ---
 
 ## Version Control

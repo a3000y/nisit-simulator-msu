@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -21,10 +22,9 @@ namespace NisitSimulator.EditorTools
         const string GameplayPath = "Assets/_Project/Scenes/01_Gameplay.unity";
         const string Root = "TalkNPCs";
 
-        // โทนสีย้อม (ให้ NPC แต่ละตัวดูต่างกัน) — ขาว = ใช้สีจริงของโมเดล
-        static readonly Color[] Tints =
+        // โทนสีย้อมนักเรียน (พาสเทลสดใส หมุนใช้) — ให้แต่ละคนดูต่างกัน
+        static readonly Color[] StudentTints =
         {
-            Color.white,
             new Color(0.72f, 0.84f, 1.00f),   // ฟ้า
             new Color(1.00f, 0.78f, 0.82f),   // ชมพู
             new Color(0.80f, 1.00f, 0.84f),   // เขียวมิ้นต์
@@ -32,6 +32,12 @@ namespace NisitSimulator.EditorTools
             new Color(0.88f, 0.80f, 1.00f),   // ม่วงลาเวนเดอร์
             new Color(1.00f, 0.84f, 0.68f),   // ส้มพีช
         };
+
+        // บุคลากร (อาจารย์/บรรณารักษ์) — โทนสุภาพ + ตัวใหญ่กว่า (ดูมีอำนาจ/เป็นผู้ใหญ่)
+        static readonly Color StaffTint = new Color(0.90f, 0.90f, 0.95f);   // เทาอมฟ้า สุภาพ
+        const float StaffScaleMul = 1.10f;
+
+        static Color StudentTint(int i) => StudentTints[i % StudentTints.Length];
 
         [MenuItem("Nisit/Build Talk NPCs (คุยได้)", false, 30)]
         public static void Build()
@@ -53,27 +59,40 @@ namespace NisitSimulator.EditorTools
             var player = GameObject.Find("Player");
             if (player != null) scale = player.transform.localScale.x;
 
-            int idx = 0;   // ตัวนับรวม (ใช้เลือกโมเดล + สีย้อม)
+            int staffIdx = 0, studentIdx = 0;
 
-            // ===== A: NPC ยืนคุย — วางหน้าประตูตึกจริง (หาไม่เจอใช้ตำแหน่งสำรอง) =====
-            var standers = new (string name, string door, Vector3 fallback, string[] lines)[]
+            // โมเดลสำหรับ "บุคลากร" — เลือกตัวที่ดูผู้ใหญ่ก่อน (Remy/teacher/prof/adult) ถ้ามี ไม่มีก็ใช้ทั้งหมด
+            var staffModels = models.Where(m =>
             {
-                ("รุ่นพี่ปี 4", "Door_อาคารเรียน", new Vector3(6, 0, 4), new[]{
+                var n = m.name.ToLower();
+                return n.Contains("remy") || n.Contains("teacher") || n.Contains("prof") || n.Contains("adult");
+            }).ToList();
+            if (staffModels.Count == 0) staffModels = models;
+
+            // ===== A: NPC ยืนคุย — วางหน้าประตูจริง (staff=true คือบุคลากร: อาจารย์/บรรณารักษ์) =====
+            var standers = new (string name, string door, Vector3 fallback, bool staff, string[] lines)[]
+            {
+                ("รุ่นพี่ปี 4", "Door_อาคารเรียน", new Vector3(6, 0, 4), false, new[]{
                     "น้องปีอะไรเหรอ? สู้ ๆ นะ!", "อย่าลืมเข้าเรียนล่ะ เดี๋ยวเกรดตก", "โปรเจกต์จบโหดจริง เตรียมใจไว้เลย" }),
-                ("เพื่อนร่วมคณะ", "Door_โรงอาหาร", new Vector3(-6, 0, 3), new[]{
+                ("เพื่อนร่วมคณะ", "Door_โรงอาหาร", new Vector3(-6, 0, 3), false, new[]{
                     "เฮ้ ไปกินข้าวโรงอาหารกันไหม?", "วันนี้มีสอบรึเปล่านะ...", "เลิกเรียนแล้วไปเล่นเกมกันนะ" }),
-                ("อาจารย์ที่ปรึกษา", "Door_อาคารบริหาร", new Vector3(3, 0, -6), new[]{
+                ("อาจารย์ที่ปรึกษา", "Door_อาคารบริหาร", new Vector3(3, 0, -6), true, new[]{
                     "ตั้งใจเรียนนะ อนาคตอยู่ในมือเธอ", "มีปัญหาอะไรมาปรึกษาได้เสมอ", "อย่าลืมส่งงานตรงเวลาด้วยล่ะ" }),
-                ("บรรณารักษ์", "Door_ห้องสมุด", new Vector3(-4, 0, -5), new[]{
+                ("อาจารย์บรรณารักษ์", "Door_ห้องสมุด", new Vector3(-4, 0, -5), true, new[]{
                     "ห้องสมุดมีชีทข้อสอบเก่าเยอะเลยนะ", "เงียบ ๆ หน่อยน้า กำลังมีคนอ่านหนังสือ", "ยืมหนังสือได้ไม่จำกัดเลยจ้ะ" }),
+                ("แม่ค้าร้านค้า", "Door_ร้านค้า", new Vector3(7, 0, -3), false, new[]{
+                    "มาซื้อของไหมจ๊ะ ของสดใหม่!", "วันนี้มีลดราคาพิเศษนะ", "อุดหนุนหน่อยน้า~" }),
             };
             foreach (var s in standers)
             {
                 Vector3 pos = NearDoor(s.door, s.fallback);
-                var npc = MakeBase(models[idx % models.Count], ctrl, layer, scale, root, s.name, pos, LookYToCenter(pos), Tints[idx % Tints.Length]);
+                GameObject npc = s.staff
+                    ? MakeBase(staffModels[staffIdx++ % staffModels.Count], ctrl, layer, scale * StaffScaleMul, root, s.name, pos, LookYToCenter(pos), StaffTint)
+                    : MakeBase(models[studentIdx % models.Count], ctrl, layer, scale, root, s.name, pos, LookYToCenter(pos), StudentTint(studentIdx++));
                 var t = npc.AddComponent<TalkNPC>();
                 t.npcName = s.name; t.lines = s.lines;
-                idx++;
+                t.idleActions = s.staff ? new[] { "Talking" } : new[] { "Talking", "Waving", "Cheering" };
+                ConfigRole(t, s.name);
             }
 
             // ===== B: NPC เดินไปมา คุยได้ =====
@@ -89,26 +108,52 @@ namespace NisitSimulator.EditorTools
                 ("นิสิตปี 3", new[]{ "ใกล้ฝึกงานแล้ว เครียดเลย", "งานกลุ่มเยอะมาก...", "สู้ ๆ นะทุกคน" }),
                 ("รุ่นพี่ใกล้จบ", new[]{ "เดี๋ยวก็จบแล้วเรา", "ทำ ปนพ. เสร็จยังน้อง? 555", "ขอให้โชคดีกับการสอบนะ" }),
             };
-            for (int i = 0; i < routes.Length; i++)
+            for (int i = 0; i < routes.Length; i++)   // นักเรียนทั้งหมด (เดินไปมา)
             {
                 var wps = MakeWaypoints(root, routes[i], "Route" + i);
-                var npc = MakeBase(models[idx % models.Count], ctrl, layer, scale, root, walkers[i].name, wps[0].position, 0, Tints[idx % Tints.Length]);
+                var npc = MakeBase(models[studentIdx % models.Count], ctrl, layer, scale, root, walkers[i].name, wps[0].position, 0, StudentTint(studentIdx));
+                studentIdx++;
                 var walker = npc.AddComponent<MenuNPCWalker>();
                 walker.waypoints = wps;
                 walker.startIndex = 1 % wps.Length;
                 walker.speed = Random.Range(1.2f, 1.8f);
                 var t = npc.AddComponent<TalkNPC>();
                 t.npcName = walkers[i].name; t.lines = walkers[i].lines;
-                idx++;
             }
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
 
-            Debug.Log($"<color=lime>[Nisit] วาง NPC คุยได้ {idx} ตัว (ยืน 4 + เดิน 3) จาก {models.Count} โมเดล</color>");
+            int total = staffIdx + studentIdx;
+            Debug.Log($"<color=lime>[Nisit] วาง NPC คุยได้ {total} ตัว (บุคลากร {staffIdx} + นักเรียน {studentIdx}) จาก {models.Count} โมเดล</color>");
             if (!SuppressDialog)
                 EditorUtility.DisplayDialog("Nisit Simulator",
-                    $"วาง NPC คุยได้ {idx} ตัวแล้ว! 👥\n\n• ใช้โมเดลคน {models.Count} แบบ + ย้อมสีต่างกัน\n• ยืนคุยหน้าตึก 4 · เดินไปมา 3\n\nเข้าใกล้ = โบกมือ · กด E = คุย (พอใจ +5)\n\n💡 วางไฟล์ตัวละคร Mixamo เพิ่มในโฟลเดอร์ Characters แล้วรันใหม่ = หลากหลายขึ้น\n⚠️ ท่าต้องมาจาก \"Setup Character Animations\"", "เยี่ยม!");
+                    $"วาง NPC คุยได้ {total} ตัวแล้ว! 👥\n\n• 👨‍🏫 บุคลากร {staffIdx} (อาจารย์/บรรณารักษ์) — ตัวใหญ่ โทนสุภาพ\n• 🎓 นักเรียน {studentIdx} — พาสเทลสดใส\n\nพฤติกรรม:\n• เข้าใกล้ = โบกมือ + หันมอง · ยืนเฉย = ทำท่า (คุย/เชียร์)\n• กด E = คุย (พอใจ +5)\n• 📋 รุ่นพี่/อาจารย์ = ให้ภารกิจเดินไปทำ (รางวัล)\n• 🛒 แม่ค้า = เปิดร้านค้า\n\n💡 อยากให้อาจารย์แก่ขึ้น: วางโมเดล Mixamo ชื่อมี teacher/prof แล้วรันใหม่", "เยี่ยม!");
+        }
+
+        // ตั้งบทบาทพิเศษตามชื่อ — B) ให้ภารกิจ (quest-giver) · C) เปิดร้าน (vendor)
+        static void ConfigRole(TalkNPC t, string name)
+        {
+            switch (name)
+            {
+                case "รุ่นพี่ปี 4":                                 // รุ่นพี่ให้ภารกิจไปห้องสมุด
+                    t.isQuestGiver = true;
+                    t.questTargetDoor = "Door_ห้องสมุด";
+                    t.questText = "ไปคืนหนังสือให้รุ่นพี่ที่ห้องสมุด";
+                    t.questGiveLine = "ช่วยไปคืนหนังสือที่ห้องสมุดหน่อยสิ เดี๋ยวมีรางวัล!";
+                    t.questRewardSat = 10f; t.questRewardMoney = 40; t.questRewardExp = 25;
+                    break;
+                case "อาจารย์ที่ปรึกษา":                            // อาจารย์ให้ภารกิจไปอาคารเรียน
+                    t.isQuestGiver = true;
+                    t.questTargetDoor = "Door_อาคารเรียน";
+                    t.questText = "ไปส่งเอกสารให้อาจารย์ที่อาคารเรียน";
+                    t.questGiveLine = "ฝากเอาเอกสารไปส่งที่อาคารเรียนหน่อยนะ";
+                    t.questRewardSat = 8f; t.questRewardMoney = 30; t.questRewardExp = 30;
+                    break;
+                case "แม่ค้าร้านค้า":                               // แม่ค้าเปิดร้านค้า
+                    t.isVendor = true; t.vendorIsShop = true;
+                    break;
+            }
         }
 
         // โหลดโมเดลคนทั้งหมดในโฟลเดอร์ Characters (ข้ามไฟล์อนิเมชัน @ )

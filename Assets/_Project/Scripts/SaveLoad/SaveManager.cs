@@ -41,7 +41,7 @@ namespace NisitSimulator.SaveLoad
             if (inv != null) data.inventoryItemIds = inv.ToSaveList();   // เก็บไอเทมในกระเป๋า
 
             var exam = Object.FindFirstObjectByType<ExamController>();
-            if (exam != null) data.gradePoints = exam.GetGradePoints();  // ประวัติเกรด (GPA)
+            if (exam != null) { data.gradePoints = exam.GetGradePoints(); data.doneExams = exam.GetDoneExams(); }  // ประวัติเกรด (GPA) + สอบที่ทำแล้ว
 
             var clock = Object.FindFirstObjectByType<GameClock>();
             if (clock != null) { data.gameDay = clock.Day; data.gameMinutes = clock.TotalMinutes; }  // เวลา
@@ -65,13 +65,16 @@ namespace NisitSimulator.SaveLoad
                 stats.LoadState(data.energy, data.health, data.hunger, data.knowledge,
                                 data.satisfaction, data.money, data.exp);
 
+            // คืน "สอบที่ทำแล้ว" ก่อน RestoreState (เพราะ RestoreState จะยิง OnDayInYearChanged → เช็กว่าจะเปิดสอบไหม)
+            var exam = Object.FindFirstObjectByType<ExamController>();
+            if (exam != null) exam.RestoreDoneExams(data.doneExams);
+
             var prog = Object.FindFirstObjectByType<ProgressionManager>();
             if (prog != null) prog.RestoreState(data.currentYear, data.dayInYear);
 
             var inv = Object.FindFirstObjectByType<InventoryManager>();
             if (inv != null) inv.LoadFromList(data.inventoryItemIds);   // คืนไอเทมในกระเป๋า
 
-            var exam = Object.FindFirstObjectByType<ExamController>();
             if (exam != null) exam.RestoreGrades(data.gradePoints);     // คืน GPA
 
             var clock = Object.FindFirstObjectByType<GameClock>();

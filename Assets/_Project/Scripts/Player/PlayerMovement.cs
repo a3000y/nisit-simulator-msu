@@ -45,6 +45,13 @@ namespace NisitSimulator.Player
             // หยุดขยับเมื่อเกม pause หรือจบ
             if (GameManager.Instance != null && !GameManager.Instance.IsActive) return;
 
+            // กัน NRE ถ้ากล้องยังไม่พร้อม (ถูกสลับ/สร้างทีหลัง) — หาใหม่ ไม่มีก็ข้ามเฟรมนี้
+            if (cameraTransform == null)
+            {
+                if (Camera.main != null) cameraTransform = Camera.main.transform;
+                else return;
+            }
+
             float h = Input.GetAxisRaw("Horizontal");
             float v = Input.GetAxisRaw("Vertical");
 

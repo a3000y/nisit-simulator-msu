@@ -5,8 +5,9 @@ using UnityEngine;
 
 namespace NisitSimulator.EditorTools
 {
-    // 🌟 กดครั้งเดียว → สร้าง/อัปเดต UI ทั้งเกมใหม่หมด (เมนู + HUD + สอบ + กระเป๋า + หน้าจบ + คณะ + พื้นหลัง)
-    //   ปิด popup ระหว่างทาง → เด้ง dialog สรุปครั้งเดียวตอนจบ
+    // 🌟 กดครั้งเดียว → ทำทุกอย่าง: แปลงโมเดล Humanoid + ท่าตัวละคร + UI ทั้งเกม + NPC + สัตว์
+    //   (เมนู + HUD + สอบ + กระเป๋า + หน้าจบ + คณะ + พื้นหลัง + NPC คุยได้ + สัตว์)
+    //   ปิด popup ระหว่างทาง → เด้ง dialog สรุปครั้งเดียวตอนจบ · ไม่ต้องไล่กดเมนูเอง
     // ใช้: เมนู  Nisit -> ★ Rebuild All UI
     public static class M23RebuildAll
     {
@@ -18,6 +19,8 @@ namespace NisitSimulator.EditorTools
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
 
             // ปิด popup ทุก tool
+            M28SetupNPCModels.SuppressDialog = true;
+            M20CharacterAnims.SuppressDialog = true;
             M3HudBuilder.SuppressDialog = true;
             M6ExamBuilder.SuppressDialog = true;
             M21InventoryBuilder.SuppressDialog = true;
@@ -32,6 +35,10 @@ namespace NisitSimulator.EditorTools
             var log = new System.Text.StringBuilder();
             try
             {
+                // ===== ตัวละคร: แปลงโมเดล Humanoid + ตั้งค่าท่า (ทำก่อนวาง NPC) =====
+                Step(log, "แปลงโมเดลเป็น Humanoid", () => M28SetupNPCModels.Setup());   // โมเดล Mixamo → Humanoid
+                Step(log, "ตั้งค่าท่าตัวละคร (Waving/Talking ฯลฯ)", () => M20CharacterAnims.Setup());
+
                 // ===== ฉากเกม: HUD + หน้าจบ + สอบ + กระเป๋า =====
                 EditorSceneManager.OpenScene(GameplayPath, OpenSceneMode.Single);
                 Step(log, "HUD + หน้าจบเกม", () =>
@@ -51,6 +58,8 @@ namespace NisitSimulator.EditorTools
             }
             finally
             {
+                M28SetupNPCModels.SuppressDialog = false;
+                M20CharacterAnims.SuppressDialog = false;
                 M3HudBuilder.SuppressDialog = false;
                 M6ExamBuilder.SuppressDialog = false;
                 M21InventoryBuilder.SuppressDialog = false;
@@ -65,8 +74,8 @@ namespace NisitSimulator.EditorTools
 
             Debug.Log("<color=lime>[Nisit] ★ Rebuild All เสร็จ!</color>\n" + log);
             EditorUtility.DisplayDialog("Nisit Simulator",
-                "อัปเดต UI ทั้งเกมในคลิกเดียวเสร็จแล้ว! 🌟\n\n" + log +
-                "\nทุกหน้าเป็นสไตล์การ์ตูนพาสเทลเข้าชุดกัน\n\nเปิด Scene1 → Play ได้เลย", "เยี่ยม!");
+                "ทำทุกอย่างในคลิกเดียวเสร็จแล้ว! 🌟\n\n" + log +
+                "\nโมเดล Humanoid + ท่า + UI + NPC + สัตว์ ครบ\nทุกหน้าสไตล์การ์ตูนพาสเทลเข้าชุดกัน\n\nเปิด Scene1 → Play ได้เลย", "เยี่ยม!");
         }
 
         static void Step(System.Text.StringBuilder log, string name, System.Action act)

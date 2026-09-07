@@ -18,7 +18,8 @@ namespace NisitSimulator.Player
 
         void Update()
         {
-            if (GameManager.Instance != null && !GameManager.Instance.IsActive) return;
+            if (GameManager.Instance != null && !GameManager.Instance.IsActive) { ClearCurrent(); return; }
+            if (Time.timeScale == 0f) { ClearCurrent(); return; }   // มีหน้าต่างหยุดเวลา (สอบ/เหตุการณ์/คู่มือ) → ไม่รับ E ซ้อน
 
             DetectNearest();
 
@@ -27,6 +28,8 @@ namespace NisitSimulator.Player
                 current.Interact(gameObject);
             }
         }
+
+        void ClearCurrent() { current = null; HUDController.Prompt(""); }
 
         // หาวัตถุที่โต้ตอบได้ที่ใกล้ที่สุดในระยะ
         private void DetectNearest()
@@ -41,6 +44,8 @@ namespace NisitSimulator.Player
                 if (hit.TryGetComponent<IInteractable>(out var interactable))
                 {
                     float d = Vector3.Distance(transform.position, hit.transform.position);
+                    // NPC/สัตว์ (เดินไปมา) ให้ระยะ "หนักขึ้น" → ประตู/ห้องสอบชนะเมื่อระยะใกล้เคียงกัน (กันบังทางเข้า)
+                    if (interactable is TalkNPC || interactable is PetAnimal) d += 1.2f;
                     if (d < minDist)
                     {
                         minDist = d;

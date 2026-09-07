@@ -79,6 +79,17 @@ namespace NisitSimulator.Systems
 
         void Update()
         {
+            // failsafe: กด Esc ปิดป็อปอัพเหตุการณ์ (กันค้างถ้าปุ่มเลือกหลุด/หาย)
+            if (IsOpen && Input.GetKeyDown(KeyCode.Escape))
+            {
+                current = null;
+                if (panel != null) panel.SetActive(false);
+                IsOpen = false;
+                Time.timeScale = 1f;
+                if (move != null) move.enabled = true;
+                return;
+            }
+
             // เช็คว่าถึงจุดหมายภารกิจ (A) หรือยัง
             if (objective == null || player == null) return;
             Vector3 a = player.transform.position;
@@ -112,6 +123,9 @@ namespace NisitSimulator.Systems
 
         public void Trigger()
         {
+            // ผู้เล่นกำลังอยู่ในหน้าต่าง/ทำกิจกรรม (movement ถูกปิด) → เลื่อนเหตุการณ์ไปก่อน (กันป็อปอัพซ้อน)
+            if (move != null && !move.enabled) return;
+
             var bank = Bank();
             current = bank[Random.Range(0, bank.Count)];
 
@@ -203,6 +217,14 @@ namespace NisitSimulator.Systems
             if (e == null || e.choices == null) return null;
             foreach (var c in e.choices) if (c.kind == Kind.Effect) return c;
             return null;
+        }
+
+        // ให้ระบบอื่น (เช่น NPC quest-giver) สั่งภารกิจเดินไปทำได้ — คืน true ถ้าเริ่มได้ (ไม่มีภารกิจค้าง)
+        public bool StartObjectiveExternal(Choice c)
+        {
+            if (c == null || objective != null) return false;
+            SetObjective(c);
+            return true;
         }
 
         // ---------- A: เดินไปทำที่จริง (โผล่เสาแสง เดินไปเอง) ----------

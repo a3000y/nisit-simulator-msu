@@ -1,5 +1,6 @@
 using UnityEngine;
 using NisitSimulator.Stats;
+using NisitSimulator.Systems;
 using NisitSimulator.UI;
 
 namespace NisitSimulator.Interaction
@@ -21,15 +22,32 @@ namespace NisitSimulator.Interaction
         public float rewardCooldown = 40f;         // กันสแปม E รัว ๆ — ได้พอใจซ้ำได้ทุกกี่วินาที
 
         [Header("ทักทาย")]
-        public float greetRange = 4.5f;            // ระยะที่เริ่มโบกมือ
+        public float greetRange = 4.5f;            // ระยะที่เริ่มโบกมือ + หันมอง
         public float waveCooldown = 8f;
+
+        [Header("กิจกรรมตอนยืนเฉย ๆ (ชื่อ state ท่า — เฉพาะตัวยืน)")]
+        public string[] idleActions;               // เช่น Talking/Waving/Cheering — สุ่มทำเป็นระยะ
+
+        [Header("B) ให้ภารกิจ (quest-giver)")]
+        public bool isQuestGiver;
+        public string questTargetDoor;             // ประตูเป้าหมาย เช่น Door_ห้องสมุด
+        public string questText = "ไปทำภารกิจที่เป้าหมาย";
+        public string questGiveLine = "ช่วยไปทำภารกิจให้หน่อยสิ เดี๋ยวมีรางวัล!";
+        public float questRewardSat = 10f;
+        public int questRewardMoney = 40, questRewardExp = 25;
+        public float questCooldown = 120f;         // ให้ภารกิจใหม่ได้ทุกกี่วินาที
+
+        [Header("C) เปิดร้าน (vendor)")]
+        public bool isVendor;
+        public bool vendorIsShop = true;           // true = ร้านค้า(เก็บกระเป๋า) · false = โรงอาหาร(กินทันที)
 
         private Animator anim;
         private MenuNPCWalker walker;              // มี = NPC เดินไปมา
         private Transform player;
+        private EventManager em;
         private int baseHash;                      // ท่าเดิม (ไว้กลับหลังทำท่า)
         private bool gesturing;
-        private float gestureUntil, nextWave, lastReward = -999f;
+        private float gestureUntil, nextWave, nextIdle, lastReward = -999f, lastQuest = -999f;
 
         void Start()
         {
@@ -37,6 +55,7 @@ namespace NisitSimulator.Interaction
             walker = GetComponent<MenuNPCWalker>();
             var p = GameObject.Find("Player");
             if (p != null) player = p.transform;
+            if (isQuestGiver) em = Object.FindFirstObjectByType<EventManager>();
         }
 
         void Update()
@@ -53,15 +72,34 @@ namespace NisitSimulator.Interaction
                 return;
             }
 
-            // เข้าใกล้ → โบกมือทักทาย (ใช้ได้ทั้ง NPC ยืนและเดิน)
             if (player == null) return;
             float dx = transform.position.x - player.position.x;
             float dz = transform.position.z - player.position.z;
-            if (dx * dx + dz * dz <= greetRange * greetRange && Time.time >= nextWave)
+            float sq = dx * dx + dz * dz;
+
+            // เข้าใกล้ → โบกมือทักทาย + หันหน้ามอง (เฉพาะตัวยืน)
+            if (sq <= greetRange * greetRange)
             {
-                PlayGesture("Waving", 2.2f);
-                nextWave = Time.time + waveCooldown;
+                if (Time.time >= nextWave) { PlayGesture("Waving", 2.2f); nextWave = Time.time + waveCooldown; }
+                LookAtPlayerSmooth();
+                return;
             }
+
+            // ยืนเฉย ๆ (ไม่ใช่คนเดิน) → สุ่มทำกิจกรรมเป็นระยะ (คุย/โบก/เชียร์) ให้ดูมีชีวิต
+            if (walker == null && idleActions != null && idleActions.Length > 0 && Time.time >= nextIdle)
+            {
+                PlayGesture(idleActions[Random.Range(0, idleActions.Length)], Random.Range(3.5f, 6f));
+                nextIdle = Time.time + Random.Range(7f, 13f);
+            }
+        }
+
+        // หันหน้าตามผู้เล่นแบบนุ่มนวล (คนเดินจะหันตามทางเดินอยู่แล้ว ไม่ต้อง)
+        void LookAtPlayerSmooth()
+        {
+            if (walker != null || player == null) return;
+            Vector3 to = player.position - transform.position; to.y = 0f;
+            if (to.sqrMagnitude < 0.01f) return;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(to), 3f * Time.deltaTime);
         }
 
         public string GetPrompt() => $"กด E เพื่อคุยกับ {npcName}";
@@ -71,6 +109,40 @@ namespace NisitSimulator.Interaction
             FacePlayer();
             PlayGesture("Talking", 3f);
 
+            // C) พ่อค้า/แม่ค้า → เปิดร้าน
+            if (isVendor)
+            {
+                var shop = FindShop(vendorIsShop);
+                if (shop != null) { HUDController.Toast($"{npcName}: เชิญเลือกได้เลยจ้ะ~"); shop.Open(); }
+                else HUDController.Toast($"{npcName}: ขอโทษ ตอนนี้ร้านปิดอยู่");
+                return;
+            }
+
+            // B) ให้ภารกิจเดินไปทำ (ถ้าเป็น quest-giver + พร้อม + ไม่มีภารกิจค้าง)
+            if (isQuestGiver && Time.time - lastQuest >= questCooldown)
+            {
+                if (em == null) em = Object.FindFirstObjectByType<EventManager>();
+                if (em != null)
+                {
+                    var c = new EventManager.Choice
+                    {
+                        kind = EventManager.Kind.GoTo,
+                        targetDoor = questTargetDoor,
+                        objectiveText = questText,
+                        satisfaction = questRewardSat, money = questRewardMoney, exp = questRewardExp,
+                        result = $"ภารกิจสำเร็จ! {npcName} ขอบคุณมาก"
+                    };
+                    if (em.StartObjectiveExternal(c))
+                    {
+                        lastQuest = Time.time;
+                        HUDController.Toast($"{npcName}: {questGiveLine}");
+                    }
+                    else HUDController.Toast($"{npcName}: ทำภารกิจที่ค้างให้เสร็จก่อนนะ");
+                    return;
+                }
+            }
+
+            // ปกติ → คุย (สุ่มบทพูด) + พอใจเล็กน้อย
             string line = (lines != null && lines.Length > 0) ? lines[Random.Range(0, lines.Length)] : "สวัสดี!";
             HUDController.Toast($"{npcName}: {line}");    // Toast มีเสียงแจ้งเตือนในตัว
 
@@ -81,6 +153,14 @@ namespace NisitSimulator.Interaction
                          ?? Object.FindFirstObjectByType<PlayerStats>();
                 if (st != null) st.ChangeSatisfaction(satisfactionReward);
             }
+        }
+
+        // หา ShopController ที่ต้องการ (shop=เก็บกระเป๋า / cafeteria=กินทันที) แม้ตอนปิดอยู่
+        static ShopController FindShop(bool wantShop)
+        {
+            var all = Object.FindObjectsByType<ShopController>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (var s in all) if (s.storeToInventory == wantShop) return s;
+            return all.Length > 0 ? all[0] : null;
         }
 
         // ---------- ท่าทาง (CrossFade แล้วกลับท่าเดิม) ----------

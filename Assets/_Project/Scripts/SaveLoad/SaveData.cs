@@ -28,6 +28,7 @@ namespace NisitSimulator.SaveLoad
 
         // ประวัติสอบ (เกรดแต่ละวิชา → คำนวณ GPA ต่อได้) + เวลาในเกม
         public List<float> gradePoints = new List<float>();
+        public List<string> doneExams = new List<string>();   // การสอบที่ทำเสร็จแล้ว (กันสอบซ้ำเมื่อโหลดเซฟ)
         public int gameDay = 1;        // วันสะสมของ GameClock
         public float gameMinutes;      // เวลาในวัน (นาทีสะสม)
     }

@@ -13,6 +13,8 @@ namespace NisitSimulator.EditorTools
     // ใช้: เมนู  Nisit -> Setup Character Animations
     public static class M20CharacterAnims
     {
+        public static bool SuppressDialog = false;
+
         const string Dir = "Assets/_Project/Art/Characters/";
         const string BaseFbx = Dir + "Ch29_nonPBR.fbx";
         const string GameplayPath = "Assets/_Project/Scenes/01_Gameplay.unity";
@@ -35,10 +37,15 @@ namespace NisitSimulator.EditorTools
         [MenuItem("Nisit/Setup Character Animations")]
         public static void Setup()
         {
-            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            if (!SuppressDialog && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
 
             var avatar = GetAvatar(BaseFbx);
-            if (avatar == null) { EditorUtility.DisplayDialog("Nisit", "ไม่พบ Avatar ของ Ch29 (Ch29_nonPBR.fbx)", "ปิด"); return; }
+            if (avatar == null)
+            {
+                Debug.LogWarning("[Nisit] ไม่พบ Avatar ของ Ch29 (Ch29_nonPBR.fbx)");
+                if (!SuppressDialog) EditorUtility.DisplayDialog("Nisit", "ไม่พบ Avatar ของ Ch29 (Ch29_nonPBR.fbx)", "ปิด");
+                return;
+            }
 
             var log = new System.Text.StringBuilder();
             var clips = new Dictionary<string, AnimationClip>();
@@ -77,8 +84,9 @@ namespace NisitSimulator.EditorTools
             EditorSceneManager.SaveScene(scene);
 
             Debug.Log("<color=lime>[Nisit] ตั้งค่าท่าตัวละครเสร็จ!</color>\n" + log);
-            EditorUtility.DisplayDialog("Nisit Simulator",
-                "ตั้งค่าท่าตัวละครเสร็จ! 🎭\n\n" + log + "\n• เรียน/ทำงาน → Typing\n• กิน → สุ่ม 2 ท่า · นอน → สุ่ม 2 ท่า\n\nกด Play ลองเข้าเรียน/กินข้าวดู", "เยี่ยม!");
+            if (!SuppressDialog)
+                EditorUtility.DisplayDialog("Nisit Simulator",
+                    "ตั้งค่าท่าตัวละครเสร็จ! 🎭\n\n" + log + "\n• เรียน/ทำงาน → Typing\n• กิน → สุ่ม 2 ท่า · นอน → สุ่ม 2 ท่า\n\nกด Play ลองเข้าเรียน/กินข้าวดู", "เยี่ยม!");
         }
 
         static Avatar GetAvatar(string path)
