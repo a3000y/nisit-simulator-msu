@@ -242,6 +242,15 @@ Unity 6.1 (6000.5.1f1) · URP · C#
   4. [ExamController.cs](Assets/_Project/Scripts/Systems/ExamController.cs) — กัน save-scum สอบซ้ำ: จำ "สอบเสร็จแล้ว" (`done` mark ตอน Finish แทน offer) + เซฟลง [SaveData](Assets/_Project/Scripts/SaveLoad/SaveData.cs).`doneExams` (คืนก่อน `RestoreState`)
 - ยังเหลือ (บรรเทาแล้ว/ผลกระทบต่ำ): modal manager กลาง (1A) · action ค้างถ้าตายกลางท่า (1D) · quest/objective ไม่เซฟ
 
+### Phase 3 — Multiplayer MP-1 (Netcode for GameObjects) (2026-09-10)
+- 🌐 **ลง package** `com.unity.netcode.gameobjects` (NGO) — ยึด NGO เป็น tech หลัก (ไม่ใช่ Photon)
+- 🎯 **แนวทาง: เสริมทับ SP ไม่แตะระบบเดิม** — Player ในฉาก = ตัวที่เล่น (ทุกระบบ SP ทำงานปกติ) · เพิ่ม "อวตารเครือข่าย" เป็นหุ่นเงาที่ลอกท่าไป broadcast (แก้ปัญหา `GameObject.Find("Player")` พังใน networked-spawn โดยไม่ต้อง refactor SP)
+- 🕹️ **NetworkAvatar** ([Net/NetworkAvatar.cs](Assets/_Project/Scripts/Net/NetworkAvatar.cs)) — `NetworkBehaviour` sync ตำแหน่ง/ทิศ/Speed ผ่าน `NetworkVariable` (owner-write) · owner: ลอกจาก "Player" ในฉาก + ซ่อนตัวเอง + ปิด animator · remote: interpolate เดินตาม + เล่นท่า (Speed) · ปิด root motion กันไถล
+- 🔘 **NetworkUI** ([Net/NetworkUI.cs](Assets/_Project/Scripts/Net/NetworkUI.cs)) — ปุ่ม Host/Join/ออก (F3 เปิดแผง) + เช็ก PlayerPrefab ว่าง (เตือนชัด)
+- 🛠️ **M29NetworkSetup** ([Editor/M29NetworkSetup.cs](Assets/_Project/Scripts/Editor/M29NetworkSetup.cs), Nisit ▸ Setup Multiplayer (MP-1)) — สร้าง NetworkAvatar.prefab (NetworkObject+Animator) + NetworkManager(UnityTransport 127.0.0.1) + UI ปุ่ม อัตโนมัติ
+- ทดสอบ: Window ▸ Multiplayer Play Mode (2 หน้าต่าง) → Host + Join → เห็นกันเดิน · ยังไม่ได้รันจริง (รอผู้ใช้เทสต์)
+- Roadmap: MP-1 เห็นกันเดิน ✅(code) · MP-2 ป้ายชื่อ+ท่า · MP-3 แชท+เทรด
+
 ---
 
 ## Version Control
