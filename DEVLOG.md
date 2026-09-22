@@ -273,6 +273,12 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - 🏗️ **Build tool**: [M33BuildGame](Assets/_Project/Scripts/Editor/M33BuildGame.cs) — Nisit ▸ ★ Build Game (.exe) → StandaloneWindows64 → `Build/NisitSimulator.exe` · **build สำเร็จ เล่นได้จริง!** (HUD ครบ/คม/เต็มจอ)
 - 🐾 จูนเพิ่ม: สัตว์ auto-scale (วัด bounds) + เดินช้า/พักนาน · NPC auto-scale เท่าผู้เล่น · FixCharacterMaterials แก้ครบทุกตัว (NPC มีชุด)
 
+### MP-3+ เทรดไอเทม + LAN (IP) + เตรียม Relay (2026-09-22)
+- 🤝 **เทรด/ให้ของ** ([Net/TradeRelay.cs](Assets/_Project/Scripts/Net/TradeRelay.cs) NetworkBehaviour บน avatar + [Net/TradeUI.cs](Assets/_Project/Scripts/Net/TradeUI.cs)) — กด G ใกล้ผู้เล่นอื่น → เลือกไอเทม → ServerRpc→ClientRpc(เฉพาะผู้รับ) → เข้ากระเป๋าเขา · InventoryManager เพิ่ม Resolve/AddByName/RemoveByName
+- 🌐 **LAN**: [NetworkUI](Assets/_Project/Scripts/Net/NetworkUI.cs) เพิ่มช่องกรอก IP + `UnityTransport.SetConnectionData` (Host ฟัง 0.0.0.0 โชว์ LAN IP · Client ต่อตาม IP ที่กรอก) · M29 สร้างช่อง input
+- 🔴 **Relay (ข้ามเน็ต) ยังไม่เสร็จ**: ลง `com.unity.services.multiplayer` แล้ว แต่เชื่อม Unity Cloud ไม่ได้บน **Wi-Fi มมส** (บล็อก services) → ทำต่อบน hotspot/เน็ตบ้าน แล้วเขียน Join-Code (Multiplayer Sessions API) · ดู memory [[multiplayer-relay-pending]]
+- MP ครบ: เดิน/ป้าย/อีโมท(วงล้อ B)/แชท(Y)/เทรด(G)/LAN · เหลือ Relay อย่างเดียว
+
 ---
 
 ## Version Control

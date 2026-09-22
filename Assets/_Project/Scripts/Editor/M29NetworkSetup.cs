@@ -50,7 +50,7 @@ namespace NisitSimulator.EditorTools
                 "ตั้งค่า Multiplayer (MP-1/2/3) เสร็จ! 🌐\n\n" +
                 "• NetworkAvatar (sync เดิน+ท่า) + ป้ายชื่อ\n" +
                 "• NetworkManager + UnityTransport (127.0.0.1)\n" +
-                "• UI: Host/Join (F3) · วงล้ออีโมท (กดค้าง B) · แชท (Y)\n\n" +
+                "• UI: Host/Join (F3) · อีโมท (ค้าง B) · แชท (Y) · เทรด/ให้ของ (G)\n\n" +
                 "ทดสอบ: Window → Multiplayer Play Mode → เปิด Player 2\nเครื่องแรก Host, เครื่องสอง Join → เห็นกันเดิน+ท่า+แชท!\n\n" +
                 "⚠️ ถ้า NetworkManager → PlayerPrefab ว่าง ให้ลาก NetworkAvatar.prefab ใส่เอง", "เยี่ยม!");
         }
@@ -72,6 +72,7 @@ namespace NisitSimulator.EditorTools
             if (inst.GetComponent<NetworkObject>() == null) inst.AddComponent<NetworkObject>();
             if (inst.GetComponent<NetworkAvatar>() == null) inst.AddComponent<NetworkAvatar>();
             if (inst.GetComponent<ChatRelay>() == null) inst.AddComponent<ChatRelay>();
+            if (inst.GetComponent<TradeRelay>() == null) inst.AddComponent<TradeRelay>();
 
             var prefab = PrefabUtility.SaveAsPrefabAsset(inst, PrefabPath);
             Object.DestroyImmediate(inst);
@@ -100,18 +101,20 @@ namespace NisitSimulator.EditorTools
             panel.transform.SetParent(canGo.transform, false);
             var pr = panel.GetComponent<RectTransform>();
             pr.anchorMin = pr.anchorMax = new Vector2(1f, 1f); pr.pivot = new Vector2(1f, 1f);
-            pr.anchoredPosition = new Vector2(-24f, -24f); pr.sizeDelta = new Vector2(320f, 260f);
+            pr.anchoredPosition = new Vector2(-24f, -24f); pr.sizeDelta = new Vector2(340f, 330f);
             panel.GetComponent<Image>().color = new Color(0.12f, 0.14f, 0.24f, 0.92f);
 
-            var status = MakeText(panel.transform, font, "ยังไม่เชื่อมต่อ — กด Host หรือ Join",
-                new Vector2(0f, -34f), 20, new Color(0.9f, 0.92f, 1f));
-            var host = MakeButton(panel.transform, font, "Host (สร้างห้อง)", new Vector2(0f, -90f), new Color(0.60f, 0.86f, 0.68f));
-            var client = MakeButton(panel.transform, font, "Join (127.0.0.1)", new Vector2(0f, -150f), new Color(0.62f, 0.80f, 0.96f));
-            var disc = MakeButton(panel.transform, font, "ออกจากห้อง", new Vector2(0f, -210f), new Color(0.99f, 0.74f, 0.78f));
+            var status = MakeText(panel.transform, font, "ยังไม่เชื่อมต่อ", new Vector2(0f, -24f), 18, new Color(0.9f, 0.92f, 1f));
+            MakeText(panel.transform, font, "IP ของ Host (เล่น LAN):", new Vector2(0f, -62f), 15, new Color(0.75f, 0.8f, 0.95f));
+            var ip = MakeInput(panel.transform, font, new Vector2(0f, -84f), new Vector2(300f, 40f));
+            var host = MakeButton(panel.transform, font, "Host (สร้างห้อง)", new Vector2(0f, -138f), new Color(0.60f, 0.86f, 0.68f));
+            var client = MakeButton(panel.transform, font, "Join", new Vector2(0f, -196f), new Color(0.62f, 0.80f, 0.96f));
+            var disc = MakeButton(panel.transform, font, "ออกจากห้อง", new Vector2(0f, -254f), new Color(0.99f, 0.74f, 0.78f));
 
             var ui = canGo.AddComponent<NetworkUI>();
             ui.panel = panel;
             ui.statusText = status;
+            ui.ipInput = ip;
             ui.hostButton = host; ui.clientButton = client; ui.disconnectButton = disc;
 
             // ----- แชทด่วน (มุมซ้ายล่าง) -----
@@ -144,6 +147,50 @@ namespace NisitSimulator.EditorTools
             chat.panel = chatPanel; chat.log = chatLog; chat.presetButtons = chatBtns; chat.presets = presets;
 
             BuildEmoteWheel(canGo, font);
+            BuildTradeUI(canGo, font);
+        }
+
+        // ----- UI เทรด/ให้ของ (กด G) -----
+        static void BuildTradeUI(GameObject canGo, TMP_FontAsset font)
+        {
+            // การ์ดกลางจอ
+            var panel = new GameObject("Trade Panel", typeof(RectTransform), typeof(Image));
+            panel.transform.SetParent(canGo.transform, false);
+            var prt = panel.GetComponent<RectTransform>();
+            prt.anchorMin = prt.anchorMax = new Vector2(0.5f, 0.5f); prt.pivot = new Vector2(0.5f, 0.5f);
+            prt.anchoredPosition = Vector2.zero; prt.sizeDelta = new Vector2(420f, 480f);
+            panel.GetComponent<Image>().color = new Color(0.12f, 0.14f, 0.24f, 0.96f);
+
+            var title = MakeText(panel.transform, font, "ให้ของกับผู้เล่น", new Vector2(0f, -34f), 24, Color.white);
+            title.alignment = TextAlignmentOptions.Center;
+            var trt = title.rectTransform; trt.anchorMin = new Vector2(0, 1); trt.anchorMax = new Vector2(1, 1); trt.pivot = new Vector2(0.5f, 1f);
+            trt.sizeDelta = new Vector2(0, 40); trt.anchoredPosition = new Vector2(0f, -14f);
+
+            // content (เรียงแนวตั้ง)
+            var content = new GameObject("Content", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
+            content.transform.SetParent(panel.transform, false);
+            var crt = content.GetComponent<RectTransform>();
+            crt.anchorMin = new Vector2(0, 1); crt.anchorMax = new Vector2(1, 1); crt.pivot = new Vector2(0.5f, 1f);
+            crt.anchoredPosition = new Vector2(0f, -60f); crt.sizeDelta = new Vector2(-32f, 0f);
+            var vlg = content.GetComponent<VerticalLayoutGroup>();
+            vlg.spacing = 8; vlg.childControlWidth = true; vlg.childForceExpandWidth = true; vlg.childControlHeight = false; vlg.childForceExpandHeight = false;
+            content.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            // row template (ปุ่ม + ข้อความ)
+            var row = new GameObject("Row", typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement));
+            row.transform.SetParent(content.transform, false);
+            row.GetComponent<Image>().color = new Color(0.62f, 0.80f, 0.96f);
+            row.GetComponent<LayoutElement>().minHeight = 52;
+            var rlbl = MakeText(row.transform, font, "ไอเทม", Vector2.zero, 20, new Color(0.14f, 0.16f, 0.26f));
+            rlbl.alignment = TextAlignmentOptions.Center;
+            var rlrt = rlbl.rectTransform; rlrt.anchorMin = Vector2.zero; rlrt.anchorMax = Vector2.one; rlrt.sizeDelta = Vector2.zero; rlrt.anchoredPosition = Vector2.zero;
+
+            var hint = MakeText(panel.transform, font, "กด G ปิด", new Vector2(0f, 20f), 16, new Color(0.7f, 0.75f, 0.9f));
+            hint.alignment = TextAlignmentOptions.Center;
+            var hrt = hint.rectTransform; hrt.anchorMin = new Vector2(0, 0); hrt.anchorMax = new Vector2(1, 0); hrt.pivot = new Vector2(0.5f, 0f); hrt.sizeDelta = new Vector2(0, 30); hrt.anchoredPosition = new Vector2(0, 12);
+
+            var ui = canGo.AddComponent<TradeUI>();
+            ui.panel = panel; ui.content = content.transform; ui.rowTemplate = row; ui.titleText = title;
         }
 
         // ----- วงล้ออีโมท (กดค้าง B เลือก) — สไตล์ candy พาสเทล -----
@@ -229,6 +276,33 @@ namespace NisitSimulator.EditorTools
             var trt = txt.GetComponent<RectTransform>();
             trt.anchorMin = Vector2.zero; trt.anchorMax = Vector2.one; trt.sizeDelta = Vector2.zero; trt.anchoredPosition = Vector2.zero;
             return go.GetComponent<Button>();
+        }
+
+        static TMP_InputField MakeInput(Transform parent, TMP_FontAsset font, Vector2 pos, Vector2 size)
+        {
+            var go = new GameObject("IPInput", typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(parent, false);
+            var rt = go.GetComponent<RectTransform>();
+            rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 1f); rt.pivot = new Vector2(0.5f, 1f);
+            rt.anchoredPosition = pos; rt.sizeDelta = size;
+            go.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.92f);
+
+            var input = go.AddComponent<TMP_InputField>();
+
+            var textGo = new GameObject("Text", typeof(RectTransform));
+            textGo.transform.SetParent(go.transform, false);
+            var txt = textGo.AddComponent<TextMeshProUGUI>();
+            if (font != null) txt.font = font;
+            txt.color = new Color(0.12f, 0.14f, 0.24f); txt.fontSize = 20; txt.alignment = TextAlignmentOptions.Left;
+            var txtRt = textGo.GetComponent<RectTransform>();
+            txtRt.anchorMin = Vector2.zero; txtRt.anchorMax = Vector2.one; txtRt.offsetMin = new Vector2(10f, 2f); txtRt.offsetMax = new Vector2(-10f, -2f);
+
+            input.textViewport = rt;
+            input.textComponent = txt;
+            if (font != null) input.fontAsset = font;
+            input.lineType = TMP_InputField.LineType.SingleLine;
+            input.text = "127.0.0.1";
+            return input;
         }
 
         static TMP_Text MakeText(Transform parent, TMP_FontAsset font, string s, Vector2 pos, float size, Color col)

@@ -74,6 +74,26 @@ namespace NisitSimulator.Systems
             return n;
         }
 
+        // ---------- เทรด/ให้ของ (ค้นหา/เพิ่ม/ลบ ตามชื่อไอเทม) ----------
+        public static ShopItem Resolve(string name)
+            => BuildLookup().TryGetValue(name, out var it) ? it : null;
+
+        public bool AddByName(string name)
+        {
+            var it = Resolve(name);
+            return it != null && Add(it, 1);
+        }
+
+        public bool RemoveByName(string name)
+        {
+            var s = stacks.Find(x => x.item != null && x.item.name == name);
+            if (s == null) return false;
+            s.count--;
+            if (s.count <= 0) stacks.Remove(s);
+            OnChanged?.Invoke();
+            return true;
+        }
+
         // ---------- บันทึก/โหลด (เก็บเป็นชื่อไอเทม) ----------
         public List<string> ToSaveList()
         {

@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -12,6 +13,8 @@ namespace NisitSimulator.Net
         public GameObject panel;
         public Button hostButton, clientButton, disconnectButton;
         public TMP_Text statusText;
+        public TMP_InputField ipInput;        // ช่องกรอก IP ของ host (เล่น LAN)
+        public ushort port = 7777;
 
         void Start()
         {
@@ -31,13 +34,31 @@ namespace NisitSimulator.Net
         {
             if (NetworkManager.Singleton == null || Connected()) return;
             if (!HasPlayerPrefab()) return;
+            var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
+            if (utp != null) utp.SetConnectionData("0.0.0.0", port, "0.0.0.0");   // ฟังทุก interface → LAN ต่อได้
             NetworkManager.Singleton.StartHost();
         }
 
         void Client()
         {
             if (NetworkManager.Singleton == null || Connected()) return;
+            string ip = (ipInput != null && !string.IsNullOrWhiteSpace(ipInput.text)) ? ipInput.text.Trim() : "127.0.0.1";
+            var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
+            if (utp != null) utp.SetConnectionData(ip, port);   // ต่อไปหา host ตาม IP ที่กรอก
             NetworkManager.Singleton.StartClient();
+        }
+
+        // IP ในวง LAN ของเครื่องนี้ (บอกเพื่อนให้ Join)
+        static string LocalIP()
+        {
+            try
+            {
+                foreach (var a in System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName()).AddressList)
+                    if (a.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork && !a.ToString().StartsWith("127."))
+                        return a.ToString();
+            }
+            catch { }
+            return "127.0.0.1";
         }
 
         // เช็ก PlayerPrefab (จุดพังบ่อยสุด — ถ้าว่าง จะไม่มีตัวละครโผล่)
@@ -70,8 +91,8 @@ namespace NisitSimulator.Net
             {
                 var nm = NetworkManager.Singleton;
                 statusText.text = !on
-                    ? "ยังไม่เชื่อมต่อ — กด Host หรือ Join"
-                    : (nm.IsHost ? "กำลัง Host (เซิร์ฟเวอร์ + ผู้เล่น)"
+                    ? "ยังไม่เชื่อมต่อ"
+                    : (nm.IsHost ? $"Host! บอกเพื่อน Join IP: {LocalIP()}"
                                  : nm.IsServer ? "เซิร์ฟเวอร์"
                                  : "เชื่อมต่อแล้ว (ผู้เล่น)");
             }
