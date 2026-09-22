@@ -22,8 +22,8 @@ namespace NisitSimulator.CameraRig
 
         [Header("Isometric")]
         public float distance = 18f;
-        public float pitchAngle = 35f;
-        public float orthoSize = 7f;
+        public float pitchAngle = 40f;   // ก้มลงกว่าเดิม (35→40) ลดพื้นที่ว่างขอบล่างที่ 16:9
+        public float orthoSize = 6f;     // ซูมเข้านิด (7→6) เห็นตัวละครชัด + เต็มจอ
         public float minOrtho = 3f, maxOrtho = 22f;
 
         [Header("Third-Person (OTS)")]

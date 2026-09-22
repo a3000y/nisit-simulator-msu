@@ -264,6 +264,15 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - ⚠️ เจอ (ต้องรัน Build Audio): คลิป fanfare/eat/page ยังไม่ถูกสร้าง (เพิ่มโค้ดแล้วแต่ยังไม่ได้ rebuild เสียง)
 - เหลือ: MP-3+ เทรดไอเทม · รัน Build Audio (fanfare/eat/page)
 
+### ยกเครื่องกราฟิก + ฟอนต์การ์ตูน + Build .exe (2026-09-22)
+- 🖼️ **แก้ภาพแตก/ไม่คม**: URP asset เปิด **MSAA 4x** + Mobile render scale 0.8→1 ([PC/Mobile_RPAsset](Assets/Settings/)) · พบว่าที่เห็นแตกในเอดิเตอร์ส่วนใหญ่คือ Game view Scale 1.3x (พรีวิว) ไม่ใช่ของจริง
+- 🔤 **แก้ตัวหนังสือเบลอ**: ฟอนต์ไทยถูกเบคเป็น **SMOOTH (บิตแมป, RenderMode 4165)** ไม่ใช่ SDF → [M31FixFonts](Assets/_Project/Scripts/Editor/M31FixFonts.cs) เปลี่ยนทุกฟอนต์เป็น **SDFAA (4169)** คมทุกขนาด
+- 🎨 **ฟอนต์การ์ตูน Pattaya**: [M32CartoonFont](Assets/_Project/Scripts/Editor/M32CartoonFont.cs) สร้าง Pattaya SDF (SDFAA ชัดเจน + Dynamic ไทยครบ) จาก TTF + สลับทุก TMP_Text ทั้ง 2 ฉาก + ตั้งเป็น TMP default · หมายเหตุ: `CreateFontAsset(src)` แบบไม่ระบุ mode = SMOOTH → ต้องระบุ SDFAA_HINTED เอง
+- 📷 **กล้อง**: pitchAngle 35→40 + orthoSize 7→6 ([IsometricCameraRig](Assets/_Project/Scripts/CameraRig/IsometricCameraRig.cs)) แก้พื้นที่ว่างขอบล่างที่ 16:9 + เห็นตัวละครชัด
+- 📺 **FHD**: Player Settings default 1024×768(4:3) → **1920×1080 (16:9)**
+- 🏗️ **Build tool**: [M33BuildGame](Assets/_Project/Scripts/Editor/M33BuildGame.cs) — Nisit ▸ ★ Build Game (.exe) → StandaloneWindows64 → `Build/NisitSimulator.exe` · **build สำเร็จ เล่นได้จริง!** (HUD ครบ/คม/เต็มจอ)
+- 🐾 จูนเพิ่ม: สัตว์ auto-scale (วัด bounds) + เดินช้า/พักนาน · NPC auto-scale เท่าผู้เล่น · FixCharacterMaterials แก้ครบทุกตัว (NPC มีชุด)
+
 ---
 
 ## Version Control

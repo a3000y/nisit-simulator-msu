@@ -50,7 +50,7 @@ namespace NisitSimulator.EditorTools
                 "ตั้งค่า Multiplayer (MP-1/2/3) เสร็จ! 🌐\n\n" +
                 "• NetworkAvatar (sync เดิน+ท่า) + ป้ายชื่อ\n" +
                 "• NetworkManager + UnityTransport (127.0.0.1)\n" +
-                "• UI: Host/Join (F3) · อีโมท Z/X/C · แชท (Y)\n\n" +
+                "• UI: Host/Join (F3) · วงล้ออีโมท (กดค้าง B) · แชท (Y)\n\n" +
                 "ทดสอบ: Window → Multiplayer Play Mode → เปิด Player 2\nเครื่องแรก Host, เครื่องสอง Join → เห็นกันเดิน+ท่า+แชท!\n\n" +
                 "⚠️ ถ้า NetworkManager → PlayerPrefab ว่าง ให้ลาก NetworkAvatar.prefab ใส่เอง", "เยี่ยม!");
         }
@@ -142,6 +142,77 @@ namespace NisitSimulator.EditorTools
 
             var chat = canGo.AddComponent<ChatUI>();
             chat.panel = chatPanel; chat.log = chatLog; chat.presetButtons = chatBtns; chat.presets = presets;
+
+            BuildEmoteWheel(canGo, font);
+        }
+
+        // ----- วงล้ออีโมท (กดค้าง B เลือก) — สไตล์ candy พาสเทล -----
+        static void BuildEmoteWheel(GameObject canGo, TMP_FontAsset font)
+        {
+            var circle = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/ui_circle.png");
+            var gloss  = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/ui_gloss.png");
+            var round  = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/ui_round.png");
+
+            // panel เต็มจอ (dim + วงล้อ)
+            var panel = new GameObject("EmoteWheel", typeof(RectTransform));
+            panel.transform.SetParent(canGo.transform, false);
+            var prt = panel.GetComponent<RectTransform>();
+            prt.anchorMin = Vector2.zero; prt.anchorMax = Vector2.one; prt.offsetMin = Vector2.zero; prt.offsetMax = Vector2.zero;
+
+            var dim = new GameObject("Dim", typeof(RectTransform), typeof(Image));
+            dim.transform.SetParent(panel.transform, false);
+            var drt = dim.GetComponent<RectTransform>();
+            drt.anchorMin = Vector2.zero; drt.anchorMax = Vector2.one; drt.offsetMin = Vector2.zero; drt.offsetMax = Vector2.zero;
+            dim.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.35f);
+
+            // จานกลางวง + ชื่ออีโมทที่เลือก
+            var hub = MakeCircle(panel.transform, round ?? circle, Vector2.zero, 160f, new Color(0.16f, 0.18f, 0.28f, 0.95f));
+            var center = MakeText(hub, font, "เลือกอีโมท", Vector2.zero, 24, Color.white);
+            center.alignment = TextAlignmentOptions.Center;
+            var crt = center.rectTransform; crt.anchorMin = Vector2.zero; crt.anchorMax = Vector2.one; crt.sizeDelta = Vector2.zero; crt.anchoredPosition = Vector2.zero;
+
+            string[] labels = { "โบกมือ", "เชียร์", "ทักทาย" };
+            Color[] cols = { new Color(0.62f, 0.80f, 0.96f), new Color(1.00f, 0.85f, 0.55f), new Color(0.80f, 1.00f, 0.84f) };
+            float[] deg = { 90f, 210f, 330f };   // บน · ล่างซ้าย · ล่างขวา
+            var items = new RectTransform[3]; var bgs = new Image[3]; var rings = new Image[3];
+            for (int i = 0; i < 3; i++)
+            {
+                float a = deg[i] * Mathf.Deg2Rad;
+                Vector2 pos = new Vector2(Mathf.Cos(a), Mathf.Sin(a)) * 180f;
+
+                // วงแหวนไฮไลต์ (ใหญ่กว่า อยู่หลัง ปิดไว้ก่อน)
+                var ring = MakeCircle(panel.transform, circle, pos, 152f, Color.white);
+                var ringImg = ring.GetComponent<Image>(); ringImg.enabled = false; ringImg.raycastTarget = false;
+                rings[i] = ringImg;
+
+                // ไอคอนวงกลมพาสเทล
+                var it = MakeCircle(panel.transform, circle, pos, 132f, cols[i]);
+                if (gloss != null) { var g = MakeCircle(it, gloss, Vector2.zero, 132f, new Color(1, 1, 1, 0.5f)); g.GetComponent<Image>().raycastTarget = false; g.sizeDelta = new Vector2(132f, 132f); g.anchorMin = g.anchorMax = new Vector2(0.5f, 0.5f); }
+
+                var lbl = MakeText(it, font, labels[i], Vector2.zero, 22, new Color(0.14f, 0.16f, 0.26f));
+                lbl.alignment = TextAlignmentOptions.Center;
+                var lrt = lbl.rectTransform; lrt.anchorMin = Vector2.zero; lrt.anchorMax = Vector2.one; lrt.sizeDelta = Vector2.zero; lrt.anchoredPosition = Vector2.zero;
+
+                items[i] = it; bgs[i] = it.GetComponent<Image>();
+            }
+
+            var ew = canGo.AddComponent<EmoteWheel>();
+            ew.panel = panel; ew.items = items; ew.itemBg = bgs; ew.rings = rings; ew.centerLabel = center;
+            ew.names = labels; ew.kinds = new[] { 1, 2, 3 };
+        }
+
+        // วงกลม (ใช้ sprite ui_circle/ui_round) — คืน RectTransform
+        static RectTransform MakeCircle(Transform parent, Sprite sp, Vector2 pos, float size, Color col)
+        {
+            var go = new GameObject("Circle", typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(parent, false);
+            var rt = go.GetComponent<RectTransform>();
+            rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f); rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.anchoredPosition = pos; rt.sizeDelta = new Vector2(size, size);
+            var img = go.GetComponent<Image>();
+            if (sp != null) img.sprite = sp;
+            img.color = col;
+            return rt;
         }
 
         static Button MakeButton(Transform parent, TMP_FontAsset font, string label, Vector2 pos, Color col)

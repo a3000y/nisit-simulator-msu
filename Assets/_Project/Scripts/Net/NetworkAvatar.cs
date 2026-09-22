@@ -90,13 +90,7 @@ namespace NisitSimulator.Net
                     var a = localPlayer.GetComponentInChildren<Animator>();
                     if (a != null) netSpeed.Value = a.GetFloat("Speed");
                 }
-                // อีโมท: Z โบกมือ · X เชียร์ · C ทักทาย
-                if (Time.timeScale > 0f)
-                {
-                    if (Input.GetKeyDown(KeyCode.Z)) DoEmote(1);
-                    else if (Input.GetKeyDown(KeyCode.X)) DoEmote(2);
-                    else if (Input.GetKeyDown(KeyCode.C)) DoEmote(3);
-                }
+                // อีโมทสั่งจาก EmoteWheel (กดค้าง B เลือก) ผ่าน DoEmote()
             }
             else
             {
@@ -127,8 +121,8 @@ namespace NisitSimulator.Net
             if (p != null) localPlayer = p.transform;
         }
 
-        // ---------- อีโมท ----------
-        void DoEmote(int kind)
+        // ---------- อีโมท (เรียกจาก EmoteWheel) ----------
+        public void DoEmote(int kind)
         {
             emote.Value = (++emoteSeq) * 10 + kind;   // sync ให้ผู้เล่นอื่นเห็น
             if (localPlayer != null)                  // เล่นบน Player จริงของเรา (ให้เราเห็นตัวเองด้วย)
