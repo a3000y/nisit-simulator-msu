@@ -47,11 +47,11 @@ namespace NisitSimulator.EditorTools
 
             Debug.Log("<color=lime>[Nisit] ตั้งค่า Multiplayer (MP-1) เสร็จ!</color>");
             EditorUtility.DisplayDialog("Nisit Simulator",
-                "ตั้งค่า Multiplayer (MP-1) เสร็จ! 🌐\n\n" +
-                "• NetworkAvatar prefab (หุ่นเงา sync)\n" +
+                "ตั้งค่า Multiplayer (MP-1/2/3) เสร็จ! 🌐\n\n" +
+                "• NetworkAvatar (sync เดิน+ท่า) + ป้ายชื่อ\n" +
                 "• NetworkManager + UnityTransport (127.0.0.1)\n" +
-                "• UI ปุ่ม Host/Join (กด F3 เปิด/ปิด)\n\n" +
-                "ทดสอบ: Window → Multiplayer Play Mode → เปิด Player 2\nแล้วเครื่องแรกกด Host, เครื่องสองกด Join → เห็นกันเดิน!\n\n" +
+                "• UI: Host/Join (F3) · อีโมท Z/X/C · แชท (Y)\n\n" +
+                "ทดสอบ: Window → Multiplayer Play Mode → เปิด Player 2\nเครื่องแรก Host, เครื่องสอง Join → เห็นกันเดิน+ท่า+แชท!\n\n" +
                 "⚠️ ถ้า NetworkManager → PlayerPrefab ว่าง ให้ลาก NetworkAvatar.prefab ใส่เอง", "เยี่ยม!");
         }
 
@@ -71,6 +71,7 @@ namespace NisitSimulator.EditorTools
 
             if (inst.GetComponent<NetworkObject>() == null) inst.AddComponent<NetworkObject>();
             if (inst.GetComponent<NetworkAvatar>() == null) inst.AddComponent<NetworkAvatar>();
+            if (inst.GetComponent<ChatRelay>() == null) inst.AddComponent<ChatRelay>();
 
             var prefab = PrefabUtility.SaveAsPrefabAsset(inst, PrefabPath);
             Object.DestroyImmediate(inst);
@@ -112,6 +113,35 @@ namespace NisitSimulator.EditorTools
             ui.panel = panel;
             ui.statusText = status;
             ui.hostButton = host; ui.clientButton = client; ui.disconnectButton = disc;
+
+            // ----- แชทด่วน (มุมซ้ายล่าง) -----
+            var chatLog = MakeText(canGo.transform, font, "", Vector2.zero, 20, new Color(1f, 1f, 1f, 0.95f));
+            var clrt = chatLog.rectTransform;
+            clrt.anchorMin = clrt.anchorMax = new Vector2(0f, 0f); clrt.pivot = new Vector2(0f, 0f);
+            clrt.anchoredPosition = new Vector2(24f, 100f); clrt.sizeDelta = new Vector2(600f, 220f);
+            chatLog.alignment = TextAlignmentOptions.BottomLeft;
+            chatLog.outlineWidth = 0.15f; chatLog.outlineColor = new Color32(0, 0, 0, 255);
+
+            var chatPanel = new GameObject("ChatPanel", typeof(RectTransform), typeof(Image));
+            chatPanel.transform.SetParent(canGo.transform, false);
+            var cprt = chatPanel.GetComponent<RectTransform>();
+            cprt.anchorMin = cprt.anchorMax = new Vector2(0f, 0f); cprt.pivot = new Vector2(0f, 0f);
+            cprt.anchoredPosition = new Vector2(24f, 24f); cprt.sizeDelta = new Vector2(600f, 60f);
+            chatPanel.GetComponent<Image>().color = new Color(0.12f, 0.14f, 0.24f, 0.9f);
+
+            string[] presets = { "สวัสดี!", "รอด้วย~", "ไปไหนกัน?", "เก่งมาก!" };
+            var chatBtns = new Button[presets.Length];
+            for (int i = 0; i < presets.Length; i++)
+            {
+                var b = MakeButton(chatPanel.transform, font, presets[i], Vector2.zero, new Color(0.62f, 0.80f, 0.96f));
+                var brt = b.GetComponent<RectTransform>();
+                brt.anchorMin = brt.anchorMax = new Vector2(0f, 0.5f); brt.pivot = new Vector2(0f, 0.5f);
+                brt.anchoredPosition = new Vector2(10f + i * 146f, 0f); brt.sizeDelta = new Vector2(140f, 44f);
+                chatBtns[i] = b;
+            }
+
+            var chat = canGo.AddComponent<ChatUI>();
+            chat.panel = chatPanel; chat.log = chatLog; chat.presetButtons = chatBtns; chat.presets = presets;
         }
 
         static Button MakeButton(Transform parent, TMP_FontAsset font, string label, Vector2 pos, Color col)

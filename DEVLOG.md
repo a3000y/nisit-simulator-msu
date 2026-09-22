@@ -251,6 +251,19 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - ทดสอบ: Window ▸ Multiplayer Play Mode (2 หน้าต่าง) → Host + Join → เห็นกันเดิน · ยังไม่ได้รันจริง (รอผู้ใช้เทสต์)
 - Roadmap: MP-1 เห็นกันเดิน ✅(code) · MP-2 ป้ายชื่อ+ท่า · MP-3 แชท+เทรด
 
+### MP-2/3 + จูน NPC/สัตว์/เสียง (ทดสอบ 2 หน้าต่างผ่าน) (2026-09-22)
+- ✅ **ทดสอบ MP จริงผ่าน** (Multiplayer Play Mode 2 หน้าต่าง Host+Join) — เห็นกันเดิน + ป้ายชื่อ "Player 1/2" ถูกต้อง
+- 🏷️ **MP-2 ป้ายชื่อ** ([Net/NetworkAvatar.cs](Assets/_Project/Scripts/Net/NetworkAvatar.cs)) — TextMeshPro 3D ลอยหัวผู้เล่นอื่น + billboard หันเข้ากล้อง
+- 🙋 **MP-2 อีโมทซิงก์** — กด Z โบก · X เชียร์ · C ทักทาย (NetworkVariable encode seq×10+kind) → เห็นทั้งตัวเอง (PlayerActionController) + ผู้เล่นอื่น (CrossFade)
+- 💬 **MP-3 แชทด่วน** ([Net/ChatRelay.cs](Assets/_Project/Scripts/Net/ChatRelay.cs) NetworkBehaviour บน avatar + [Net/ChatUI.cs](Assets/_Project/Scripts/Net/ChatUI.cs)) — กด Y เปิดแผงข้อความสำเร็จรูป → ServerRpc→ClientRpc กระจายทุกคน (FixedString512) · M29 สร้าง UI ให้
+- 🐾 **แก้สัตว์ใหญ่** ([M27](Assets/_Project/Scripts/Editor/M27AnimalBuilder.cs)) — **auto-scale** วัด Renderer bounds แล้วย่อให้สูงตามเป้า (หมา 0.6 · จิ้งจอก 0.5 · กวาง 1.3m) — โมเดล Quaternius base ใหญ่มาก
+- 🧍 **แก้ NPC ใหญ่ไม่เท่ากัน** ([M26](Assets/_Project/Scripts/Editor/M26TalkNPCs.cs)) — auto-scale เท่าความสูงผู้เล่น (โมเดล Mixamo แต่ละตัว base ต่างกัน) · เอา staff ×1.10 ออก
+- 👕 **แก้ NPC สีเทา (ไม่มีชุด)** ([FixCharacterMaterials.cs](Assets/_Project/Scripts/Editor/FixCharacterMaterials.cs)) — เดิมแก้แค่ตัวแรก (มี break) → **แก้ให้แตก texture+material ครบทุกตัว**
+- 🐌 **แก้เดินวนถี่ไป** — NPC/สัตว์ เดินช้าลง + `pauseTime` ยาวขึ้น (ยืนพัก 2.5-10 วิ)
+- 🦶 **แก้เสียงเดินไม่ตรงก้าว** ([PlayerMovement.cs](Assets/_Project/Scripts/Player/PlayerMovement.cs)) — เลิกใช้ timer ตายตัว → **ตรวจกระดูกเท้า (Humanoid LeftFoot/RightFoot) จุดต่ำสุด = แตะพื้น** เล่นเสียงตรงจังหวะจริงทุกความเร็ว · ลดความดัง 0.45→0.28
+- ⚠️ เจอ (ต้องรัน Build Audio): คลิป fanfare/eat/page ยังไม่ถูกสร้าง (เพิ่มโค้ดแล้วแต่ยังไม่ได้ rebuild เสียง)
+- เหลือ: MP-3+ เทรดไอเทม · รัน Build Audio (fanfare/eat/page)
+
 ---
 
 ## Version Control

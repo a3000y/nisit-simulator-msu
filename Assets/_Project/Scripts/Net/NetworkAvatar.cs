@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using TMPro;
 
 namespace NisitSimulator.Net
 {
@@ -20,8 +21,16 @@ namespace NisitSimulator.Net
         readonly NetworkVariable<float> netSpeed = new NetworkVariable<float>(
             0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
+        // อีโมท: encode = seq*10 + kind (kind 1=โบก 2=เชียร์ 3=ทักทาย) — เปลี่ยนค่า = เล่นท่าใหม่
+        readonly NetworkVariable<int> emote = new NetworkVariable<int>(
+            0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
         Transform localPlayer;   // owner: อ้างอิง Player ในฉาก
         Animator anim;
+        Transform nameTag;       // remote: ป้ายชื่อลอยหัว
+        Camera cam;
+        int emoteSeq;                              // owner: ตัวนับกันค่าซ้ำ
+        int gestureBase; bool gesturing; float gestureUntil;   // remote: เล่นท่าอีโมทแล้วกลับท่าเดิม
 
         public override void OnNetworkSpawn()
         {
@@ -42,7 +51,31 @@ namespace NisitSimulator.Net
                 // เริ่มที่ตำแหน่งล่าสุดทันที (กันวาร์ปจาก 0,0,0)
                 transform.position = netPos.Value;
                 transform.rotation = Quaternion.Euler(0f, netYaw.Value, 0f);
+                CreateNameTag();   // ป้ายชื่อลอยหัว (เฉพาะผู้เล่นอื่น)
+                emote.OnValueChanged += OnEmoteChanged;   // ผู้เล่นอื่นส่งอีโมท → เล่นท่า
             }
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            if (!IsOwner) emote.OnValueChanged -= OnEmoteChanged;
+        }
+
+        // ป้ายชื่อลอยหัว (TextMeshPro 3D — ไม่ต้องใช้ canvas)
+        void CreateNameTag()
+        {
+            var go = new GameObject("NameTag");
+            go.transform.SetParent(transform, false);
+            go.transform.localPosition = new Vector3(0f, 2.3f, 0f);
+            var tmp = go.AddComponent<TextMeshPro>();
+            tmp.text = "Player " + (OwnerClientId + 1);
+            tmp.fontSize = 3f;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.color = Color.white;
+            tmp.outlineWidth = 0.2f;
+            tmp.outlineColor = new Color32(20, 22, 38, 255);
+            tmp.rectTransform.sizeDelta = new Vector2(4f, 1f);
+            nameTag = go.transform;
         }
 
         void Update()
@@ -57,13 +90,34 @@ namespace NisitSimulator.Net
                     var a = localPlayer.GetComponentInChildren<Animator>();
                     if (a != null) netSpeed.Value = a.GetFloat("Speed");
                 }
+                // อีโมท: Z โบกมือ · X เชียร์ · C ทักทาย
+                if (Time.timeScale > 0f)
+                {
+                    if (Input.GetKeyDown(KeyCode.Z)) DoEmote(1);
+                    else if (Input.GetKeyDown(KeyCode.X)) DoEmote(2);
+                    else if (Input.GetKeyDown(KeyCode.C)) DoEmote(3);
+                }
             }
             else
             {
+                // จบอีโมท → กลับท่าเดิน (เดิน/ยืน)
+                if (gesturing && Time.time >= gestureUntil)
+                {
+                    if (anim != null && gestureBase != 0) anim.CrossFade(gestureBase, 0.2f);
+                    gesturing = false;
+                }
+
                 // remote: เดินตามค่าที่ sync มา (interpolate ให้ลื่น)
                 transform.position = Vector3.Lerp(transform.position, netPos.Value, lerp * Time.deltaTime);
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0f, netYaw.Value, 0f), lerp * Time.deltaTime);
                 if (anim != null) anim.SetFloat("Speed", netSpeed.Value);
+
+                // ป้ายชื่อหันหน้าเข้ากล้องเสมอ (billboard)
+                if (nameTag != null)
+                {
+                    if (cam == null) cam = Camera.main;
+                    if (cam != null) nameTag.forward = cam.transform.forward;
+                }
             }
         }
 
@@ -71,6 +125,35 @@ namespace NisitSimulator.Net
         {
             var p = GameObject.Find("Player");
             if (p != null) localPlayer = p.transform;
+        }
+
+        // ---------- อีโมท ----------
+        void DoEmote(int kind)
+        {
+            emote.Value = (++emoteSeq) * 10 + kind;   // sync ให้ผู้เล่นอื่นเห็น
+            if (localPlayer != null)                  // เล่นบน Player จริงของเรา (ให้เราเห็นตัวเองด้วย)
+            {
+                var pac = localPlayer.GetComponent<NisitSimulator.Player.PlayerActionController>();
+                if (pac != null && !pac.IsBusy) pac.PerformState(2.5f, null, StateName(kind));
+            }
+        }
+
+        void OnEmoteChanged(int prev, int cur) => PlayEmoteRemote(cur % 10);
+
+        void PlayEmoteRemote(int kind)
+        {
+            string st = StateName(kind);
+            if (anim == null || string.IsNullOrEmpty(st)) return;
+            if (!gesturing) gestureBase = anim.GetCurrentAnimatorStateInfo(0).shortNameHash;
+            int h = Animator.StringToHash(st);
+            if (anim.HasState(0, h)) anim.CrossFade(h, 0.15f);
+            gesturing = true; gestureUntil = Time.time + 2.5f;
+        }
+
+        static string StateName(int kind)
+        {
+            switch (kind) { case 1: return "Waving"; case 2: return "Cheering"; case 3: return "Talking"; }
+            return null;
         }
 
         void SetVisible(bool v)

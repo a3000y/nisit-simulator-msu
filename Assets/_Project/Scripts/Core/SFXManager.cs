@@ -64,7 +64,7 @@ namespace NisitSimulator.Core
         public static void Coin()     { if (I != null) I.PlayClip(I.coin); }
         public static void Success()  { if (I != null) I.PlayClip(I.success); }
         public static void Error()    { if (I != null) I.PlayClip(I.error); }
-        public static void Footstep() { if (I != null) I.PlayClip(I.footstep, 0.45f); }
+        public static void Footstep() { if (I != null) I.PlayClip(I.footstep, 0.28f); }   // พอดี (ซิงก์กับอนิเมชันแล้ว)
         public static void Jump()     { if (I != null) I.PlayClip(I.jump, 0.7f); }
         public static void Sleep()    { if (I != null) I.PlayClip(I.sleep); }
         public static void Whoosh()   { if (I != null) I.PlayClip(I.whoosh, 0.6f); }

@@ -28,13 +28,21 @@ namespace NisitSimulator.Player
         private Animator animator;              // ตัวเล่นแอนิเมชัน (ถ้ามีโมเดล)
         private PlayerEffects effects;          // ผลกระทบชั่วคราว (ป่วย ฯลฯ)
         private Vector3 velocity;
-        private float stepTimer;                // จับจังหวะเสียงฝีเท้า
+        // ซิงก์เสียงฝีเท้ากับกระดูกเท้าจริง (เล่นตอนเท้าลงต่ำสุด = แตะพื้น)
+        private Transform leftFoot, rightFoot;
+        private float lfPrevY, rfPrevY;
+        private bool lfDescending, rfDescending;
 
         void Awake()
         {
             controller = GetComponent<CharacterController>();
             stats = GetComponent<PlayerStats>();
             animator = GetComponentInChildren<Animator>();   // หา Animator จากโมเดลลูก
+            if (animator != null && animator.isHuman)         // อ้างอิงกระดูกเท้า (Humanoid) ไว้ซิงก์เสียงเดิน
+            {
+                leftFoot = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
+                rightFoot = animator.GetBoneTransform(HumanBodyBones.RightFoot);
+            }
             effects = GetComponent<PlayerEffects>() ?? gameObject.AddComponent<PlayerEffects>();
             if (cameraTransform == null && Camera.main != null)
                 cameraTransform = Camera.main.transform;
@@ -69,13 +77,12 @@ namespace NisitSimulator.Player
 
             bool moving = moveDir.sqrMagnitude > 0.01f;
 
-            // เสียงฝีเท้า (วิ่งถี่กว่าเดิน)
+            // เสียงฝีเท้า — เล่นตอน "เท้าลงต่ำสุด" (แตะพื้น) จากตำแหน่งกระดูกเท้าจริง → ตรงเป๊ะทุกอนิเมชัน
             if (moving && controller.isGrounded)
             {
-                stepTimer -= Time.deltaTime * (running ? 1.6f : 1f);
-                if (stepTimer <= 0f) { NisitSimulator.Core.SFXManager.Footstep(); stepTimer = 0.4f; }
+                StepFoot(leftFoot, ref lfPrevY, ref lfDescending);
+                StepFoot(rightFoot, ref rfPrevY, ref rfDescending);
             }
-            else stepTimer = 0f;
 
             // หันหน้าตามทิศเดิน
             if (moving)
@@ -110,6 +117,20 @@ namespace NisitSimulator.Player
                 float animSpeed = moving ? (running ? 1f : 0.5f) : 0f;
                 animator.SetFloat("Speed", animSpeed, 0.12f, Time.deltaTime);
             }
+        }
+
+        // เล่นเสียงฝีเท้าตอนเท้าถึง "จุดต่ำสุด" (เปลี่ยนจากลงเป็นขึ้น) = แตะพื้นจริง
+        void StepFoot(Transform foot, ref float prevY, ref bool wasDescending)
+        {
+            if (foot == null) return;
+            float y = foot.position.y;
+            bool descending = y < prevY - 0.001f;   // deadzone กัน jitter
+            bool ascending  = y > prevY + 0.001f;
+            if (wasDescending && ascending)          // ผ่านจุดต่ำสุด → แตะพื้น
+                NisitSimulator.Core.SFXManager.Footstep();
+            if (descending) wasDescending = true;
+            else if (ascending) wasDescending = false;
+            prevY = y;
         }
     }
 }

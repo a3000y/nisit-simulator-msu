@@ -34,8 +34,8 @@ namespace NisitSimulator.EditorTools
         };
 
         // บุคลากร (อาจารย์/บรรณารักษ์) — โทนสุภาพ + ตัวใหญ่กว่า (ดูมีอำนาจ/เป็นผู้ใหญ่)
-        static readonly Color StaffTint = new Color(0.90f, 0.90f, 0.95f);   // เทาอมฟ้า สุภาพ
-        const float StaffScaleMul = 1.10f;
+        static readonly Color StaffTint = new Color(0.90f, 0.90f, 0.95f);   // เทาอมฟ้า สุภาพ (แยกบทบาทด้วยสี ไม่ใช่ขนาด)
+        const float StaffScaleMul = 1.0f;   // เท่าคนอื่น (เดิม 1.10 ทำให้ดูใหญ่)
 
         static Color StudentTint(int i) => StudentTints[i % StudentTints.Length];
 
@@ -54,10 +54,10 @@ namespace NisitSimulator.EditorTools
             if (old != null) Object.DestroyImmediate(old);
             var root = new GameObject(Root).transform;
 
-            // scale ให้เท่าผู้เล่น
-            float scale = 1f;
+            // ความสูงเป้าหมาย = ความสูงจริงของผู้เล่น (NPC ทุกตัวจะสูงเท่านี้)
+            float playerH = 1.8f;
             var player = GameObject.Find("Player");
-            if (player != null) scale = player.transform.localScale.x;
+            if (player != null) { float ph = ModelHeight(player); if (ph > 0.5f) playerH = ph; }
 
             int staffIdx = 0, studentIdx = 0;
 
@@ -87,8 +87,8 @@ namespace NisitSimulator.EditorTools
             {
                 Vector3 pos = NearDoor(s.door, s.fallback);
                 GameObject npc = s.staff
-                    ? MakeBase(staffModels[staffIdx++ % staffModels.Count], ctrl, layer, scale * StaffScaleMul, root, s.name, pos, LookYToCenter(pos), StaffTint)
-                    : MakeBase(models[studentIdx % models.Count], ctrl, layer, scale, root, s.name, pos, LookYToCenter(pos), StudentTint(studentIdx++));
+                    ? MakeBase(staffModels[staffIdx++ % staffModels.Count], ctrl, layer, playerH * StaffScaleMul, root, s.name, pos, LookYToCenter(pos), StaffTint)
+                    : MakeBase(models[studentIdx % models.Count], ctrl, layer, playerH, root, s.name, pos, LookYToCenter(pos), StudentTint(studentIdx++));
                 var t = npc.AddComponent<TalkNPC>();
                 t.npcName = s.name; t.lines = s.lines;
                 t.idleActions = s.staff ? new[] { "Talking" } : new[] { "Talking", "Waving", "Cheering" };
@@ -111,12 +111,13 @@ namespace NisitSimulator.EditorTools
             for (int i = 0; i < routes.Length; i++)   // นักเรียนทั้งหมด (เดินไปมา)
             {
                 var wps = MakeWaypoints(root, routes[i], "Route" + i);
-                var npc = MakeBase(models[studentIdx % models.Count], ctrl, layer, scale, root, walkers[i].name, wps[0].position, 0, StudentTint(studentIdx));
+                var npc = MakeBase(models[studentIdx % models.Count], ctrl, layer, playerH, root, walkers[i].name, wps[0].position, 0, StudentTint(studentIdx));
                 studentIdx++;
                 var walker = npc.AddComponent<MenuNPCWalker>();
                 walker.waypoints = wps;
                 walker.startIndex = 1 % wps.Length;
-                walker.speed = Random.Range(1.2f, 1.8f);
+                walker.speed = Random.Range(0.9f, 1.4f);           // เดินช้าลง
+                walker.pauseTime = Random.Range(2.5f, 4.5f);       // หยุดพักนานขึ้น (ไม่เดินวนถี่)
                 var t = npc.AddComponent<TalkNPC>();
                 t.npcName = walkers[i].name; t.lines = walkers[i].lines;
             }
@@ -172,24 +173,51 @@ namespace NisitSimulator.EditorTools
             return list;
         }
 
-        // สร้างตัว NPC พื้นฐาน (โมเดล + Animator + Collider + Layer + Scale + ย้อมสี)
+        // วัดความสูงจริง (world) — ใช้ SkinnedMeshRenderer.bounds ก่อน (แม่นใน edit mode) แล้วค่อย Renderer ทั่วไป
+        static float ModelHeight(GameObject go)
+        {
+            float top = float.MinValue, bot = float.MaxValue; bool any = false;
+            foreach (var smr in go.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                if (smr.sharedMesh == null) continue;
+                var b = smr.bounds;
+                if (b.size.y <= 0.0001f) continue;
+                top = Mathf.Max(top, b.max.y); bot = Mathf.Min(bot, b.min.y); any = true;
+            }
+            if (!any)
+                foreach (var r in go.GetComponentsInChildren<Renderer>())
+                {
+                    var b = r.bounds;
+                    if (b.size.y <= 0.0001f) continue;
+                    top = Mathf.Max(top, b.max.y); bot = Mathf.Min(bot, b.min.y); any = true;
+                }
+            return any ? top - bot : 0f;
+        }
+
+        // สร้างตัว NPC พื้นฐาน (โมเดล + Animator + Collider + Layer + auto-scale + ย้อมสี)
         static GameObject MakeBase(GameObject model, UnityEditor.Animations.AnimatorController ctrl,
-                                   int layer, float scale, Transform root, string name, Vector3 pos, float rotY, Color tint)
+                                   int layer, float targetHeight, Transform root, string name, Vector3 pos, float rotY, Color tint)
         {
             var npc = (GameObject)PrefabUtility.InstantiatePrefab(model);
             npc.name = "NPC_" + name;
             npc.transform.SetParent(root);
             npc.transform.position = pos;
             npc.transform.rotation = Quaternion.Euler(0, rotY, 0);
-            npc.transform.localScale = Vector3.one * scale;
+
+            // auto-scale ให้สูงตามเป้า (โมเดล Mixamo แต่ละตัว base ขนาดต่างกัน — จะได้สูงเท่ากันหมด)
+            float h = ModelHeight(npc);
+            float s = h > 0.01f ? targetHeight / h : 1f;
+            npc.transform.localScale = Vector3.one * s;
+            Debug.Log($"[NPC scale] {name}: วัดสูง h={h:0.00} → scale={s:0.000} (เป้า {targetHeight:0.00})");
 
             var anim = npc.GetComponentInChildren<Animator>();
             if (anim != null && ctrl != null) anim.runtimeAnimatorController = ctrl;
 
-            // Collider สำหรับตรวจจับ E (trigger = เดินทะลุได้ ไม่ติด)
+            // Collider สำหรับตรวจจับ E (อิงขนาด base → world พอดีตัวเสมอ)
             var col = npc.GetComponent<CapsuleCollider>();
             if (col == null) col = npc.AddComponent<CapsuleCollider>();
-            col.center = new Vector3(0f, 1f, 0f); col.height = 2f; col.radius = 0.4f; col.isTrigger = true;
+            col.height = h; col.radius = h * 0.2f; col.center = new Vector3(0f, h * 0.5f, 0f);
+            col.isTrigger = true;
             if (layer >= 0) npc.layer = layer;
 
             // ย้อมสีให้ต่างกัน

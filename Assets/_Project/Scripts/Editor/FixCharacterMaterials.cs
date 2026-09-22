@@ -15,48 +15,45 @@ namespace NisitSimulator.EditorTools
         [MenuItem("Nisit/Fix Character Materials")]
         public static void Fix()
         {
-            // หาไฟล์ตัวละคร (FBX ที่มี mesh)
-            string fbxPath = null;
+            string texDir = CharDir + "/Textures";
+            if (!Directory.Exists(texDir)) Directory.CreateDirectory(texDir);
+
+            var log = new System.Text.StringBuilder();
+            int count = 0, extractedCount = 0;
+
+            // แก้ "ทุก" โมเดลตัวละคร (ไม่ใช่แค่ตัวแรก) — ข้ามไฟล์อนิเมชัน (@)
             foreach (var guid in AssetDatabase.FindAssets("t:Model", new[] { CharDir }))
             {
                 var p = AssetDatabase.GUIDToAssetPath(guid);
+                if (p.Contains("@")) continue;                        // ไฟล์ท่าอนิเมชัน ข้าม
                 var go = AssetDatabase.LoadAssetAtPath<GameObject>(p);
-                if (go != null && go.GetComponentInChildren<SkinnedMeshRenderer>() != null)
-                {
-                    fbxPath = p;
-                    break;
-                }
+                if (go == null || go.GetComponentInChildren<SkinnedMeshRenderer>() == null) continue;
+
+                var importer = AssetImporter.GetAtPath(p) as ModelImporter;
+                if (importer == null) continue;
+
+                // 1) เปิด import วัสดุ
+                importer.materialImportMode = ModelImporterMaterialImportMode.ImportStandard;
+                importer.SaveAndReimport();
+                // 2) แตก texture ที่ฝังใน FBX ออกมาเป็นไฟล์จริง
+                bool extracted = importer.ExtractTextures(texDir);
+                AssetDatabase.Refresh();
+                // 3) แตกวัสดุเป็น asset (ผูกกับ texture ที่แตกแล้ว)
+                importer.materialLocation = ModelImporterMaterialLocation.External;
+                importer.SaveAndReimport();
+
+                log.AppendLine($"{(extracted ? "✓" : "•")} {Path.GetFileName(p)}");
+                if (extracted) extractedCount++;
+                count++;
             }
-
-            if (fbxPath == null)
-            {
-                EditorUtility.DisplayDialog("Nisit", "ไม่พบไฟล์ตัวละครใน Characters/", "OK");
-                return;
-            }
-
-            var importer = AssetImporter.GetAtPath(fbxPath) as ModelImporter;
-            if (importer == null) return;
-
-            // 1) เปิดให้ import วัสดุ
-            importer.materialImportMode = ModelImporterMaterialImportMode.ImportStandard;
-            importer.SaveAndReimport();
-
-            // 2) แตก texture ที่ฝังใน FBX ออกมาเป็นไฟล์จริง
-            string texDir = CharDir + "/Textures";
-            if (!Directory.Exists(texDir)) Directory.CreateDirectory(texDir);
-            bool extracted = importer.ExtractTextures(texDir);
             AssetDatabase.Refresh();
 
-            // 3) แตกวัสดุออกมาเป็น asset (จะได้ผูกกับ texture ที่แตกแล้ว)
-            importer.materialLocation = ModelImporterMaterialLocation.External;
-            importer.SaveAndReimport();
-            AssetDatabase.Refresh();
-
-            Debug.Log($"<color=lime>[Nisit] แก้วัสดุตัวละครแล้ว</color> (แตก texture: {extracted})");
+            Debug.Log($"<color=lime>[Nisit] แก้วัสดุตัวละคร {count} ไฟล์ (แตก texture {extractedCount})</color>\n" + log);
             EditorUtility.DisplayDialog("Nisit Simulator",
-                extracted
-                    ? "แตก texture + ผูกวัสดุเสร็จแล้ว! 🎨\n\nตัวละครควรมีสีผิว/เสื้อผ้าแล้ว\nกด Play ดูได้เลย\n\n(ถ้ายังขาวอยู่ ส่งรูปมาให้ผมดูอีกที)"
-                    : "ไฟล์นี้อาจไม่มี texture ฝังมา (โมเดลบางตัวเป็นสีล้วน)\nถ้ายังขาว ลองโหลดตัวละครอื่นที่มีเสื้อผ้าจาก Mixamo", "OK");
+                count == 0
+                    ? "ไม่พบไฟล์ตัวละครใน Characters/"
+                    : $"แก้วัสดุตัวละคร {count} ตัวเสร็จ! 🎨 (แตก texture {extractedCount})\n\n" + log +
+                      "\nควรมีสีผิว/เสื้อผ้าแล้ว → รัน Build Talk NPCs ใหม่ แล้ว Play\n\n(ถ้ายังเทา ส่งรูปมาให้ผมดู)", "OK");
         }
     }
 }

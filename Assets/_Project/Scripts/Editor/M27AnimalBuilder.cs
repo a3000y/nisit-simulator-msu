@@ -38,14 +38,14 @@ namespace NisitSimulator.EditorTools
             if (old != null) Object.DestroyImmediate(old);
             var root = new GameObject(Root).transform;
 
-            // แผนประชากรสัตว์ — "ตัวเดียวมีได้หลายตัว" · แก้/เพิ่มได้ตรงนี้ (keyword=ชื่อไฟล์, thai=ชื่อในเกม)
-            var plan = new (string keyword, string thai)[]
+            // แผนประชากรสัตว์ — "ตัวเดียวมีได้หลายตัว" · targetH = ความสูงเป้าหมาย(เมตร) เทียบคน ~1.8m
+            var plan = new (string keyword, string thai, float targetH)[]
             {
-                ("shiba", "หมา"),          // 🐕 หมา 3 ตัว เดินคนละมุม
-                ("husky", "หมา"),
-                ("shiba", "หมา"),
-                ("fox",   "จิ้งจอก"),       // 🦊
-                ("deer",  "กวาง"),          // 🦌
+                ("shiba", "หมา", 0.6f),       // 🐕 หมา 3 ตัว เดินคนละมุม (สูง ~0.6m)
+                ("husky", "หมา", 0.65f),
+                ("shiba", "หมา", 0.6f),
+                ("fox",   "จิ้งจอก", 0.5f),    // 🦊 (เล็ก)
+                ("deer",  "กวาง", 1.3f),       // 🦌 (สูงกว่า)
             };
 
             int count = 0;
@@ -54,7 +54,7 @@ namespace NisitSimulator.EditorTools
                 var model = FindModel(models, plan[i].keyword) ?? models[i % models.Count];
                 string nm = !string.IsNullOrEmpty(plan[i].thai) ? plan[i].thai : GuessName(model.name);
 
-                var route = SectorRoute(i, plan.Length, 9f, 2.6f);   // กระจายเป็นวง คนละมุม + ลาดตระเวนเล็ก ๆ
+                var route = SectorRoute(i, plan.Length, 12f, 1.5f);   // กระจายกว้างขึ้น + ลาดตระเวนวงแคบ
                 var wps = MakeWaypoints(root, route, "AnimalRoute" + i);
 
                 var a = (GameObject)PrefabUtility.InstantiatePrefab(model);
@@ -62,9 +62,15 @@ namespace NisitSimulator.EditorTools
                 a.transform.SetParent(root);
                 a.transform.position = wps[0].position;
 
+                // วัดขนาดจริง แล้วย่อให้สูงตามเป้า (ทำงานกับโมเดลขนาดไหนก็ได้ — แก้ปัญหา base ใหญ่มาก)
+                float h = ModelHeight(a);
+                float s = h > 0.01f ? plan[i].targetH / h : 1f;
+                a.transform.localScale = Vector3.one * s;
+
                 var col = a.GetComponent<CapsuleCollider>();
                 if (col == null) col = a.AddComponent<CapsuleCollider>();
-                col.center = new Vector3(0f, 0.4f, 0f); col.height = 0.9f; col.radius = 0.5f; col.isTrigger = true;
+                col.height = h * 0.9f; col.radius = h * 0.35f; col.center = new Vector3(0f, h * 0.45f, 0f);
+                col.isTrigger = true;
                 if (layer >= 0) a.layer = layer;
 
                 // ต่อ Animator ให้สัตว์เดินได้ (Idle↔Walk ตามค่า Speed จาก MenuNPCWalker)
@@ -77,7 +83,9 @@ namespace NisitSimulator.EditorTools
                 }
 
                 var walker = a.AddComponent<MenuNPCWalker>();
-                walker.waypoints = wps; walker.startIndex = 1 % wps.Length; walker.speed = Random.Range(1.0f, 2.2f);
+                walker.waypoints = wps; walker.startIndex = 1 % wps.Length;
+                walker.speed = Random.Range(0.5f, 0.9f);          // เดินช้าลงอีก
+                walker.pauseTime = Random.Range(5f, 10f);         // ยืนพักนาน ๆ (เดินเป็นครั้งคราว ไม่วนถี่)
 
                 var pet = a.AddComponent<PetAnimal>();
                 pet.animalName = nm;
@@ -108,6 +116,16 @@ namespace NisitSimulator.EditorTools
                 if (go != null) list.Add(go);
             }
             return list;
+        }
+
+        // วัดความสูงจริงของโมเดล (world) จาก Renderer bounds — ไว้ auto-scale
+        static float ModelHeight(GameObject go)
+        {
+            var rs = go.GetComponentsInChildren<Renderer>();
+            if (rs.Length == 0) return 0f;
+            Bounds b = rs[0].bounds;
+            for (int i = 1; i < rs.Length; i++) b.Encapsulate(rs[i].bounds);
+            return b.size.y;
         }
 
         // หาโมเดลที่ชื่อไฟล์มี keyword (เช่น "shiba") — ไม่เจอคืน null
