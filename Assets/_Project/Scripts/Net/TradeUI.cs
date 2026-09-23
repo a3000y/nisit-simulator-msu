@@ -20,12 +20,14 @@ namespace NisitSimulator.Net
         public float range = 5f;
 
         private Transform player;
+        private NisitSimulator.Player.PlayerMovement move;
+        private bool moveWasOn;
         private readonly List<GameObject> rows = new List<GameObject>();
 
         void Start()
         {
             var p = GameObject.Find("Player");
-            if (p != null) player = p.transform;
+            if (p != null) { player = p.transform; move = p.GetComponent<NisitSimulator.Player.PlayerMovement>(); }
             if (rowTemplate != null) rowTemplate.SetActive(false);
             if (panel != null) panel.SetActive(false);
         }
@@ -34,8 +36,9 @@ namespace NisitSimulator.Net
         {
             if (Input.GetKeyDown(key))
             {
-                if (panel != null && panel.activeSelf) Close();
-                else Open();
+                bool open = panel != null && panel.activeSelf;
+                if (open) Close();
+                else if (NisitSimulator.Core.GameManager.Instance == null || NisitSimulator.Core.GameManager.Instance.IsActive) Open();
             }
         }
 
@@ -49,9 +52,14 @@ namespace NisitSimulator.Net
 
             Build(target);
             if (panel != null) panel.SetActive(true);
+            if (move != null && move.enabled) { move.enabled = false; moveWasOn = true; }   // หยุดเดินตอนเลือกของ
         }
 
-        void Close() { if (panel != null) panel.SetActive(false); }
+        void Close()
+        {
+            if (panel != null) panel.SetActive(false);
+            if (move != null && moveWasOn) { move.enabled = true; moveWasOn = false; }
+        }
 
         void Build(NetworkObject target)
         {
@@ -79,15 +87,18 @@ namespace NisitSimulator.Net
 
         void Give(NetworkObject target, string itemName)
         {
-            var inv = InventoryManager.Instance;
-            if (inv == null || !inv.RemoveByName(itemName)) return;   // เอาออกจากกระเป๋าเรา
+            // เช็คระยะอีกครั้ง (กันเดินไกลแล้วยังให้ได้)
+            if (target == null || player == null ||
+                (target.transform.position - player.position).sqrMagnitude > range * range)
+            { HUDController.Toast("ผู้เล่นอยู่ไกลเกินไป"); Close(); return; }
 
-            var local = NetworkManager.Singleton != null && NetworkManager.Singleton.LocalClient != null
-                        ? NetworkManager.Singleton.LocalClient.PlayerObject : null;
+            var nm = NetworkManager.Singleton;
+            var local = (nm != null && nm.LocalClient != null) ? nm.LocalClient.PlayerObject : null;
             var relay = local != null ? local.GetComponent<TradeRelay>() : null;
-            if (relay != null) relay.Give(target.OwnerClientId, itemName);
+            if (relay == null) { HUDController.Toast("ยังไม่เชื่อมต่อ"); Close(); return; }
 
-            HUDController.Toast($"ให้ {itemName} แล้ว!");
+            // ไม่ลบของที่นี่ — TradeRelay จะลบ "เมื่อผู้รับยืนยันสำเร็จ" (กันของหาย)
+            relay.Give(target.OwnerClientId, itemName);
             Close();
         }
 

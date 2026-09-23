@@ -16,12 +16,14 @@ namespace NisitSimulator.Net
 
         private Transform player;
         private PlayerStats stats;
-        private float timer;
+        private float timer, scanTimer;
+        private bool nearCached;
 
         void Update()
         {
             var nm = NetworkManager.Singleton;
             if (nm == null || !nm.IsClient) { timer = 0f; return; }   // เล่นคนเดียว = ไม่มีโบนัส
+            if (Time.timeScale == 0f) return;                         // หยุดตอน pause/สอบ/เหตุการณ์
 
             if (player == null)
             {
@@ -31,15 +33,11 @@ namespace NisitSimulator.Net
             }
             if (stats == null) stats = Object.FindFirstObjectByType<PlayerStats>();
 
-            // มีผู้เล่นอื่นอยู่ในระยะไหม
-            bool near = false;
-            foreach (var av in Object.FindObjectsByType<NetworkAvatar>(FindObjectsSortMode.None))
-            {
-                if (av.IsOwner) continue;
-                if ((av.transform.position - player.position).sqrMagnitude <= range * range) { near = true; break; }
-            }
+            // สแกนหาผู้เล่นใกล้ ทุก 0.5 วิ (ไม่ต้องทุกเฟรม)
+            scanTimer -= Time.deltaTime;
+            if (scanTimer <= 0f) { scanTimer = 0.5f; nearCached = ScanNear(); }
 
-            if (!near) { timer = 0f; return; }
+            if (!nearCached) { timer = 0f; return; }
 
             timer += Time.deltaTime;
             if (timer >= interval)
@@ -52,6 +50,16 @@ namespace NisitSimulator.Net
                 }
                 HUDController.Toast($"เรียนกับเพื่อน! ความรู้ +{knowledgePerTick:0} พอใจ +{satPerTick:0} 🤝");
             }
+        }
+
+        bool ScanNear()
+        {
+            foreach (var av in Object.FindObjectsByType<NetworkAvatar>(FindObjectsSortMode.None))
+            {
+                if (av.IsOwner) continue;
+                if ((av.transform.position - player.position).sqrMagnitude <= range * range) return true;
+            }
+            return false;
         }
     }
 }

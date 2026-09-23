@@ -66,10 +66,12 @@ namespace NisitSimulator.Net
             if (av != null) av.SetIdentity(GameSession.PlayerName, GameSession.PlayerColor);
         }
 
+        float nextRefresh;
+
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.F3) && panel != null) panel.SetActive(!panel.activeSelf);
-            Refresh();
+            if (Time.unscaledTime >= nextRefresh) { nextRefresh = Time.unscaledTime + 0.5f; Refresh(); }   // ไม่ต้องทุกเฟรม
         }
 
         void Host()
@@ -90,17 +92,20 @@ namespace NisitSimulator.Net
             NetworkManager.Singleton.StartClient();
         }
 
-        // IP ในวง LAN ของเครื่องนี้ (บอกเพื่อนให้ Join)
+        // IP ในวง LAN ของเครื่องนี้ (คำนวณครั้งเดียว cache ไว้ — DNS lookup ช้า อย่าเรียกทุกเฟรม)
+        static string _cachedIP;
         static string LocalIP()
         {
+            if (_cachedIP != null) return _cachedIP;
+            _cachedIP = "127.0.0.1";
             try
             {
                 foreach (var a in System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName()).AddressList)
                     if (a.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork && !a.ToString().StartsWith("127."))
-                        return a.ToString();
+                    { _cachedIP = a.ToString(); break; }
             }
             catch { }
-            return "127.0.0.1";
+            return _cachedIP;
         }
 
         // เช็ก PlayerPrefab (จุดพังบ่อยสุด — ถ้าว่าง จะไม่มีตัวละครโผล่)

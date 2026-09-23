@@ -199,6 +199,8 @@ namespace NisitSimulator.Net
             netColor.Value = color;   // NV เปลี่ยน → OnColorChanged ทาสีให้เอง
         }
 
+        public string DisplayName => ResolveName();   // ให้ PlayerListUI อ่านชื่อ
+
         string ResolveName()
         {
             var n = netName.Value.ToString();

@@ -284,6 +284,17 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - 🤝 **Co-op โบนัส** ([Net/CoopBonus.cs](Assets/_Project/Scripts/Net/CoopBonus.cs) บน NetworkManager) — อยู่ใกล้ผู้เล่นอื่น ~6m ทุก 8 วิ ได้ความรู้ +6/พอใจ +4 · คำนวณ client-local (ไม่ sync) · เฉพาะตอนเชื่อม MP
 - แก้เพิ่ม: ป้ายชื่อใช้ชื่อจริงแทน "Player N" · ทุกอย่างเทสต์ได้ 2 หน้าต่าง (ไม่ต้องเน็ต)
 
+### MP polish (แชทพิมพ์เอง + รายชื่อ) + แก้บั๊กจากสแกน QA (2026-09-23)
+- 💬 **แชทพิมพ์เอง** ([Net/ChatUI.cs](Assets/_Project/Scripts/Net/ChatUI.cs)) — เพิ่มช่องพิมพ์ (Enter ส่ง) + ปุ่มสำเร็จรูป · หยุดเดินระหว่างพิมพ์ (disable PlayerMovement)
+- 👥 **รายชื่อผู้เล่น** ([Net/PlayerListUI.cs](Assets/_Project/Scripts/Net/PlayerListUI.cs), F2) — อ่านจาก NetworkAvatar ที่ spawn (เห็นครบทุก client) + NetworkAvatar.DisplayName
+- 🐛 **แก้บั๊กจากสแกน QA**:
+  - 🔴 **เทรดของหาย** (critical): TradeRelay เปลี่ยนเป็น **ลบของเมื่อผู้รับ ack สำเร็จ** (ServerRpc→ผู้รับ→ผลกลับ→ผู้ให้ลบของ) · TradeUI ไม่ลบล่วงหน้า + เช็คระยะซ้ำตอนให้ + ไม่ toast สำเร็จก่อนยืนยัน
+  - เทรด/แชท **หยุดเดินตอนเปิดแผง** (กัน WASD เลื่อนตัว)
+  - NetworkUI: cache LocalIP + Refresh ทุก 0.5 วิ (เดิม DNS lookup ทุกเฟรม = สะดุด)
+  - CoopBonus: throttle สแกนทุก 0.5 วิ + หยุดตอน pause
+  - กันเปิดแผง chat/emote/trade ตอนจบเกม (เช็ก GameManager.IsActive)
+- สแกนยืนยันสะอาด: NetworkVariable write permission, RPC ownership/targeting, OnNetworkDespawn unsub, null-guards, core SP loop (สอบ/เลื่อนปี/เซฟ/timeScale) ครบถูกต้อง
+
 ---
 
 ## Version Control

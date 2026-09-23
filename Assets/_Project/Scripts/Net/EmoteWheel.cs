@@ -27,7 +27,10 @@ namespace NisitSimulator.Net
         void Update()
         {
             if (panel == null) return;
-            if (Input.GetKeyDown(key)) Open();
+            if (Input.GetKeyDown(key))
+            {
+                if (NisitSimulator.Core.GameManager.Instance == null || NisitSimulator.Core.GameManager.Instance.IsActive) Open();
+            }
             else if (Input.GetKey(key) && panel.activeSelf) Hover();
             else if (Input.GetKeyUp(key) && panel.activeSelf) Choose();
         }

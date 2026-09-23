@@ -51,7 +51,7 @@ namespace NisitSimulator.EditorTools
                 "ตั้งค่า Multiplayer (MP-1/2/3) เสร็จ! 🌐\n\n" +
                 "• NetworkAvatar (sync เดิน+ท่า) + ป้ายชื่อ\n" +
                 "• NetworkManager + UnityTransport (127.0.0.1)\n" +
-                "• UI: Host/Join (F3) · อีโมท (ค้าง B) · แชท (Y) · เทรด (G)\n" +
+                "• UI: Host/Join (F3) · อีโมท (ค้าง B) · แชท+พิมพ์เอง (Y) · เทรด (G) · รายชื่อ (F2)\n" +
                 "• ปรับแต่งชื่อ+สีตัวละคร (ในแผง F3) · 🤝 Co-op โบนัสอยู่ใกล้เพื่อน\n\n" +
                 "ทดสอบ: Window → Multiplayer Play Mode → เปิด Player 2\nเครื่องแรก Host, เครื่องสอง Join → เห็นกันเดิน+ท่า+แชท!\n\n" +
                 "⚠️ ถ้า NetworkManager → PlayerPrefab ว่าง ให้ลาก NetworkAvatar.prefab ใส่เอง", "เยี่ยม!");
@@ -137,11 +137,11 @@ namespace NisitSimulator.EditorTools
             ui.colorButtons = swatches;
             ui.hostButton = host; ui.clientButton = client; ui.disconnectButton = disc;
 
-            // ----- แชทด่วน (มุมซ้ายล่าง) -----
+            // ----- แชท (มุมซ้ายล่าง) — log + ช่องพิมพ์ + ปุ่มสำเร็จรูป -----
             var chatLog = MakeText(canGo.transform, font, "", Vector2.zero, 20, new Color(1f, 1f, 1f, 0.95f));
             var clrt = chatLog.rectTransform;
             clrt.anchorMin = clrt.anchorMax = new Vector2(0f, 0f); clrt.pivot = new Vector2(0f, 0f);
-            clrt.anchoredPosition = new Vector2(24f, 100f); clrt.sizeDelta = new Vector2(600f, 220f);
+            clrt.anchoredPosition = new Vector2(24f, 150f); clrt.sizeDelta = new Vector2(600f, 220f);
             chatLog.alignment = TextAlignmentOptions.BottomLeft;
             chatLog.outlineWidth = 0.15f; chatLog.outlineColor = new Color32(0, 0, 0, 255);
 
@@ -149,22 +149,41 @@ namespace NisitSimulator.EditorTools
             chatPanel.transform.SetParent(canGo.transform, false);
             var cprt = chatPanel.GetComponent<RectTransform>();
             cprt.anchorMin = cprt.anchorMax = new Vector2(0f, 0f); cprt.pivot = new Vector2(0f, 0f);
-            cprt.anchoredPosition = new Vector2(24f, 24f); cprt.sizeDelta = new Vector2(600f, 60f);
+            cprt.anchoredPosition = new Vector2(24f, 24f); cprt.sizeDelta = new Vector2(600f, 112f);
             chatPanel.GetComponent<Image>().color = new Color(0.12f, 0.14f, 0.24f, 0.9f);
 
+            // ช่องพิมพ์เอง (บนสุดของแผง)
+            var chatInput = MakeInput(chatPanel.transform, font, new Vector2(0f, -8f), new Vector2(580f, 42f));
+            chatInput.text = ""; chatInput.characterLimit = 120;
+
+            // ปุ่มข้อความสำเร็จรูป (ล่างของแผง)
             string[] presets = { "สวัสดี!", "รอด้วย~", "ไปไหนกัน?", "เก่งมาก!" };
             var chatBtns = new Button[presets.Length];
             for (int i = 0; i < presets.Length; i++)
             {
                 var b = MakeButton(chatPanel.transform, font, presets[i], Vector2.zero, new Color(0.62f, 0.80f, 0.96f));
                 var brt = b.GetComponent<RectTransform>();
-                brt.anchorMin = brt.anchorMax = new Vector2(0f, 0.5f); brt.pivot = new Vector2(0f, 0.5f);
-                brt.anchoredPosition = new Vector2(10f + i * 146f, 0f); brt.sizeDelta = new Vector2(140f, 44f);
+                brt.anchorMin = brt.anchorMax = new Vector2(0f, 0f); brt.pivot = new Vector2(0f, 0f);
+                brt.anchoredPosition = new Vector2(10f + i * 146f, 8f); brt.sizeDelta = new Vector2(140f, 42f);
                 chatBtns[i] = b;
             }
 
             var chat = canGo.AddComponent<ChatUI>();
-            chat.panel = chatPanel; chat.log = chatLog; chat.presetButtons = chatBtns; chat.presets = presets;
+            chat.panel = chatPanel; chat.log = chatLog; chat.input = chatInput; chat.presetButtons = chatBtns; chat.presets = presets;
+
+            // ----- รายชื่อผู้เล่น (F2) — บนกลางจอ -----
+            var plPanel = new GameObject("PlayerListPanel", typeof(RectTransform), typeof(Image));
+            plPanel.transform.SetParent(canGo.transform, false);
+            var plrt = plPanel.GetComponent<RectTransform>();
+            plrt.anchorMin = plrt.anchorMax = new Vector2(0.5f, 1f); plrt.pivot = new Vector2(0.5f, 1f);
+            plrt.anchoredPosition = new Vector2(0f, -120f); plrt.sizeDelta = new Vector2(340f, 300f);
+            plPanel.GetComponent<Image>().color = new Color(0.12f, 0.14f, 0.24f, 0.92f);
+            var plText = MakeText(plPanel.transform, font, "", Vector2.zero, 20, Color.white);
+            plText.alignment = TextAlignmentOptions.TopLeft;
+            var pltrt = plText.rectTransform;
+            pltrt.anchorMin = Vector2.zero; pltrt.anchorMax = Vector2.one; pltrt.offsetMin = new Vector2(18f, 14f); pltrt.offsetMax = new Vector2(-18f, -14f);
+            var plUI = canGo.AddComponent<PlayerListUI>();
+            plUI.panel = plPanel; plUI.listText = plText;
 
             BuildEmoteWheel(canGo, font);
             BuildTradeUI(canGo, font);
