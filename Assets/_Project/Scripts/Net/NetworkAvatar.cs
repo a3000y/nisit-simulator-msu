@@ -1,6 +1,8 @@
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using TMPro;
+using NisitSimulator.SaveLoad;
 
 namespace NisitSimulator.Net
 {
@@ -24,6 +26,21 @@ namespace NisitSimulator.Net
         // อีโมท: encode = seq*10 + kind (kind 1=โบก 2=เชียร์ 3=ทักทาย) — เปลี่ยนค่า = เล่นท่าใหม่
         readonly NetworkVariable<int> emote = new NetworkVariable<int>(
             0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+        // เอกลักษณ์ผู้เล่น (ชื่อ+สี) sync ทุกคน
+        readonly NetworkVariable<FixedString64Bytes> netName = new NetworkVariable<FixedString64Bytes>(
+            default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        readonly NetworkVariable<int> netColor = new NetworkVariable<int>(
+            0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+        // พาเลตต์สีตัวละคร (0 = สีจริงของโมเดล)
+        public static readonly Color[] Palette =
+        {
+            Color.white,
+            new Color(0.72f, 0.84f, 1.00f), new Color(1.00f, 0.78f, 0.82f), new Color(0.80f, 1.00f, 0.84f),
+            new Color(1.00f, 0.94f, 0.72f), new Color(0.88f, 0.80f, 1.00f), new Color(1.00f, 0.84f, 0.68f),
+            new Color(1.00f, 0.62f, 0.62f),
+        };
 
         Transform localPlayer;   // owner: อ้างอิง Player ในฉาก
         Animator anim;
@@ -54,12 +71,30 @@ namespace NisitSimulator.Net
                 CreateNameTag();   // ป้ายชื่อลอยหัว (เฉพาะผู้เล่นอื่น)
                 emote.OnValueChanged += OnEmoteChanged;   // ผู้เล่นอื่นส่งอีโมท → เล่นท่า
             }
+
+            // ---- เอกลักษณ์ (ชื่อ+สี) ----
+            if (IsOwner)
+            {
+                netName.Value = new FixedString64Bytes(Trunc(GameSession.PlayerName));
+                netColor.Value = GameSession.PlayerColor;
+                TintLocalPlayer(GameSession.PlayerColor);   // ทาสีตัวเราเอง (Player ในฉาก)
+            }
+            else
+            {
+                ApplyColor(gameObject, netColor.Value);     // ทาสี avatar ผู้อื่นตามค่าล่าสุด
+            }
+            netColor.OnValueChanged += OnColorChanged;
+            netName.OnValueChanged += OnNameChanged;
         }
 
         public override void OnNetworkDespawn()
         {
             if (!IsOwner) emote.OnValueChanged -= OnEmoteChanged;
+            netColor.OnValueChanged -= OnColorChanged;
+            netName.OnValueChanged -= OnNameChanged;
         }
+
+        static string Trunc(string s) => string.IsNullOrEmpty(s) ? "" : (s.Length > 16 ? s.Substring(0, 16) : s);
 
         // ป้ายชื่อลอยหัว (TextMeshPro 3D — ไม่ต้องใช้ canvas)
         void CreateNameTag()
@@ -68,7 +103,7 @@ namespace NisitSimulator.Net
             go.transform.SetParent(transform, false);
             go.transform.localPosition = new Vector3(0f, 2.3f, 0f);
             var tmp = go.AddComponent<TextMeshPro>();
-            tmp.text = "Player " + (OwnerClientId + 1);
+            tmp.text = ResolveName();
             tmp.fontSize = 3f;
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.color = Color.white;
@@ -153,6 +188,57 @@ namespace NisitSimulator.Net
         void SetVisible(bool v)
         {
             foreach (var r in GetComponentsInChildren<Renderer>()) r.enabled = v;
+        }
+
+        // ---------- เอกลักษณ์ (ชื่อ+สี) ----------
+        // เรียกจาก UI ตอนเปลี่ยนชื่อ/สีระหว่างเล่น (owner เท่านั้น)
+        public void SetIdentity(string name, int color)
+        {
+            if (!IsOwner) return;
+            netName.Value = new FixedString64Bytes(Trunc(name));
+            netColor.Value = color;   // NV เปลี่ยน → OnColorChanged ทาสีให้เอง
+        }
+
+        string ResolveName()
+        {
+            var n = netName.Value.ToString();
+            return string.IsNullOrEmpty(n) ? ("ผู้เล่น " + (OwnerClientId + 1)) : n;
+        }
+
+        void OnColorChanged(int prev, int cur)
+        {
+            if (IsOwner) TintLocalPlayer(cur);
+            else ApplyColor(gameObject, cur);
+        }
+
+        void OnNameChanged(FixedString64Bytes prev, FixedString64Bytes cur)
+        {
+            if (!IsOwner && nameTag != null)
+            {
+                var tmp = nameTag.GetComponent<TextMeshPro>();
+                if (tmp != null) tmp.text = ResolveName();
+            }
+        }
+
+        void TintLocalPlayer(int idx)
+        {
+            if (localPlayer == null) CacheLocalPlayer();
+            if (localPlayer != null) ApplyColor(localPlayer.gameObject, idx);
+        }
+
+        // ทาสีทั้งตัว (MaterialPropertyBlock — ไม่แตะ material asset) · idx 0 = สีจริง
+        static void ApplyColor(GameObject go, int idx)
+        {
+            if (go == null) return;
+            var col = (idx > 0 && idx < Palette.Length) ? Palette[idx] : Color.white;
+            var mpb = new MaterialPropertyBlock();
+            foreach (var r in go.GetComponentsInChildren<Renderer>())
+            {
+                r.GetPropertyBlock(mpb);
+                mpb.SetColor("_BaseColor", col);
+                mpb.SetColor("_Color", col);
+                r.SetPropertyBlock(mpb);
+            }
         }
     }
 }

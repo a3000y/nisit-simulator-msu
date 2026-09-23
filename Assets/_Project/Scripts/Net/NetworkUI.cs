@@ -3,6 +3,7 @@ using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using NisitSimulator.SaveLoad;
 
 namespace NisitSimulator.Net
 {
@@ -16,12 +17,53 @@ namespace NisitSimulator.Net
         public TMP_InputField ipInput;        // ช่องกรอก IP ของ host (เล่น LAN)
         public ushort port = 7777;
 
+        [Header("ปรับแต่งตัวละคร (ชื่อ+สี)")]
+        public TMP_InputField nameInput;
+        public Button[] colorButtons;
+
         void Start()
         {
             if (hostButton) hostButton.onClick.AddListener(Host);
             if (clientButton) clientButton.onClick.AddListener(Client);
             if (disconnectButton) disconnectButton.onClick.AddListener(Disconnect);
+
+            if (nameInput != null)
+            {
+                nameInput.text = GameSession.PlayerName;
+                nameInput.onValueChanged.AddListener(OnNameEdited);
+            }
+            if (colorButtons != null)
+                for (int i = 0; i < colorButtons.Length; i++)
+                {
+                    int idx = i;
+                    if (colorButtons[i] != null) colorButtons[i].onClick.AddListener(() => PickColor(idx));
+                }
+            HighlightColor(GameSession.PlayerColor);
+
             Refresh();
+        }
+
+        // ---------- ปรับแต่งตัวละคร ----------
+        void OnNameEdited(string s) { GameSession.PlayerName = s; PushIdentity(); }
+
+        void PickColor(int i) { GameSession.PlayerColor = i; HighlightColor(i); PushIdentity(); }
+
+        void HighlightColor(int sel)
+        {
+            if (colorButtons == null) return;
+            for (int i = 0; i < colorButtons.Length; i++)
+                if (colorButtons[i] != null)
+                    colorButtons[i].transform.localScale = Vector3.one * (i == sel ? 1.35f : 1f);
+        }
+
+        // อัปเดตชื่อ/สีให้ avatar ของเราสด ๆ (ถ้าเชื่อมต่ออยู่)
+        void PushIdentity()
+        {
+            var nm = NetworkManager.Singleton;
+            if (nm == null || !nm.IsClient || nm.LocalClient == null) return;
+            var po = nm.LocalClient.PlayerObject;
+            var av = po != null ? po.GetComponent<NetworkAvatar>() : null;
+            if (av != null) av.SetIdentity(GameSession.PlayerName, GameSession.PlayerColor);
         }
 
         void Update()

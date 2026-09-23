@@ -37,6 +37,7 @@ namespace NisitSimulator.EditorTools
             if (nm.NetworkConfig == null) nm.NetworkConfig = new NetworkConfig();
             nm.NetworkConfig.NetworkTransport = utp;
             nm.NetworkConfig.PlayerPrefab = prefab;
+            if (nmGo.GetComponent<CoopBonus>() == null) nmGo.AddComponent<CoopBonus>();   // 🤝 โบนัสเล่นด้วยกัน
             EditorUtility.SetDirty(nm);
             EditorUtility.SetDirty(nmGo);
 
@@ -50,7 +51,8 @@ namespace NisitSimulator.EditorTools
                 "ตั้งค่า Multiplayer (MP-1/2/3) เสร็จ! 🌐\n\n" +
                 "• NetworkAvatar (sync เดิน+ท่า) + ป้ายชื่อ\n" +
                 "• NetworkManager + UnityTransport (127.0.0.1)\n" +
-                "• UI: Host/Join (F3) · อีโมท (ค้าง B) · แชท (Y) · เทรด/ให้ของ (G)\n\n" +
+                "• UI: Host/Join (F3) · อีโมท (ค้าง B) · แชท (Y) · เทรด (G)\n" +
+                "• ปรับแต่งชื่อ+สีตัวละคร (ในแผง F3) · 🤝 Co-op โบนัสอยู่ใกล้เพื่อน\n\n" +
                 "ทดสอบ: Window → Multiplayer Play Mode → เปิด Player 2\nเครื่องแรก Host, เครื่องสอง Join → เห็นกันเดิน+ท่า+แชท!\n\n" +
                 "⚠️ ถ้า NetworkManager → PlayerPrefab ว่าง ให้ลาก NetworkAvatar.prefab ใส่เอง", "เยี่ยม!");
         }
@@ -101,20 +103,38 @@ namespace NisitSimulator.EditorTools
             panel.transform.SetParent(canGo.transform, false);
             var pr = panel.GetComponent<RectTransform>();
             pr.anchorMin = pr.anchorMax = new Vector2(1f, 1f); pr.pivot = new Vector2(1f, 1f);
-            pr.anchoredPosition = new Vector2(-24f, -24f); pr.sizeDelta = new Vector2(340f, 330f);
+            pr.anchoredPosition = new Vector2(-24f, -24f); pr.sizeDelta = new Vector2(360f, 470f);
             panel.GetComponent<Image>().color = new Color(0.12f, 0.14f, 0.24f, 0.92f);
 
-            var status = MakeText(panel.transform, font, "ยังไม่เชื่อมต่อ", new Vector2(0f, -24f), 18, new Color(0.9f, 0.92f, 1f));
-            MakeText(panel.transform, font, "IP ของ Host (เล่น LAN):", new Vector2(0f, -62f), 15, new Color(0.75f, 0.8f, 0.95f));
-            var ip = MakeInput(panel.transform, font, new Vector2(0f, -84f), new Vector2(300f, 40f));
-            var host = MakeButton(panel.transform, font, "Host (สร้างห้อง)", new Vector2(0f, -138f), new Color(0.60f, 0.86f, 0.68f));
-            var client = MakeButton(panel.transform, font, "Join", new Vector2(0f, -196f), new Color(0.62f, 0.80f, 0.96f));
-            var disc = MakeButton(panel.transform, font, "ออกจากห้อง", new Vector2(0f, -254f), new Color(0.99f, 0.74f, 0.78f));
+            var status = MakeText(panel.transform, font, "ยังไม่เชื่อมต่อ", new Vector2(0f, -18f), 16, new Color(0.9f, 0.92f, 1f));
+
+            // ชื่อผู้เล่น
+            MakeText(panel.transform, font, "ชื่อผู้เล่น:", new Vector2(0f, -46f), 15, new Color(0.75f, 0.8f, 0.95f));
+            var nameIn = MakeInput(panel.transform, font, new Vector2(0f, -66f), new Vector2(320f, 38f));
+            nameIn.text = ""; nameIn.characterLimit = 16;
+
+            // สีตัวละคร (สวอตช์)
+            MakeText(panel.transform, font, "สีตัวละคร:", new Vector2(0f, -108f), 15, new Color(0.75f, 0.8f, 0.95f));
+            var pal = NisitSimulator.Net.NetworkAvatar.Palette;
+            var swatches = new Button[pal.Length];
+            float sw = 34f, gap = 6f; float totalW = pal.Length * (sw + gap) - gap; float x0 = -totalW / 2f + sw / 2f;
+            for (int i = 0; i < pal.Length; i++)
+                swatches[i] = MakeSwatch(panel.transform, new Vector2(x0 + i * (sw + gap), -130f), sw, pal[i]);
+
+            // IP (LAN)
+            MakeText(panel.transform, font, "IP ของ Host (LAN):", new Vector2(0f, -168f), 15, new Color(0.75f, 0.8f, 0.95f));
+            var ip = MakeInput(panel.transform, font, new Vector2(0f, -190f), new Vector2(320f, 38f));
+
+            var host = MakeButton(panel.transform, font, "Host (สร้างห้อง)", new Vector2(0f, -244f), new Color(0.60f, 0.86f, 0.68f));
+            var client = MakeButton(panel.transform, font, "Join", new Vector2(0f, -300f), new Color(0.62f, 0.80f, 0.96f));
+            var disc = MakeButton(panel.transform, font, "ออกจากห้อง", new Vector2(0f, -356f), new Color(0.99f, 0.74f, 0.78f));
 
             var ui = canGo.AddComponent<NetworkUI>();
             ui.panel = panel;
             ui.statusText = status;
             ui.ipInput = ip;
+            ui.nameInput = nameIn;
+            ui.colorButtons = swatches;
             ui.hostButton = host; ui.clientButton = client; ui.disconnectButton = disc;
 
             // ----- แชทด่วน (มุมซ้ายล่าง) -----
@@ -275,6 +295,17 @@ namespace NisitSimulator.EditorTools
             txt.alignment = TextAlignmentOptions.Center;
             var trt = txt.GetComponent<RectTransform>();
             trt.anchorMin = Vector2.zero; trt.anchorMax = Vector2.one; trt.sizeDelta = Vector2.zero; trt.anchoredPosition = Vector2.zero;
+            return go.GetComponent<Button>();
+        }
+
+        static Button MakeSwatch(Transform parent, Vector2 pos, float size, Color col)
+        {
+            var go = new GameObject("Swatch", typeof(RectTransform), typeof(Image), typeof(Button));
+            go.transform.SetParent(parent, false);
+            var rt = go.GetComponent<RectTransform>();
+            rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 1f); rt.pivot = new Vector2(0.5f, 1f);
+            rt.anchoredPosition = pos; rt.sizeDelta = new Vector2(size, size);
+            go.GetComponent<Image>().color = col;
             return go.GetComponent<Button>();
         }
 

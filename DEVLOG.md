@@ -279,6 +279,11 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - 🔴 **Relay (ข้ามเน็ต) ยังไม่เสร็จ**: ลง `com.unity.services.multiplayer` แล้ว แต่เชื่อม Unity Cloud ไม่ได้บน **Wi-Fi มมส** (บล็อก services) → ทำต่อบน hotspot/เน็ตบ้าน แล้วเขียน Join-Code (Multiplayer Sessions API) · ดู memory [[multiplayer-relay-pending]]
 - MP ครบ: เดิน/ป้าย/อีโมท(วงล้อ B)/แชท(Y)/เทรด(G)/LAN · เหลือ Relay อย่างเดียว
 
+### MP-supporting: ปรับแต่งตัวละคร (ชื่อ+สี) + Co-op โบนัส (2026-09-23)
+- 🎨 **ปรับแต่งตัวละคร sync** — [GameSession](Assets/_Project/Scripts/SaveLoad/GameSession.cs) เก็บ PlayerName/PlayerColor · [NetworkAvatar](Assets/_Project/Scripts/Net/NetworkAvatar.cs) sync ชื่อ (FixedString64) + สี (index พาเลตต์ 8 สี) ผ่าน NetworkVariable → ทาสีด้วย MaterialPropertyBlock + ป้ายชื่อแสดงชื่อจริง · owner ทาสี Player ในฉากของตัวเอง · เปลี่ยนสดได้ (`SetIdentity`) · [NetworkUI](Assets/_Project/Scripts/Net/NetworkUI.cs) เพิ่มช่องชื่อ + สวอตช์สี (M29 สร้าง UI)
+- 🤝 **Co-op โบนัส** ([Net/CoopBonus.cs](Assets/_Project/Scripts/Net/CoopBonus.cs) บน NetworkManager) — อยู่ใกล้ผู้เล่นอื่น ~6m ทุก 8 วิ ได้ความรู้ +6/พอใจ +4 · คำนวณ client-local (ไม่ sync) · เฉพาะตอนเชื่อม MP
+- แก้เพิ่ม: ป้ายชื่อใช้ชื่อจริงแทน "Player N" · ทุกอย่างเทสต์ได้ 2 หน้าต่าง (ไม่ต้องเน็ต)
+
 ---
 
 ## Version Control
