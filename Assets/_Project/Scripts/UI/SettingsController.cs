@@ -3,8 +3,8 @@ using UnityEngine.UI;
 
 namespace NisitSimulator.UI
 {
-    // ตั้งค่าเสียง (ฉาก 5) — Master คุมจริงผ่าน AudioListener.volume, เก็บใน PlayerPrefs
-    // Music/SFX เก็บค่าไว้ให้ระบบเสียงในอนาคตอ่านไปใช้
+    // ตั้งค่าเสียง — Master คุมผ่าน AudioListener.volume · Music/SFX/Voice/Ambient คุมแหล่งเสียงใน SFXManager
+    //   ปรับสไลเดอร์แล้วมีผลทันที (ถ้ามี SFXManager ในฉาก) + เก็บใน PlayerPrefs ให้ฉากเกมอ่านตอนเริ่ม
     public class SettingsController : MonoBehaviour
     {
         public Slider masterSlider;
@@ -26,14 +26,18 @@ namespace NisitSimulator.UI
             AudioListener.volume = m;
 
             if (masterSlider)  { masterSlider.value = m;   masterSlider.onValueChanged.AddListener(SetMaster); }
-            if (musicSlider)   { musicSlider.value = mu;   musicSlider.onValueChanged.AddListener(v => Save("vol_music", v)); }
-            if (sfxSlider)     { sfxSlider.value = sf;     sfxSlider.onValueChanged.AddListener(v => Save("vol_sfx", v)); }
-            if (voiceSlider)   { voiceSlider.value = vo;   voiceSlider.onValueChanged.AddListener(v => Save("vol_voice", v)); }
-            if (ambientSlider) { ambientSlider.value = am; ambientSlider.onValueChanged.AddListener(v => Save("vol_ambient", v)); }
+            if (musicSlider)   { musicSlider.value = mu;   musicSlider.onValueChanged.AddListener(SetMusic); }
+            if (sfxSlider)     { sfxSlider.value = sf;     sfxSlider.onValueChanged.AddListener(SetSfx); }
+            if (voiceSlider)   { voiceSlider.value = vo;   voiceSlider.onValueChanged.AddListener(SetVoice); }
+            if (ambientSlider) { ambientSlider.value = am; ambientSlider.onValueChanged.AddListener(SetAmbient); }
             if (closeButton && panel) closeButton.onClick.AddListener(() => panel.SetActive(false));
         }
 
-        private void SetMaster(float v) { AudioListener.volume = v; Save("vol_master", v); }
+        private void SetMaster(float v)  { AudioListener.volume = v; Save("vol_master", v); }
+        private void SetMusic(float v)   { Save("vol_music", v);   var s = NisitSimulator.Core.SFXManager.I; if (s != null && s.musicSource != null) s.musicSource.volume = v; }
+        private void SetSfx(float v)     { Save("vol_sfx", v);     var s = NisitSimulator.Core.SFXManager.I; if (s != null && s.sfxSource != null) s.sfxSource.volume = v; }
+        private void SetVoice(float v)   { Save("vol_voice", v);   var s = NisitSimulator.Core.SFXManager.I; if (s != null && s.voiceSource != null) s.voiceSource.volume = v; }
+        private void SetAmbient(float v) { Save("vol_ambient", v); var s = NisitSimulator.Core.SFXManager.I; if (s != null && s.ambientSource != null) s.ambientSource.volume = v; }
         private void Save(string key, float v) { PlayerPrefs.SetFloat(key, v); PlayerPrefs.Save(); }
     }
 }

@@ -316,6 +316,16 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - 🐛 **แก้บั๊กเงินตั้งต้นซ้ำตอน "เล่นต่อ"** — `DailyAllowance.Start()` บวก +100 เสมอ ทับกับเงินที่คืนจากเซฟ (order-dependent) · เพิ่ม `GameSession.IsContinue` (ไม่ถูกกิน) → ให้เงินตั้งต้นเฉพาะเกมใหม่
 - 📋 ผลสำรวจช่องว่าง: core loop สมบูรณ์ (4 คณะ + ข้อสอบแยกคณะ + จบเกม win/lose ครบ) · ที่ยังเหลือ (เล็ก): เควส/objective/เข้าเรียน/สถานะป่วย ไม่ถูกเซฟ (มีผลเฉพาะออกเกมกลางวัน), สไลเดอร์เสียง vol_voice ยังไม่มีโค้ดอ่าน, ScriptableObject ItemData/CourseData ไม่ถูกใช้
 
+### เซฟให้ครบ + เก็บงานเล็ก ๆ (2026-09-24)
+- 💾 **เซฟครบขึ้น** — เพิ่มการเซฟ/คืนค่า 4 อย่างที่เคยหายตอน "เล่นต่อ" กลางวัน:
+  - **เควสรายวัน** ([QuestSystem.cs](Assets/_Project/Scripts/Systems/QuestSystem.cs)) — เก็บรายการเควสที่สุ่มได้ + สถานะสำเร็จ + ตัวสะสม (ไม่สุ่มใหม่/ไม่รีเซ็ต) · คืนค่าแบบ "อัปเดต UI ไม่แจกรางวัล" กันเควส Reach สำเร็จผิดจากค่าสถานะที่ยังไม่ถูกคืน
+  - **ภารกิจ GoTo ที่ค้าง** ([EventManager.cs](Assets/_Project/Scripts/Systems/EventManager.cs)) — เก็บประตูเป้าหมาย+ข้อความ+ผลตอบแทน แล้วโผล่เสาแสงใหม่ตอนโหลด
+  - **เข้าเรียนของวันนี้** ([ClassStation.cs](Assets/_Project/Scripts/Interaction/ClassStation.cs)) — คีย์ตามชื่อ+ตำแหน่งห้อง กันเข้าเรียนซ้ำหลังโหลด
+  - **อาการทั้งวัน (ป่วย/ไฟแรง)** ([PlayerEffects.cs](Assets/_Project/Scripts/Player/PlayerEffects.cs)) — เก็บตัวคูณ 3 ตัว
+  - สถาปัตยกรรม: เก็บรวมที่ `SaveManager.Save()` · คืนค่าในแต่ละระบบเอง (gated `GameSession.IsContinue`) เลี่ยงปัญหาลำดับ Start() · เซฟเก่ายังโหลดได้ (ฟิลด์ใหม่มีค่า default)
+- 🧹 **เก็บงานเล็ก**: ลบ ScriptableObject โค้ดตาย `ItemData.cs`/`CourseData.cs` (ไม่มี .asset/โค้ดใดอ้าง) · ลบฟิลด์ตาย `SaveData.currentDay`
+- 🔊 **สไลเดอร์เสียงครบทุกตัว** — เพิ่ม `voiceSource` (สร้าง runtime) ใน [SFXManager.cs](Assets/_Project/Scripts/Core/SFXManager.cs) route เสียงตอบรับ UI (คลิก/แจ้งเตือน/สำเร็จ/ผิดพลาด/เปิดหน้า) ผ่านมัน → สไลเดอร์ Voice มีผลจริง · [SettingsController.cs](Assets/_Project/Scripts/UI/SettingsController.cs) ปรับทุกสไลเดอร์ให้มีผล live
+
 ---
 
 ## Version Control

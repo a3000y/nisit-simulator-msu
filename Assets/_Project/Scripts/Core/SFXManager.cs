@@ -18,6 +18,7 @@ namespace NisitSimulator.Core
         public AudioSource sfxSource;
         public AudioSource musicSource;
         public AudioSource ambientSource;   // เสียงบรรยากาศ (นก/ลม) วนลูป
+        public AudioSource voiceSource;     // เสียงตอบรับ UI/พูด (คุมด้วย vol_voice) — สร้าง runtime ถ้าว่าง
 
         private PlayerStats stats;
         private int lastMoney;
@@ -43,6 +44,13 @@ namespace NisitSimulator.Core
                 ambientSource.volume = PlayerPrefs.GetFloat("vol_ambient", 0.7f);
                 if (ambient != null) ambientSource.Play();
             }
+            // แหล่งเสียง "Voice" (ตอบรับ UI/พูด) — สร้างเองถ้ายังไม่มี เพื่อให้สไลเดอร์ Voice มีผลจริง
+            if (voiceSource == null)
+            {
+                voiceSource = gameObject.AddComponent<AudioSource>();
+                voiceSource.playOnAwake = false;
+            }
+            voiceSource.volume = PlayerPrefs.GetFloat("vol_voice", 0.9f);
 
             // เสียงเงินอัตโนมัติ (ได้เงิน = ปิ๊ง)
             stats = Object.FindFirstObjectByType<PlayerStats>();
@@ -58,18 +66,27 @@ namespace NisitSimulator.Core
             if (c != null && sfxSource != null) sfxSource.PlayOneShot(c, vol);
         }
 
+        // เสียงตอบรับ UI/พูด — ผ่าน voiceSource (คุมด้วยสไลเดอร์ Voice แยกจาก SFX)
+        public void PlayVoice(AudioClip c, float vol = 1f)
+        {
+            if (c == null) return;
+            if (voiceSource != null) voiceSource.PlayOneShot(c, vol);
+            else if (sfxSource != null) sfxSource.PlayOneShot(c, vol);   // fallback
+        }
+
         // ---------- static helpers (null-safe เรียกจากที่ไหนก็ได้) ----------
-        public static void Click()    { if (I != null) I.PlayClip(I.click); }
-        public static void Notify()   { if (I != null) I.PlayClip(I.notify, 0.8f); }
+        //   ตอบรับ UI/พูด → Voice · เสียงในโลก/รางวัล → SFX
+        public static void Click()    { if (I != null) I.PlayVoice(I.click); }
+        public static void Notify()   { if (I != null) I.PlayVoice(I.notify, 0.8f); }
         public static void Coin()     { if (I != null) I.PlayClip(I.coin); }
-        public static void Success()  { if (I != null) I.PlayClip(I.success); }
-        public static void Error()    { if (I != null) I.PlayClip(I.error); }
+        public static void Success()  { if (I != null) I.PlayVoice(I.success); }
+        public static void Error()    { if (I != null) I.PlayVoice(I.error); }
         public static void Footstep() { if (I != null) I.PlayClip(I.footstep, 0.28f); }   // พอดี (ซิงก์กับอนิเมชันแล้ว)
         public static void Jump()     { if (I != null) I.PlayClip(I.jump, 0.7f); }
         public static void Sleep()    { if (I != null) I.PlayClip(I.sleep); }
         public static void Whoosh()   { if (I != null) I.PlayClip(I.whoosh, 0.6f); }
         public static void Fanfare()  { if (I != null) I.PlayClip(I.fanfare, 0.9f); }   // ดีใจ/จบการศึกษา
         public static void Eat()      { if (I != null) I.PlayClip(I.eat, 0.8f); }        // กินข้าว
-        public static void Page()     { if (I != null) I.PlayClip(I.page, 0.55f); }      // เปิดหน้า/เปลี่ยนแอป
+        public static void Page()     { if (I != null) I.PlayVoice(I.page, 0.55f); }      // เปิดหน้า/เปลี่ยนแอป
     }
 }
