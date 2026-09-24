@@ -175,32 +175,7 @@ namespace NisitSimulator.EditorTools
             mc.comingSoonCloseButton = csClose;
             csDim.gameObject.SetActive(false);
 
-            // ===== ปุ่ม "เกี่ยวกับ / ผู้จัดทำ" + แผงเครดิต =====
-            mc.creditsButton = MakeButton(root, "เกี่ยวกับ / ผู้จัดทำ", new Vector2(0, -372), new Color(0.72f, 0.78f, 0.92f));
-            mc.creditsButton.transform.localScale = Vector3.one * 0.8f;   // เล็กกว่าปุ่มหลัก
-
-            var crDim = MakeImage(root, "CreditsPanel", Vector2.zero, Vector2.one, new Color(0.04f, 0.06f, 0.12f, 0.66f));
-            crDim.rectTransform.offsetMin = Vector2.zero; crDim.rectTransform.offsetMax = Vector2.zero;
-            var crCard = MakeRounded(crDim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(720, 760), new Color(0.11f, 0.14f, 0.24f, 0.99f));
-            Deco(crCard);
-            MakeText(crCard.transform, "CRTitle", "เกี่ยวกับเกม", 46, new Vector2(0.5f, 1f), new Vector2(0, -44), new Vector2(660, 62), new Color(1f, 0.9f, 0.5f), FontStyles.Bold);
-
-            // แก้ชื่อผู้จัดทำ/อาจารย์ได้ที่ข้อความนี้ (ส่วนในวงเล็บ [ ])
-            string crBodyText =
-                "<b>Nisit Simulator</b>   ·   จำลองชีวิตนิสิต\n\n" +
-                "ปริญญานิพนธ์\n" +
-                "สาขาเทคโนโลยีสารสนเทศ\n" +
-                "มหาวิทยาลัยมหาสารคาม\n\n" +
-                "<b>ผู้จัดทำ</b>\n[ใส่ชื่อ-สกุล / รหัสนิสิต]\n\n" +
-                "<b>อาจารย์ที่ปรึกษา</b>\n[ใส่ชื่ออาจารย์ที่ปรึกษา]\n\n" +
-                "<size=80%><color=#B9C2D6>พัฒนาด้วย Unity\nโมเดล/แอนิเมชัน: Mixamo, Quaternius · UI: Kenney</color></size>";
-            var crBody = MakeText(crCard.transform, "CRBody", crBodyText, 26, new Vector2(0.5f, 0.5f), new Vector2(0, 20), new Vector2(620, 540), new Color(0.94f, 0.96f, 0.92f), FontStyles.Normal);
-            crBody.enableWordWrapping = true; crBody.alignment = TextAlignmentOptions.Top;
-
-            var crClose = MakeButton(crCard.transform, "ปิด", new Vector2(0, 30), new Color(0.80f, 0.72f, 0.96f), 0.5f, 0f);
-            mc.creditsPanel = crDim.gameObject;
-            mc.creditsCloseButton = crClose;
-            crDim.gameObject.SetActive(false);
+            // (เอาปุ่ม "เกี่ยวกับ / ผู้จัดทำ" ออกตามที่ผู้ใช้ขอ)
         }
 
         // ---------- helpers ----------

@@ -46,7 +46,7 @@ namespace NisitSimulator.UI
             if (slotCloseButton && slotPanel) slotCloseButton.onClick.AddListener(() => slotPanel.SetActive(false));
             if (slotPanel) slotPanel.SetActive(false);
             if (settingsButton && settingsPanel)
-                settingsButton.onClick.AddListener(() => settingsPanel.SetActive(true));
+                settingsButton.onClick.AddListener(() => Show(settingsPanel));
             if (quitButton) quitButton.onClick.AddListener(Quit);
             if (comingSoonCloseButton && comingSoonPanel)
                 comingSoonCloseButton.onClick.AddListener(() => comingSoonPanel.SetActive(false));
@@ -72,7 +72,15 @@ namespace NisitSimulator.UI
             slotContinueMode = continueMode;
             if (slotPanel == null) { if (continueMode) Continue(); else OpenCustomize(); return; }
             RefreshSlots();
-            slotPanel.SetActive(true);
+            Show(slotPanel);
+        }
+
+        // เปิดแผงให้อยู่หน้าสุด (กัน MenuPolish ดันปุ่มหลักมาบัง)
+        static void Show(GameObject panel)
+        {
+            if (panel == null) return;
+            panel.transform.SetAsLastSibling();
+            panel.SetActive(true);
         }
 
         void OnSlotClicked(int i)
@@ -122,7 +130,7 @@ namespace NisitSimulator.UI
         // เปิดหน้าแต่งตัวละคร (จากปุ่มเล่นคนเดียว) → ยืนยันแล้วค่อยไปเลือกคณะ/เริ่มเกม
         public void OpenCustomize()
         {
-            if (characterPanel != null) { characterPanel.SetActive(true); return; }
+            if (characterPanel != null) { Show(characterPanel); return; }
             NewGame();   // ไม่มีหน้าแต่งตัว → ไปต่อเลย
         }
 
@@ -140,7 +148,7 @@ namespace NisitSimulator.UI
         // เริ่มใหม่ — เปิดหน้าเลือกคณะก่อน (ถ้ามี) ไม่งั้นเริ่มเลย
         public void NewGame()
         {
-            if (facultyPanel != null) { facultyPanel.SetActive(true); return; }
+            if (facultyPanel != null) { Show(facultyPanel); return; }
             StartNewGame();
         }
 
