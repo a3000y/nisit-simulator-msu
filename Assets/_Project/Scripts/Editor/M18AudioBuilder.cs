@@ -15,6 +15,7 @@ namespace NisitSimulator.EditorTools
     // ใช้: เมนู  Nisit -> Build Audio
     public static class M18AudioBuilder
     {
+        public static bool SuppressDialog = false;
         const int RATE = 44100;
         const string GameplayPath = "Assets/_Project/Scenes/01_Gameplay.unity";
         const string MenuPath = "Assets/Scenes/Scene1.unity";
@@ -25,15 +26,16 @@ namespace NisitSimulator.EditorTools
         [MenuItem("Nisit/Build Audio")]
         public static void Build()
         {
-            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            if (!SuppressDialog && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
 
             var c = Generate();
             int b1 = BuildScene(GameplayPath, c);
             int b2 = BuildScene(MenuPath, c);
 
             Debug.Log("<color=lime>[Nisit] สร้างระบบเสียงเสร็จ!</color>");
-            EditorUtility.DisplayDialog("Nisit Simulator",
-                "สร้างระบบเสียงเสร็จแล้ว! 🔊\n\n• สังเคราะห์เสียงเอง 9 แบบ + เพลงพื้นหลัง\n• คลิกปุ่มมีเสียง (แปะ " + (b1 + b2) + " ปุ่ม)\n• เดิน/กระโดด/ได้เงิน/สอบผ่าน-ตก/แจ้งเตือน/นอน มีเสียง\n• เพลง ambient วนพื้นหลัง\n\nปรับความดังได้ที่ ตั้งค่า (Master/Music/SFX)\nกด Play ฟังได้เลย", "เยี่ยม!");
+            if (!SuppressDialog)
+                EditorUtility.DisplayDialog("Nisit Simulator",
+                    "สร้างระบบเสียงเสร็จแล้ว! 🔊\n\n• สังเคราะห์เสียงเอง 9 แบบ + เพลงพื้นหลัง\n• คลิกปุ่มมีเสียง (แปะ " + (b1 + b2) + " ปุ่ม)\n• เดิน/กระโดด/ได้เงิน/สอบผ่าน-ตก/แจ้งเตือน/นอน มีเสียง\n• เพลง ambient วนพื้นหลัง\n\nปรับความดังได้ที่ ตั้งค่า (Master/Music/SFX)\nกด Play ฟังได้เลย", "เยี่ยม!");
         }
 
         static Clips Generate() => new Clips

@@ -303,6 +303,13 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - ปิด gap ตาราง 3.1 (ตัวละครหลายแบบ/เพศ) — เปลี่ยน label เป็น ชาย/หญิง ได้ที่ CharacterCatalog asset
 - ⚠️ ยังไม่ได้เทสต์รันจริง (runtime model swap + MP sync) — เทสต์ 2 หน้าต่างแล้วปรับได้
 
+### เมนู Pause ในเกม + รวมเสียงเข้า ★ Rebuild All (2026-09-24)
+- ⏸️ **PauseMenu** ([UI/PauseMenu.cs](Assets/_Project/Scripts/UI/PauseMenu.cs)) — กด Esc เปิด/ปิด · เปิดได้เมื่อ `GameManager.IsActive` และไม่มีหน้าต่างอื่นคุมอยู่ (เช็ค `move.enabled` = ไม่มีร้าน/โทรศัพท์/สอบเปิด) · Pause → `GameManager.PauseGame()` (timeScale=0) · เมนู 3 ปุ่ม: เล่นต่อ / กลับเมนูหลัก / ออกจากเกม
+- 🔌 **กลับเมนูหลัก** ตัด NGO (`NetworkManager.Shutdown()` ถ้าต่อ MP อยู่) + คืน timeScale=1 ก่อนโหลด `GameSession.MenuScene` ("Scene1", ยืนยันอยู่ index 0 ใน Build Settings)
+- 🛠️ **M35PauseBuilder** ([Editor/M35PauseBuilder.cs](Assets/_Project/Scripts/Editor/M35PauseBuilder.cs), เมนู Nisit → Build Pause Menu) — สร้าง Pause Canvas (dim + การ์ด "หยุดชั่วคราว" + 3 ปุ่มพาสเทล) + ต่อ PauseMenu · SuppressDialog
+- 🔊 **รวมเสียงเข้า ★ Rebuild All** — M18AudioBuilder เพิ่ม `SuppressDialog` → ★ Rebuild All สร้างเสียง (fanfare/eat/page + แปะปุ่มทุกฉาก) ให้เลยในคลิกเดียว ไม่ต้องกด Build Audio แยก
+- ⚠️ ยังไม่ได้เทสต์รันจริง — รัน ★ Rebuild All 1 ครั้งแล้วเทสต์ Esc + ปุ่มกลับเมนู/ออกเกม พร้อมรอบก่อน
+
 ---
 
 ## Version Control
