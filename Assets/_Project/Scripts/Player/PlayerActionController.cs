@@ -21,6 +21,9 @@ namespace NisitSimulator.Player
             move = GetComponent<PlayerMovement>();
         }
 
+        // เรียกหลังสลับโมเดล — หา Animator ใหม่
+        public void RefreshAnimator() { anim = GetComponentInChildren<Animator>(); }
+
         // ทำแอคชันเป็นเวลา duration วินาที แล้วเรียก onDone (หยุดเดินระหว่างนั้น)
         public void Perform(float duration, System.Action onDone, string animBool = "Sitting")
         {

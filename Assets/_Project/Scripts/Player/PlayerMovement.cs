@@ -48,6 +48,17 @@ namespace NisitSimulator.Player
                 cameraTransform = Camera.main.transform;
         }
 
+        // เรียกหลังสลับโมเดล (PlayerModelSwapper) — หา Animator/กระดูกเท้าใหม่
+        public void RefreshAnimator()
+        {
+            animator = GetComponentInChildren<Animator>();
+            if (animator != null && animator.isHuman)
+            {
+                leftFoot = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
+                rightFoot = animator.GetBoneTransform(HumanBodyBones.RightFoot);
+            }
+        }
+
         void Update()
         {
             // หยุดขยับเมื่อเกม pause หรือจบ

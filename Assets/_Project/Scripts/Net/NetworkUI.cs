@@ -17,9 +17,10 @@ namespace NisitSimulator.Net
         public TMP_InputField ipInput;        // ช่องกรอก IP ของ host (เล่น LAN)
         public ushort port = 7777;
 
-        [Header("ปรับแต่งตัวละคร (ชื่อ+สี)")]
+        [Header("ปรับแต่งตัวละคร (ชื่อ+สี+แบบ)")]
         public TMP_InputField nameInput;
         public Button[] colorButtons;
+        public Button[] modelButtons;
 
         void Start()
         {
@@ -38,7 +39,14 @@ namespace NisitSimulator.Net
                     int idx = i;
                     if (colorButtons[i] != null) colorButtons[i].onClick.AddListener(() => PickColor(idx));
                 }
+            if (modelButtons != null)
+                for (int i = 0; i < modelButtons.Length; i++)
+                {
+                    int idx = i;
+                    if (modelButtons[i] != null) modelButtons[i].onClick.AddListener(() => PickModel(idx));
+                }
             HighlightColor(GameSession.PlayerColor);
+            HighlightModel(GameSession.PlayerModel);
 
             Refresh();
         }
@@ -48,12 +56,30 @@ namespace NisitSimulator.Net
 
         void PickColor(int i) { GameSession.PlayerColor = i; HighlightColor(i); PushIdentity(); }
 
+        void PickModel(int i)
+        {
+            GameSession.PlayerModel = i;
+            HighlightModel(i);
+            var p = GameObject.Find("Player");
+            var sw = p != null ? p.GetComponent<NisitSimulator.Player.PlayerModelSwapper>() : null;
+            if (sw != null) sw.SwapTo(i);   // สลับโมเดล Player จริงของเราทันที
+            PushIdentity();
+        }
+
         void HighlightColor(int sel)
         {
             if (colorButtons == null) return;
             for (int i = 0; i < colorButtons.Length; i++)
                 if (colorButtons[i] != null)
                     colorButtons[i].transform.localScale = Vector3.one * (i == sel ? 1.35f : 1f);
+        }
+
+        void HighlightModel(int sel)
+        {
+            if (modelButtons == null) return;
+            for (int i = 0; i < modelButtons.Length; i++)
+                if (modelButtons[i] != null)
+                    modelButtons[i].transform.localScale = Vector3.one * (i == sel ? 1.15f : 1f);
         }
 
         // อัปเดตชื่อ/สีให้ avatar ของเราสด ๆ (ถ้าเชื่อมต่ออยู่)
@@ -63,7 +89,7 @@ namespace NisitSimulator.Net
             if (nm == null || !nm.IsClient || nm.LocalClient == null) return;
             var po = nm.LocalClient.PlayerObject;
             var av = po != null ? po.GetComponent<NetworkAvatar>() : null;
-            if (av != null) av.SetIdentity(GameSession.PlayerName, GameSession.PlayerColor);
+            if (av != null) av.SetIdentity(GameSession.PlayerName, GameSession.PlayerColor, GameSession.PlayerModel);
         }
 
         float nextRefresh;

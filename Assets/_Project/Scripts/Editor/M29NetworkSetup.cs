@@ -1,4 +1,6 @@
 #if UNITY_EDITOR
+using System.IO;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -7,6 +9,8 @@ using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using NisitSimulator.Net;
+using NisitSimulator.Systems;
+using NisitSimulator.Player;
 
 namespace NisitSimulator.EditorTools
 {
@@ -41,6 +45,12 @@ namespace NisitSimulator.EditorTools
             EditorUtility.SetDirty(nm);
             EditorUtility.SetDirty(nmGo);
 
+            // แต่งตัว: สร้างแคตตาล็อกตัวละคร + ติดตัวสลับโมเดลบน Player
+            EnsureCatalog();
+            var playerGo = GameObject.Find("Player");
+            if (playerGo != null && playerGo.GetComponent<PlayerModelSwapper>() == null)
+                playerGo.AddComponent<PlayerModelSwapper>();
+
             BuildNetworkUI();
 
             EditorSceneManager.MarkSceneDirty(scene);
@@ -52,9 +62,53 @@ namespace NisitSimulator.EditorTools
                 "• NetworkAvatar (sync เดิน+ท่า) + ป้ายชื่อ\n" +
                 "• NetworkManager + UnityTransport (127.0.0.1)\n" +
                 "• UI: Host/Join (F3) · อีโมท (ค้าง B) · แชท+พิมพ์เอง (Y) · เทรด (G) · รายชื่อ (F2)\n" +
-                "• ปรับแต่งชื่อ+สีตัวละคร (ในแผง F3) · 🤝 Co-op โบนัสอยู่ใกล้เพื่อน\n\n" +
+                "• แต่งตัว: ชื่อ+สี+แบบตัวละคร (ในแผง F3) · 🤝 Co-op โบนัสอยู่ใกล้เพื่อน\n\n" +
                 "ทดสอบ: Window → Multiplayer Play Mode → เปิด Player 2\nเครื่องแรก Host, เครื่องสอง Join → เห็นกันเดิน+ท่า+แชท!\n\n" +
                 "⚠️ ถ้า NetworkManager → PlayerPrefab ว่าง ให้ลาก NetworkAvatar.prefab ใส่เอง", "เยี่ยม!");
+        }
+
+        // ---------- แคตตาล็อกตัวละคร (แต่งตัว) ----------
+        static CharacterCatalog EnsureCatalog()
+        {
+            const string dir = "Assets/_Project/Resources";
+            const string path = dir + "/CharacterCatalog.asset";
+            var cat = AssetDatabase.LoadAssetAtPath<CharacterCatalog>(path);
+            if (cat != null && cat.Count > 0) return cat;
+
+            if (!AssetDatabase.IsValidFolder(dir)) AssetDatabase.CreateFolder("Assets/_Project", "Resources");
+            if (cat == null) { cat = ScriptableObject.CreateInstance<CharacterCatalog>(); AssetDatabase.CreateAsset(cat, path); }
+
+            string[] want = { "Ch29", "Ch07", "Ch12", "Ch21", "Remy" };   // index 0 = Ch29 (เริ่มต้น ตรงกับ Player/avatar)
+            var models = new List<GameObject>(); var labels = new List<string>();
+            foreach (var key in want)
+            {
+                var go = FindCharModel(key);
+                if (go != null) { models.Add(go); labels.Add("แบบ " + (models.Count)); }
+            }
+            if (models.Count == 0)   // สำรอง: เอาโมเดลใดก็ได้ที่มี
+                foreach (var guid in AssetDatabase.FindAssets("t:GameObject", new[] { "Assets/_Project/Art/Characters" }))
+                {
+                    var p = AssetDatabase.GUIDToAssetPath(guid);
+                    if (p.Contains("@") || !p.ToLower().EndsWith(".fbx")) continue;
+                    models.Add(AssetDatabase.LoadAssetAtPath<GameObject>(p)); labels.Add("แบบ " + models.Count);
+                    if (models.Count >= 5) break;
+                }
+            cat.models = models.ToArray(); cat.labels = labels.ToArray();
+            cat.controller = AssetDatabase.LoadAssetAtPath<UnityEditor.Animations.AnimatorController>(CharCtrl);
+            EditorUtility.SetDirty(cat); AssetDatabase.SaveAssets();
+            return cat;
+        }
+
+        static GameObject FindCharModel(string key)
+        {
+            foreach (var guid in AssetDatabase.FindAssets("t:GameObject", new[] { "Assets/_Project/Art/Characters" }))
+            {
+                var p = AssetDatabase.GUIDToAssetPath(guid);
+                if (p.Contains("@")) continue;
+                if (Path.GetFileName(p).ToLower().Contains(key.ToLower()))
+                    return AssetDatabase.LoadAssetAtPath<GameObject>(p);
+            }
+            return null;
         }
 
         // ---------- prefab อวตารเครือข่าย ----------
@@ -103,31 +157,49 @@ namespace NisitSimulator.EditorTools
             panel.transform.SetParent(canGo.transform, false);
             var pr = panel.GetComponent<RectTransform>();
             pr.anchorMin = pr.anchorMax = new Vector2(1f, 1f); pr.pivot = new Vector2(1f, 1f);
-            pr.anchoredPosition = new Vector2(-24f, -24f); pr.sizeDelta = new Vector2(360f, 470f);
+            pr.anchoredPosition = new Vector2(-24f, -24f); pr.sizeDelta = new Vector2(360f, 490f);
             panel.GetComponent<Image>().color = new Color(0.12f, 0.14f, 0.24f, 0.92f);
 
-            var status = MakeText(panel.transform, font, "ยังไม่เชื่อมต่อ", new Vector2(0f, -18f), 16, new Color(0.9f, 0.92f, 1f));
+            var labelCol = new Color(0.75f, 0.8f, 0.95f);
+            var status = MakeText(panel.transform, font, "ยังไม่เชื่อมต่อ", new Vector2(0f, -16f), 16, new Color(0.9f, 0.92f, 1f));
 
             // ชื่อผู้เล่น
-            MakeText(panel.transform, font, "ชื่อผู้เล่น:", new Vector2(0f, -46f), 15, new Color(0.75f, 0.8f, 0.95f));
-            var nameIn = MakeInput(panel.transform, font, new Vector2(0f, -66f), new Vector2(320f, 38f));
+            MakeText(panel.transform, font, "ชื่อผู้เล่น:", new Vector2(0f, -44f), 15, labelCol);
+            var nameIn = MakeInput(panel.transform, font, new Vector2(0f, -64f), new Vector2(320f, 38f));
             nameIn.text = ""; nameIn.characterLimit = 16;
 
             // สีตัวละคร (สวอตช์)
-            MakeText(panel.transform, font, "สีตัวละคร:", new Vector2(0f, -108f), 15, new Color(0.75f, 0.8f, 0.95f));
+            MakeText(panel.transform, font, "สีตัวละคร:", new Vector2(0f, -108f), 15, labelCol);
             var pal = NisitSimulator.Net.NetworkAvatar.Palette;
             var swatches = new Button[pal.Length];
             float sw = 34f, gap = 6f; float totalW = pal.Length * (sw + gap) - gap; float x0 = -totalW / 2f + sw / 2f;
             for (int i = 0; i < pal.Length; i++)
                 swatches[i] = MakeSwatch(panel.transform, new Vector2(x0 + i * (sw + gap), -130f), sw, pal[i]);
 
-            // IP (LAN)
-            MakeText(panel.transform, font, "IP ของ Host (LAN):", new Vector2(0f, -168f), 15, new Color(0.75f, 0.8f, 0.95f));
-            var ip = MakeInput(panel.transform, font, new Vector2(0f, -190f), new Vector2(320f, 38f));
+            // แบบตัวละคร (จากแคตตาล็อก)
+            MakeText(panel.transform, font, "แบบตัวละคร:", new Vector2(0f, -172f), 15, labelCol);
+            var cat = AssetDatabase.LoadAssetAtPath<CharacterCatalog>("Assets/_Project/Resources/CharacterCatalog.asset");
+            int mCount = (cat != null && cat.Count > 0) ? cat.Count : 1;
+            var modelBtns = new Button[mCount];
+            float mw = 62f, mgap = 6f; float mtot = mCount * (mw + mgap) - mgap; float mx0 = -mtot / 2f + mw / 2f;
+            for (int i = 0; i < mCount; i++)
+            {
+                string lbl = cat != null ? cat.Label(i) : ("แบบ " + (i + 1));
+                var b = MakeButton(panel.transform, font, lbl, Vector2.zero, new Color(0.80f, 0.82f, 0.95f));
+                var brt = b.GetComponent<RectTransform>();
+                brt.anchorMin = brt.anchorMax = new Vector2(0.5f, 1f); brt.pivot = new Vector2(0.5f, 1f);
+                brt.anchoredPosition = new Vector2(mx0 + i * (mw + mgap), -192f); brt.sizeDelta = new Vector2(mw, 44f);
+                var lt = b.GetComponentInChildren<TMP_Text>(); if (lt != null) lt.fontSize = 14;
+                modelBtns[i] = b;
+            }
 
-            var host = MakeButton(panel.transform, font, "Host (สร้างห้อง)", new Vector2(0f, -244f), new Color(0.60f, 0.86f, 0.68f));
-            var client = MakeButton(panel.transform, font, "Join", new Vector2(0f, -300f), new Color(0.62f, 0.80f, 0.96f));
-            var disc = MakeButton(panel.transform, font, "ออกจากห้อง", new Vector2(0f, -356f), new Color(0.99f, 0.74f, 0.78f));
+            // IP (LAN)
+            MakeText(panel.transform, font, "IP ของ Host (LAN):", new Vector2(0f, -244f), 15, labelCol);
+            var ip = MakeInput(panel.transform, font, new Vector2(0f, -264f), new Vector2(320f, 38f));
+
+            var host = MakeButton(panel.transform, font, "Host (สร้างห้อง)", new Vector2(0f, -318f), new Color(0.60f, 0.86f, 0.68f));
+            var client = MakeButton(panel.transform, font, "Join", new Vector2(0f, -372f), new Color(0.62f, 0.80f, 0.96f));
+            var disc = MakeButton(panel.transform, font, "ออกจากห้อง", new Vector2(0f, -426f), new Color(0.99f, 0.74f, 0.78f));
 
             var ui = canGo.AddComponent<NetworkUI>();
             ui.panel = panel;
@@ -135,6 +207,7 @@ namespace NisitSimulator.EditorTools
             ui.ipInput = ip;
             ui.nameInput = nameIn;
             ui.colorButtons = swatches;
+            ui.modelButtons = modelBtns;
             ui.hostButton = host; ui.clientButton = client; ui.disconnectButton = disc;
 
             // ----- แชท (มุมซ้ายล่าง) — log + ช่องพิมพ์ + ปุ่มสำเร็จรูป -----

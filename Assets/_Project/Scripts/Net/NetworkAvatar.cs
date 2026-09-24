@@ -3,6 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using TMPro;
 using NisitSimulator.SaveLoad;
+using NisitSimulator.Systems;
 
 namespace NisitSimulator.Net
 {
@@ -32,6 +33,8 @@ namespace NisitSimulator.Net
             default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         readonly NetworkVariable<int> netColor = new NetworkVariable<int>(
             0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        readonly NetworkVariable<int> netModel = new NetworkVariable<int>(
+            0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         // พาเลตต์สีตัวละคร (0 = สีจริงของโมเดล)
         public static readonly Color[] Palette =
@@ -51,6 +54,9 @@ namespace NisitSimulator.Net
 
         public override void OnNetworkSpawn()
         {
+            // สลับโมเดลตามที่ผู้เล่นเลือก (เฉพาะตัวที่มองเห็น = remote) ก่อน cache Animator
+            if (!IsOwner && netModel.Value > 0) CharacterCatalog.Apply(transform, netModel.Value);
+
             anim = GetComponentInChildren<Animator>();
             if (anim != null) anim.applyRootMotion = false;   // กันหุ่นไถล/ลอย (ตำแหน่งมาจาก sync ไม่ใช่ root motion)
 
@@ -77,6 +83,7 @@ namespace NisitSimulator.Net
             {
                 netName.Value = new FixedString64Bytes(Trunc(GameSession.PlayerName));
                 netColor.Value = GameSession.PlayerColor;
+                netModel.Value = GameSession.PlayerModel;
                 TintLocalPlayer(GameSession.PlayerColor);   // ทาสีตัวเราเอง (Player ในฉาก)
             }
             else
@@ -85,6 +92,7 @@ namespace NisitSimulator.Net
             }
             netColor.OnValueChanged += OnColorChanged;
             netName.OnValueChanged += OnNameChanged;
+            netModel.OnValueChanged += OnModelChanged;
         }
 
         public override void OnNetworkDespawn()
@@ -92,6 +100,7 @@ namespace NisitSimulator.Net
             if (!IsOwner) emote.OnValueChanged -= OnEmoteChanged;
             netColor.OnValueChanged -= OnColorChanged;
             netName.OnValueChanged -= OnNameChanged;
+            netModel.OnValueChanged -= OnModelChanged;
         }
 
         static string Trunc(string s) => string.IsNullOrEmpty(s) ? "" : (s.Length > 16 ? s.Substring(0, 16) : s);
@@ -192,11 +201,21 @@ namespace NisitSimulator.Net
 
         // ---------- เอกลักษณ์ (ชื่อ+สี) ----------
         // เรียกจาก UI ตอนเปลี่ยนชื่อ/สีระหว่างเล่น (owner เท่านั้น)
-        public void SetIdentity(string name, int color)
+        public void SetIdentity(string name, int color, int model)
         {
             if (!IsOwner) return;
             netName.Value = new FixedString64Bytes(Trunc(name));
-            netColor.Value = color;   // NV เปลี่ยน → OnColorChanged ทาสีให้เอง
+            netColor.Value = color;    // NV เปลี่ยน → OnColorChanged ทาสีให้เอง
+            netModel.Value = model;    // → OnModelChanged สลับโมเดลให้ผู้อื่นเห็น
+        }
+
+        void OnModelChanged(int prev, int cur)
+        {
+            if (IsOwner) return;   // ตัวเราเปลี่ยนที่ Player จริง (PlayerModelSwapper) ไม่ใช่ avatar
+            CharacterCatalog.Apply(transform, cur);
+            anim = GetComponentInChildren<Animator>();
+            if (anim != null) anim.applyRootMotion = false;
+            ApplyColor(gameObject, netColor.Value);   // ทาสีโมเดลใหม่
         }
 
         public string DisplayName => ResolveName();   // ให้ PlayerListUI อ่านชื่อ

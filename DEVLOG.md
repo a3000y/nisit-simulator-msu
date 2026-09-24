@@ -295,6 +295,14 @@ Unity 6.1 (6000.5.1f1) · URP · C#
   - กันเปิดแผง chat/emote/trade ตอนจบเกม (เช็ก GameManager.IsActive)
 - สแกนยืนยันสะอาด: NetworkVariable write permission, RPC ownership/targeting, OnNetworkDespawn unsub, null-guards, core SP loop (สอบ/เลื่อนปี/เซฟ/timeScale) ครบถูกต้อง
 
+### หน้าแต่งตัว: เลือกแบบ/เพศตัวละคร + สี + ชื่อ (sync MP) (2026-09-24)
+- 🎭 **CharacterCatalog** ([Systems/CharacterCatalog.cs](Assets/_Project/Scripts/Systems/CharacterCatalog.cs)) — ScriptableObject ใน Resources เก็บโมเดลที่เลือกได้ (index 0 = Ch29 เริ่มต้น) + controller · static `Apply(root, index)` สลับโมเดลลูก (instantiate ใหม่ + ตั้ง controller + ลบเก่า) ใช้ทั้ง player และ avatar
+- 🔄 **PlayerModelSwapper** ([Player/PlayerModelSwapper.cs](Assets/_Project/Scripts/Player/PlayerModelSwapper.cs), `[DefaultExecutionOrder(-500)]`) — สลับโมเดล Player ตาม GameSession.PlayerModel ก่อนสคริปต์อื่น cache Animator · `SwapTo(i)` เปลี่ยนสด + เรียก `RefreshAnimator()` ที่เพิ่มใน PlayerMovement/PlayerActionController
+- 🌐 **sync MP**: NetworkAvatar เพิ่ม `netModel` (NetworkVariable) → remote สลับโมเดลตามที่เลือก (OnNetworkSpawn/OnModelChanged ผ่าน CharacterCatalog.Apply) · `SetIdentity(name,color,model)`
+- 🖱️ **UI แต่งตัว**: NetworkUI + M29 เพิ่มปุ่มเลือกแบบตัวละคร ในแผง F3 (ชื่อ+สี+แบบ) · PickModel → GameSession + SwapTo(local) + sync · M29 `EnsureCatalog()` สร้าง+ใส่โมเดล (Ch29/Ch07/Ch12/Ch21/Remy) + ติด PlayerModelSwapper บน Player
+- ปิด gap ตาราง 3.1 (ตัวละครหลายแบบ/เพศ) — เปลี่ยน label เป็น ชาย/หญิง ได้ที่ CharacterCatalog asset
+- ⚠️ ยังไม่ได้เทสต์รันจริง (runtime model swap + MP sync) — เทสต์ 2 หน้าต่างแล้วปรับได้
+
 ---
 
 ## Version Control

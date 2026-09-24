@@ -11,8 +11,9 @@ namespace NisitSimulator.SaveLoad
         // คณะของผู้เล่น (0=IT, 1=บริหาร, 2=วิทย์, 3=นิเทศ) — เป็นค่าต่อผู้เล่น เผื่อ multiplayer ในอนาคต
         public static int SelectedFacultyIndex = 0;
 
-        // ปรับแต่งตัวละคร (sync ใน multiplayer) — ตั้งจากแผง MP
+        // ปรับแต่งตัวละคร (sync ใน multiplayer) — ตั้งจากแผงแต่งตัว
         public static string PlayerName = "";   // ว่าง = ใช้ "ผู้เล่น N"
         public static int PlayerColor = 0;       // index ในพาเลตต์สี (0 = สีจริงของโมเดล)
+        public static int PlayerModel = 0;       // index ในแคตตาล็อกตัวละคร (แบบ/เพศ)
     }
 }
