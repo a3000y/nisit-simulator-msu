@@ -125,6 +125,22 @@ namespace NisitSimulator.EditorTools
             mc.settingsButton    = MakeButton(root, "ตั้งค่า",      new Vector2(0, -192), new Color(0.80f, 0.72f, 0.96f));
             mc.quitButton        = MakeButton(root, "ออก",         new Vector2(0, -282), new Color(0.99f, 0.74f, 0.78f));
 
+            // ===== ตัวละคร 3D โชว์ด้านขวา (สไตล์ cinematic) =====
+            var pStage = new GameObject("MenuCharStage"); pStage.transform.position = new Vector3(800f, 0f, 800f);
+            var pRoot = new GameObject("ModelRoot").transform; pRoot.SetParent(pStage.transform, false); pRoot.localPosition = Vector3.zero;
+            var pKey = new GameObject("Key").AddComponent<Light>(); pKey.transform.SetParent(pStage.transform, false); pKey.transform.localPosition = new Vector3(1.2f, 2.4f, 2f); pKey.type = LightType.Point; pKey.intensity = 14f; pKey.range = 30f; pKey.color = new Color(1f, 0.97f, 0.9f);
+            var pFill = new GameObject("Fill").AddComponent<Light>(); pFill.transform.SetParent(pStage.transform, false); pFill.transform.localPosition = new Vector3(-1.4f, 1.6f, 1.8f); pFill.type = LightType.Point; pFill.intensity = 7f; pFill.range = 30f; pFill.color = new Color(0.85f, 0.9f, 1f);
+            var pCamGo = new GameObject("MenuCharCam"); pCamGo.transform.SetParent(pStage.transform, false); pCamGo.transform.localPosition = new Vector3(0f, 1.0f, 3.0f);
+            var pCam = pCamGo.AddComponent<Camera>(); pCam.transform.LookAt(pStage.transform.position + new Vector3(0f, 0.95f, 0f));
+            pCam.clearFlags = CameraClearFlags.SolidColor; pCam.backgroundColor = new Color(0f, 0f, 0f, 0f);   // โปร่งใส → เห็นฉากหลัง
+            pCam.fieldOfView = 30f; pCam.nearClipPlane = 0.1f; pCam.farClipPlane = 12f; pCam.enabled = false;
+            var praw = new GameObject("MenuCharPreview", typeof(RectTransform), typeof(RawImage));
+            praw.transform.SetParent(root, false);
+            var prrt = (RectTransform)praw.transform; prrt.anchorMin = prrt.anchorMax = prrt.pivot = new Vector2(0.5f, 0.5f);
+            prrt.anchoredPosition = new Vector2(440f, -30f); prrt.sizeDelta = new Vector2(560f, 800f);
+            var prawImg = praw.GetComponent<RawImage>(); prawImg.color = Color.white; prawImg.raycastTarget = false;
+            var mcp = praw.AddComponent<MenuCharacterPreview>(); mcp.cam = pCam; mcp.root = pRoot; mcp.image = prawImg;
+
             // ===== แผงเลือกช่องบันทึก (popup — เด้งตอนกดเล่นคนเดียว/เล่นต่อ) =====
             var slDim = MakeImage(root, "SlotPanel", Vector2.zero, Vector2.one, new Color(0.04f, 0.06f, 0.12f, 0.62f));
             slDim.rectTransform.offsetMin = Vector2.zero; slDim.rectTransform.offsetMax = Vector2.zero;

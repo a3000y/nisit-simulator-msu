@@ -322,12 +322,13 @@ namespace NisitSimulator.EditorTools
             if (title == null) return;
 
             title.fontStyle = FontStyles.Bold;
-            title.fontSize = 90;
+            title.fontSize = 82;
+            title.alignment = TextAlignmentOptions.Left;   // โลโก้ชิดซ้าย (สไตล์ cinematic)
             title.enableVertexGradient = true;
             title.colorGradient = new VertexGradient(
                 new Color(1.00f, 0.95f, 0.66f), new Color(1.00f, 0.95f, 0.66f),   // ทองอ่อนบน
                 new Color(0.96f, 0.64f, 0.11f), new Color(0.96f, 0.64f, 0.11f));  // ทองเข้มล่าง
-            Place(title.rectTransform, new Vector2(0, 250), new Vector2(1000, 140));
+            Place(title.rectTransform, new Vector2(-300, 340), new Vector2(1100, 120));
 
             // ขอบเข้มหนา + เงานูน 3D ผ่าน material instance (ไม่กระทบข้อความอื่น)
             var mat = title.fontMaterial;
@@ -348,7 +349,7 @@ namespace NisitSimulator.EditorTools
             if (glowSprite != null) { lglow.sprite = glowSprite; lglow.type = Image.Type.Simple; }
             lglow.color = new Color(1f, 0.86f, 0.5f, 0.26f);
             lglow.raycastTarget = false;
-            Place(lglow.rectTransform, new Vector2(0, 250), new Vector2(1000, 460));
+            Place(lglow.rectTransform, new Vector2(-300, 340), new Vector2(900, 340));
         }
 
         // แคปซูลคำโปรย "จำลองชีวิตนิสิต"
@@ -360,27 +361,29 @@ namespace NisitSimulator.EditorTools
             if (sub == null) return;
             sub.fontSize = 30;
             sub.fontStyle = FontStyles.Bold;
+            sub.alignment = TextAlignmentOptions.Left;
             sub.color = new Color(0.99f, 0.96f, 0.87f, 1f);
-            Place(sub.rectTransform, new Vector2(0, 150), new Vector2(560, 46));
+            Place(sub.rectTransform, new Vector2(-585, 258), new Vector2(560, 46));
 
-            // แคปซูลเข้มโปร่งหลังคำโปรย
+            // แคปซูลเข้มโปร่งหลังคำโปรย (ซ่อนในโหมดชิดซ้าย)
             var pillT = root.Find("TaglinePill");
             Image pill = pillT != null ? pillT.GetComponent<Image>() : NewRounded(root, "TaglinePill");
             if (roundSprite != null) { pill.sprite = roundSprite; pill.type = Image.Type.Sliced; }
-            pill.color = new Color(0.09f, 0.15f, 0.27f, 0.62f);
+            pill.color = new Color(0.09f, 0.15f, 0.27f, 0f);   // โปร่งใส (ไม่ใช้แคปซูล)
             pill.raycastTarget = false;
-            Place(pill.rectTransform, new Vector2(0, 150), new Vector2(360, 54));
+            Place(pill.rectTransform, new Vector2(-585, 258), new Vector2(360, 54));
         }
 
         // ---------------------------------------------------------------- buttons
 
         static void LayoutButtons(Transform root)
         {
-            StyleButton(root, "เล่นคนเดียวBtn", new Vector2(0,   78), new Color(0.60f, 0.86f, 0.68f), icPlay);     // มินต์พาสเทล
-            StyleButton(root, "เล่นหลายคนBtn", new Vector2(0,  -12), new Color(0.99f, 0.82f, 0.62f), icContinue); // พีชพาสเทล
-            StyleButton(root, "เล่นต่อBtn",     new Vector2(0, -102), new Color(0.62f, 0.80f, 0.96f), icContinue); // ฟ้าพาสเทล
-            StyleButton(root, "ตั้งค่าBtn",      new Vector2(0, -192), new Color(0.80f, 0.72f, 0.96f), icSettings); // ลาเวนเดอร์
-            StyleButton(root, "ออกBtn",         new Vector2(0, -282), new Color(0.99f, 0.74f, 0.78f), icExit);     // ชมพูพาสเทล
+            // คอลัมน์ซ้าย (สไตล์ cinematic — ตัวละครโชว์ด้านขวา)
+            StyleButton(root, "เล่นคนเดียวBtn", new Vector2(-560,  120), new Color(0.60f, 0.86f, 0.68f), icPlay);     // มินต์พาสเทล
+            StyleButton(root, "เล่นหลายคนBtn", new Vector2(-560,   30), new Color(0.99f, 0.82f, 0.62f), icContinue); // พีชพาสเทล
+            StyleButton(root, "เล่นต่อBtn",     new Vector2(-560,  -60), new Color(0.62f, 0.80f, 0.96f), icContinue); // ฟ้าพาสเทล
+            StyleButton(root, "ตั้งค่าBtn",      new Vector2(-560, -150), new Color(0.80f, 0.72f, 0.96f), icSettings); // ลาเวนเดอร์
+            StyleButton(root, "ออกBtn",         new Vector2(-560, -240), new Color(0.99f, 0.74f, 0.78f), icExit);     // ชมพูพาสเทล
         }
 
         static void StyleButton(Transform root, string name, Vector2 pos, Color baseCol, Sprite icon)
