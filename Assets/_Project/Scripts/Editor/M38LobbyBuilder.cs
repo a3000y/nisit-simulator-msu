@@ -176,7 +176,7 @@ namespace NisitSimulator.EditorTools
             return t;
         }
 
-        static Button MakeButton(Transform parent, TMP_FontAsset font, string label, Vector2 pos, Vector2 size, Color col, float fs, float ax = 0.5f, float ay = 0.5f)
+        static Button MakeButton(Transform parent, TMP_FontAsset font, string label, Vector2 pos, Vector2 size, Color col, float fs, float ax = 0.5f, float ay = 1f)
         {
             var go = new GameObject("Btn_" + label, typeof(RectTransform), typeof(Image), typeof(Button));
             go.transform.SetParent(parent, false);
