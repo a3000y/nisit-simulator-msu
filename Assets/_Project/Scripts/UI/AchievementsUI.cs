@@ -121,7 +121,7 @@ namespace NisitSimulator.UI
             var crt = (RectTransform)card.transform;
             crt.anchorMin = crt.anchorMax = crt.pivot = new Vector2(0.5f, 0.5f);
             crt.sizeDelta = new Vector2(980f, 700f);
-            card.GetComponent<Image>().color = new Color(0.14f, 0.16f, 0.26f, 0.99f);
+            UIStyle.Card(card, new Color(0.14f, 0.16f, 0.26f, 0.99f));   // มุมมนเข้าชุด
 
             MakeText(card.transform, "สมุดนิสิต — สถิติ & ความสำเร็จ", new Vector2(0f, 315f), new Vector2(940, 50), 30, new Color(1f, 0.9f, 0.5f)).alignment = TextAlignmentOptions.Center;
 

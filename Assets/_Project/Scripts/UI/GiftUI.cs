@@ -145,7 +145,7 @@ namespace NisitSimulator.UI
             var crt = (RectTransform)card.transform;
             crt.anchorMin = crt.anchorMax = crt.pivot = new Vector2(0.5f, 0.5f);
             crt.sizeDelta = new Vector2(560f, 680f);
-            card.GetComponent<Image>().color = new Color(0.15f, 0.17f, 0.27f, 0.99f);
+            UIStyle.Card(card, new Color(0.15f, 0.17f, 0.27f, 0.99f));   // มุมมนเข้าชุด
 
             titleText = MakeText(card.transform, "ให้ของขวัญ", new Vector2(0f, 300f), new Vector2(520, 50), 30, new Color(1f, 0.9f, 0.5f));
             titleText.alignment = TextAlignmentOptions.Center;
