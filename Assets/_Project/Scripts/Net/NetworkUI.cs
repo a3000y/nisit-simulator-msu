@@ -151,7 +151,7 @@ namespace NisitSimulator.Net
                 var alloc = await RelayService.Instance.CreateAllocationAsync(8);   // สูงสุด 8 คนอื่น
                 relayCode = await RelayService.Instance.GetJoinCodeAsync(alloc.AllocationId);
                 var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
-                if (utp != null) utp.SetRelayServerData(new RelayServerData(alloc, "dtls"));
+                if (utp != null) utp.SetRelayServerData(alloc.ToRelayServerData("dtls"));
                 NetworkManager.Singleton.StartHost();
                 SetStatus($"ออนไลน์! โค้ดห้อง: {relayCode}");
             }
@@ -169,7 +169,7 @@ namespace NisitSimulator.Net
             {
                 var join = await RelayService.Instance.JoinAllocationAsync(c);
                 var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
-                if (utp != null) utp.SetRelayServerData(new RelayServerData(join, "dtls"));
+                if (utp != null) utp.SetRelayServerData(join.ToRelayServerData("dtls"));
                 NetworkManager.Singleton.StartClient();
                 SetStatus("เข้าห้องออนไลน์แล้ว!");
             }
