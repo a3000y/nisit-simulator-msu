@@ -331,6 +331,13 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - [PauseMenu.cs](Assets/_Project/Scripts/UI/PauseMenu.cs): เปิด/ปิดแผงตั้งค่า · Esc ปิดแผงตั้งค่าก่อน (ไม่ออกจาก Pause) · Resume ปิดทั้งคู่
 - ปิด gap "ปรับเสียงตอนอยู่ในเกมไม่ได้" — ต้อง re-bake (★ Rebuild All) 1 ครั้ง
 
+### หน้าแต่งตัวละคร (พรีวิว 3D หมุนได้) (2026-09-24)
+- 🧑‍🎨 หน้าจอแต่งตัวเป็นของตัวเองในเมนู (เดิมอยู่แค่แผง F3): เลือกแบบ/เพศ + สี + ชื่อ พร้อม **พรีวิว 3D หมุนได้**
+- flow: ปุ่ม "เล่นคนเดียว" → หน้าแต่งตัว → เริ่มเล่น → (เลือกคณะ) → เข้าเกม · reuse `CharacterCatalog` + `GameSession` + `PlayerModelSwapper` เดิม (เข้าเกมใส่โมเดลให้อัตโนมัติ + sync MP ฟรี)
+- [CharacterCreatorController.cs](Assets/_Project/Scripts/UI/CharacterCreatorController.cs): พรีวิวด้วย Camera→RenderTexture (สร้างรันไทม์) ส่องเวทีที่วางไกล (1000,0,1000) · instantiate โมเดลจากแคตตาล็อก + auto-scale วางเท้า + หมุนช้า ๆ · ทาสีด้วย `NetworkAvatar.ApplyColor` (เปิดเป็น public) ให้ตรงกับในเกม
+- [M37CharacterCreator.cs](Assets/_Project/Scripts/Editor/M37CharacterCreator.cs): สร้างเวที (กล้อง/ไฟ point 2 ดวง/จุดวางโมเดล) + แผง UI (พรีวิว/ชื่อ/6 แบบ/8 สี/ยืนยัน-ย้อนกลับ) · อยู่ใน ★ Rebuild All (หลัง M4) · ต้องมี CharacterCatalog (Setup Multiplayer) ถึงจะมีแบบให้เลือก
+- [MainMenuController.cs](Assets/_Project/Scripts/UI/MainMenuController.cs): OpenCustomize/ConfirmCustomize/CloseCustomize (MP ยังเข้าทาง F3 เหมือนเดิม)
+
 ---
 
 ## Version Control

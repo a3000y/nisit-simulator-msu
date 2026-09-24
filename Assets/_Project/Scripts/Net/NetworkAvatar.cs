@@ -248,7 +248,8 @@ namespace NisitSimulator.Net
         }
 
         // ทาสีทั้งตัว (MaterialPropertyBlock — ไม่แตะ material asset) · idx 0 = สีจริง
-        static void ApplyColor(GameObject go, int idx)
+        //   public เพื่อให้หน้าแต่งตัว (พรีวิว) ทาสีแบบเดียวกับในเกม
+        public static void ApplyColor(GameObject go, int idx)
         {
             if (go == null) return;
             var col = (idx > 0 && idx < Palette.Length) ? Palette[idx] : Color.white;

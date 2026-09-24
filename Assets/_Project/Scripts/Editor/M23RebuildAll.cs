@@ -30,6 +30,7 @@ namespace NisitSimulator.EditorTools
             M27AnimalBuilder.SuppressDialog = true;
             M35PauseBuilder.SuppressDialog = true;
             M18AudioBuilder.SuppressDialog = true;
+            M37CharacterCreator.SuppressDialog = true;
             M4MenuBuilder.SuppressDialog = true;
             MenuPolish.SuppressDialog = true;
             M11FacultyBuilder.SuppressDialog = true;
@@ -59,6 +60,9 @@ namespace NisitSimulator.EditorTools
                 // ===== ฉากเมนู (auto-chain: Polish + พื้นหลัง + คณะ) =====
                 Step(log, "เมนู + คณะ + พื้นหลัง + เสียง", () => M4MenuBuilder.Build());
 
+                // ===== หน้าแต่งตัวละคร (พรีวิว 3D) — หลังสร้างเมนูใหม่ =====
+                Step(log, "หน้าแต่งตัวละคร (พรีวิว 3D)", () => M37CharacterCreator.Build());
+
                 // ===== เสียงในเกม (สังเคราะห์เอง + แปะปุ่ม) — ทำท้ายสุด =====
                 Step(log, "ระบบเสียง (คลิก/เดิน/สอบ/แจ้งเตือน)", () => M18AudioBuilder.Build());
             }
@@ -75,6 +79,7 @@ namespace NisitSimulator.EditorTools
                 M27AnimalBuilder.SuppressDialog = false;
                 M35PauseBuilder.SuppressDialog = false;
                 M18AudioBuilder.SuppressDialog = false;
+                M37CharacterCreator.SuppressDialog = false;
                 M4MenuBuilder.SuppressDialog = false;
                 MenuPolish.SuppressDialog = false;
                 M11FacultyBuilder.SuppressDialog = false;

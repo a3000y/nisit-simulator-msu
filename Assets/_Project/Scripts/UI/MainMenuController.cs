@@ -20,12 +20,15 @@ namespace NisitSimulator.UI
         public Button creditsButton;       // เกี่ยวกับ/ผู้จัดทำ (เซ็ตโดย Editor)
         public GameObject creditsPanel;
         public Button creditsCloseButton;
+        public GameObject characterPanel;  // หน้าแต่งตัวละคร (เซ็ตโดย Editor)
+        public Button characterConfirmButton;
+        public Button characterBackButton;
 
         void Start()
         {
             Time.timeScale = 1f;
 
-            if (newGameButton) newGameButton.onClick.AddListener(() => { GameSession.OpenNetworkOnStart = false; NewGame(); });
+            if (newGameButton) newGameButton.onClick.AddListener(() => { GameSession.OpenNetworkOnStart = false; OpenCustomize(); });
             if (multiplayerButton) multiplayerButton.onClick.AddListener(MultiplayerGame);
             if (continueButton)
             {
@@ -43,10 +46,14 @@ namespace NisitSimulator.UI
             if (creditsCloseButton && creditsPanel)
                 creditsCloseButton.onClick.AddListener(() => creditsPanel.SetActive(false));
 
+            if (characterConfirmButton) characterConfirmButton.onClick.AddListener(ConfirmCustomize);
+            if (characterBackButton) characterBackButton.onClick.AddListener(CloseCustomize);
+
             if (settingsPanel) settingsPanel.SetActive(false);
             if (facultyPanel) facultyPanel.SetActive(false);
             if (comingSoonPanel) comingSoonPanel.SetActive(false);
             if (creditsPanel) creditsPanel.SetActive(false);
+            if (characterPanel) characterPanel.SetActive(false);
         }
 
         // ปุ่มเล่นหลายคน — เริ่มเกมใหม่แล้วเปิดแผง Multiplayer (F3) อัตโนมัติ
@@ -61,6 +68,24 @@ namespace NisitSimulator.UI
         public void ShowComingSoon()
         {
             if (comingSoonPanel != null) comingSoonPanel.SetActive(true);
+        }
+
+        // เปิดหน้าแต่งตัวละคร (จากปุ่มเล่นคนเดียว) → ยืนยันแล้วค่อยไปเลือกคณะ/เริ่มเกม
+        public void OpenCustomize()
+        {
+            if (characterPanel != null) { characterPanel.SetActive(true); return; }
+            NewGame();   // ไม่มีหน้าแต่งตัว → ไปต่อเลย
+        }
+
+        public void CloseCustomize()
+        {
+            if (characterPanel != null) characterPanel.SetActive(false);
+        }
+
+        public void ConfirmCustomize()
+        {
+            CloseCustomize();
+            NewGame();   // ไปเลือกคณะ (ถ้ามี) แล้วเริ่มเกม
         }
 
         // เริ่มใหม่ — เปิดหน้าเลือกคณะก่อน (ถ้ามี) ไม่งั้นเริ่มเลย
