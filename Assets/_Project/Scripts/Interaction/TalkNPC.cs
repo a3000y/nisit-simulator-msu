@@ -157,12 +157,16 @@ namespace NisitSimulator.Interaction
                 if (em == null) em = Object.FindFirstObjectByType<EventManager>();
                 if (em != null)
                 {
+                    // ยิ่งสนิท ยิ่งได้รางวัลเควสเยอะ (+20%/ระดับ)
+                    float m = 1f + 0.2f * RelationshipManager.Instance.GetLevel(relId);
                     var c = new EventManager.Choice
                     {
                         kind = EventManager.Kind.GoTo,
                         targetDoor = questTargetDoor,
                         objectiveText = questText,
-                        satisfaction = questRewardSat, money = questRewardMoney, exp = questRewardExp,
+                        satisfaction = questRewardSat * m,
+                        money = Mathf.RoundToInt(questRewardMoney * m),
+                        exp = Mathf.RoundToInt(questRewardExp * m),
                         result = $"ภารกิจสำเร็จ! {npcName} ขอบคุณมาก"
                     };
                     if (em.StartObjectiveExternal(c))

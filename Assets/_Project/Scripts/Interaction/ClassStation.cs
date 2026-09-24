@@ -5,6 +5,7 @@ using NisitSimulator.TimeSystem;
 using NisitSimulator.Player;
 using NisitSimulator.UI;
 using NisitSimulator.SaveLoad;
+using NisitSimulator.Systems;
 
 namespace NisitSimulator.Interaction
 {
@@ -88,12 +89,17 @@ namespace NisitSimulator.Interaction
             if (interactor.TryGetComponent<PlayerStats>(out var stats))
             {
                 float kMult = interactor.TryGetComponent<PlayerEffects>(out var fx) ? fx.knowledgeMult : 1f;
-                float k = knowledgePerClass * kMult;
+                // โบนัสจากเพื่อนสนิท (เพื่อนติวให้) — +5%/คน สูงสุด +25%
+                int closeFriends = RelationshipManager.Instance.CountAtLeast(3);
+                float friendMult = 1f + Mathf.Min(closeFriends, 5) * 0.05f;
+                float k = knowledgePerClass * kMult * friendMult;
                 stats.ChangeKnowledge(k);
                 stats.AddExp(expPerClass);
                 stats.ChangeEnergy(-energyCost);
                 stats.ChangeSatisfaction(3f);
-                HUDController.Toast($"เรียนจบคาบ +{k:0} ความรู้" + (kMult > 1f ? " (ไฟแรง!)" : ""));
+                HUDController.Toast($"เรียนจบคาบ +{k:0} ความรู้"
+                    + (kMult > 1f ? " (ไฟแรง!)" : "")
+                    + (closeFriends > 0 ? $" (เพื่อนติว +{Mathf.Min(closeFriends,5)*5}%)" : ""));
             }
         }
 
