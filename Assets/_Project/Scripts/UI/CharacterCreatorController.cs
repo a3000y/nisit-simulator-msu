@@ -162,7 +162,7 @@ namespace NisitSimulator.UI
         {
             if (GameSession.PlayerAccessories == null || slot >= GameSession.PlayerAccessories.Length) return;
             GameSession.PlayerAccessories[slot] = value;
-            if (current != null) CharacterAccessories.Apply(current, GameSession.PlayerAccessories);
+            if (current != null) CharacterAccessories.Apply(current.transform, GameSession.PlayerAccessories);
             HighlightAccessories();
         }
 
@@ -201,7 +201,7 @@ namespace NisitSimulator.UI
 
             AutoScaleToFeet(current);
             NetworkAvatar.ApplyColor(current, color);
-            CharacterAccessories.Apply(current, GameSession.PlayerAccessories);   // ใส่ของแต่งกับโมเดลใหม่
+            CharacterAccessories.Apply(current.transform, GameSession.PlayerAccessories);   // ใส่ของแต่งกับโมเดลใหม่
         }
 
         // ปรับสเกลให้สูงเท่า targetHeight + วางเท้าที่ระดับ previewRoot (โมเดลต่างขนาดกัน)
