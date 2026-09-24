@@ -128,8 +128,8 @@ namespace NisitSimulator.EditorTools
             // ===== ตัวละคร 3D โชว์ด้านขวา (สไตล์ cinematic) =====
             var pStage = new GameObject("MenuCharStage"); pStage.transform.position = new Vector3(800f, 0f, 800f);
             var pRoot = new GameObject("ModelRoot").transform; pRoot.SetParent(pStage.transform, false); pRoot.localPosition = Vector3.zero;
-            var pKey = new GameObject("Key").AddComponent<Light>(); pKey.transform.SetParent(pStage.transform, false); pKey.transform.localPosition = new Vector3(1.2f, 2.4f, 2f); pKey.type = LightType.Point; pKey.intensity = 14f; pKey.range = 30f; pKey.color = new Color(1f, 0.97f, 0.9f);
-            var pFill = new GameObject("Fill").AddComponent<Light>(); pFill.transform.SetParent(pStage.transform, false); pFill.transform.localPosition = new Vector3(-1.4f, 1.6f, 1.8f); pFill.type = LightType.Point; pFill.intensity = 7f; pFill.range = 30f; pFill.color = new Color(0.85f, 0.9f, 1f);
+            var pKey = new GameObject("Key").AddComponent<Light>(); pKey.transform.SetParent(pStage.transform, false); pKey.transform.localPosition = new Vector3(1.2f, 2.4f, 2f); pKey.type = LightType.Point; pKey.intensity = 4f; pKey.range = 26f; pKey.color = new Color(1f, 0.97f, 0.9f);
+            var pFill = new GameObject("Fill").AddComponent<Light>(); pFill.transform.SetParent(pStage.transform, false); pFill.transform.localPosition = new Vector3(-1.4f, 1.6f, 1.8f); pFill.type = LightType.Point; pFill.intensity = 1.8f; pFill.range = 26f; pFill.color = new Color(0.85f, 0.9f, 1f);
             var pCamGo = new GameObject("MenuCharCam"); pCamGo.transform.SetParent(pStage.transform, false); pCamGo.transform.localPosition = new Vector3(0f, 1.0f, 3.0f);
             var pCam = pCamGo.AddComponent<Camera>(); pCam.transform.LookAt(pStage.transform.position + new Vector3(0f, 0.95f, 0f));
             pCam.clearFlags = CameraClearFlags.SolidColor; pCam.backgroundColor = new Color(0f, 0f, 0f, 0f);   // โปร่งใส → เห็นฉากหลัง

@@ -212,7 +212,12 @@ namespace NisitSimulator.EditorTools
         {
             var go = new GameObject("Card", typeof(RectTransform), typeof(Image));
             go.transform.SetParent(parent, false);
-            go.GetComponent<Image>().color = new Color(0.14f, 0.17f, 0.27f, 0.98f);
+            var img = go.GetComponent<Image>();
+            img.color = new Color(0.14f, 0.17f, 0.27f, 0.98f);
+            var round = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/ui_round.png");
+            if (round != null) { img.sprite = round; img.type = Image.Type.Sliced; }   // มุมมนเข้าชุดเมนู
+            var ol = go.AddComponent<UnityEngine.UI.Outline>(); ol.effectColor = new Color(0.10f, 0.12f, 0.22f, 1f); ol.effectDistance = new Vector2(4f, -4f); ol.useGraphicAlpha = false;
+            var sh = go.AddComponent<UnityEngine.UI.Shadow>(); sh.effectColor = new Color(0f, 0f, 0f, 0.35f); sh.effectDistance = new Vector2(4f, -8f);
             var rt = (RectTransform)go.transform;
             rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
             rt.anchoredPosition = pos; rt.sizeDelta = size;

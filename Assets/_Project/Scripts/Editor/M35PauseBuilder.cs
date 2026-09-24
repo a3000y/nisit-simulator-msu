@@ -45,7 +45,7 @@ namespace NisitSimulator.EditorTools
             var crt = card.GetComponent<RectTransform>();
             crt.anchorMin = crt.anchorMax = new Vector2(0.5f, 0.5f); crt.pivot = new Vector2(0.5f, 0.5f);
             crt.sizeDelta = new Vector2(460f, 480f);
-            card.GetComponent<Image>().color = new Color(0.16f, 0.18f, 0.28f, 0.98f);
+            Roundify(card, new Color(0.16f, 0.18f, 0.28f, 0.98f));
 
             var title = MakeText(card.transform, font, "หยุดชั่วคราว", new Vector2(0f, -30f), 40, Color.white);
             title.alignment = TextAlignmentOptions.Center;
@@ -87,7 +87,7 @@ namespace NisitSimulator.EditorTools
             var crt = card.GetComponent<RectTransform>();
             crt.anchorMin = crt.anchorMax = crt.pivot = new Vector2(0.5f, 0.5f);
             crt.sizeDelta = new Vector2(560f, 640f);
-            card.GetComponent<Image>().color = new Color(0.16f, 0.18f, 0.28f, 0.99f);
+            Roundify(card, new Color(0.16f, 0.18f, 0.28f, 0.99f));
 
             var title = MakeText(card.transform, font, "ตั้งค่าเสียง", new Vector2(0f, 280f), 36, new Color(1f, 0.9f, 0.5f));
             title.alignment = TextAlignmentOptions.Center;
@@ -148,6 +148,16 @@ namespace NisitSimulator.EditorTools
             slider.direction = Slider.Direction.LeftToRight;
             slider.minValue = 0f; slider.maxValue = 1f; slider.value = 1f;
             return slider;
+        }
+
+        // การ์ดมุมมน + ขอบ + เงา (เข้าชุดกับเมนู)
+        static void Roundify(GameObject go, Color col)
+        {
+            var img = go.GetComponent<Image>(); img.color = col;
+            var round = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/ui_round.png");
+            if (round != null) { img.sprite = round; img.type = Image.Type.Sliced; }
+            var ol = go.AddComponent<Outline>(); ol.effectColor = new Color(0.10f, 0.12f, 0.22f, 1f); ol.effectDistance = new Vector2(4f, -4f); ol.useGraphicAlpha = false;
+            var sh = go.AddComponent<Shadow>(); sh.effectColor = new Color(0f, 0f, 0f, 0.35f); sh.effectDistance = new Vector2(4f, -8f);
         }
 
         static Button MakeButton(Transform parent, TMP_FontAsset font, string label, Vector2 pos, Color col)
