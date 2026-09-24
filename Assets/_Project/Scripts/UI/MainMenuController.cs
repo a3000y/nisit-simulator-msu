@@ -25,22 +25,26 @@ namespace NisitSimulator.UI
         public Button characterConfirmButton;
         public Button characterBackButton;
         public Button[] slotButtons;       // เลือกช่องเซฟ 1-3 (เซ็ตโดย Editor)
+        public GameObject slotPanel;       // แผง popup เลือกช่อง
+        public Button slotCloseButton;
+        private bool slotContinueMode;     // true = เปิดจาก "เล่นต่อ" · false = จาก "เล่นคนเดียว"
 
         void Start()
         {
             Time.timeScale = 1f;
 
-            if (newGameButton) newGameButton.onClick.AddListener(() => { GameSession.OpenNetworkOnStart = false; OpenCustomize(); });
+            if (newGameButton) newGameButton.onClick.AddListener(() => OpenSlots(false));
             if (multiplayerButton) multiplayerButton.onClick.AddListener(MultiplayerGame);
-            if (continueButton) continueButton.onClick.AddListener(Continue);
+            if (continueButton) continueButton.onClick.AddListener(() => OpenSlots(true));
 
             if (slotButtons != null)
                 for (int i = 0; i < slotButtons.Length; i++)
                 {
                     int idx = i;
-                    if (slotButtons[i] != null) slotButtons[i].onClick.AddListener(() => SelectSlot(idx));
+                    if (slotButtons[i] != null) slotButtons[i].onClick.AddListener(() => OnSlotClicked(idx));
                 }
-            RefreshSlots();   // ตั้งป้ายช่อง + เปิด/ปิด "เล่นต่อ" ตามช่องปัจจุบัน
+            if (slotCloseButton && slotPanel) slotCloseButton.onClick.AddListener(() => slotPanel.SetActive(false));
+            if (slotPanel) slotPanel.SetActive(false);
             if (settingsButton && settingsPanel)
                 settingsButton.onClick.AddListener(() => settingsPanel.SetActive(true));
             if (quitButton) quitButton.onClick.AddListener(Quit);
@@ -62,28 +66,44 @@ namespace NisitSimulator.UI
             if (characterPanel) characterPanel.SetActive(false);
         }
 
-        // เลือกช่องเซฟ → อัปเดตปุ่ม "เล่นต่อ" + ป้ายช่อง
-        public void SelectSlot(int i)
+        // เปิดแผงเลือกช่อง — จาก "เล่นคนเดียว" (new) หรือ "เล่นต่อ" (continue)
+        public void OpenSlots(bool continueMode)
+        {
+            slotContinueMode = continueMode;
+            if (slotPanel == null) { if (continueMode) Continue(); else OpenCustomize(); return; }
+            RefreshSlots();
+            slotPanel.SetActive(true);
+        }
+
+        void OnSlotClicked(int i)
         {
             GameSession.SaveSlot = i;
-            RefreshSlots();
+            if (slotContinueMode)
+            {
+                if (!SaveSystem.HasSave(i)) return;   // ช่องว่าง เล่นต่อไม่ได้
+                if (slotPanel) slotPanel.SetActive(false);
+                Continue();
+            }
+            else
+            {
+                if (slotPanel) slotPanel.SetActive(false);
+                GameSession.OpenNetworkOnStart = false;
+                OpenCustomize();   // เกมใหม่ → แต่งตัว → คณะ → เล่น
+            }
         }
 
         void RefreshSlots()
         {
-            if (slotButtons != null)
-                for (int i = 0; i < slotButtons.Length; i++)
-                {
-                    if (slotButtons[i] == null) continue;
-                    var lbl = slotButtons[i].GetComponentInChildren<TMP_Text>();
-                    if (lbl != null)
-                    {
-                        string sum = SaveSystem.SummaryFor(i);
-                        lbl.text = $"ช่อง {i + 1}\n<size=55%>{(sum != null ? sum : "ว่าง")}</size>";
-                    }
-                    slotButtons[i].transform.localScale = Vector3.one * (i == GameSession.SaveSlot ? 1.12f : 1f);
-                }
-            if (continueButton != null) continueButton.interactable = SaveSystem.HasSave();   // มีเซฟในช่องนี้ไหม
+            if (slotButtons == null) return;
+            for (int i = 0; i < slotButtons.Length; i++)
+            {
+                if (slotButtons[i] == null) continue;
+                var lbl = slotButtons[i].GetComponentInChildren<TMP_Text>();
+                string sum = SaveSystem.SummaryFor(i);
+                if (lbl != null)
+                    lbl.text = $"ช่อง {i + 1}\n<size=55%>{(sum != null ? sum : "ว่าง")}</size>";
+                slotButtons[i].interactable = !slotContinueMode || sum != null;   // เล่นต่อ: เฉพาะช่องมีเซฟ
+            }
         }
 
         // ปุ่มเล่นหลายคน — เข้าฉากล็อบบี้ (Host/Join → แต่งตัว+เห็นเพื่อน → โฮสต์กดเริ่มพร้อมกัน)

@@ -122,12 +122,20 @@ namespace NisitSimulator.EditorTools
             mc.settingsButton    = MakeButton(root, "ตั้งค่า",      new Vector2(0, -192), new Color(0.80f, 0.72f, 0.96f));
             mc.quitButton        = MakeButton(root, "ออก",         new Vector2(0, -282), new Color(0.99f, 0.74f, 0.78f));
 
-            // ===== ช่องบันทึก 3 ช่อง (คอลัมน์ขวา) =====
-            MakeText(root, "SlotLabel", "ช่องบันทึก", 30, new Vector2(0.5f, 0.5f), new Vector2(560, 210), new Vector2(360, 40), Color.white, FontStyles.Bold);
+            // ===== แผงเลือกช่องบันทึก (popup — เด้งตอนกดเล่นคนเดียว/เล่นต่อ) =====
+            var slDim = MakeImage(root, "SlotPanel", Vector2.zero, Vector2.one, new Color(0.04f, 0.06f, 0.12f, 0.62f));
+            slDim.rectTransform.offsetMin = Vector2.zero; slDim.rectTransform.offsetMax = Vector2.zero;
+            var slCard = MakeRounded(slDim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(620, 600), new Color(0.11f, 0.14f, 0.24f, 0.99f));
+            Deco(slCard);
+            MakeText(slCard.transform, "SlTitle", "เลือกช่องบันทึก", 42, new Vector2(0.5f, 1f), new Vector2(0, -46), new Vector2(560, 56), new Color(1f, 0.9f, 0.5f), FontStyles.Bold);
             var slotBtns = new Button[3];
             for (int i = 0; i < 3; i++)
-                slotBtns[i] = MakeButton(root, "ช่อง " + (i + 1), new Vector2(560f, 130f - i * 92f), new Color(0.72f, 0.82f, 0.72f));
+                slotBtns[i] = MakeButton(slCard.transform, "ช่อง " + (i + 1), new Vector2(0f, 120f - i * 118f), new Color(0.72f, 0.82f, 0.72f));
+            var slClose = MakeButton(slCard.transform, "ยกเลิก", new Vector2(0, 30), new Color(0.86f, 0.80f, 0.88f), 0.5f, 0f);
             mc.slotButtons = slotBtns;
+            mc.slotPanel = slDim.gameObject;
+            mc.slotCloseButton = slClose;
+            slDim.gameObject.SetActive(false);
 
             // ===== แผงตั้งค่าเสียง (dim เต็มจอ + การ์ดกลาง) =====
             var sDim = MakeImage(root, "SettingsPanel", Vector2.zero, Vector2.one, new Color(0.04f, 0.06f, 0.12f, 0.62f));
