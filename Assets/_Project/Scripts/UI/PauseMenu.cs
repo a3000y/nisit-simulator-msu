@@ -56,6 +56,13 @@ namespace NisitSimulator.UI
 
         void ToMenu()
         {
+            // เซฟก่อนออก (เหมือน OnApplicationQuit) — ไม่งั้นความคืบหน้ากลางวันหายตอนกลับเมนู
+            // ใช้ State ตรงๆ เพราะตอนนี้ Paused อยู่ (IsActive จะ false) — เซฟถ้ายังไม่จบเกม
+            if (GameManager.Instance != null
+                && GameManager.Instance.State != GameState.GameOver
+                && GameManager.Instance.State != GameState.Win)
+                NisitSimulator.SaveLoad.SaveManager.Save();
+
             Time.timeScale = 1f;
             var nm = Unity.Netcode.NetworkManager.Singleton;
             if (nm != null && (nm.IsClient || nm.IsServer)) nm.Shutdown();   // ตัดการเชื่อมต่อ MP ก่อนออก

@@ -37,10 +37,12 @@ namespace NisitSimulator.SaveLoad
                 SaveSystem.DeleteSave();
         }
 
-        // ปิดเกมกลางคัน → เซฟไว้
+        // ปิดเกมกลางคัน → เซฟไว้ (รวมกรณีปิดตอนกด Pause อยู่ = State Paused ซึ่ง IsActive เป็น false)
         void OnApplicationQuit()
         {
-            if (GameManager.Instance != null && GameManager.Instance.IsActive)
+            if (GameManager.Instance != null
+                && GameManager.Instance.State != GameState.GameOver
+                && GameManager.Instance.State != GameState.Win)
                 SaveManager.Save();
         }
     }
