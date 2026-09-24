@@ -16,6 +16,8 @@ namespace NisitSimulator.Net
         public Button backButton;
         public TMP_Text hintText;
         public TMP_Text playerListText;
+        public GameObject connectGroup;    // แสดงตอนยังไม่เชื่อมต่อ (สร้าง/เข้าห้อง)
+        public GameObject customizeGroup;  // แสดงตอนเข้าห้องแล้ว (แต่งตัว)
         public string gameplayScene = "01_Gameplay";
 
         void Start()
@@ -32,6 +34,10 @@ namespace NisitSimulator.Net
             var nm = NetworkManager.Singleton;
             bool connected = nm != null && (nm.IsHost || nm.IsClient || nm.IsServer);
             bool isHost = nm != null && nm.IsHost;
+
+            // 2 ขั้น: ยังไม่ต่อ = โชว์สร้าง/เข้าห้อง · ต่อแล้ว = โชว์แต่งตัว
+            if (connectGroup && connectGroup.activeSelf == connected) connectGroup.SetActive(!connected);
+            if (customizeGroup && customizeGroup.activeSelf != connected) customizeGroup.SetActive(connected);
 
             if (startButton && startButton.gameObject.activeSelf != (connected && isHost))
                 startButton.gameObject.SetActive(connected && isHost);

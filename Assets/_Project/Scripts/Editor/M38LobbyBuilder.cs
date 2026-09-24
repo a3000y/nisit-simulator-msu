@@ -73,39 +73,39 @@ namespace NisitSimulator.EditorTools
 
             // ----- การ์ดซ้าย: เชื่อมต่อ + แต่งตัว (NetworkUI) -----
             var card = MakeCard(root, new Vector2(-470, -20), new Vector2(640, 720));
-            var status = MakeText(card, font, "สร้างห้อง หรือเข้าห้องเพื่อเริ่ม", new Vector2(0.5f, 1f), new Vector2(0, -20), new Vector2(600, 30), 18, new Color(0.9f, 0.92f, 1f), TextAlignmentOptions.Center);
+            var status = MakeText(card, font, "สร้างห้อง หรือเข้าห้องเพื่อเริ่ม", new Vector2(0.5f, 1f), new Vector2(0, -18), new Vector2(600, 30), 18, new Color(0.9f, 0.92f, 1f), TextAlignmentOptions.Center);
 
-            MakeLabel(card, font, "ชื่อผู้เล่น:", -56);
-            var nameIn = MakeInput(card, font, new Vector2(0, -78), new Vector2(560, 44));
-            nameIn.characterLimit = 16;
+            var cat = AssetDatabase.LoadAssetAtPath<NisitSimulator.Systems.CharacterCatalog>("Assets/_Project/Resources/CharacterCatalog.asset");
 
-            MakeLabel(card, font, "สีตัวละคร:", -124);
+            // ===== กลุ่ม A: สร้าง/เข้าห้อง (โชว์ตอนยังไม่เชื่อมต่อ) =====
+            var connGrp = MakeGroup(card, "ConnectGroup");
+            MakeLabel(connGrp, font, "สร้างห้องใหม่:", -66);
+            var host = MakeButton(connGrp, font, "Host (สร้างห้อง)", new Vector2(0, -94), new Vector2(560, 58), new Color(0.60f, 0.86f, 0.68f), 26);
+            MakeLabel(connGrp, font, "เข้าห้อง (LAN) — กรอก IP ของ Host:", -186);
+            var ip = MakeInput(connGrp, font, new Vector2(0, -214), new Vector2(560, 44));
+            var client = MakeButton(connGrp, font, "Join (เข้าห้อง)", new Vector2(0, -268), new Vector2(560, 52), new Color(0.62f, 0.80f, 0.96f), 24);
+            MakeLabel(connGrp, font, "— หรือเล่นออนไลน์ (Join Code) —", -348);
+            var code = MakeInput(connGrp, font, new Vector2(0, -376), new Vector2(560, 44));
+            var hostR = MakeButton(connGrp, font, "Host ออนไลน์", new Vector2(-145, -430), new Vector2(270, 50), new Color(0.55f, 0.82f, 0.70f), 20);
+            var joinR = MakeButton(connGrp, font, "Join ออนไลน์", new Vector2(145, -430), new Vector2(270, 50), new Color(0.60f, 0.74f, 0.96f), 20);
+
+            // ===== กลุ่ม B: แต่งตัว (โชว์เมื่อเข้าห้องแล้ว) =====
+            var custGrp = MakeGroup(card, "CustomizeGroup");
+            MakeText(custGrp, font, "แต่งตัวละครของคุณ", new Vector2(0.5f, 1f), new Vector2(0, -60), new Vector2(560, 40), 28, new Color(1f, 0.9f, 0.5f), TextAlignmentOptions.Center);
+            MakeLabel(custGrp, font, "ชื่อผู้เล่น:", -118);
+            var nameIn = MakeInput(custGrp, font, new Vector2(0, -140), new Vector2(560, 44)); nameIn.characterLimit = 16;
+            MakeLabel(custGrp, font, "สีตัวละคร:", -200);
             var pal = NetworkAvatar.Palette;
             var swatches = new Button[pal.Length];
-            float sw = 40f, gp2 = 8f; float tot = pal.Length * (sw + gp2) - gp2; float x0 = -tot / 2f + sw / 2f;
-            for (int i = 0; i < pal.Length; i++) swatches[i] = MakeSwatch(card, new Vector2(x0 + i * (sw + gp2), -150f), sw, pal[i]);
-
-            MakeLabel(card, font, "แบบตัวละคร:", -196);
-            var cat = AssetDatabase.LoadAssetAtPath<NisitSimulator.Systems.CharacterCatalog>("Assets/_Project/Resources/CharacterCatalog.asset");
+            float sw = 42f, gp2 = 10f; float tot = pal.Length * (sw + gp2) - gp2; float x0 = -tot / 2f + sw / 2f;
+            for (int i = 0; i < pal.Length; i++) swatches[i] = MakeSwatch(custGrp, new Vector2(x0 + i * (sw + gp2), -228f), sw, pal[i]);
+            MakeLabel(custGrp, font, "แบบตัวละคร:", -292);
             int mCount = (cat != null && cat.Count > 0) ? cat.Count : 1;
             var modelBtns = new Button[mCount];
-            float mw = 88f, mg = 8f; float mtot = mCount * (mw + mg) - mg; float mx0 = -mtot / 2f + mw / 2f;
+            float mw = 90f, mg = 8f; float mtot = mCount * (mw + mg) - mg; float mx0 = -mtot / 2f + mw / 2f;
             for (int i = 0; i < mCount; i++)
-            {
-                var b = MakeButton(card, font, cat != null ? cat.Label(i) : ("แบบ " + (i + 1)), new Vector2(mx0 + i * (mw + mg), -222f), new Vector2(mw, 46f), new Color(0.80f, 0.82f, 0.95f), 16);
-                modelBtns[i] = b;
-            }
-
-            MakeLabel(card, font, "IP ของ Host (LAN):", -284);
-            var ip = MakeInput(card, font, new Vector2(0, -306), new Vector2(560, 44));
-            var host = MakeButton(card, font, "Host (สร้างห้อง)", new Vector2(0, -360), new Vector2(560, 50), new Color(0.60f, 0.86f, 0.68f), 24);
-            var client = MakeButton(card, font, "Join", new Vector2(0, -418), new Vector2(560, 50), new Color(0.62f, 0.80f, 0.96f), 24);
-            var disc = MakeButton(card, font, "ออกจากห้อง", new Vector2(0, -476), new Vector2(560, 46), new Color(0.99f, 0.74f, 0.78f), 22);
-
-            MakeLabel(card, font, "— หรือออนไลน์ (Join Code) —", -520);
-            var code = MakeInput(card, font, new Vector2(0, -542), new Vector2(560, 44));
-            var hostR = MakeButton(card, font, "Host ออนไลน์", new Vector2(-145, -596), new Vector2(270, 48), new Color(0.55f, 0.82f, 0.70f), 20);
-            var joinR = MakeButton(card, font, "Join ออนไลน์", new Vector2(145, -596), new Vector2(270, 48), new Color(0.60f, 0.74f, 0.96f), 20);
+                modelBtns[i] = MakeButton(custGrp, font, cat != null ? cat.Label(i) : ("แบบ " + (i + 1)), new Vector2(mx0 + i * (mw + mg), -318f), new Vector2(mw, 46f), new Color(0.80f, 0.82f, 0.95f), 16);
+            var disc = MakeButton(custGrp, font, "ออกจากห้อง", new Vector2(0, -440), new Vector2(560, 48), new Color(0.99f, 0.74f, 0.78f), 22);
 
             var nui = canGo.AddComponent<NetworkUI>();
             nui.panel = card.gameObject; nui.statusText = status; nui.ipInput = ip; nui.nameInput = nameIn;
@@ -123,7 +123,9 @@ namespace NisitSimulator.EditorTools
 
             var lobby = canGo.AddComponent<LobbyController>();
             lobby.startButton = startBtn; lobby.backButton = backBtn; lobby.hintText = hint; lobby.playerListText = listText;
+            lobby.connectGroup = connGrp.gameObject; lobby.customizeGroup = custGrp.gameObject;
             startBtn.gameObject.SetActive(false);
+            custGrp.gameObject.SetActive(false);   // เริ่มต้นซ่อน แต่งตัว (โผล่เมื่อเข้าห้อง)
 
             // 5) เซฟฉาก + ตั้ง Build Settings (เมนู → ล็อบบี้ → เกม)
             EditorSceneManager.SaveScene(scene, LobbyPath);
@@ -147,6 +149,16 @@ namespace NisitSimulator.EditorTools
             var img = go.GetComponent<Image>(); img.color = col;
             var rt = img.rectTransform; rt.anchorMin = aMin; rt.anchorMax = aMax; rt.offsetMin = Vector2.zero; rt.offsetMax = Vector2.zero;
             return img;
+        }
+
+        // กลุ่มว่างเต็มการ์ด (ไว้ซ่อน/โชว์เป็นชุด)
+        static RectTransform MakeGroup(Transform parent, string name)
+        {
+            var go = new GameObject(name, typeof(RectTransform));
+            go.transform.SetParent(parent, false);
+            var rt = (RectTransform)go.transform;
+            rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one; rt.offsetMin = Vector2.zero; rt.offsetMax = Vector2.zero;
+            return rt;
         }
 
         static RectTransform MakeCard(Transform parent, Vector2 pos, Vector2 size)
