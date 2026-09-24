@@ -345,6 +345,12 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - [GameSession](Assets/_Project/Scripts/SaveLoad/GameSession.cs) เพิ่ม `PlayerAccessories int[]` (0=ไม่ใส่) · [PlayerModelSwapper](Assets/_Project/Scripts/Player/PlayerModelSwapper.cs) ใส่ให้ตอนเข้าเกม/สลับแบบ · [NetworkAvatar](Assets/_Project/Scripts/Net/NetworkAvatar.cs) เพิ่ม `netAcc` sync ให้ผู้เล่นอื่นเห็น (apply ใหม่เมื่อเปลี่ยนโมเดลด้วย)
 - [M37CharacterCreator](Assets/_Project/Scripts/Editor/M37CharacterCreator.cs): สร้าง `AccessoryCatalog` เริ่มต้น (4 ช่องว่าง, ไม่ทับถ้ามีแล้ว) + UI แถวเลือกของแต่ง · โมเดล full-body สลับเสื้อ/กางเกงแยกชิ้นไม่ได้ (ต้อง modular) จึงใช้ accessory ติดกระดูกแทน — ผู้ใช้ลาก prop 3D (Kenney/Quaternius) ใส่ options[]
 
+### ระบบความสัมพันธ์กับ NPC (life-sim) (2026-09-24)
+- 🤝 คุยกับ NPC → ค่าสนิทเพิ่ม → เลื่อนระดับ: คนแปลกหน้า → รู้จักกัน → เพื่อน → เพื่อนสนิท → เพื่อนซี้ (เกณฑ์ 0/20/50/90/140)
+- [RelationshipManager.cs](Assets/_Project/Scripts/Systems/RelationshipManager.cs): singleton สร้างอัตโนมัติ (ไม่ต้องวางในฉาก/re-bake) · เลื่อนระดับ = แจ้งเตือน + โบนัสความพอใจ (ซี้ = ได้เงินของขวัญ) · เซฟ/คืนค่า (id→คะแนน) ผ่าน SaveData
+- [TalkNPC.cs](Assets/_Project/Scripts/Interaction/TalkNPC.cs): ได้ค่าสนิท "ครั้งแรกของแต่ละวัน" (สไตล์แวะหาเพื่อนทุกวัน กันสแปม) · รางวัลความพอใจสเกลตามระดับ (สนิทมาก=คุยแล้วสุขกว่า) · ป้าย "กด E" โชว์หัวใจ ♥ ตามระดับ · คีย์คงที่จากชื่อ+ตำแหน่งเริ่ม
+- **logic ล้วน ไม่ต้อง re-bake** — เข้าเกมคุยได้เลย · ยังไม่มีหน้ารายชื่อเพื่อน (phone app) ไว้ทำต่อได้
+
 ---
 
 ## Version Control

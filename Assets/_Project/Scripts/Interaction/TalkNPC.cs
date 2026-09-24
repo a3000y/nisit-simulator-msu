@@ -1,6 +1,7 @@
 using UnityEngine;
 using NisitSimulator.Stats;
 using NisitSimulator.Systems;
+using NisitSimulator.TimeSystem;
 using NisitSimulator.UI;
 
 namespace NisitSimulator.Interaction
@@ -41,10 +42,16 @@ namespace NisitSimulator.Interaction
         public bool isVendor;
         public bool vendorIsShop = true;           // true = ร้านค้า(เก็บกระเป๋า) · false = โรงอาหาร(กินทันที)
 
+        [Header("ความสัมพันธ์")]
+        public int friendshipPerDay = 12;          // คะแนนสนิทที่ได้จากการคุยครั้งแรกของแต่ละวัน
+
         private Animator anim;
         private MenuNPCWalker walker;              // มี = NPC เดินไปมา
         private Transform player;
         private EventManager em;
+        private GameClock clock;
+        private string relId;                      // คีย์ความสัมพันธ์ (คงที่จากตำแหน่งเริ่ม)
+        private int lastFriendDay = -1;
         private int baseHash;                      // ท่าเดิม (ไว้กลับหลังทำท่า)
         private bool gesturing;
         private float gestureUntil, nextWave, nextIdle, lastReward = -999f, lastQuest = -999f;
@@ -56,6 +63,9 @@ namespace NisitSimulator.Interaction
             var p = GameObject.Find("Player");
             if (p != null) player = p.transform;
             if (isQuestGiver) em = Object.FindFirstObjectByType<EventManager>();
+            clock = Object.FindFirstObjectByType<GameClock>();
+            // คีย์คงที่ (จากตำแหน่งเริ่ม — คนเดินก็ยังคงคีย์เดิม)
+            relId = $"{npcName}_{Mathf.RoundToInt(transform.position.x)}_{Mathf.RoundToInt(transform.position.z)}";
         }
 
         void Update()
@@ -102,7 +112,16 @@ namespace NisitSimulator.Interaction
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(to), 3f * Time.deltaTime);
         }
 
-        public string GetPrompt() => $"กด E เพื่อคุยกับ {npcName}";
+        public string GetPrompt()
+        {
+            // โชว์ระดับความสัมพันธ์ + หัวใจ (เฉพาะ NPC ที่คุยได้ทั่วไป)
+            if (isVendor) return $"กด E ซื้อของกับ {npcName}";
+            int lvl = RelationshipManager.Instance.GetLevel(relId);
+            string hearts = RelationshipManager.Hearts(lvl);
+            return string.IsNullOrEmpty(hearts)
+                ? $"กด E เพื่อคุยกับ {npcName}"
+                : $"กด E เพื่อคุยกับ {npcName} <color=#FF7BA6>{hearts}</color>";
+        }
 
         public void Interact(GameObject who)
         {
@@ -142,7 +161,8 @@ namespace NisitSimulator.Interaction
                 }
             }
 
-            // ปกติ → คุย (สุ่มบทพูด) + พอใจเล็กน้อย
+            // ปกติ → คุย (สุ่มบทพูด) + พอใจ + เพิ่มความสนิท
+            int lvl = RelationshipManager.Instance.GetLevel(relId);
             string line = (lines != null && lines.Length > 0) ? lines[Random.Range(0, lines.Length)] : "สวัสดี!";
             HUDController.Toast($"{npcName}: {line}");    // Toast มีเสียงแจ้งเตือนในตัว
 
@@ -151,7 +171,15 @@ namespace NisitSimulator.Interaction
                 lastReward = Time.time;
                 var st = (who != null ? who.GetComponent<PlayerStats>() : null)
                          ?? Object.FindFirstObjectByType<PlayerStats>();
-                if (st != null) st.ChangeSatisfaction(satisfactionReward);
+                if (st != null) st.ChangeSatisfaction(satisfactionReward * (1f + 0.25f * lvl));   // สนิทมาก = คุยแล้วสุขใจกว่า
+            }
+
+            // ความสนิท: ได้จากการคุย "ครั้งแรกของแต่ละวัน" (สไตล์ life-sim — แวะหาเพื่อนทุกวัน)
+            int day = clock != null ? clock.Day : lastFriendDay + 1;
+            if (day > lastFriendDay)
+            {
+                lastFriendDay = day;
+                RelationshipManager.Instance.AddPoints(relId, npcName, friendshipPerDay);
             }
         }
 

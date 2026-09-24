@@ -43,6 +43,10 @@ namespace NisitSimulator.SaveLoad
         // ===== ผลกระทบทั้งวัน (PlayerEffects: ป่วย/ไฟแรง) =====
         public float fxMove = 1f, fxDrain = 1f, fxKnow = 1f;
 
+        // ===== ความสัมพันธ์กับ NPC (id -> คะแนนสนิท) =====
+        public List<string> relIds = new List<string>();
+        public List<int> relPoints = new List<int>();
+
         // ===== เป้าหมาย GoTo ที่ค้าง (เดินไปทำ) =====
         public bool hasObjective = false;
         public string objDoor = "";

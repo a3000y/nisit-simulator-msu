@@ -61,6 +61,10 @@ namespace NisitSimulator.SaveLoad
             var fx = Object.FindFirstObjectByType<PlayerEffects>();
             if (fx != null) { data.fxMove = fx.moveMult; data.fxDrain = fx.energyDrainMult; data.fxKnow = fx.knowledgeMult; }
 
+            // ความสัมพันธ์กับ NPC
+            var rel = Object.FindFirstObjectByType<RelationshipManager>();
+            if (rel != null) rel.CollectSave(data);
+
             // เข้าเรียนของวันนี้ (ทุกห้อง)
             data.classAttendance = new List<string>();
             foreach (var cs in Object.FindObjectsByType<ClassStation>(FindObjectsSortMode.None))
