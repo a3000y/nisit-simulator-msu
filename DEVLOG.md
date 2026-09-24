@@ -357,6 +357,15 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - 📚 **โบนัสจากเพื่อนสนิท**: เข้าเรียนได้ความรู้ +5%/เพื่อนสนิท (สูงสุด +25%) · เควสจาก NPC รางวัล +20%/ระดับความสนิท
 - 🎓 **Life Recap ตอนจบ**: หน้าจบโชว์ "เพื่อนที่ได้รู้จัก X คน (สนิท/ซี้)" ต่อจาก GPA/คะแนน · [EndScreenController](Assets/_Project/Scripts/UI/EndScreenController.cs)
 
+### ระบบความสำเร็จ (Achievements) + สถิติ (2026-09-24)
+- 🏆 **Achievements 13 อย่าง** — ขยัน/ตัวยง/มือปราบภารกิจ/เพื่อนเยอะ/ป็อปปูลาร์/ใจบุญ/นักหารายได้/เศรษฐี/เด็กเรียน/เกียรตินิยม/ขุมทรัพย์ความรู้/ใกล้จบ/เอาตัวรอด · ปลดล็อกอัตโนมัติ + แจ้งเตือน + โบนัสความพอใจ
+- 📊 **สถิติสะสม** — เวลาเล่น/วันในมหาลัย/คาบเรียน/เควส/ของขวัญ/เพื่อน/เงินรวม/ความรู้รวม
+- [StatsTracker.cs](Assets/_Project/Scripts/Systems/StatsTracker.cs): auto-singleton · poll ค่าเอง (เลี่ยงปัญหาลำดับ event) · เซฟ/คืนค่า
+- [AchievementManager.cs](Assets/_Project/Scripts/Systems/AchievementManager.cs): นิยามแบบ lambda เช็คทุก 2 วิ · เซฟรายการที่ปลดล็อก
+- [AchievementsUI.cs](Assets/_Project/Scripts/UI/AchievementsUI.cs): กด **J** → หน้าสมุด 2 คอลัมน์ (สถิติ | ความสำเร็จ) · สร้าง runtime ไม่ต้อง bake
+- Hooks: ClassStation(+คาบ), QuestSystem(+เควส), GiftUI(+ของขวัญ) · money/ความรู้/วัน/เวลา auto · [GameplayBootstrap](Assets/_Project/Scripts/SaveLoad/GameplayBootstrap.cs) สร้าง manager ตอนเข้าเกม · หน้าจบโชว์ "ความสำเร็จ X/Y"
+- **logic ล้วน ไม่ต้อง re-bake**
+
 ---
 
 ## Version Control

@@ -89,6 +89,7 @@ namespace NisitSimulator.UI
             int friends = rel.FriendCount;         // "เพื่อน" ขึ้นไป
             int close = rel.CountAtLeast(3);        // "เพื่อนสนิท" ขึ้นไป
             int best = rel.CountAtLeast(4);         // "เพื่อนซี้"
+            var am = AchievementManager.Instance;
 
             if (scoreText != null)
                 scoreText.text =
@@ -96,6 +97,7 @@ namespace NisitSimulator.UI
                     $"ชั้นปีที่ไปถึง: {year}\n" +
                     $"เกรดเฉลี่ย (GPA): {gpa:0.00}\n" +
                     $"เพื่อนที่ได้รู้จัก: {friends} คน" + (close > 0 ? $" (สนิท {close}" + (best > 0 ? $", ซี้ {best}" : "") + ")" : "") + "\n" +
+                    $"ความสำเร็จ: {am.UnlockedCount}/{am.Total}\n" +
                     $"คะแนนรวม: {score}";
         }
 

@@ -117,6 +117,7 @@ namespace NisitSimulator.UI
             if (!inv.RemoveByName(itemName)) { Close(); return; }
 
             target.ReceiveGift(itemName, friendship);
+            StatsTracker.Instance.Add("gifts", 1);
             SFXManager.Coin();
 
             if (inv.TotalCount() == 0) Close();

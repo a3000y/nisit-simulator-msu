@@ -65,6 +65,12 @@ namespace NisitSimulator.SaveLoad
             var rel = Object.FindFirstObjectByType<RelationshipManager>();
             if (rel != null) rel.CollectSave(data);
 
+            // สถิติ + ความสำเร็จ
+            var st2 = Object.FindFirstObjectByType<StatsTracker>();
+            if (st2 != null) st2.CollectSave(data);
+            var ach = Object.FindFirstObjectByType<AchievementManager>();
+            if (ach != null) ach.CollectSave(data);
+
             // เข้าเรียนของวันนี้ (ทุกห้อง)
             data.classAttendance = new List<string>();
             foreach (var cs in Object.FindObjectsByType<ClassStation>(FindObjectsSortMode.None))

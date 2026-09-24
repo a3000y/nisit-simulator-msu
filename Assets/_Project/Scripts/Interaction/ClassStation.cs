@@ -97,6 +97,7 @@ namespace NisitSimulator.Interaction
                 stats.AddExp(expPerClass);
                 stats.ChangeEnergy(-energyCost);
                 stats.ChangeSatisfaction(3f);
+                StatsTracker.Instance.Add("classes", 1);
                 HUDController.Toast($"เรียนจบคาบ +{k:0} ความรู้"
                     + (kMult > 1f ? " (ไฟแรง!)" : "")
                     + (closeFriends > 0 ? $" (เพื่อนติว +{Mathf.Min(closeFriends,5)*5}%)" : ""));

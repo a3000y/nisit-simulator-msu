@@ -1,6 +1,8 @@
 using UnityEngine;
 using NisitSimulator.Core;
 using NisitSimulator.TimeSystem;
+using NisitSimulator.Systems;
+using NisitSimulator.UI;
 
 namespace NisitSimulator.SaveLoad
 {
@@ -13,6 +15,11 @@ namespace NisitSimulator.SaveLoad
         void Start()
         {
             SaveManager.ApplyIfPending();
+
+            // สร้างระบบสถิติ/ความสำเร็จ + หน้ากด J (หลังโหลดเซฟ → baseline/คืนค่าถูกต้อง)
+            _ = StatsTracker.Instance;
+            _ = AchievementManager.Instance;
+            AchievementsUI.EnsureExists();
 
             clock = Object.FindFirstObjectByType<GameClock>();
             if (clock != null) clock.OnDayChanged += OnDay;

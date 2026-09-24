@@ -47,6 +47,11 @@ namespace NisitSimulator.SaveLoad
         public List<string> relIds = new List<string>();
         public List<int> relPoints = new List<int>();
 
+        // ===== สถิติสะสม + ความสำเร็จ =====
+        public List<string> statKeys = new List<string>();
+        public List<float> statVals = new List<float>();
+        public List<string> unlockedAchievements = new List<string>();
+
         // ===== เป้าหมาย GoTo ที่ค้าง (เดินไปทำ) =====
         public bool hasObjective = false;
         public string objDoor = "";

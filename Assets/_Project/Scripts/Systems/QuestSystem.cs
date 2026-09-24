@@ -186,6 +186,7 @@ namespace NisitSimulator.Systems
                     }
                     HUDController.Toast($"ภารกิจสำเร็จ! {q.desc}  (+{q.rewardMoney}฿)");
                     NisitSimulator.Core.SFXManager.Success();   // เสียงสำเร็จ (เด่นกว่า notify)
+                    StatsTracker.Instance.Add("quests", 1);
                 }
             }
             UpdateUI();
