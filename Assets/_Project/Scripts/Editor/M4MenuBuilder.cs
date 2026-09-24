@@ -229,7 +229,7 @@ namespace NisitSimulator.EditorTools
             var anchor = new Vector2(ax, ay);
 
             // ฐานเงาเข้ม (หลังปุ่ม)
-            var baseGo = new GameObject(label + "Base", typeof(Image));
+            var baseGo = new GameObject(label + "BtnBase", typeof(Image));   // ชื่อให้ตรงกับที่ MenuPolish หา (…BtnBase) จะได้ย้ายตามปุ่มไปซ้าย
             baseGo.transform.SetParent(parent, false);
             var bimg = baseGo.GetComponent<Image>();
             bimg.sprite = sprite; bimg.type = Image.Type.Sliced; bimg.color = Shift(col, -0.26f); bimg.raycastTarget = false;
