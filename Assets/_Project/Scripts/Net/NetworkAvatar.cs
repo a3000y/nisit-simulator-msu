@@ -217,6 +217,13 @@ namespace NisitSimulator.Net
             netModel.Value = model;    // → OnModelChanged สลับโมเดลให้ผู้อื่นเห็น
         }
 
+        // owner ดันของแต่งจาก GameSession ขึ้นเครือข่าย (เรียกจากล็อบบี้ตอนเปลี่ยน)
+        public void SetAccessories()
+        {
+            if (!IsOwner) return;
+            netAcc.Value = new FixedString64Bytes(Trunc32(CharacterAccessories.Pack(GameSession.PlayerAccessories)));
+        }
+
         void OnModelChanged(int prev, int cur)
         {
             if (IsOwner) return;   // ตัวเราเปลี่ยนที่ Player จริง (PlayerModelSwapper) ไม่ใช่ avatar

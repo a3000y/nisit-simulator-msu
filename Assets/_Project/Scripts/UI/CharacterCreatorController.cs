@@ -50,7 +50,7 @@ namespace NisitSimulator.UI
             if (nameInput != null)
             {
                 nameInput.text = GameSession.PlayerName;
-                nameInput.onValueChanged.AddListener(s => GameSession.PlayerName = s);
+                nameInput.onValueChanged.AddListener(s => { GameSession.PlayerName = s; PushToNetwork(); });
             }
 
             var cat = CharacterCatalog.Load();
@@ -118,6 +118,7 @@ namespace NisitSimulator.UI
             model = i; GameSession.PlayerModel = i;
             SpawnPreview(i);
             HighlightModel();
+            PushToNetwork();
         }
 
         void PickColor(int i)
@@ -125,6 +126,17 @@ namespace NisitSimulator.UI
             color = i; GameSession.PlayerColor = i;
             if (current != null) NetworkAvatar.ApplyColor(current, i);
             HighlightColor();
+            PushToNetwork();
+        }
+
+        // sync การแต่งตัวขึ้นเครือข่าย (ใช้ในล็อบบี้ MP — ถ้าเล่นคนเดียวจะ no-op)
+        void PushToNetwork()
+        {
+            var nm = Unity.Netcode.NetworkManager.Singleton;
+            if (nm == null || !nm.IsClient || nm.LocalClient == null) return;
+            var po = nm.LocalClient.PlayerObject;
+            var av = po != null ? po.GetComponent<NetworkAvatar>() : null;
+            if (av != null) { av.SetIdentity(GameSession.PlayerName, GameSession.PlayerColor, GameSession.PlayerModel); av.SetAccessories(); }
         }
 
         // ---------- ของแต่ง (หมวก/แว่น/...) ----------
@@ -174,6 +186,7 @@ namespace NisitSimulator.UI
             GameSession.PlayerAccessories[slot] = value;
             if (current != null) CharacterAccessories.Apply(current.transform, GameSession.PlayerAccessories);
             HighlightAccessories();
+            PushToNetwork();
         }
 
         void PickDifficulty(int i)

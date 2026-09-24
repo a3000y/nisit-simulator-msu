@@ -61,6 +61,24 @@ namespace NisitSimulator.EditorTools
             };
             nmGo.AddComponent<CoopBonus>();
 
+            // 3.5) เวทีพรีวิวตัวละคร 3D (วางไกลๆ) — ให้หน้าแต่งตัวในล็อบบี้เห็นตัวละครเหมือนเล่นคนเดียว
+            var stage = new GameObject("LobbyPreviewStage");
+            stage.transform.position = new Vector3(1200f, 0f, 1200f);
+            var modelRoot = new GameObject("ModelRoot").transform;
+            modelRoot.SetParent(stage.transform, false); modelRoot.localPosition = Vector3.zero;
+            var keyL = new GameObject("Key").AddComponent<Light>();
+            keyL.transform.SetParent(stage.transform, false); keyL.transform.localPosition = new Vector3(1.2f, 2.4f, 2.0f);
+            keyL.type = LightType.Point; keyL.intensity = 14f; keyL.range = 30f; keyL.color = new Color(1f, 0.97f, 0.9f);
+            var fillL = new GameObject("Fill").AddComponent<Light>();
+            fillL.transform.SetParent(stage.transform, false); fillL.transform.localPosition = new Vector3(-1.4f, 1.6f, 1.8f);
+            fillL.type = LightType.Point; fillL.intensity = 7f; fillL.range = 30f; fillL.color = new Color(0.85f, 0.9f, 1f);
+            var pcamGo = new GameObject("PreviewCam"); pcamGo.transform.SetParent(stage.transform, false);
+            pcamGo.transform.localPosition = new Vector3(0f, 1.0f, 2.7f);
+            var pcam = pcamGo.AddComponent<Camera>();
+            pcam.transform.LookAt(stage.transform.position + new Vector3(0f, 0.95f, 0f));
+            pcam.clearFlags = CameraClearFlags.SolidColor; pcam.backgroundColor = new Color(0.16f, 0.18f, 0.26f);
+            pcam.fieldOfView = 30f; pcam.nearClipPlane = 0.1f; pcam.farClipPlane = 12f; pcam.enabled = false;
+
             // 4) Canvas
             var canGo = new GameObject("Lobby Canvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             canGo.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
@@ -89,27 +107,55 @@ namespace NisitSimulator.EditorTools
             var hostR = MakeButton(connGrp, font, "Host ออนไลน์", new Vector2(-145, -430), new Vector2(270, 50), new Color(0.55f, 0.82f, 0.70f), 20);
             var joinR = MakeButton(connGrp, font, "Join ออนไลน์", new Vector2(145, -430), new Vector2(270, 50), new Color(0.60f, 0.74f, 0.96f), 20);
 
-            // ===== กลุ่ม B: แต่งตัว (โชว์เมื่อเข้าห้องแล้ว) =====
+            // ===== กลุ่ม B: แต่งตัว (โชว์เมื่อเข้าห้องแล้ว) — พรีวิว 3D + สี/แบบ/ของแต่ง =====
             var custGrp = MakeGroup(card, "CustomizeGroup");
-            MakeText(custGrp, font, "แต่งตัวละครของคุณ", new Vector2(0.5f, 1f), new Vector2(0, -60), new Vector2(560, 40), 28, new Color(1f, 0.9f, 0.5f), TextAlignmentOptions.Center);
-            MakeLabel(custGrp, font, "ชื่อผู้เล่น:", -118);
-            var nameIn = MakeInput(custGrp, font, new Vector2(0, -140), new Vector2(560, 44)); nameIn.characterLimit = 16;
-            MakeLabel(custGrp, font, "สีตัวละคร:", -200);
+            MakeText(custGrp, font, "แต่งตัวละครของคุณ", new Vector2(0.5f, 1f), new Vector2(0, -44), new Vector2(560, 40), 26, new Color(1f, 0.9f, 0.5f), TextAlignmentOptions.Center);
+
+            // พรีวิว 3D (ซ้าย)
+            var rawGo = new GameObject("Preview", typeof(RectTransform), typeof(RawImage));
+            rawGo.transform.SetParent(custGrp, false);
+            var rrt = (RectTransform)rawGo.transform; rrt.anchorMin = rrt.anchorMax = new Vector2(0.5f, 1f); rrt.pivot = new Vector2(0.5f, 1f);
+            rrt.anchoredPosition = new Vector2(-158f, -92f); rrt.sizeDelta = new Vector2(248f, 336f);
+            var rawImg = rawGo.GetComponent<RawImage>(); rawImg.color = Color.white;
+
+            // ขวา: ชื่อ/สี/แบบ
+            float rx = 148f;
+            MakeLabel(custGrp, font, "ชื่อ:", -84); var nameIn = MakeInput(custGrp, font, new Vector2(rx, -108), new Vector2(300, 44)); nameIn.characterLimit = 16;
+            MakeLabel(custGrp, font, "สี:", -162);
             var pal = NetworkAvatar.Palette;
             var swatches = new Button[pal.Length];
-            float sw = 42f, gp2 = 10f; float tot = pal.Length * (sw + gp2) - gp2; float x0 = -tot / 2f + sw / 2f;
-            for (int i = 0; i < pal.Length; i++) swatches[i] = MakeSwatch(custGrp, new Vector2(x0 + i * (sw + gp2), -228f), sw, pal[i]);
-            MakeLabel(custGrp, font, "แบบตัวละคร:", -292);
+            float sw = 30f, gp2 = 4f; float tot = pal.Length * (sw + gp2) - gp2; float x0 = rx - tot / 2f + sw / 2f;
+            for (int i = 0; i < pal.Length; i++) swatches[i] = MakeSwatch(custGrp, new Vector2(x0 + i * (sw + gp2), -190f), sw, pal[i]);
+            MakeLabel(custGrp, font, "แบบ:", -238);
             int mCount = (cat != null && cat.Count > 0) ? cat.Count : 1;
             var modelBtns = new Button[mCount];
-            float mw = 90f, mg = 8f; float mtot = mCount * (mw + mg) - mg; float mx0 = -mtot / 2f + mw / 2f;
+            float mw = 56f, mg = 5f; float mtot = mCount * (mw + mg) - mg; float mx0 = rx - mtot / 2f + mw / 2f;
             for (int i = 0; i < mCount; i++)
-                modelBtns[i] = MakeButton(custGrp, font, cat != null ? cat.Label(i) : ("แบบ " + (i + 1)), new Vector2(mx0 + i * (mw + mg), -318f), new Vector2(mw, 46f), new Color(0.80f, 0.82f, 0.95f), 16);
-            var disc = MakeButton(custGrp, font, "ออกจากห้อง", new Vector2(0, -440), new Vector2(560, 48), new Color(0.99f, 0.74f, 0.78f), 22);
+                modelBtns[i] = MakeButton(custGrp, font, (i + 1).ToString(), new Vector2(mx0 + i * (mw + mg), -264f), new Vector2(mw, 44f), new Color(0.80f, 0.82f, 0.95f), 18);
 
+            // ของแต่ง (4 ช่อง) — เต็มความกว้างด้านล่าง
+            string[] slotNames = { "หมวก", "แว่นตา", "กระเป๋าเป้", "ของถือ" };
+            var accSlots = new NisitSimulator.UI.CharacterCreatorController.AccessorySlotUI[slotNames.Length];
+            for (int s = 0; s < slotNames.Length; s++)
+            {
+                float ry = -448f - s * 46f;
+                MakeText(custGrp, font, slotNames[s], new Vector2(0.5f, 1f), new Vector2(-248f, ry), new Vector2(120, 34), 16, new Color(0.85f, 0.88f, 1f), TextAlignmentOptions.Left);
+                var btns = new Button[4];
+                for (int b = 0; b < 4; b++)
+                    btns[b] = MakeButton(custGrp, font, "-", new Vector2(-95f + b * 108f, ry), new Vector2(100, 38), new Color(0.86f, 0.82f, 0.72f), 15);
+                accSlots[s] = new NisitSimulator.UI.CharacterCreatorController.AccessorySlotUI { buttons = btns };
+            }
+
+            var disc = MakeButton(custGrp, font, "ออกจากห้อง", new Vector2(0, -652), new Vector2(560, 46), new Color(0.99f, 0.74f, 0.78f), 22);
+
+            // CharacterCreatorController = พรีวิว + แต่งตัว (บน custGrp → เปิดกล้องเฉพาะตอนโชว์)
+            var cc = custGrp.gameObject.AddComponent<NisitSimulator.UI.CharacterCreatorController>();
+            cc.nameInput = nameIn; cc.colorButtons = swatches; cc.modelButtons = modelBtns; cc.accessorySlots = accSlots;
+            cc.previewCamera = pcam; cc.previewRoot = modelRoot; cc.previewImage = rawImg;
+
+            // NetworkUI = เชื่อมต่ออย่างเดียว (ไม่จับ name/color/model — CharacterCreatorController จัดการ + sync)
             var nui = canGo.AddComponent<NetworkUI>();
-            nui.panel = card.gameObject; nui.statusText = status; nui.ipInput = ip; nui.nameInput = nameIn;
-            nui.colorButtons = swatches; nui.modelButtons = modelBtns;
+            nui.panel = card.gameObject; nui.statusText = status; nui.ipInput = ip;
             nui.hostButton = host; nui.clientButton = client; nui.disconnectButton = disc;
             nui.codeInput = code; nui.hostRelayButton = hostR; nui.joinRelayButton = joinR;
 
