@@ -10,6 +10,9 @@ namespace NisitSimulator.SaveLoad
         public static bool IsContinue = false;   // true = เข้าเกมแบบ "เล่นต่อ" — ไม่ถูกกิน ใช้เช็คตอนเล่น
                                                  //   (เช่น DailyAllowance ไม่ให้เงินตั้งต้นซ้ำ) กันปัญหาลำดับ Start()
 
+        public static bool OpenNetworkOnStart = false;  // true = เปิดแผง Multiplayer (F3) อัตโนมัติตอนเข้าเกม
+                                                        //   (ตั้งจากปุ่ม "เล่นหลายคน" ในเมนู) NetworkUI อ่านครั้งเดียว
+
         // คณะของผู้เล่น (0=IT, 1=บริหาร, 2=วิทย์, 3=นิเทศ) — เป็นค่าต่อผู้เล่น เผื่อ multiplayer ในอนาคต
         public static int SelectedFacultyIndex = 0;
 

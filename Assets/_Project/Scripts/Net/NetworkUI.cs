@@ -48,6 +48,13 @@ namespace NisitSimulator.Net
             HighlightColor(GameSession.PlayerColor);
             HighlightModel(GameSession.PlayerModel);
 
+            // เปิดแผงอัตโนมัติถ้ามาจากปุ่ม "เล่นหลายคน" ในเมนู (อ่านครั้งเดียวแล้วเคลียร์)
+            if (panel != null)
+            {
+                if (GameSession.OpenNetworkOnStart) panel.SetActive(true);
+                GameSession.OpenNetworkOnStart = false;
+            }
+
             Refresh();
         }
 
@@ -164,7 +171,7 @@ namespace NisitSimulator.Net
             {
                 var nm = NetworkManager.Singleton;
                 statusText.text = !on
-                    ? "ยังไม่เชื่อมต่อ"
+                    ? $"เล่น LAN: กด Host (IP เครื่องนี้ {LocalIP()})\nหรือกรอก IP เพื่อนแล้วกด Join · F3 ปิด/เปิด"
                     : (nm.IsHost ? $"Host! บอกเพื่อน Join IP: {LocalIP()}"
                                  : nm.IsServer ? "เซิร์ฟเวอร์"
                                  : "เชื่อมต่อแล้ว (ผู้เล่น)");

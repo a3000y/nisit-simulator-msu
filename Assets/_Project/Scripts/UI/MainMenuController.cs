@@ -22,8 +22,8 @@ namespace NisitSimulator.UI
         {
             Time.timeScale = 1f;
 
-            if (newGameButton) newGameButton.onClick.AddListener(NewGame);
-            if (multiplayerButton) multiplayerButton.onClick.AddListener(ShowComingSoon);
+            if (newGameButton) newGameButton.onClick.AddListener(() => { GameSession.OpenNetworkOnStart = false; NewGame(); });
+            if (multiplayerButton) multiplayerButton.onClick.AddListener(MultiplayerGame);
             if (continueButton)
             {
                 continueButton.onClick.AddListener(Continue);
@@ -40,7 +40,15 @@ namespace NisitSimulator.UI
             if (comingSoonPanel) comingSoonPanel.SetActive(false);
         }
 
-        // ปุ่มเล่นหลายคน (ยังไม่เปิด) — แสดงป็อปอัปแจ้งว่ากำลังพัฒนา
+        // ปุ่มเล่นหลายคน — เริ่มเกมใหม่แล้วเปิดแผง Multiplayer (F3) อัตโนมัติ
+        //   (เล่น LAN ได้เลย: คนหนึ่งกด Host อีกคนกรอก IP แล้ว Join · Relay ข้ามเน็ตยังไม่เปิด)
+        public void MultiplayerGame()
+        {
+            GameSession.OpenNetworkOnStart = true;
+            NewGame();   // เลือกคณะ (ถ้ามี) แล้วเข้าเกม — NetworkUI จะเปิดแผงให้เอง
+        }
+
+        // (คงไว้เผื่อเรียกจากที่อื่น) ป็อปอัป "กำลังพัฒนา"
         public void ShowComingSoon()
         {
             if (comingSoonPanel != null) comingSoonPanel.SetActive(true);
@@ -78,6 +86,7 @@ namespace NisitSimulator.UI
         {
             GameSession.PendingLoad = true;
             GameSession.IsContinue = true;    // เล่นต่อ → เงินคืนจากเซฟ ไม่บวกเงินตั้งต้นซ้ำ
+            GameSession.OpenNetworkOnStart = false;
             SceneManager.LoadScene(GameSession.GameplayScene);
         }
 
