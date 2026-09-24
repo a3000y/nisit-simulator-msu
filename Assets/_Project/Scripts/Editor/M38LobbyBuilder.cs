@@ -87,10 +87,9 @@ namespace NisitSimulator.EditorTools
             var root = canGo.transform;
 
             MakeImage(root, "BG", Vector2.zero, Vector2.one, new Color(0.10f, 0.13f, 0.21f, 1f));
-            MakeText(root, font, "ล็อบบี้ — เล่นหลายคน", new Vector2(0.5f, 1f), new Vector2(0, -70), new Vector2(900, 70), 48, new Color(1f, 0.9f, 0.5f), TextAlignmentOptions.Center);
 
             // ----- การ์ดซ้าย: เชื่อมต่อ + แต่งตัว (NetworkUI) -----
-            var card = MakeCard(root, new Vector2(-470, -20), new Vector2(640, 720));
+            var card = MakeCard(root, new Vector2(-470, 0), new Vector2(640, 860));
             var status = MakeText(card, font, "สร้างห้อง หรือเข้าห้องเพื่อเริ่ม", new Vector2(0.5f, 1f), new Vector2(0, -18), new Vector2(600, 30), 18, new Color(0.9f, 0.92f, 1f), TextAlignmentOptions.Center);
 
             var cat = AssetDatabase.LoadAssetAtPath<NisitSimulator.Systems.CharacterCatalog>("Assets/_Project/Resources/CharacterCatalog.asset");
@@ -160,7 +159,7 @@ namespace NisitSimulator.EditorTools
             nui.codeInput = code; nui.hostRelayButton = hostR; nui.joinRelayButton = joinR;
 
             // ----- การ์ดขวา: รายชื่อผู้เล่น + คำแนะนำ + เริ่มเกม -----
-            var rcard = MakeCard(root, new Vector2(470, -20), new Vector2(640, 720));
+            var rcard = MakeCard(root, new Vector2(470, 0), new Vector2(640, 860));
             MakeText(rcard, font, "ห้องของเรา", new Vector2(0.5f, 1f), new Vector2(0, -20), new Vector2(600, 40), 30, Color.white, TextAlignmentOptions.Center);
             var listText = MakeText(rcard, font, "ยังไม่มีผู้เล่นในห้อง", new Vector2(0.5f, 1f), new Vector2(0, -80), new Vector2(560, 380), 24, new Color(0.92f, 0.94f, 1f), TextAlignmentOptions.Top);
             var hint = MakeText(rcard, font, "", new Vector2(0.5f, 0f), new Vector2(0, 150), new Vector2(560, 80), 20, new Color(0.8f, 0.85f, 0.95f), TextAlignmentOptions.Center);
