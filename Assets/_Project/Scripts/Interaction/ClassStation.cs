@@ -4,6 +4,7 @@ using NisitSimulator.Stats;
 using NisitSimulator.TimeSystem;
 using NisitSimulator.Player;
 using NisitSimulator.UI;
+using NisitSimulator.SaveLoad;
 
 namespace NisitSimulator.Interaction
 {
@@ -27,6 +28,33 @@ namespace NisitSimulator.Interaction
         {
             clock = Object.FindFirstObjectByType<GameClock>();
             if (clock != null) clock.OnDayChanged += _ => attendedToday.Clear(); // วันใหม่ เข้าเรียนได้อีก
+
+            // เล่นต่อ → คืน "คาบที่เข้าเรียนไปแล้ววันนี้" ของห้องนี้ (กันเข้าเรียนซ้ำ)
+            if (GameSession.IsContinue)
+            {
+                var d = SaveSystem.Load();
+                if (d != null && d.classAttendance != null)
+                {
+                    string key = StationKey();
+                    foreach (var e in d.classAttendance)
+                    {
+                        int c = e.LastIndexOf(':');
+                        if (c > 0 && e.Substring(0, c) == key && int.TryParse(e.Substring(c + 1), out int s))
+                            attendedToday.Add(s);
+                    }
+                }
+            }
+        }
+
+        // คีย์ประจำห้อง (ชื่อ + ตำแหน่งปัด) — คงที่ข้ามการโหลด ตราบใดที่ห้องไม่ถูกย้าย
+        private string StationKey()
+            => $"{name}_{Mathf.RoundToInt(transform.position.x)}_{Mathf.RoundToInt(transform.position.z)}";
+
+        // ให้ SaveManager เรียกเก็บคาบที่เข้าเรียนแล้วของห้องนี้
+        public void CollectAttendance(List<string> outList)
+        {
+            string key = StationKey();
+            foreach (int s in attendedToday) outList.Add(key + ":" + s);
         }
 
         public string GetPrompt() => "กด E เพื่อเข้าเรียน";

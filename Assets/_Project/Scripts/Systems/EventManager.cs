@@ -5,6 +5,7 @@ using TMPro;
 using NisitSimulator.Stats;
 using NisitSimulator.Player;
 using NisitSimulator.UI;
+using NisitSimulator.SaveLoad;
 
 namespace NisitSimulator.Systems
 {
@@ -73,9 +74,38 @@ namespace NisitSimulator.Systems
                 if (choiceButtons[i] != null) choiceButtons[i].onClick.AddListener(() => Choose(idx));
             }
             if (panel != null) panel.SetActive(false);
+
+            // เล่นต่อ → คืนภารกิจเดินไปทำ (GoTo) ที่ยังค้าง + โผล่เสาแสงอีกครั้ง
+            if (GameSession.IsContinue)
+            {
+                var d = SaveSystem.Load();
+                if (d != null && d.hasObjective && !string.IsNullOrEmpty(d.objDoor))
+                {
+                    var c = new Choice
+                    {
+                        kind = Kind.GoTo, targetDoor = d.objDoor, objectiveText = d.objText,
+                        energy = d.objEnergy, health = d.objHealth, hunger = d.objHunger,
+                        knowledge = d.objKnowledge, satisfaction = d.objSatisfaction,
+                        money = d.objMoney, exp = d.objExp,
+                    };
+                    SetObjective(c);
+                }
+            }
         }
 
         void OnDestroy() { if (prog != null) prog.OnDayInYearChanged -= OnDay; }
+
+        // ให้ SaveManager เก็บภารกิจ GoTo ที่ค้างอยู่
+        public void CollectObjective(SaveData d)
+        {
+            if (objective == null) { d.hasObjective = false; return; }
+            d.hasObjective = true;
+            d.objDoor = objective.targetDoor;
+            d.objText = objective.objectiveText;
+            d.objEnergy = objective.energy; d.objHealth = objective.health; d.objHunger = objective.hunger;
+            d.objKnowledge = objective.knowledge; d.objSatisfaction = objective.satisfaction;
+            d.objMoney = objective.money; d.objExp = objective.exp;
+        }
 
         void Update()
         {

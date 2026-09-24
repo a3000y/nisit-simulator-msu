@@ -4,6 +4,7 @@ using TMPro;
 using NisitSimulator.Stats;
 using NisitSimulator.TimeSystem;
 using NisitSimulator.UI;
+using NisitSimulator.SaveLoad;
 
 namespace NisitSimulator.Systems
 {
@@ -65,7 +66,43 @@ namespace NisitSimulator.Systems
             }
             if (clock != null) clock.OnDayChanged += OnNewDay;
 
-            NewDay();
+            // เล่นต่อ → คืนเควสของวันนี้ (ไม่สุ่มใหม่/ไม่รีเซ็ตความคืบหน้า) · ไม่ได้ = เกมใหม่/เซฟเก่า → สุ่มปกติ
+            if (!(GameSession.IsContinue && TryRestore())) NewDay();
+        }
+
+        // คืนเควสจากเซฟ — คืน true ถ้าคืนสำเร็จ
+        bool TryRestore()
+        {
+            var d = SaveSystem.Load();
+            if (d == null || !d.hasQuestData || d.quests == null || d.quests.Count == 0) return false;
+
+            active.Clear();
+            foreach (var q in d.quests)
+                active.Add(new Quest(q.desc, (Metric)q.metric, q.target, q.rewardMoney, q.rewardExp, q.rewardSat) { done = q.done });
+
+            kToday = d.questAccK; xToday = d.questAccX; mToday = d.questAccM; mSpentToday = d.questAccSpent;
+            lastK = d.questLastK; lastM = d.questLastM; lastX = d.questLastX;
+
+            // อัปเดตหน้าจออย่างเดียว ไม่แจกรางวัลตอนนี้ — เพราะค่าสถานะอาจยังไม่ถูกคืน
+            // (ค่าเริ่มต้นอาจสูงกว่าเซฟ → เควส "ให้ถึง X" จะสำเร็จผิด) ปล่อยให้ Refresh ปกติแจกหลังสถานะคืนแล้ว
+            foreach (var q in active) q.progress = Value(q.metric);
+            UpdateUI();
+            return true;
+        }
+
+        // ให้ SaveManager เก็บเควส + ตัวสะสมของวันนี้
+        public void CollectSave(SaveData d)
+        {
+            d.hasQuestData = true;
+            d.quests = new List<QuestSave>();
+            foreach (var q in active)
+                d.quests.Add(new QuestSave
+                {
+                    desc = q.desc, metric = (int)q.metric, target = q.target,
+                    rewardMoney = q.rewardMoney, rewardExp = q.rewardExp, rewardSat = q.rewardSat, done = q.done
+                });
+            d.questAccK = kToday; d.questAccX = xToday; d.questAccM = mToday; d.questAccSpent = mSpentToday;
+            d.questLastK = lastK; d.questLastM = lastM; d.questLastX = lastX;
         }
 
         void OnDestroy()

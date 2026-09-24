@@ -1,7 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 using NisitSimulator.Stats;
 using NisitSimulator.Systems;
 using NisitSimulator.TimeSystem;
+using NisitSimulator.Player;
+using NisitSimulator.Interaction;
 
 namespace NisitSimulator.SaveLoad
 {
@@ -45,6 +48,23 @@ namespace NisitSimulator.SaveLoad
 
             var clock = Object.FindFirstObjectByType<GameClock>();
             if (clock != null) { data.gameDay = clock.Day; data.gameMinutes = clock.TotalMinutes; }  // เวลา
+
+            // เควสรายวัน + ตัวสะสม
+            var quest = Object.FindFirstObjectByType<QuestSystem>();
+            if (quest != null) quest.CollectSave(data);
+
+            // ภารกิจ GoTo ที่ค้าง
+            var evt = Object.FindFirstObjectByType<EventManager>();
+            if (evt != null) evt.CollectObjective(data);
+
+            // ผลกระทบทั้งวัน (ป่วย/ไฟแรง)
+            var fx = Object.FindFirstObjectByType<PlayerEffects>();
+            if (fx != null) { data.fxMove = fx.moveMult; data.fxDrain = fx.energyDrainMult; data.fxKnow = fx.knowledgeMult; }
+
+            // เข้าเรียนของวันนี้ (ทุกห้อง)
+            data.classAttendance = new List<string>();
+            foreach (var cs in Object.FindObjectsByType<ClassStation>(FindObjectsSortMode.None))
+                cs.CollectAttendance(data.classAttendance);
 
             SaveSystem.Save(data);
         }

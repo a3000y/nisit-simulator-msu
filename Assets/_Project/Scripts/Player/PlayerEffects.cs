@@ -1,6 +1,7 @@
 using UnityEngine;
 using NisitSimulator.TimeSystem;
 using NisitSimulator.UI;
+using NisitSimulator.SaveLoad;
 
 namespace NisitSimulator.Player
 {
@@ -18,6 +19,13 @@ namespace NisitSimulator.Player
         {
             clock = Object.FindFirstObjectByType<GameClock>();
             if (clock != null) clock.OnDayChanged += OnNewDay;
+
+            // เล่นต่อ → คืนอาการที่ค้างจากเซฟ (ป่วย/ไฟแรง)
+            if (GameSession.IsContinue)
+            {
+                var d = SaveSystem.Load();
+                if (d != null) { moveMult = d.fxMove; energyDrainMult = d.fxDrain; knowledgeMult = d.fxKnow; }
+            }
         }
 
         void OnDestroy() { if (clock != null) clock.OnDayChanged -= OnNewDay; }
