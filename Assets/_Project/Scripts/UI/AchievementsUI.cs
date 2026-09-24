@@ -92,7 +92,7 @@ namespace NisitSimulator.UI
             foreach (var a in am.All)
             {
                 bool got = am.IsUnlocked(a.id);
-                string mark = got ? "<color=#7BE38B>✔</color>" : "<color=#6B7386>✖</color>";
+                string mark = got ? "<color=#7BE38B>[สำเร็จ]</color>" : "<color=#6B7386>[ล็อก]</color>";
                 string title = got ? a.title : $"<color=#9AA6BF>{a.title}</color>";
                 sb.AppendLine($"{mark} {title}");
                 sb.AppendLine($"<size=68%><color=#8A93AB>{a.desc}</color></size>");
