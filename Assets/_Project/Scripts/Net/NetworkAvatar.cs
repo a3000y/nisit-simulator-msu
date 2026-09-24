@@ -35,6 +35,9 @@ namespace NisitSimulator.Net
             0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         readonly NetworkVariable<int> netModel = new NetworkVariable<int>(
             0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        // ของแต่ง (หมวก/แว่น/...) — เก็บเป็นสตริง "0,1,0,2" (selection ต่อช่อง)
+        readonly NetworkVariable<FixedString64Bytes> netAcc = new NetworkVariable<FixedString64Bytes>(
+            default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
         // พาเลตต์สีตัวละคร (0 = สีจริงของโมเดล)
         public static readonly Color[] Palette =
@@ -84,15 +87,18 @@ namespace NisitSimulator.Net
                 netName.Value = new FixedString64Bytes(Trunc(GameSession.PlayerName));
                 netColor.Value = GameSession.PlayerColor;
                 netModel.Value = GameSession.PlayerModel;
+                netAcc.Value = new FixedString64Bytes(Trunc32(CharacterAccessories.Pack(GameSession.PlayerAccessories)));
                 TintLocalPlayer(GameSession.PlayerColor);   // ทาสีตัวเราเอง (Player ในฉาก)
             }
             else
             {
                 ApplyColor(gameObject, netColor.Value);     // ทาสี avatar ผู้อื่นตามค่าล่าสุด
+                CharacterAccessories.Apply(transform, CharacterAccessories.Unpack(netAcc.Value.ToString()));
             }
             netColor.OnValueChanged += OnColorChanged;
             netName.OnValueChanged += OnNameChanged;
             netModel.OnValueChanged += OnModelChanged;
+            netAcc.OnValueChanged += OnAccChanged;
         }
 
         public override void OnNetworkDespawn()
@@ -101,9 +107,11 @@ namespace NisitSimulator.Net
             netColor.OnValueChanged -= OnColorChanged;
             netName.OnValueChanged -= OnNameChanged;
             netModel.OnValueChanged -= OnModelChanged;
+            netAcc.OnValueChanged -= OnAccChanged;
         }
 
         static string Trunc(string s) => string.IsNullOrEmpty(s) ? "" : (s.Length > 16 ? s.Substring(0, 16) : s);
+        static string Trunc32(string s) => string.IsNullOrEmpty(s) ? "" : (s.Length > 32 ? s.Substring(0, 32) : s);
 
         // ป้ายชื่อลอยหัว (TextMeshPro 3D — ไม่ต้องใช้ canvas)
         void CreateNameTag()
@@ -216,6 +224,13 @@ namespace NisitSimulator.Net
             anim = GetComponentInChildren<Animator>();
             if (anim != null) anim.applyRootMotion = false;
             ApplyColor(gameObject, netColor.Value);   // ทาสีโมเดลใหม่
+            CharacterAccessories.Apply(transform, CharacterAccessories.Unpack(netAcc.Value.ToString()));   // ใส่ของแต่งคืน
+        }
+
+        void OnAccChanged(FixedString64Bytes prev, FixedString64Bytes cur)
+        {
+            if (IsOwner) return;   // ตัวเราใส่ที่ Player จริง
+            CharacterAccessories.Apply(transform, CharacterAccessories.Unpack(cur.ToString()));
         }
 
         public string DisplayName => ResolveName();   // ให้ PlayerListUI อ่านชื่อ

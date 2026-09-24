@@ -20,5 +20,6 @@ namespace NisitSimulator.SaveLoad
         public static string PlayerName = "";   // ว่าง = ใช้ "ผู้เล่น N"
         public static int PlayerColor = 0;       // index ในพาเลตต์สี (0 = สีจริงของโมเดล)
         public static int PlayerModel = 0;       // index ในแคตตาล็อกตัวละคร (แบบ/เพศ)
+        public static int[] PlayerAccessories = new int[0];   // ของแต่งต่อช่อง (0=ไม่ใส่, k=option k) — sync MP ได้
     }
 }

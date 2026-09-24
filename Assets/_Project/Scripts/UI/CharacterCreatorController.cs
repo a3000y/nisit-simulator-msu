@@ -12,10 +12,14 @@ namespace NisitSimulator.UI
     //   UI + เวที (กล้อง/ไฟ/จุดวางโมเดล) สร้าง+ต่อโดย Editor tool (Nisit -> Build Character Creator)
     public class CharacterCreatorController : MonoBehaviour
     {
+        [System.Serializable]
+        public class AccessorySlotUI { public Button[] buttons; }   // buttons[0]=ไม่ใส่, [1..]=option
+
         [Header("ต่อโดย Editor")]
         public TMP_InputField nameInput;
         public Button[] modelButtons;
         public Button[] colorButtons;
+        public AccessorySlotUI[] accessorySlots;   // 1 ช่องต่อชนิดของแต่ง (หมวก/แว่น/...)
         public Camera previewCamera;   // กล้องส่องเวที (render → RawImage)
         public Transform previewRoot;  // จุดวางโมเดลพรีวิว
         public RawImage previewImage;  // แสดงผลพรีวิว
@@ -73,9 +77,12 @@ namespace NisitSimulator.UI
                     colorButtons[i].onClick.AddListener(() => PickColor(idx));
                 }
 
+            SetupAccessoryUI();
+
             SpawnPreview(model);
             HighlightModel();
             HighlightColor();
+            HighlightAccessories();
 
             initialized = true;
             if (previewCamera != null) previewCamera.enabled = true;
@@ -110,6 +117,70 @@ namespace NisitSimulator.UI
             HighlightColor();
         }
 
+        // ---------- ของแต่ง (หมวก/แว่น/...) ----------
+        void SetupAccessoryUI()
+        {
+            var cat = AccessoryCatalog.Load();
+            int slotCount = cat != null ? cat.SlotCount : 0;
+
+            // ให้ GameSession.PlayerAccessories ยาวเท่าจำนวนช่อง (คงค่าที่เคยเลือกไว้)
+            var sel = GameSession.PlayerAccessories;
+            if (sel == null || sel.Length != slotCount)
+            {
+                var arr = new int[slotCount];
+                if (sel != null) for (int i = 0; i < Mathf.Min(slotCount, sel.Length); i++) arr[i] = sel[i];
+                GameSession.PlayerAccessories = arr;
+            }
+
+            if (accessorySlots == null) return;
+            for (int s = 0; s < accessorySlots.Length; s++)
+            {
+                var slotUI = accessorySlots[s];
+                if (slotUI == null || slotUI.buttons == null) continue;
+                bool slotExists = s < slotCount;
+                int optCount = slotExists ? cat.OptionCount(s) : 0;
+
+                for (int b = 0; b < slotUI.buttons.Length; b++)
+                {
+                    var btn = slotUI.buttons[b];
+                    if (btn == null) continue;
+                    // ปุ่ม b=0 คือ "ไม่ใส่"; b>=1 คือ option b-1
+                    bool has = slotExists && (b == 0 || (b - 1) < optCount);
+                    btn.gameObject.SetActive(has);
+                    if (!has) continue;
+
+                    var lbl = btn.GetComponentInChildren<TMP_Text>();
+                    if (lbl != null) lbl.text = (b == 0) ? "ไม่ใส่" : cat.OptionLabel(s, b - 1);
+
+                    int slotIdx = s, val = b;
+                    btn.onClick.AddListener(() => PickAccessory(slotIdx, val));
+                }
+            }
+        }
+
+        void PickAccessory(int slot, int value)
+        {
+            if (GameSession.PlayerAccessories == null || slot >= GameSession.PlayerAccessories.Length) return;
+            GameSession.PlayerAccessories[slot] = value;
+            if (current != null) CharacterAccessories.Apply(current, GameSession.PlayerAccessories);
+            HighlightAccessories();
+        }
+
+        void HighlightAccessories()
+        {
+            if (accessorySlots == null) return;
+            var sel = GameSession.PlayerAccessories;
+            for (int s = 0; s < accessorySlots.Length; s++)
+            {
+                var slotUI = accessorySlots[s];
+                if (slotUI == null || slotUI.buttons == null) continue;
+                int chosen = (sel != null && s < sel.Length) ? sel[s] : 0;
+                for (int b = 0; b < slotUI.buttons.Length; b++)
+                    if (slotUI.buttons[b] != null)
+                        slotUI.buttons[b].transform.localScale = Vector3.one * (b == chosen ? 1.12f : 1f);
+            }
+        }
+
         void SpawnPreview(int i)
         {
             if (previewRoot == null) return;
@@ -130,6 +201,7 @@ namespace NisitSimulator.UI
 
             AutoScaleToFeet(current);
             NetworkAvatar.ApplyColor(current, color);
+            CharacterAccessories.Apply(current, GameSession.PlayerAccessories);   // ใส่ของแต่งกับโมเดลใหม่
         }
 
         // ปรับสเกลให้สูงเท่า targetHeight + วางเท้าที่ระดับ previewRoot (โมเดลต่างขนาดกัน)

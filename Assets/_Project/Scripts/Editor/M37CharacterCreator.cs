@@ -68,54 +68,74 @@ namespace NisitSimulator.EditorTools
             cam.fieldOfView = 30f; cam.nearClipPlane = 0.1f; cam.farClipPlane = 12f;
             cam.enabled = false;   // controller เปิดตอนโชว์หน้า + ต่อ RenderTexture
 
+            EnsureAccessoryCatalog();
+
             // ===== แผงแต่งตัว (ใน Menu Canvas) =====
             var root = mc.transform;
             var dim = MakeImage(root, "Character Panel", Vector2.zero, Vector2.one, new Color(0.05f, 0.07f, 0.13f, 0.75f));
             dim.rectTransform.offsetMin = Vector2.zero; dim.rectTransform.offsetMax = Vector2.zero;
 
-            var card = MakeCard(dim.transform, new Vector2(1150f, 720f), new Color(0.13f, 0.16f, 0.26f, 0.99f));
+            var card = MakeCard(dim.transform, new Vector2(1260f, 830f), new Color(0.13f, 0.16f, 0.26f, 0.99f));
 
-            MakeText(card.transform, font, "แต่งตัวละคร", new Vector2(0f, 315f), new Vector2(900, 60), 44, new Color(1f, 0.9f, 0.5f), TextAlignmentOptions.Center);
+            MakeText(card.transform, font, "แต่งตัวละคร", new Vector2(0f, 380f), new Vector2(900, 60), 44, new Color(1f, 0.9f, 0.5f), TextAlignmentOptions.Center);
 
             // พรีวิว (ซ้าย)
             var raw = new GameObject("Preview", typeof(RectTransform), typeof(RawImage));
             raw.transform.SetParent(card.transform, false);
             var rrt = (RectTransform)raw.transform;
             rrt.anchorMin = rrt.anchorMax = rrt.pivot = new Vector2(0.5f, 0.5f);
-            rrt.anchoredPosition = new Vector2(-330f, -10f); rrt.sizeDelta = new Vector2(400f, 540f);
+            rrt.anchoredPosition = new Vector2(-395f, -10f); rrt.sizeDelta = new Vector2(420f, 630f);
             var rawImg = raw.GetComponent<RawImage>(); rawImg.color = Color.white;
 
-            // ขวา: ชื่อ
-            MakeText(card.transform, font, "ชื่อผู้เล่น", new Vector2(110f, 250f), new Vector2(460, 36), 26, Color.white, TextAlignmentOptions.Left);
-            var nameInput = MakeInput(card.transform, font, "ใส่ชื่อ...", new Vector2(110f, 205f), new Vector2(460f, 56f));
+            float rx = 155f;   // จุดกึ่งกลางคอลัมน์ขวา
+            var lblCol = Color.white;
 
-            // ขวา: แบบตัวละคร (สูงสุด 6 ปุ่ม, 3 ต่อแถว)
-            MakeText(card.transform, font, "แบบตัวละคร / เพศ", new Vector2(110f, 152f), new Vector2(460, 34), 26, Color.white, TextAlignmentOptions.Left);
+            // ชื่อ
+            MakeText(card.transform, font, "ชื่อผู้เล่น", new Vector2(rx, 328f), new Vector2(470, 32), 25, lblCol, TextAlignmentOptions.Left);
+            var nameInput = MakeInput(card.transform, font, "ใส่ชื่อ...", new Vector2(rx, 290f), new Vector2(470f, 50f));
+
+            // แบบตัวละคร (สูงสุด 6 ปุ่ม, 3 ต่อแถว)
+            MakeText(card.transform, font, "แบบตัวละคร / เพศ", new Vector2(rx, 244f), new Vector2(470, 30), 25, lblCol, TextAlignmentOptions.Left);
             var modelBtns = new Button[6];
             for (int i = 0; i < 6; i++)
             {
                 int col = i % 3, rowi = i / 3;
-                float x = 110f + (col - 1) * 152f;
-                float y = 104f - rowi * 62f;
-                modelBtns[i] = MakeButton(card.transform, font, "แบบ " + (i + 1), new Vector2(x, y), new Vector2(140f, 50f), new Color(0.62f, 0.80f, 0.96f), 22);
+                float x = rx + (col - 1) * 156f;
+                float y = 204f - rowi * 54f;
+                modelBtns[i] = MakeButton(card.transform, font, "แบบ " + (i + 1), new Vector2(x, y), new Vector2(140f, 46f), new Color(0.62f, 0.80f, 0.96f), 21);
             }
 
-            // ขวา: สี (8)
-            MakeText(card.transform, font, "สีชุด", new Vector2(110f, -30f), new Vector2(460, 34), 26, Color.white, TextAlignmentOptions.Left);
+            // สี (8)
+            MakeText(card.transform, font, "สีชุด", new Vector2(rx, 100f), new Vector2(470, 30), 25, lblCol, TextAlignmentOptions.Left);
             var colorBtns = new Button[8];
             for (int i = 0; i < 8; i++)
+                colorBtns[i] = MakeSwatch(card.transform, new Vector2(rx + (i - 3.5f) * 46f, 62f), 40f);
+
+            // ของแต่ง (4 ช่อง: หมวก/แว่น/เป้/ของถือ) — แต่ละช่อง 4 ปุ่ม (ไม่ใส่ + 3 แบบ)
+            string[] slotNames = { "หมวก", "แว่นตา", "กระเป๋าเป้", "ของถือ" };
+            var accSlots = new CharacterCreatorController.AccessorySlotUI[slotNames.Length];
+            for (int s = 0; s < slotNames.Length; s++)
             {
-                float x = 110f - 175f + i * 50f;
-                colorBtns[i] = MakeSwatch(card.transform, new Vector2(x, -80f), 44f);
+                float labelY = 18f - s * 76f;
+                float btnY = labelY - 34f;
+                MakeText(card.transform, font, slotNames[s], new Vector2(rx, labelY), new Vector2(470, 28), 23, lblCol, TextAlignmentOptions.Left);
+                var btns = new Button[4];
+                for (int b = 0; b < 4; b++)
+                {
+                    float x = rx + (b - 1.5f) * 116f;
+                    btns[b] = MakeButton(card.transform, font, "-", new Vector2(x, btnY), new Vector2(108f, 40f), new Color(0.86f, 0.82f, 0.72f), 19);
+                }
+                accSlots[s] = new CharacterCreatorController.AccessorySlotUI { buttons = btns };
             }
 
             // ปุ่มยืนยัน / ย้อนกลับ
-            var back = MakeButton(card.transform, font, "ย้อนกลับ", new Vector2(-330f, -305f), new Vector2(300f, 62f), new Color(0.86f, 0.80f, 0.88f), 26);
-            var confirm = MakeButton(card.transform, font, "เริ่มเล่น", new Vector2(220f, -305f), new Vector2(320f, 62f), new Color(0.60f, 0.86f, 0.68f), 28);
+            var back = MakeButton(card.transform, font, "ย้อนกลับ", new Vector2(-395f, -378f), new Vector2(300f, 60f), new Color(0.86f, 0.80f, 0.88f), 26);
+            var confirm = MakeButton(card.transform, font, "เริ่มเล่น", new Vector2(255f, -378f), new Vector2(330f, 62f), new Color(0.60f, 0.86f, 0.68f), 28);
 
             // ===== ต่อ controller + เมนู =====
             var cc = card.gameObject.AddComponent<CharacterCreatorController>();
             cc.nameInput = nameInput; cc.modelButtons = modelBtns; cc.colorButtons = colorBtns;
+            cc.accessorySlots = accSlots;
             cc.previewCamera = cam; cc.previewRoot = modelRoot; cc.previewImage = rawImg;
 
             mc.characterPanel = dim.gameObject;
@@ -130,7 +150,29 @@ namespace NisitSimulator.EditorTools
             Debug.Log("<color=lime>[Nisit] สร้างหน้าแต่งตัวละคร (พรีวิว 3D) แล้ว</color>");
             if (!SuppressDialog)
                 EditorUtility.DisplayDialog("Nisit Simulator",
-                    "สร้างหน้าแต่งตัวละครแล้ว! 🧑‍🎨\n\nกด 'เล่นคนเดียว' → เลือกแบบ/สี/ชื่อ (พรีวิว 3D หมุนได้) → เริ่มเล่น\n\n* ต้องมี CharacterCatalog (Setup Multiplayer) จึงจะมีแบบให้เลือก", "เยี่ยม!");
+                    "สร้างหน้าแต่งตัวละครแล้ว! 🧑‍🎨\n\nกด 'เล่นคนเดียว' → เลือกแบบ/สี/ชื่อ + หมวก/แว่น/เป้/ของถือ (พรีวิว 3D หมุนได้) → เริ่มเล่น\n\n* แบบตัวละคร: มาจาก CharacterCatalog (Setup Multiplayer)\n* ของแต่ง: ลากโมเดล prop ใส่ options[] ใน Assets/_Project/Resources/AccessoryCatalog แล้วกดสร้างซ้ำ", "เยี่ยม!");
+        }
+
+        // สร้างโครง AccessoryCatalog เริ่มต้น (4 ช่องว่าง) ถ้ายังไม่มี — ผู้ใช้ลาก prop ใส่ options[] เอง
+        static void EnsureAccessoryCatalog()
+        {
+            const string path = "Assets/_Project/Resources/AccessoryCatalog.asset";
+            if (AssetDatabase.LoadAssetAtPath<AccessoryCatalog>(path) != null) return;   // มีแล้ว → ไม่ทับของที่ใส่ไว้
+
+            if (!AssetDatabase.IsValidFolder("Assets/_Project/Resources"))
+                AssetDatabase.CreateFolder("Assets/_Project", "Resources");
+
+            var cat = ScriptableObject.CreateInstance<AccessoryCatalog>();
+            cat.slots = new[]
+            {
+                new AccessoryCatalog.Slot { slotName = "หมวก",      bone = HumanBodyBones.Head,      posOffset = new Vector3(0f, 0.12f, 0f),    eulerOffset = Vector3.zero,             scale = 1f, options = new GameObject[0], labels = new string[0] },
+                new AccessoryCatalog.Slot { slotName = "แว่นตา",    bone = HumanBodyBones.Head,      posOffset = new Vector3(0f, 0.04f, 0.09f), eulerOffset = Vector3.zero,             scale = 1f, options = new GameObject[0], labels = new string[0] },
+                new AccessoryCatalog.Slot { slotName = "กระเป๋าเป้", bone = HumanBodyBones.Spine,     posOffset = new Vector3(0f, 0.10f, -0.12f),eulerOffset = new Vector3(0f, 180f, 0f),scale = 1f, options = new GameObject[0], labels = new string[0] },
+                new AccessoryCatalog.Slot { slotName = "ของถือ",    bone = HumanBodyBones.RightHand, posOffset = Vector3.zero,                  eulerOffset = Vector3.zero,             scale = 1f, options = new GameObject[0], labels = new string[0] },
+            };
+            AssetDatabase.CreateAsset(cat, path);
+            AssetDatabase.SaveAssets();
+            Debug.Log("[Nisit] สร้าง AccessoryCatalog เริ่มต้น (4 ช่องว่าง) — ลากโมเดล prop ใส่ options[] ของแต่ละช่องใน Inspector");
         }
 
         // ---------- helpers ----------

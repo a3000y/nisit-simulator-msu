@@ -15,12 +15,25 @@ namespace NisitSimulator.Player
                 CharacterCatalog.Apply(transform, GameSession.PlayerModel);
         }
 
+        void Start()
+        {
+            // ใส่ของแต่ง (หมวก/แว่น/...) ตามที่เลือก — ทำใน Start เพราะกระดูกโมเดลพร้อมแล้ว
+            CharacterAccessories.Apply(transform, GameSession.PlayerAccessories);
+        }
+
         // เปลี่ยนแบบระหว่างเล่น (จากแผงแต่งตัว) — ต้อง refresh Animator ให้สคริปต์อื่น
         public void SwapTo(int index)
         {
             CharacterCatalog.Apply(transform, index);
+            CharacterAccessories.Apply(transform, GameSession.PlayerAccessories);   // ใส่ของแต่งกับโมเดลใหม่
             var mv = GetComponent<PlayerMovement>(); if (mv != null) mv.RefreshAnimator();
             var pac = GetComponent<PlayerActionController>(); if (pac != null) pac.RefreshAnimator();
+        }
+
+        // เปลี่ยนของแต่งระหว่างเล่น
+        public void RefreshAccessories()
+        {
+            CharacterAccessories.Apply(transform, GameSession.PlayerAccessories);
         }
     }
 }

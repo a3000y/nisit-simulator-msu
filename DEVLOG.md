@@ -338,6 +338,13 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - [M37CharacterCreator.cs](Assets/_Project/Scripts/Editor/M37CharacterCreator.cs): สร้างเวที (กล้อง/ไฟ point 2 ดวง/จุดวางโมเดล) + แผง UI (พรีวิว/ชื่อ/6 แบบ/8 สี/ยืนยัน-ย้อนกลับ) · อยู่ใน ★ Rebuild All (หลัง M4) · ต้องมี CharacterCatalog (Setup Multiplayer) ถึงจะมีแบบให้เลือก
 - [MainMenuController.cs](Assets/_Project/Scripts/UI/MainMenuController.cs): OpenCustomize/ConfirmCustomize/CloseCustomize (MP ยังเข้าทาง F3 เหมือนเดิม)
 
+### ของแต่ง: หมวก/แว่น/เป้/ของถือ (ติดกระดูก) (2026-09-24)
+- 👒 ระบบ accessory ติดกับกระดูก humanoid — เพิ่มในหน้าแต่งตัว 4 ช่อง (หมวก/แว่นตา/กระเป๋าเป้/ของถือ) เลือกได้ + พรีวิว 3D + sync MP
+- [AccessoryCatalog.cs](Assets/_Project/Scripts/Systems/AccessoryCatalog.cs): ScriptableObject (Resources) เก็บช่อง (bone + offset/หมุน/สเกล + options[] ให้ผู้ใช้ลาก prop ใส่เอง)
+- [CharacterAccessories.cs](Assets/_Project/Scripts/Systems/CharacterAccessories.cs): `Apply(root, selections[])` หา bone ด้วย `Animator.GetBoneTransform` แล้ว instantiate prop เป็นลูกของกระดูก (ตามท่าเดิน) · Pack/Unpack เป็นสตริงสำหรับเครือข่าย · `AccessoryTag` กำกับไว้ถอด
+- [GameSession](Assets/_Project/Scripts/SaveLoad/GameSession.cs) เพิ่ม `PlayerAccessories int[]` (0=ไม่ใส่) · [PlayerModelSwapper](Assets/_Project/Scripts/Player/PlayerModelSwapper.cs) ใส่ให้ตอนเข้าเกม/สลับแบบ · [NetworkAvatar](Assets/_Project/Scripts/Net/NetworkAvatar.cs) เพิ่ม `netAcc` sync ให้ผู้เล่นอื่นเห็น (apply ใหม่เมื่อเปลี่ยนโมเดลด้วย)
+- [M37CharacterCreator](Assets/_Project/Scripts/Editor/M37CharacterCreator.cs): สร้าง `AccessoryCatalog` เริ่มต้น (4 ช่องว่าง, ไม่ทับถ้ามีแล้ว) + UI แถวเลือกของแต่ง · โมเดล full-body สลับเสื้อ/กางเกงแยกชิ้นไม่ได้ (ต้อง modular) จึงใช้ accessory ติดกระดูกแทน — ผู้ใช้ลาก prop 3D (Kenney/Quaternius) ใส่ options[]
+
 ---
 
 ## Version Control
