@@ -173,6 +173,18 @@ namespace NisitSimulator.EditorTools
             return list;
         }
 
+        // จุดต่ำสุด (world min.y) ของโมเดล — ไว้ยกเท้าให้อยู่พื้น (คืน float.MaxValue ถ้าไม่มี renderer)
+        static float ModelBottom(GameObject go)
+        {
+            float bot = float.MaxValue;
+            foreach (var smr in go.GetComponentsInChildren<SkinnedMeshRenderer>())
+                bot = Mathf.Min(bot, smr.bounds.min.y);
+            if (bot == float.MaxValue)
+                foreach (var r in go.GetComponentsInChildren<Renderer>())
+                    bot = Mathf.Min(bot, r.bounds.min.y);
+            return bot;
+        }
+
         // วัดความสูงจริง (world) — ใช้ SkinnedMeshRenderer.bounds ก่อน (แม่นใน edit mode) แล้วค่อย Renderer ทั่วไป
         static float ModelHeight(GameObject go)
         {
@@ -208,6 +220,11 @@ namespace NisitSimulator.EditorTools
             float h = ModelHeight(npc);
             float s = h > 0.01f ? targetHeight / h : 1f;
             npc.transform.localScale = Vector3.one * s;
+
+            // ยกให้ "เท้า" อยู่ที่ระดับพื้น (หลังสเกล) — กันโมเดลจมพื้น/ไม่เห็นรองเท้า
+            float bottom = ModelBottom(npc);
+            if (bottom < float.MaxValue) npc.transform.position += new Vector3(0f, pos.y - bottom, 0f);
+
             Debug.Log($"[NPC scale] {name}: วัดสูง h={h:0.00} → scale={s:0.000} (เป้า {targetHeight:0.00})");
 
             var anim = npc.GetComponentInChildren<Animator>();
