@@ -47,12 +47,14 @@ namespace NisitSimulator.Systems
         int Year() { var p = PR; return p != null ? p.CurrentYear : 1; }
         int Friends() => RelationshipManager.Instance.FriendCount;
 
+        const string PrefKey = "nisit_ach";   // โปรไฟล์ถาวร (คงข้ามรอบ New Game+)
+
         void Awake()
         {
             if (_i != null && _i != this) { Destroy(gameObject); return; }
             _i = this;
             Build();
-            if (GameSession.IsContinue) LoadUnlocked();
+            LoadAll();
         }
 
         void Build()
@@ -85,7 +87,8 @@ namespace NisitSimulator.Systems
         void Unlock(Ach a)
         {
             unlocked.Add(a.id);
-            HUDController.Toast($"🏆 ปลดล็อกความสำเร็จ: {a.title}!");
+            SaveToPrefs();   // เก็บลงโปรไฟล์ถาวรทันที
+            HUDController.Toast($"ปลดล็อกความสำเร็จ: {a.title}!");
             NisitSimulator.Core.SFXManager.Success();
             var s = PS; if (s != null) s.ChangeSatisfaction(5f);   // โบนัสความภูมิใจ
         }
@@ -102,12 +105,25 @@ namespace NisitSimulator.Systems
             d.unlockedAchievements = new List<string>(unlocked);
         }
 
-        void LoadUnlocked()
+        // โหลดจากโปรไฟล์ถาวร (PlayerPrefs) + รวมกับเซฟปัจจุบัน (union — ปลดล็อกแล้วไม่หาย)
+        void LoadAll()
         {
-            var d = SaveSystem.Load();
-            if (d == null || d.unlockedAchievements == null) return;
-            unlocked.Clear();
-            foreach (var id in d.unlockedAchievements) unlocked.Add(id);
+            string csv = PlayerPrefs.GetString(PrefKey, "");
+            if (!string.IsNullOrEmpty(csv))
+                foreach (var id in csv.Split(',')) if (!string.IsNullOrEmpty(id)) unlocked.Add(id);
+
+            if (GameSession.IsContinue)
+            {
+                var d = SaveSystem.Load();
+                if (d != null && d.unlockedAchievements != null)
+                    foreach (var id in d.unlockedAchievements) unlocked.Add(id);
+            }
+        }
+
+        void SaveToPrefs()
+        {
+            PlayerPrefs.SetString(PrefKey, string.Join(",", unlocked));
+            PlayerPrefs.Save();
         }
     }
 }

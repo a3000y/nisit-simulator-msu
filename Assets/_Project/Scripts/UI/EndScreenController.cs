@@ -19,6 +19,8 @@ namespace NisitSimulator.UI
         public Button restartButton;
         public Button quitButton;
 
+        private EndReason lastReason;
+
         void Start()
         {
             if (panel != null) panel.SetActive(false);
@@ -44,6 +46,7 @@ namespace NisitSimulator.UI
 
         private void Show(EndReason reason)
         {
+            lastReason = reason;
             if (panel != null) panel.SetActive(true);
 
             // หยุดตัวละคร + ปลดล็อกเมาส์ (กดปุ่มได้ + ไม่เดินหลังฉากจบ)
@@ -55,13 +58,36 @@ namespace NisitSimulator.UI
             }
             Cursor.visible = true; Cursor.lockState = CursorLockMode.None;
 
+            // ---- ข้อมูลสรุป (ใช้ตัดสินเกียรตินิยม + เส้นทางต่อไป) ----
+            var prog = Object.FindFirstObjectByType<ProgressionManager>();
+            var exam = Object.FindFirstObjectByType<ExamController>();
+            var statsP = Object.FindFirstObjectByType<NisitSimulator.Stats.PlayerStats>();
+            int score = prog != null ? prog.CalculateScore() : 0;
+            int year = prog != null ? prog.CurrentYear : 1;
+            float gpa = exam != null ? exam.GPA : 0f;
+            int money = statsP != null ? statsP.Money : 0;
+            string faculty = FacultyCatalog.NameOf(GameSession.SelectedFacultyIndex);
+
+            // สรุปชีวิต: เพื่อนที่ได้รู้จักตลอดการเล่น (life recap)
+            var rel = RelationshipManager.Instance;
+            int friends = rel.FriendCount;         // "เพื่อน" ขึ้นไป
+            int close = rel.CountAtLeast(3);        // "เพื่อนสนิท" ขึ้นไป
+            int best = rel.CountAtLeast(4);         // "เพื่อนซี้"
+            var am = AchievementManager.Instance;
+
             string title, msg;
             Color color;
             switch (reason)
             {
                 case EndReason.Graduated:
-                    title = "GRADUATION!"; color = new Color(1f, 0.85f, 0.3f);
-                    msg = "ยินดีด้วย! คุณเรียนจบการศึกษาสำเร็จ";
+                    color = new Color(1f, 0.85f, 0.3f);
+                    string honors = gpa >= 3.5f ? "เกียรตินิยมอันดับหนึ่ง"
+                                  : gpa >= 3.25f ? "เกียรตินิยมอันดับสอง" : "";
+                    title = honors != "" ? "เกียรตินิยม!" : "GRADUATION!";
+                    msg = (honors != ""
+                              ? $"ยินดีด้วย! คุณจบการศึกษาด้วย{honors}"
+                              : "ยินดีด้วย! คุณเรียนจบการศึกษาสำเร็จ")
+                          + "\n" + CareerPath(gpa, money, friends);
                     NisitSimulator.Core.SFXManager.Fanfare();   // เสียงแฟนแฟร์ตอนจบการศึกษา
                     break;
                 case EndReason.Flunked:
@@ -77,19 +103,7 @@ namespace NisitSimulator.UI
             if (titleText != null) { titleText.text = title; titleText.color = color; }
             if (messageText != null) messageText.text = msg;
 
-            var prog = Object.FindFirstObjectByType<ProgressionManager>();
-            var exam = Object.FindFirstObjectByType<ExamController>();
-            int score = prog != null ? prog.CalculateScore() : 0;
-            int year = prog != null ? prog.CurrentYear : 1;
-            float gpa = exam != null ? exam.GPA : 0f;
-            string faculty = FacultyCatalog.NameOf(GameSession.SelectedFacultyIndex);
-
-            // สรุปชีวิต: เพื่อนที่ได้รู้จักตลอดการเล่น (life recap)
-            var rel = RelationshipManager.Instance;
-            int friends = rel.FriendCount;         // "เพื่อน" ขึ้นไป
-            int close = rel.CountAtLeast(3);        // "เพื่อนสนิท" ขึ้นไป
-            int best = rel.CountAtLeast(4);         // "เพื่อนซี้"
-            var am = AchievementManager.Instance;
+            int ng = PlayerPrefs.GetInt("nisit_ngplus", 0);
 
             if (scoreText != null)
                 scoreText.text =
@@ -98,13 +112,35 @@ namespace NisitSimulator.UI
                     $"เกรดเฉลี่ย (GPA): {gpa:0.00}\n" +
                     $"เพื่อนที่ได้รู้จัก: {friends} คน" + (close > 0 ? $" (สนิท {close}" + (best > 0 ? $", ซี้ {best}" : "") + ")" : "") + "\n" +
                     $"ความสำเร็จ: {am.UnlockedCount}/{am.Total}\n" +
-                    $"คะแนนรวม: {score}";
+                    (ng > 0 ? $"New Game+ รอบ {ng}\n" : "") +
+                    $"คะแนนรวม: {score}" +
+                    (reason == EndReason.Graduated ? "\n\n<size=80%><color=#B9C2D6>กด \"เล่นใหม่\" เพื่อเริ่ม New Game+ (โบนัสเงิน + เก็บความสำเร็จ)</color></size>" : "");
         }
 
-        // โหลดฉากปัจจุบันใหม่ = เริ่มเกมใหม่
+        // เส้นทางหลังเรียนจบ — ตาม GPA + เงินเก็บ + เพื่อน (networking)
+        private string CareerPath(float gpa, int money, int friends)
+        {
+            if (gpa >= 3.5f) return "บริษัทชั้นนำแย่งตัว + ได้ทุนเรียนต่อ ป.โท!";
+            if (gpa >= 3.0f) return "ได้งานในบริษัทที่ใฝ่ฝันทันที!";
+            if (gpa >= 2.0f)
+                return friends >= 5
+                    ? "เพื่อน ๆ ช่วยแนะนำงานดี ๆ ให้ เริ่มงานได้เลย!"
+                    : (money >= 3000 ? "มีทุนเก็บ เปิดกิจการเล็ก ๆ ของตัวเอง!" : "ได้งานทั่วไป เริ่มต้นชีวิตวัยทำงาน");
+            return "ต้องหางานอยู่พักหนึ่ง... แต่ประสบการณ์ในรั้วมหาลัยมีค่าเสมอ";
+        }
+
+        // โหลดฉากปัจจุบันใหม่ = เริ่มเกมใหม่ · ถ้าเพิ่งจบการศึกษา = เลื่อนขั้น New Game+ (โบนัสรอบถัดไป)
         public void Restart()
         {
             Time.timeScale = 1f;
+            if (lastReason == EndReason.Graduated)
+            {
+                int ng = PlayerPrefs.GetInt("nisit_ngplus", 0) + 1;
+                PlayerPrefs.SetInt("nisit_ngplus", ng);
+                PlayerPrefs.Save();
+            }
+            NisitSimulator.SaveLoad.GameSession.IsContinue = false;   // เริ่มใหม่ (รับเงินตั้งต้น + โบนัส NG+)
+            NisitSimulator.SaveLoad.GameSession.PendingLoad = false;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 

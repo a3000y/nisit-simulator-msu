@@ -366,6 +366,11 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - Hooks: ClassStation(+คาบ), QuestSystem(+เควส), GiftUI(+ของขวัญ) · money/ความรู้/วัน/เวลา auto · [GameplayBootstrap](Assets/_Project/Scripts/SaveLoad/GameplayBootstrap.cs) สร้าง manager ตอนเข้าเกม · หน้าจบโชว์ "ความสำเร็จ X/Y"
 - **logic ล้วน ไม่ต้อง re-bake**
 
+### ตอนจบละเอียด + New Game+ (2026-09-24)
+- 🎓 **ตอนจบแยกตามผลงาน** — จบการศึกษาแบ่งเป็น เกียรตินิยมอันดับ 1 (GPA≥3.5) / อันดับ 2 (≥3.25) / จบปกติ · + "เส้นทางต่อไป" ตาม GPA+เงิน+เพื่อน (บริษัทชั้นนำ/เรียนต่อ / เพื่อนแนะนำงาน / เปิดกิจการ / หางาน) · [EndScreenController](Assets/_Project/Scripts/UI/EndScreenController.cs).CareerPath — logic ล้วน
+- ♻️ **New Game+** — จบการศึกษาแล้วกด "เล่นใหม่" → เลื่อนรอบ NG+ (เก็บใน PlayerPrefs) → รอบถัดไปได้โบนัสเงินตั้งต้น +100/รอบ ([DailyAllowance](Assets/_Project/Scripts/Systems/DailyAllowance.cs)) · หน้าจบโชว์ "New Game+ รอบ N"
+- 🏆 **Achievements เป็นโปรไฟล์ถาวร** — [AchievementManager](Assets/_Project/Scripts/Systems/AchievementManager.cs) เก็บลง PlayerPrefs (union กับเซฟ) → ปลดล็อกแล้วไม่หายข้ามรอบ NG+
+
 ---
 
 ## Version Control

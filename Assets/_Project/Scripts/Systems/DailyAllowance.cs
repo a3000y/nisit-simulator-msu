@@ -21,7 +21,13 @@ namespace NisitSimulator.Systems
             stats = Object.FindFirstObjectByType<PlayerStats>();
             clock = Object.FindFirstObjectByType<GameClock>();
             // ให้เงินตั้งต้นเฉพาะเกมใหม่ — ถ้า "เล่นต่อ" เงินคืนจากเซฟแล้ว (กันบวกซ้ำ)
-            if (stats != null && startMoney != 0 && !GameSession.IsContinue) stats.ChangeMoney(startMoney);
+            if (stats != null && startMoney != 0 && !GameSession.IsContinue)
+            {
+                int ng = PlayerPrefs.GetInt("nisit_ngplus", 0);   // โบนัสตามรอบ New Game+
+                int bonus = ng * 100;
+                stats.ChangeMoney(startMoney + bonus);
+                if (bonus > 0) HUDController.Toast($"โบนัส New Game+ รอบ {ng}: +{bonus}฿");
+            }
             if (clock != null) { lastDay = clock.Day; clock.OnDayChanged += OnDay; }
         }
 
