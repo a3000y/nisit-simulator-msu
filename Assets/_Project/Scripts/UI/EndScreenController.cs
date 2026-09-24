@@ -89,6 +89,7 @@ namespace NisitSimulator.UI
                               : "ยินดีด้วย! คุณเรียนจบการศึกษาสำเร็จ")
                           + "\n" + CareerPath(gpa, money, friends);
                     NisitSimulator.Core.SFXManager.Fanfare();   // เสียงแฟนแฟร์ตอนจบการศึกษา
+                    Confetti.Burst();                            // 🎉 โปรยคอนเฟตตีฉลอง
                     break;
                 case EndReason.Flunked:
                     title = "FLUNKED OUT"; color = new Color(0.9f, 0.4f, 0.3f);

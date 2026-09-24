@@ -20,6 +20,7 @@ namespace NisitSimulator.SaveLoad
             _ = StatsTracker.Instance;
             _ = AchievementManager.Instance;
             AchievementsUI.EnsureExists();
+            FloatingTextSpawner.EnsureExists();   // เด้งตัวเลข +เงิน/+ความรู้/+EXP
 
             clock = Object.FindFirstObjectByType<GameClock>();
             if (clock != null) clock.OnDayChanged += OnDay;

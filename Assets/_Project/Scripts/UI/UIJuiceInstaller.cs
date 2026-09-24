@@ -39,6 +39,15 @@ namespace NisitSimulator.UI
                 if (rt == null || rt.rect.width < 160f) continue;             // ข้ามปุ่มเล็ก/สวอตช์
                 if (b.GetComponent<ButtonJuice>() == null) b.gameObject.AddComponent<ButtonJuice>();
             }
+
+            // แผง popup ที่มีลูกชื่อ "Card" → ใส่ PanelPop (เด้งเข้านุ่ม ๆ)
+            var rts = Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (var rt in rts)
+            {
+                if (rt == null || rt.GetComponent<PanelPop>() != null) continue;
+                if (rt.GetComponent<Canvas>() != null) continue;             // ไม่ใส่บน root canvas
+                if (rt.Find("Card") != null) rt.gameObject.AddComponent<PanelPop>();
+            }
         }
     }
 }

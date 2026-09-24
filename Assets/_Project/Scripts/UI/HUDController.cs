@@ -132,17 +132,29 @@ namespace NisitSimulator.UI
 
         private void ClearToast() { if (toastText != null) toastText.text = ""; }
 
+        // แถบวิ่งนุ่ม: เก็บค่าเป้า แล้วค่อย ๆ ไล่ใน Update (ไม่กระตุก)
+        private float energyT = 1f, healthT = 1f, hungerT = 1f, knowT = -1f;
+
+        void Update()
+        {
+            float k = 1f - Mathf.Exp(-10f * Time.deltaTime);
+            if (energyFill) energyFill.fillAmount = Mathf.Lerp(energyFill.fillAmount, energyT, k);
+            if (healthFill) healthFill.fillAmount = Mathf.Lerp(healthFill.fillAmount, healthT, k);
+            if (hungerFill) hungerFill.fillAmount = Mathf.Lerp(hungerFill.fillAmount, hungerT, k);
+            if (knowledgeFill && knowT >= 0f) knowledgeFill.fillAmount = Mathf.Lerp(knowledgeFill.fillAmount, knowT, k);
+        }
+
         // ---------- callback อัปเดต UI ----------
-        private void UpdateEnergy(float cur, float max) { if (energyFill) energyFill.fillAmount = cur / max; if (energyText) energyText.text = $"{cur:0}"; }
-        private void UpdateHealth(float cur, float max) { if (healthFill) healthFill.fillAmount = cur / max; if (healthText) healthText.text = $"{cur:0}"; }
-        private void UpdateHunger(float cur, float max) { if (hungerFill) hungerFill.fillAmount = cur / max; if (hungerText) hungerText.text = $"{cur:0}"; }
+        private void UpdateEnergy(float cur, float max) { energyT = max > 0 ? cur / max : 0f; if (energyText) energyText.text = $"{cur:0}"; }
+        private void UpdateHealth(float cur, float max) { healthT = max > 0 ? cur / max : 0f; if (healthText) healthText.text = $"{cur:0}"; }
+        private void UpdateHunger(float cur, float max) { hungerT = max > 0 ? cur / max : 0f; if (hungerText) hungerText.text = $"{cur:0}"; }
 
         private void UpdateMoney(int money) { if (moneyText) moneyText.text = $"฿ {money}"; }
 
         private void UpdateKnowledge(float know)
         {
             if (knowledgeText) knowledgeText.text = $"ความรู้ {know:0}/{knowledgeTarget:0}";
-            if (knowledgeFill) knowledgeFill.fillAmount = knowledgeTarget > 0f ? Mathf.Clamp01(know / knowledgeTarget) : 0f;
+            knowT = knowledgeTarget > 0f ? Mathf.Clamp01(know / knowledgeTarget) : 0f;
         }
 
         private void UpdateClock(int hour, int minute) { if (clockText) clockText.text = clock.GetTimeString(); }
