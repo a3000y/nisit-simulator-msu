@@ -1,5 +1,12 @@
+using System;
+using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.Networking.Transport.Relay;   // RelayServerData
+using Unity.Services.Core;
+using Unity.Services.Authentication;
+using Unity.Services.Relay;
+using Unity.Services.Relay.Models;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -22,11 +29,18 @@ namespace NisitSimulator.Net
         public Button[] colorButtons;
         public Button[] modelButtons;
 
+        [Header("ออนไลน์ (Relay / Join Code)")]
+        public TMP_InputField codeInput;
+        public Button hostRelayButton, joinRelayButton;
+        private string relayCode;   // โค้ดห้องตอนเป็น Host ออนไลน์
+
         void Start()
         {
             if (hostButton) hostButton.onClick.AddListener(Host);
             if (clientButton) clientButton.onClick.AddListener(Client);
             if (disconnectButton) disconnectButton.onClick.AddListener(Disconnect);
+            if (hostRelayButton) hostRelayButton.onClick.AddListener(() => HostRelay());
+            if (joinRelayButton) joinRelayButton.onClick.AddListener(() => JoinRelay());
 
             if (nameInput != null)
             {
@@ -125,6 +139,64 @@ namespace NisitSimulator.Net
             NetworkManager.Singleton.StartClient();
         }
 
+        // ---------- ออนไลน์ (Relay / Join Code) — เล่นข้ามเน็ตได้ ต้องต่อ Unity Cloud ----------
+        async void HostRelay()
+        {
+            if (NetworkManager.Singleton == null || Connected()) return;
+            if (!HasPlayerPrefab()) return;
+            SetStatus("กำลังสร้างห้องออนไลน์...");
+            if (!await EnsureServices()) return;
+            try
+            {
+                var alloc = await RelayService.Instance.CreateAllocationAsync(8);   // สูงสุด 8 คนอื่น
+                relayCode = await RelayService.Instance.GetJoinCodeAsync(alloc.AllocationId);
+                var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
+                if (utp != null) utp.SetRelayServerData(new RelayServerData(alloc, "dtls"));
+                NetworkManager.Singleton.StartHost();
+                SetStatus($"ออนไลน์! โค้ดห้อง: {relayCode}");
+            }
+            catch (Exception e) { SetStatus("สร้างห้องไม่สำเร็จ (ต้องมีเน็ต+ลิงก์ Cloud)"); Debug.LogWarning("[Relay] host: " + e); }
+        }
+
+        async void JoinRelay()
+        {
+            if (NetworkManager.Singleton == null || Connected()) return;
+            string c = codeInput != null ? codeInput.text.Trim().ToUpperInvariant() : "";
+            if (string.IsNullOrEmpty(c)) { SetStatus("กรอกโค้ดห้องก่อน"); return; }
+            SetStatus("กำลังเข้าห้องออนไลน์...");
+            if (!await EnsureServices()) return;
+            try
+            {
+                var join = await RelayService.Instance.JoinAllocationAsync(c);
+                var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
+                if (utp != null) utp.SetRelayServerData(new RelayServerData(join, "dtls"));
+                NetworkManager.Singleton.StartClient();
+                SetStatus("เข้าห้องออนไลน์แล้ว!");
+            }
+            catch (Exception e) { SetStatus("เข้าห้องไม่สำเร็จ (โค้ดผิด/เน็ต)"); Debug.LogWarning("[Relay] join: " + e); }
+        }
+
+        // เตรียม Unity Services + ล็อกอินแบบ anonymous (ครั้งเดียว)
+        async Task<bool> EnsureServices()
+        {
+            try
+            {
+                if (UnityServices.State != ServicesInitializationState.Initialized)
+                    await UnityServices.InitializeAsync();
+                if (!AuthenticationService.Instance.IsSignedIn)
+                    await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                SetStatus("ต่อ Unity Services ไม่ได้ (ต้องมีเน็ต+ลิงก์ Cloud)");
+                Debug.LogWarning("[Relay] services: " + e);
+                return false;
+            }
+        }
+
+        void SetStatus(string s) { if (statusText != null) statusText.text = s; }
+
         // IP ในวง LAN ของเครื่องนี้ (คำนวณครั้งเดียว cache ไว้ — DNS lookup ช้า อย่าเรียกทุกเฟรม)
         static string _cachedIP;
         static string LocalIP()
@@ -153,6 +225,7 @@ namespace NisitSimulator.Net
         void Disconnect()
         {
             if (NetworkManager.Singleton != null && Connected()) NetworkManager.Singleton.Shutdown();
+            relayCode = null;
         }
 
         static bool Connected()
@@ -166,13 +239,15 @@ namespace NisitSimulator.Net
             bool on = Connected();
             if (hostButton) hostButton.gameObject.SetActive(!on);
             if (clientButton) clientButton.gameObject.SetActive(!on);
+            if (hostRelayButton) hostRelayButton.gameObject.SetActive(!on);
+            if (joinRelayButton) joinRelayButton.gameObject.SetActive(!on);
             if (disconnectButton) disconnectButton.gameObject.SetActive(on);
             if (statusText != null)
             {
                 var nm = NetworkManager.Singleton;
                 statusText.text = !on
-                    ? $"เล่น LAN: กด Host (IP เครื่องนี้ {LocalIP()})\nหรือกรอก IP เพื่อนแล้วกด Join · F3 ปิด/เปิด"
-                    : (nm.IsHost ? $"Host! บอกเพื่อน Join IP: {LocalIP()}"
+                    ? $"เล่น LAN: Host (IP {LocalIP()}) / กรอก IP แล้ว Join\nหรือเล่นออนไลน์ด้วยโค้ด · F3 ปิด/เปิด"
+                    : (nm.IsHost ? (relayCode != null ? $"ออนไลน์! โค้ดห้อง: {relayCode}" : $"Host! บอกเพื่อน Join IP: {LocalIP()}")
                                  : nm.IsServer ? "เซิร์ฟเวอร์"
                                  : "เชื่อมต่อแล้ว (ผู้เล่น)");
             }

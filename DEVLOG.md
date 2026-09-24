@@ -386,6 +386,13 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - [SaveSystem](Assets/_Project/Scripts/SaveLoad/SaveSystem.cs): path เป็น `nisit_save_{slot}.json` ตาม `GameSession.SaveSlot` · เพิ่ม HasSave(slot)/SummaryFor(slot) · [GameSession](Assets/_Project/Scripts/SaveLoad/GameSession.cs).SaveSlot (PlayerPrefs) · [MainMenuController](Assets/_Project/Scripts/UI/MainMenuController.cs) SelectSlot/RefreshSlots · [M4MenuBuilder](Assets/_Project/Scripts/Editor/M4MenuBuilder.cs) ปุ่ม 3 ช่อง (ต้อง re-bake)
 - **QoL (ข้อ 4) ครบแล้ว**: ความยาก + กราฟิก + หลายช่องเซฟ · เหลือลิสต์เทียบเกม: ข้อ 2 ลงทะเบียนวิชา · แล้ว polish อนิเมชัน/juice เป็นด่านสุดท้าย
 
+### ออนไลน์ข้ามเน็ต: Netcode + Relay (Join Code) (2026-09-24)
+- 🌐 เขียนโค้ด **เล่นข้ามเน็ตด้วย Join Code** ผ่าน NGO + Unity Relay — เดิมต่อได้แค่ IP (LAN วงเดียวกัน)
+- [NetworkUI](Assets/_Project/Scripts/Net/NetworkUI.cs): `HostRelay()` (CreateAllocation → GetJoinCode → SetRelayServerData → StartHost, โชว์โค้ด) · `JoinRelay()` (กรอกโค้ด → JoinAllocation → StartClient) · `EnsureServices()` (UnityServices.Initialize + sign-in anonymous) · Refresh โชว์โค้ดห้องเมื่อ Host
+- [M29NetworkSetup](Assets/_Project/Scripts/Editor/M29NetworkSetup.cs): ขยายแผง F3 + ปุ่ม "Host ออนไลน์"/"Join ออนไลน์" + ช่องกรอกโค้ด (ต้อง re-run Setup Multiplayer)
+- แพ็กเกจครบ (netcode 2.13 + services.multiplayer 2.3 + relay 1.2)
+- ⚠️ **ยังเทสต์ไม่ได้ที่หอ/มอ** (Wi-Fi บล็อก Unity Cloud) — ต้อง **hotspot/เน็ตบ้าน** + ลิงก์ Project กับ Unity Cloud (Project Settings → Services) ก่อน · บรรทัด `new RelayServerData(alloc,"dtls")` อาจต้องปรับเป็น `alloc.ToRelayServerData("dtls")` ตามเวอร์ชันแพ็กเกจ (เช็คตอน compile)
+
 ---
 
 ## Version Control

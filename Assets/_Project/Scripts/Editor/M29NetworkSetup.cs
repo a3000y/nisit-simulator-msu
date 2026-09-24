@@ -157,7 +157,7 @@ namespace NisitSimulator.EditorTools
             panel.transform.SetParent(canGo.transform, false);
             var pr = panel.GetComponent<RectTransform>();
             pr.anchorMin = pr.anchorMax = new Vector2(1f, 1f); pr.pivot = new Vector2(1f, 1f);
-            pr.anchoredPosition = new Vector2(-24f, -24f); pr.sizeDelta = new Vector2(360f, 490f);
+            pr.anchoredPosition = new Vector2(-24f, -24f); pr.sizeDelta = new Vector2(360f, 640f);
             panel.GetComponent<Image>().color = new Color(0.12f, 0.14f, 0.24f, 0.92f);
 
             var labelCol = new Color(0.75f, 0.8f, 0.95f);
@@ -201,6 +201,12 @@ namespace NisitSimulator.EditorTools
             var client = MakeButton(panel.transform, font, "Join", new Vector2(0f, -372f), new Color(0.62f, 0.80f, 0.96f));
             var disc = MakeButton(panel.transform, font, "ออกจากห้อง", new Vector2(0f, -426f), new Color(0.99f, 0.74f, 0.78f));
 
+            // ----- เล่นออนไลน์ (Relay / Join Code) — ข้ามเน็ตได้ ต้องต่อ Unity Cloud -----
+            MakeText(panel.transform, font, "— หรือเล่นออนไลน์ (Join Code) —", new Vector2(0f, -466f), 14, labelCol);
+            var code = MakeInput(panel.transform, font, new Vector2(0f, -488f), new Vector2(320f, 38f));
+            var hostR = MakeButton(panel.transform, font, "Host ออนไลน์", new Vector2(0f, -536f), new Color(0.55f, 0.82f, 0.70f));
+            var joinR = MakeButton(panel.transform, font, "Join ออนไลน์", new Vector2(0f, -588f), new Color(0.60f, 0.74f, 0.96f));
+
             var ui = canGo.AddComponent<NetworkUI>();
             ui.panel = panel;
             ui.statusText = status;
@@ -209,6 +215,7 @@ namespace NisitSimulator.EditorTools
             ui.colorButtons = swatches;
             ui.modelButtons = modelBtns;
             ui.hostButton = host; ui.clientButton = client; ui.disconnectButton = disc;
+            ui.codeInput = code; ui.hostRelayButton = hostR; ui.joinRelayButton = joinR;
 
             // ----- แชท (มุมซ้ายล่าง) — log + ช่องพิมพ์ + ปุ่มสำเร็จรูป -----
             var chatLog = MakeText(canGo.transform, font, "", Vector2.zero, 20, new Color(1f, 1f, 1f, 0.95f));
