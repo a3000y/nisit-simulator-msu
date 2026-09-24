@@ -49,12 +49,15 @@ namespace NisitSimulator.EditorTools
             EditorSceneManager.MarkSceneDirty(menu);
             EditorSceneManager.SaveScene(menu);
 
-            // ===== 3) Build Settings (เมนูเป็นฉากแรก) =====
-            EditorBuildSettings.scenes = new[]
+            // ===== 3) Build Settings (เมนูเป็นฉากแรก) — ใส่ล็อบบี้ด้วยถ้ามี (กันเขียนทับตอน rebuild) =====
+            const string LobbyPath = "Assets/_Project/Scenes/02_Lobby.unity";
+            var buildScenes = new System.Collections.Generic.List<EditorBuildSettingsScene>
             {
                 new EditorBuildSettingsScene(MenuPath, true),
-                new EditorBuildSettingsScene(GameplayPath, true),
             };
+            if (System.IO.File.Exists(LobbyPath)) buildScenes.Add(new EditorBuildSettingsScene(LobbyPath, true));
+            buildScenes.Add(new EditorBuildSettingsScene(GameplayPath, true));
+            EditorBuildSettings.scenes = buildScenes.ToArray();
 
             // ===== 4) ต่อ Polish + พื้นหลัง + หน้าเลือกคณะ อัตโนมัติ (กดครั้งเดียวจบ ไม่ต้องไล่กด) =====
             MenuPolish.SuppressDialog = true;
