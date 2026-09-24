@@ -17,6 +17,9 @@ namespace NisitSimulator.UI
         public GameObject facultyPanel;    // หน้าเลือกคณะ (เซ็ตโดย Editor)
         public GameObject comingSoonPanel; // ป็อปอัป "กำลังพัฒนา" (เซ็ตโดย Editor)
         public Button comingSoonCloseButton;
+        public Button creditsButton;       // เกี่ยวกับ/ผู้จัดทำ (เซ็ตโดย Editor)
+        public GameObject creditsPanel;
+        public Button creditsCloseButton;
 
         void Start()
         {
@@ -35,9 +38,15 @@ namespace NisitSimulator.UI
             if (comingSoonCloseButton && comingSoonPanel)
                 comingSoonCloseButton.onClick.AddListener(() => comingSoonPanel.SetActive(false));
 
+            if (creditsButton && creditsPanel)
+                creditsButton.onClick.AddListener(() => creditsPanel.SetActive(true));
+            if (creditsCloseButton && creditsPanel)
+                creditsCloseButton.onClick.AddListener(() => creditsPanel.SetActive(false));
+
             if (settingsPanel) settingsPanel.SetActive(false);
             if (facultyPanel) facultyPanel.SetActive(false);
             if (comingSoonPanel) comingSoonPanel.SetActive(false);
+            if (creditsPanel) creditsPanel.SetActive(false);
         }
 
         // ปุ่มเล่นหลายคน — เริ่มเกมใหม่แล้วเปิดแผง Multiplayer (F3) อัตโนมัติ
