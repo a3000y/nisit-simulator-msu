@@ -2,6 +2,7 @@ using UnityEngine;
 using NisitSimulator.Stats;
 using NisitSimulator.TimeSystem;
 using NisitSimulator.UI;
+using NisitSimulator.SaveLoad;
 
 namespace NisitSimulator.Systems
 {
@@ -19,7 +20,8 @@ namespace NisitSimulator.Systems
         {
             stats = Object.FindFirstObjectByType<PlayerStats>();
             clock = Object.FindFirstObjectByType<GameClock>();
-            if (stats != null && startMoney != 0) stats.ChangeMoney(startMoney);
+            // ให้เงินตั้งต้นเฉพาะเกมใหม่ — ถ้า "เล่นต่อ" เงินคืนจากเซฟแล้ว (กันบวกซ้ำ)
+            if (stats != null && startMoney != 0 && !GameSession.IsContinue) stats.ChangeMoney(startMoney);
             if (clock != null) { lastDay = clock.Day; clock.OnDayChanged += OnDay; }
         }
 

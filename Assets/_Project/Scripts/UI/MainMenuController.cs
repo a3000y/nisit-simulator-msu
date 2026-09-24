@@ -69,6 +69,7 @@ namespace NisitSimulator.UI
         {
             SaveSystem.DeleteSave();
             GameSession.PendingLoad = false;
+            GameSession.IsContinue = false;   // เกมใหม่ → รับเงินตั้งต้น
             SceneManager.LoadScene(GameSession.GameplayScene);
         }
 
@@ -76,6 +77,7 @@ namespace NisitSimulator.UI
         public void Continue()
         {
             GameSession.PendingLoad = true;
+            GameSession.IsContinue = true;    // เล่นต่อ → เงินคืนจากเซฟ ไม่บวกเงินตั้งต้นซ้ำ
             SceneManager.LoadScene(GameSession.GameplayScene);
         }
 
