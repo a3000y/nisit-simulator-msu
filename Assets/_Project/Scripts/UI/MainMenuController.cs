@@ -86,12 +86,11 @@ namespace NisitSimulator.UI
             if (continueButton != null) continueButton.interactable = SaveSystem.HasSave();   // มีเซฟในช่องนี้ไหม
         }
 
-        // ปุ่มเล่นหลายคน — เริ่มเกมใหม่แล้วเปิดแผง Multiplayer (F3) อัตโนมัติ
-        //   (เล่น LAN ได้เลย: คนหนึ่งกด Host อีกคนกรอก IP แล้ว Join · Relay ข้ามเน็ตยังไม่เปิด)
+        // ปุ่มเล่นหลายคน — เข้าฉากล็อบบี้ (Host/Join → แต่งตัว+เห็นเพื่อน → โฮสต์กดเริ่มพร้อมกัน)
         public void MultiplayerGame()
         {
-            GameSession.OpenNetworkOnStart = true;
-            NewGame();   // เลือกคณะ (ถ้ามี) แล้วเข้าเกม — NetworkUI จะเปิดแผงให้เอง
+            GameSession.OpenNetworkOnStart = false;
+            SceneManager.LoadScene(GameSession.LobbyScene);
         }
 
         // (คงไว้เผื่อเรียกจากที่อื่น) ป็อปอัป "กำลังพัฒนา"

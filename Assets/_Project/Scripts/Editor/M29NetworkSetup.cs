@@ -34,16 +34,10 @@ namespace NisitSimulator.EditorTools
 
             var scene = EditorSceneManager.OpenScene(GameplayPath, OpenSceneMode.Single);
 
-            // NetworkManager + UnityTransport
-            var nmGo = GameObject.Find("NetworkManager") ?? new GameObject("NetworkManager");
-            var nm = nmGo.GetComponent<NetworkManager>() ?? nmGo.AddComponent<NetworkManager>();
-            var utp = nmGo.GetComponent<UnityTransport>() ?? nmGo.AddComponent<UnityTransport>();
-            if (nm.NetworkConfig == null) nm.NetworkConfig = new NetworkConfig();
-            nm.NetworkConfig.NetworkTransport = utp;
-            nm.NetworkConfig.PlayerPrefab = prefab;
-            if (nmGo.GetComponent<CoopBonus>() == null) nmGo.AddComponent<CoopBonus>();   // 🤝 โบนัสเล่นด้วยกัน
-            EditorUtility.SetDirty(nm);
-            EditorUtility.SetDirty(nmGo);
+            // NetworkManager ย้ายไปอยู่ที่ฉากล็อบบี้แล้ว (M38 Build Lobby) — persist เข้าเกมพร้อมกันด้วย NGO LoadScene
+            //   จึงไม่สร้าง NM ในฉากเกมที่นี่ (กันซ้ำซ้อน 2 ตัว) · ถ้ามี NM เก่าค้างอยู่ในฉากเกม ให้ลบทิ้ง
+            var strayNm = GameObject.Find("NetworkManager");
+            if (strayNm != null) Object.DestroyImmediate(strayNm);
 
             // แต่งตัว: สร้างแคตตาล็อกตัวละคร + ติดตัวสลับโมเดลบน Player
             EnsureCatalog();

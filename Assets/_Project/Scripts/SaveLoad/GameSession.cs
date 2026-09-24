@@ -5,6 +5,7 @@ namespace NisitSimulator.SaveLoad
     {
         public const string MenuScene = "Scene1";          // ฉากเมนูหลัก (ฉาก 1)
         public const string GameplayScene = "01_Gameplay"; // ฉากเล่นเกม
+        public const string LobbyScene = "02_Lobby";       // ฉากล็อบบี้เล่นหลายคน
 
         // ช่องเซฟปัจจุบัน (0-2) — เลือกในเมนู เก็บถาวร
         public static int SaveSlot

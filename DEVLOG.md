@@ -391,7 +391,13 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - [NetworkUI](Assets/_Project/Scripts/Net/NetworkUI.cs): `HostRelay()` (CreateAllocation → GetJoinCode → SetRelayServerData → StartHost, โชว์โค้ด) · `JoinRelay()` (กรอกโค้ด → JoinAllocation → StartClient) · `EnsureServices()` (UnityServices.Initialize + sign-in anonymous) · Refresh โชว์โค้ดห้องเมื่อ Host
 - [M29NetworkSetup](Assets/_Project/Scripts/Editor/M29NetworkSetup.cs): ขยายแผง F3 + ปุ่ม "Host ออนไลน์"/"Join ออนไลน์" + ช่องกรอกโค้ด (ต้อง re-run Setup Multiplayer)
 - แพ็กเกจครบ (netcode 2.13 + services.multiplayer 2.3 + relay 1.2)
-- ⚠️ **ยังเทสต์ไม่ได้ที่หอ/มอ** (Wi-Fi บล็อก Unity Cloud) — ต้อง **hotspot/เน็ตบ้าน** + ลิงก์ Project กับ Unity Cloud (Project Settings → Services) ก่อน · บรรทัด `new RelayServerData(alloc,"dtls")` อาจต้องปรับเป็น `alloc.ToRelayServerData("dtls")` ตามเวอร์ชันแพ็กเกจ (เช็คตอน compile)
+- ⚠️ **ยังเทสต์ไม่ได้ที่หอ/มอ** (Wi-Fi บล็อก Unity Cloud) — ต้อง **hotspot/เน็ตบ้าน** + ลิงก์ Project กับ Unity Cloud (Project Settings → Services) ก่อน · แก้ compile: ถอด `com.unity.services.relay` (ซ้ำกับ multiplayer) + ใช้ `alloc.ToRelayServerData("dtls")`
+
+### รื้อ MP เป็น "ล็อบบี้" (2026-09-25)
+- 🏠 **flow ใหม่**: เมนู "เล่นหลายคน" → **ฉากล็อบบี้ (02_Lobby)** → Host/Join (LAN/โค้ด) → แต่งตัว(แบบ/สี/ชื่อ) + เห็นรายชื่อผู้เล่น → **โฮสต์กด "เริ่มเกม" → ทุกคนเข้าพร้อมกัน** (เดิมโยนเข้าเกมเลย+เปิด F3 ซึ่งดูแปลก)
+- [M38LobbyBuilder](Assets/_Project/Scripts/Editor/M38LobbyBuilder.cs): สร้างฉากล็อบบี้ + **ย้าย NetworkManager มาที่ล็อบบี้** (เปิด `EnableSceneManagement` → NGO LoadScene พร้อมกัน) + ลบ NM ออกจากฉากเกม · [LobbyController](Assets/_Project/Scripts/Net/LobbyController.cs) (start=โฮสต์/back/รายชื่อ/hint) · reuse NetworkUI (connect+แต่งตัว)
+- [M29](Assets/_Project/Scripts/Editor/M29NetworkSetup.cs) ไม่สร้าง NM ในฉากเกมแล้ว (กันซ้ำ) · [MainMenuController](Assets/_Project/Scripts/UI/MainMenuController.cs).MultiplayerGame → โหลดฉากล็อบบี้ · Build Settings: เมนู→ล็อบบี้→เกม
+- ⚠️ v1 ยัง**เทสต์เองไม่ได้** — ต้องเทสต์ 2 หน้าต่าง (Multiplayer Play Mode) แล้วจูน · ยังไม่มีแชทในล็อบบี้ (ไว้เพิ่มหลัง flow นิ่ง)
 
 ---
 
