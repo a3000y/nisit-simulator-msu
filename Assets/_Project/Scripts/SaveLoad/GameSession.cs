@@ -13,6 +13,15 @@ namespace NisitSimulator.SaveLoad
         public static bool OpenNetworkOnStart = false;  // true = เปิดแผง Multiplayer (F3) อัตโนมัติตอนเข้าเกม
                                                         //   (ตั้งจากปุ่ม "เล่นหลายคน" ในเมนู) NetworkUI อ่านครั้งเดียว
 
+        // ระดับความยาก (0=ง่าย 1=ปกติ 2=ยาก) — เก็บถาวรใน PlayerPrefs · กระทบอัตราลดสถานะ
+        public static int Difficulty
+        {
+            get => UnityEngine.PlayerPrefs.GetInt("nisit_diff", 1);
+            set { UnityEngine.PlayerPrefs.SetInt("nisit_diff", UnityEngine.Mathf.Clamp(value, 0, 2)); UnityEngine.PlayerPrefs.Save(); }
+        }
+        public static float DecayMultiplier => Difficulty == 0 ? 0.7f : (Difficulty == 2 ? 1.4f : 1f);
+        public static string DifficultyName => Difficulty == 0 ? "ง่าย" : (Difficulty == 2 ? "ยาก" : "ปกติ");
+
         // คณะของผู้เล่น (0=IT, 1=บริหาร, 2=วิทย์, 3=นิเทศ) — เป็นค่าต่อผู้เล่น เผื่อ multiplayer ในอนาคต
         public static int SelectedFacultyIndex = 0;
 

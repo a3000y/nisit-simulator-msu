@@ -107,7 +107,7 @@ namespace NisitSimulator.UI
 
             if (scoreText != null)
                 scoreText.text =
-                    $"คณะ: {faculty}\n" +
+                    $"คณะ: {faculty}  ·  ความยาก: {GameSession.DifficultyName}\n" +
                     $"ชั้นปีที่ไปถึง: {year}\n" +
                     $"เกรดเฉลี่ย (GPA): {gpa:0.00}\n" +
                     $"เพื่อนที่ได้รู้จัก: {friends} คน" + (close > 0 ? $" (สนิท {close}" + (best > 0 ? $", ซี้ {best}" : "") + ")" : "") + "\n" +

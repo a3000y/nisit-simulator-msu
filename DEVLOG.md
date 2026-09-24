@@ -371,6 +371,11 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - ♻️ **New Game+** — จบการศึกษาแล้วกด "เล่นใหม่" → เลื่อนรอบ NG+ (เก็บใน PlayerPrefs) → รอบถัดไปได้โบนัสเงินตั้งต้น +100/รอบ ([DailyAllowance](Assets/_Project/Scripts/Systems/DailyAllowance.cs)) · หน้าจบโชว์ "New Game+ รอบ N"
 - 🏆 **Achievements เป็นโปรไฟล์ถาวร** — [AchievementManager](Assets/_Project/Scripts/Systems/AchievementManager.cs) เก็บลง PlayerPrefs (union กับเซฟ) → ปลดล็อกแล้วไม่หายข้ามรอบ NG+
 
+### QoL: ระดับความยาก (2026-09-24)
+- ⚖️ **เลือกความยาก ง่าย/ปกติ/ยาก** ในหน้าแต่งตัว (ก่อนเริ่มเกม) — กระทบอัตราลดความอิ่ม/พลังงาน (×0.7 / ×1.0 / ×1.4) · เก็บถาวรใน PlayerPrefs
+- [GameSession](Assets/_Project/Scripts/SaveLoad/GameSession.cs).Difficulty/DecayMultiplier/DifficultyName · [StatDecay](Assets/_Project/Scripts/Stats/StatDecay.cs) คูณอัตราลดตามความยาก · [CharacterCreatorController](Assets/_Project/Scripts/UI/CharacterCreatorController.cs) + [M37](Assets/_Project/Scripts/Editor/M37CharacterCreator.cs) เพิ่มปุ่ม 3 ระดับ · หน้าจบโชว์ระดับความยาก
+- (ยังเหลือใน QoL: ตั้งค่ากราฟิก + หลายช่องเซฟ — เป็น bake/refactor ใหญ่กว่า ไว้ต่อ)
+
 ---
 
 ## Version Control

@@ -1,5 +1,6 @@
 using UnityEngine;
 using NisitSimulator.Core;
+using NisitSimulator.SaveLoad;
 
 namespace NisitSimulator.Stats
 {
@@ -30,9 +31,10 @@ namespace NisitSimulator.Stats
             if (GameManager.Instance != null && !GameManager.Instance.IsActive) return;
             float dt = Time.deltaTime;
             float drainMult = effects != null ? effects.energyDrainMult : 1f;
+            float diff = GameSession.DecayMultiplier;   // ความยาก: ง่าย 0.7 / ปกติ 1 / ยาก 1.4
 
-            stats.ChangeHunger(-hungerDecayPerSec * dt);
-            stats.ChangeEnergy(-energyDecayPerSec * drainMult * dt);
+            stats.ChangeHunger(-hungerDecayPerSec * diff * dt);
+            stats.ChangeEnergy(-energyDecayPerSec * drainMult * diff * dt);
 
             // ถ้าความอิ่มหมด → เริ่มหักพลังงานและสุขภาพ
             if (stats.Hunger <= 0f)

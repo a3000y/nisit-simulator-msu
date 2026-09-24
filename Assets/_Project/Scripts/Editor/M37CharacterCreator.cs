@@ -128,6 +128,14 @@ namespace NisitSimulator.EditorTools
                 accSlots[s] = new CharacterCreatorController.AccessorySlotUI { buttons = btns };
             }
 
+            // ระดับความยาก (ง่าย/ปกติ/ยาก)
+            MakeText(card.transform, font, "ระดับความยาก", new Vector2(rx, -286f), new Vector2(470, 28), 23, lblCol, TextAlignmentOptions.Left);
+            var diffBtns = new Button[3];
+            string[] diffNames = { "ง่าย", "ปกติ", "ยาก" };
+            Color[] diffCols = { new Color(0.60f, 0.86f, 0.68f), new Color(0.62f, 0.80f, 0.96f), new Color(0.99f, 0.66f, 0.62f) };
+            for (int i = 0; i < 3; i++)
+                diffBtns[i] = MakeButton(card.transform, font, diffNames[i], new Vector2(rx + (i - 1) * 150f, -324f), new Vector2(140f, 42f), diffCols[i], 21);
+
             // ปุ่มยืนยัน / ย้อนกลับ
             var back = MakeButton(card.transform, font, "ย้อนกลับ", new Vector2(-395f, -378f), new Vector2(300f, 60f), new Color(0.86f, 0.80f, 0.88f), 26);
             var confirm = MakeButton(card.transform, font, "เริ่มเล่น", new Vector2(255f, -378f), new Vector2(330f, 62f), new Color(0.60f, 0.86f, 0.68f), 28);
@@ -136,6 +144,7 @@ namespace NisitSimulator.EditorTools
             var cc = card.gameObject.AddComponent<CharacterCreatorController>();
             cc.nameInput = nameInput; cc.modelButtons = modelBtns; cc.colorButtons = colorBtns;
             cc.accessorySlots = accSlots;
+            cc.difficultyButtons = diffBtns;
             cc.previewCamera = cam; cc.previewRoot = modelRoot; cc.previewImage = rawImg;
 
             mc.characterPanel = dim.gameObject;

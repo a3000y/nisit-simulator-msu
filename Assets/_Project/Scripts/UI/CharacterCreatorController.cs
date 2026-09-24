@@ -20,6 +20,7 @@ namespace NisitSimulator.UI
         public Button[] modelButtons;
         public Button[] colorButtons;
         public AccessorySlotUI[] accessorySlots;   // 1 ช่องต่อชนิดของแต่ง (หมวก/แว่น/...)
+        public Button[] difficultyButtons;         // 0=ง่าย 1=ปกติ 2=ยาก
         public Camera previewCamera;   // กล้องส่องเวที (render → RawImage)
         public Transform previewRoot;  // จุดวางโมเดลพรีวิว
         public RawImage previewImage;  // แสดงผลพรีวิว
@@ -79,10 +80,19 @@ namespace NisitSimulator.UI
 
             SetupAccessoryUI();
 
+            if (difficultyButtons != null)
+                for (int i = 0; i < difficultyButtons.Length; i++)
+                {
+                    if (difficultyButtons[i] == null) continue;
+                    int idx = i;
+                    difficultyButtons[i].onClick.AddListener(() => PickDifficulty(idx));
+                }
+
             SpawnPreview(model);
             HighlightModel();
             HighlightColor();
             HighlightAccessories();
+            HighlightDifficulty();
 
             initialized = true;
             if (previewCamera != null) previewCamera.enabled = true;
@@ -164,6 +174,21 @@ namespace NisitSimulator.UI
             GameSession.PlayerAccessories[slot] = value;
             if (current != null) CharacterAccessories.Apply(current.transform, GameSession.PlayerAccessories);
             HighlightAccessories();
+        }
+
+        void PickDifficulty(int i)
+        {
+            GameSession.Difficulty = i;
+            HighlightDifficulty();
+        }
+
+        void HighlightDifficulty()
+        {
+            if (difficultyButtons == null) return;
+            int d = GameSession.Difficulty;
+            for (int i = 0; i < difficultyButtons.Length; i++)
+                if (difficultyButtons[i] != null)
+                    difficultyButtons[i].transform.localScale = Vector3.one * (i == d ? 1.14f : 1f);
         }
 
         void HighlightAccessories()
