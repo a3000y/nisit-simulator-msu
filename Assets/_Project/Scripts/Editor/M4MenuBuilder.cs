@@ -125,17 +125,20 @@ namespace NisitSimulator.EditorTools
             // ===== แผงตั้งค่าเสียง (dim เต็มจอ + การ์ดกลาง) =====
             var sDim = MakeImage(root, "SettingsPanel", Vector2.zero, Vector2.one, new Color(0.04f, 0.06f, 0.12f, 0.62f));
             sDim.rectTransform.offsetMin = Vector2.zero; sDim.rectTransform.offsetMax = Vector2.zero;
-            var sCard = MakeRounded(sDim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(660, 720), new Color(0.11f, 0.14f, 0.24f, 0.99f));
+            var sCard = MakeRounded(sDim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(660, 820), new Color(0.11f, 0.14f, 0.24f, 0.99f));
             Deco(sCard);
-            MakeText(sCard.transform, "STitle", "ตั้งค่าเสียง", 46, new Vector2(0.5f, 1f), new Vector2(0, -46), new Vector2(600, 60), new Color(1f, 0.9f, 0.5f), FontStyles.Bold);
+            MakeText(sCard.transform, "STitle", "ตั้งค่า", 46, new Vector2(0.5f, 1f), new Vector2(0, -40), new Vector2(600, 60), new Color(1f, 0.9f, 0.5f), FontStyles.Bold);
 
             var sc = sCard.gameObject.AddComponent<SettingsController>();
             sc.panel = sDim.gameObject;
-            sc.masterSlider  = LabeledSlider(sCard.transform, "เสียงรวม (Master)", -120);
-            sc.musicSlider   = LabeledSlider(sCard.transform, "เพลง (Music)", -216);
-            sc.sfxSlider     = LabeledSlider(sCard.transform, "เอฟเฟกต์ (SFX)", -312);
-            sc.voiceSlider   = LabeledSlider(sCard.transform, "เสียงพูด (Voice)", -408);
-            sc.ambientSlider = LabeledSlider(sCard.transform, "บรรยากาศ (Ambient)", -504);
+            sc.masterSlider  = LabeledSlider(sCard.transform, "เสียงรวม (Master)", -108);
+            sc.musicSlider   = LabeledSlider(sCard.transform, "เพลง (Music)", -196);
+            sc.sfxSlider     = LabeledSlider(sCard.transform, "เอฟเฟกต์ (SFX)", -284);
+            sc.voiceSlider   = LabeledSlider(sCard.transform, "เสียงพูด (Voice)", -372);
+            sc.ambientSlider = LabeledSlider(sCard.transform, "บรรยากาศ (Ambient)", -460);
+            // กราฟิก (ปุ่มวน — คลิกเพื่อเปลี่ยนคุณภาพ/สลับเต็มจอ)
+            sc.qualityButton    = MakeButton(sCard.transform, "คุณภาพ", new Vector2(0, -556), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f);
+            sc.fullscreenButton = MakeButton(sCard.transform, "เต็มจอ", new Vector2(0, -648), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f);
             sc.closeButton   = MakeButton(sCard.transform, "ปิด", new Vector2(0, 28), new Color(0.80f, 0.72f, 0.96f), 0.5f, 0f);
 
             mc.settingsPanel = sDim.gameObject;

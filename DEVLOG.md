@@ -376,6 +376,11 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - [GameSession](Assets/_Project/Scripts/SaveLoad/GameSession.cs).Difficulty/DecayMultiplier/DifficultyName · [StatDecay](Assets/_Project/Scripts/Stats/StatDecay.cs) คูณอัตราลดตามความยาก · [CharacterCreatorController](Assets/_Project/Scripts/UI/CharacterCreatorController.cs) + [M37](Assets/_Project/Scripts/Editor/M37CharacterCreator.cs) เพิ่มปุ่ม 3 ระดับ · หน้าจบโชว์ระดับความยาก
 - (ยังเหลือใน QoL: ตั้งค่ากราฟิก + หลายช่องเซฟ — เป็น bake/refactor ใหญ่กว่า ไว้ต่อ)
 
+### QoL: ตั้งค่ากราฟิก (2026-09-24)
+- 🖥️ เพิ่มในแผงตั้งค่า (เมนู): ปุ่มวน **คุณภาพ** (QualitySettings ทุกระดับ) + **เต็มจอ/หน้าต่าง** · เก็บ PlayerPrefs
+- [SettingsController](Assets/_Project/Scripts/UI/SettingsController.cs) เพิ่ม qualityButton/fullscreenButton + `[RuntimeInitializeOnLoadMethod]` ใช้ค่าที่เซฟตอนเปิดแอป (แก้ปัญหาแผงเริ่มปิด Start ไม่รัน — ครอบคลุม master volume ด้วย) · [M4MenuBuilder](Assets/_Project/Scripts/Editor/M4MenuBuilder.cs) ขยายการ์ด + วางปุ่มกราฟิก (ต้อง re-bake)
+- QoL เหลือ: **หลายช่องเซฟ** (refactor SaveSystem เป็นหลายไฟล์ + UI เลือกช่อง) — ยังไม่ทำ
+
 ---
 
 ## Version Control
