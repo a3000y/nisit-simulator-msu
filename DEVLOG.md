@@ -351,6 +351,12 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - [TalkNPC.cs](Assets/_Project/Scripts/Interaction/TalkNPC.cs): ได้ค่าสนิท "ครั้งแรกของแต่ละวัน" (สไตล์แวะหาเพื่อนทุกวัน กันสแปม) · รางวัลความพอใจสเกลตามระดับ (สนิทมาก=คุยแล้วสุขกว่า) · ป้าย "กด E" โชว์หัวใจ ♥ ตามระดับ · คีย์คงที่จากชื่อ+ตำแหน่งเริ่ม
 - **logic ล้วน ไม่ต้อง re-bake** — เข้าเกมคุยได้เลย · ยังไม่มีหน้ารายชื่อเพื่อน (phone app) ไว้ทำต่อได้
 
+### ต่อยอดความสัมพันธ์: แอปเพื่อน + ของขวัญ + โบนัส + Life Recap (2026-09-24)
+- 📱 **แอป "เพื่อน" ในโทรศัพท์** (TAB → เพื่อน) — โชว์ NPC ทุกคนที่รู้จัก + ระดับ + หัวใจ เรียงจากสนิทมากไปน้อย · [PhoneController](Assets/_Project/Scripts/UI/PhoneController.cs) เพิ่ม App.Friends + FriendsText() · [M12PhoneBuilder](Assets/_Project/Scripts/Editor/M12PhoneBuilder.cs) เพิ่มปุ่มแอปที่ 6 + SuppressDialog + เข้า ★ Rebuild All (ต้อง re-bake)
+- 🎁 **ให้ของขวัญ** — กด **H** ใกล้ NPC → เลือกไอเทมในกระเป๋าให้ → +ค่าสนิท (ตามค่าไอเทม 5-20) · [GiftUI.cs](Assets/_Project/Scripts/UI/GiftUI.cs) สร้าง UI เองตอนรัน (logic ล้วน) · [TalkNPC](Assets/_Project/Scripts/Interaction/TalkNPC.cs).ReceiveGift
+- 📚 **โบนัสจากเพื่อนสนิท**: เข้าเรียนได้ความรู้ +5%/เพื่อนสนิท (สูงสุด +25%) · เควสจาก NPC รางวัล +20%/ระดับความสนิท
+- 🎓 **Life Recap ตอนจบ**: หน้าจบโชว์ "เพื่อนที่ได้รู้จัก X คน (สนิท/ซี้)" ต่อจาก GPA/คะแนน · [EndScreenController](Assets/_Project/Scripts/UI/EndScreenController.cs)
+
 ---
 
 ## Version Control

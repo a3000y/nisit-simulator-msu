@@ -15,7 +15,7 @@ namespace NisitSimulator.UI
     // UI ถูกสร้าง+ต่อโดย Editor tool (Nisit -> Build Phone (TAB))
     public class PhoneController : MonoBehaviour
     {
-        public enum App { Status = 0, Calendar = 1, Quests = 2, Grades = 3, Map = 4 }
+        public enum App { Status = 0, Calendar = 1, Quests = 2, Grades = 3, Map = 4, Friends = 5 }
 
         [Header("UI (เซ็ตโดย Editor)")]
         public GameObject panel;        // ราก (dim + ตัวเครื่อง)
@@ -145,6 +145,7 @@ namespace NisitSimulator.UI
                 case App.Quests: return "ภารกิจวันนี้";
                 case App.Grades: return "ผลการเรียน";
                 case App.Map: return "แผนที่มหาลัย";
+                case App.Friends: return "รายชื่อเพื่อน";
             }
             return "แอป";
         }
@@ -184,7 +185,33 @@ namespace NisitSimulator.UI
                 case App.Calendar: appTitle.text = "ปฏิทินการศึกษา"; appBody.text = CalendarText(); break;
                 case App.Quests:   appTitle.text = "ภารกิจวันนี้";    appBody.text = quests != null ? quests.SummaryText() : "-"; break;
                 case App.Grades:   appTitle.text = "ผลการเรียน";     appBody.text = GradesText();   break;
+                case App.Friends:  appTitle.text = "รายชื่อเพื่อน";   appBody.text = FriendsText();  break;
             }
+        }
+
+        // รายชื่อ NPC ที่รู้จัก + ระดับความสนิท (เรียงจากสนิทมากไปน้อย)
+        string FriendsText()
+        {
+            var rel = RelationshipManager.Instance;
+            var ids = rel.AllIds;
+            if (ids == null || ids.Count == 0)
+                return "ยังไม่รู้จักใครเลย\nลองเดินไปทักทาย NPC (กด E) ดูสิ!";
+
+            var list = new System.Collections.Generic.List<string>(ids);
+            list.Sort((a, b) => rel.GetPoints(b).CompareTo(rel.GetPoints(a)));   // สนิทมากขึ้นก่อน
+
+            int friends = rel.FriendCount;
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine($"<size=80%><color=#B9C2D6>รู้จัก {ids.Count} คน · เพื่อน {friends} คน</color></size>\n");
+            foreach (var id in list)
+            {
+                int p = rel.GetPoints(id);
+                int lvl = RelationshipManager.LevelOf(p);
+                string hearts = RelationshipManager.Hearts(lvl);
+                string h = string.IsNullOrEmpty(hearts) ? "" : $"  <color=#FF7BA6>{hearts}</color>";
+                sb.AppendLine($"{rel.DisplayName(id)}{h}\n<size=72%><color=#9AA6BF>{RelationshipManager.NameOfLevel(lvl)} ({p})</color></size>");
+            }
+            return sb.ToString();
         }
 
         string StatusText()

@@ -67,6 +67,7 @@ namespace NisitSimulator.Interaction
             // คีย์คงที่ (จากตำแหน่งเริ่ม — คนเดินก็ยังคงคีย์เดิม)
             relId = $"{npcName}_{Mathf.RoundToInt(transform.position.x)}_{Mathf.RoundToInt(transform.position.z)}";
             if (!isVendor) RelationshipManager.Instance.Register(relId, npcName);   // ลงทะเบียนในรายชื่อเพื่อน
+            GiftUI.EnsureExists();   // ระบบให้ของขวัญ (กด H ใกล้ NPC)
         }
 
         public string RelId => relId;

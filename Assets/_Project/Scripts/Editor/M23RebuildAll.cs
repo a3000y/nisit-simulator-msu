@@ -30,6 +30,7 @@ namespace NisitSimulator.EditorTools
             M27AnimalBuilder.SuppressDialog = true;
             M35PauseBuilder.SuppressDialog = true;
             M18AudioBuilder.SuppressDialog = true;
+            M12PhoneBuilder.SuppressDialog = true;
             M37CharacterCreator.SuppressDialog = true;
             M4MenuBuilder.SuppressDialog = true;
             MenuPolish.SuppressDialog = true;
@@ -55,6 +56,7 @@ namespace NisitSimulator.EditorTools
                 Step(log, "ป้ายคณะ 4 ตึก", () => M25FacultyBuildings.Build());     // เปิด/เซฟฉากเกมเอง
                 Step(log, "NPC คุยได้ (ยืน+เดิน)", () => M26TalkNPCs.Build());      // เปิด/เซฟฉากเกมเอง
                 Step(log, "สัตว์ในมหาลัย", () => M27AnimalBuilder.Build());          // ข้ามถ้ายังไม่มีโมเดลสัตว์
+                Step(log, "โทรศัพท์ (6 แอป + เพื่อน)", () => M12PhoneBuilder.Build());
                 Step(log, "เมนู Pause (Esc)", () => M35PauseBuilder.Build());
 
                 // ===== ฉากเมนู (auto-chain: Polish + พื้นหลัง + คณะ) =====
@@ -79,6 +81,7 @@ namespace NisitSimulator.EditorTools
                 M27AnimalBuilder.SuppressDialog = false;
                 M35PauseBuilder.SuppressDialog = false;
                 M18AudioBuilder.SuppressDialog = false;
+                M12PhoneBuilder.SuppressDialog = false;
                 M37CharacterCreator.SuppressDialog = false;
                 M4MenuBuilder.SuppressDialog = false;
                 MenuPolish.SuppressDialog = false;

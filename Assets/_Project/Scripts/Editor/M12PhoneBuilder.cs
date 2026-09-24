@@ -14,6 +14,7 @@ namespace NisitSimulator.EditorTools
     // ใช้: เมนู  Nisit -> Build Phone (TAB)
     public static class M12PhoneBuilder
     {
+        public static bool SuppressDialog = false;
         const string GameplayPath = "Assets/_Project/Scenes/01_Gameplay.unity";
         const string FontSdf = "Assets/_Project/Art/Fonts/Mitr SDF.asset";
         const string IconDir = "Assets/_Project/Art/UI/kenney_game-icons/PNG/White/2x/";
@@ -27,7 +28,7 @@ namespace NisitSimulator.EditorTools
         [MenuItem("Nisit/Build Phone (TAB)")]
         public static void Build()
         {
-            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            if (!SuppressDialog && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
             var scene = EditorSceneManager.OpenScene(GameplayPath, OpenSceneMode.Single);
 
             thai = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontSdf);
@@ -108,12 +109,13 @@ namespace NisitSimulator.EditorTools
             home.raycastTarget = false;
             pc.homeView = home.gameObject;
 
-            var appBtns = new Button[5];
+            var appBtns = new Button[6];
             appBtns[0] = AppBtn(home.transform, "สถานะ",  "leaderboardsComplex", new Vector2(-104, 244), new Color(0.34f, 0.62f, 0.98f));
             appBtns[1] = AppBtn(home.transform, "ปฏิทิน", "information",         new Vector2(104, 244),  new Color(0.30f, 0.78f, 0.52f));
             appBtns[2] = AppBtn(home.transform, "ภารกิจ", "checkmark",           new Vector2(-104, 74),  new Color(1.00f, 0.68f, 0.26f));
             appBtns[3] = AppBtn(home.transform, "เกรด",   "trophy",              new Vector2(104, 74),   new Color(0.74f, 0.50f, 1.00f));
-            appBtns[4] = AppBtn(home.transform, "แผนที่", "target",              new Vector2(0, -96),    new Color(0.22f, 0.80f, 0.82f));
+            appBtns[4] = AppBtn(home.transform, "แผนที่", "target",              new Vector2(-104, -96), new Color(0.22f, 0.80f, 0.82f));
+            appBtns[5] = AppBtn(home.transform, "เพื่อน", "star",                new Vector2(104, -96),  new Color(1.00f, 0.55f, 0.68f));
             pc.appButtons = appBtns;
 
             MakeText(home.transform, "Hint", "กด TAB เพื่อปิด", 18, new Vector2(0.5f, 0f), new Vector2(0, -2), new Vector2(300, 30), new Color(1, 1, 1, 0.55f), FontStyles.Italic, TextAlignmentOptions.Center);
@@ -178,8 +180,9 @@ namespace NisitSimulator.EditorTools
             EditorSceneManager.SaveScene(scene);
 
             Debug.Log("<color=lime>[Nisit] โทรศัพท์ดีไซน์หรูเสร็จ!</color>");
-            EditorUtility.DisplayDialog("Nisit Simulator",
-                "อัปเกรดโทรศัพท์แล้ว! 📱✨\n\n• Wallpaper จอ (ไล่เฉดม่วง-คราม)\n• สไลด์ลื่น ๆ ตอนสลับแอป\n• ขอบทอง + เงาลอย + การ์ดไล่เฉด\n\nใส่ wallpaper เอง: วางรูปชื่อ\n  Assets/_Project/Art/UI/phone_wallpaper.png\nแล้วกดคำสั่งนี้ใหม่\n\nกด Play → TAB ดูได้เลย", "เยี่ยม!");
+            if (!SuppressDialog)
+                EditorUtility.DisplayDialog("Nisit Simulator",
+                    "อัปเกรดโทรศัพท์แล้ว! 📱✨\n\n• 6 แอป: สถานะ/ปฏิทิน/ภารกิจ/เกรด/แผนที่/เพื่อน\n• สไลด์ลื่น ๆ ตอนสลับแอป\n\nกด Play → TAB ดูได้เลย", "เยี่ยม!");
         }
 
         // ---------- ปุ่มแอป: การ์ดไล่เฉด + วงไอคอนฝ้า + เงา ----------
