@@ -109,7 +109,7 @@ namespace NisitSimulator.EditorTools
         {
             var lbl = MakeText(parent, font, label, new Vector2(0f, y), 22, new Color(0.95f, 0.96f, 0.92f));
             lbl.alignment = TextAlignmentOptions.Center;
-            return MakeSlider(parent, new Vector2(0f, y - 28f), new Vector2(460f, 22f));
+            return MakeSlider(parent, new Vector2(0f, y - 36f), new Vector2(460f, 22f));
         }
 
         static Slider MakeSlider(Transform parent, Vector2 pos, Vector2 size)

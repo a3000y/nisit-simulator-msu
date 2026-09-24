@@ -158,12 +158,12 @@ namespace NisitSimulator.EditorTools
             var status = MakeText(panel.transform, font, "ยังไม่เชื่อมต่อ", new Vector2(0f, -16f), 16, new Color(0.9f, 0.92f, 1f));
 
             // ชื่อผู้เล่น
-            MakeText(panel.transform, font, "ชื่อผู้เล่น:", new Vector2(0f, -44f), 15, labelCol);
+            MakeText(panel.transform, font, "ชื่อผู้เล่น:", new Vector2(0f, -34f), 15, labelCol);
             var nameIn = MakeInput(panel.transform, font, new Vector2(0f, -64f), new Vector2(320f, 38f));
             nameIn.text = ""; nameIn.characterLimit = 16;
 
             // สีตัวละคร (สวอตช์)
-            MakeText(panel.transform, font, "สีตัวละคร:", new Vector2(0f, -108f), 15, labelCol);
+            MakeText(panel.transform, font, "สีตัวละคร:", new Vector2(0f, -98f), 15, labelCol);
             var pal = NisitSimulator.Net.NetworkAvatar.Palette;
             var swatches = new Button[pal.Length];
             float sw = 34f, gap = 6f; float totalW = pal.Length * (sw + gap) - gap; float x0 = -totalW / 2f + sw / 2f;
@@ -171,7 +171,7 @@ namespace NisitSimulator.EditorTools
                 swatches[i] = MakeSwatch(panel.transform, new Vector2(x0 + i * (sw + gap), -130f), sw, pal[i]);
 
             // แบบตัวละคร (จากแคตตาล็อก)
-            MakeText(panel.transform, font, "แบบตัวละคร:", new Vector2(0f, -172f), 15, labelCol);
+            MakeText(panel.transform, font, "แบบตัวละคร:", new Vector2(0f, -162f), 15, labelCol);
             var cat = AssetDatabase.LoadAssetAtPath<CharacterCatalog>("Assets/_Project/Resources/CharacterCatalog.asset");
             int mCount = (cat != null && cat.Count > 0) ? cat.Count : 1;
             var modelBtns = new Button[mCount];
@@ -188,7 +188,7 @@ namespace NisitSimulator.EditorTools
             }
 
             // IP (LAN)
-            MakeText(panel.transform, font, "IP ของ Host (LAN):", new Vector2(0f, -244f), 15, labelCol);
+            MakeText(panel.transform, font, "IP ของ Host (LAN):", new Vector2(0f, -234f), 15, labelCol);
             var ip = MakeInput(panel.transform, font, new Vector2(0f, -264f), new Vector2(320f, 38f));
 
             var host = MakeButton(panel.transform, font, "Host (สร้างห้อง)", new Vector2(0f, -318f), new Color(0.60f, 0.86f, 0.68f));
@@ -196,7 +196,7 @@ namespace NisitSimulator.EditorTools
             var disc = MakeButton(panel.transform, font, "ออกจากห้อง", new Vector2(0f, -426f), new Color(0.99f, 0.74f, 0.78f));
 
             // ----- เล่นออนไลน์ (Relay / Join Code) — ข้ามเน็ตได้ ต้องต่อ Unity Cloud -----
-            MakeText(panel.transform, font, "— หรือเล่นออนไลน์ (Join Code) —", new Vector2(0f, -466f), 14, labelCol);
+            MakeText(panel.transform, font, "— หรือเล่นออนไลน์ (Join Code) —", new Vector2(0f, -456f), 14, labelCol);
             var code = MakeInput(panel.transform, font, new Vector2(0f, -488f), new Vector2(320f, 38f));
             var hostR = MakeButton(panel.transform, font, "Host ออนไลน์", new Vector2(0f, -536f), new Color(0.55f, 0.82f, 0.70f));
             var joinR = MakeButton(panel.transform, font, "Join ออนไลน์", new Vector2(0f, -588f), new Color(0.60f, 0.74f, 0.96f));

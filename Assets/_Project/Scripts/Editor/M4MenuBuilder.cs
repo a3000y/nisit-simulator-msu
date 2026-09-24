@@ -143,7 +143,7 @@ namespace NisitSimulator.EditorTools
             // ===== แผงตั้งค่าเสียง (dim เต็มจอ + การ์ดกลาง) =====
             var sDim = MakeImage(root, "SettingsPanel", Vector2.zero, Vector2.one, new Color(0.04f, 0.06f, 0.12f, 0.62f));
             sDim.rectTransform.offsetMin = Vector2.zero; sDim.rectTransform.offsetMax = Vector2.zero;
-            var sCard = MakeRounded(sDim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(660, 820), new Color(0.11f, 0.14f, 0.24f, 0.99f));
+            var sCard = MakeRounded(sDim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(660, 880), new Color(0.11f, 0.14f, 0.24f, 0.99f));
             Deco(sCard);
             MakeText(sCard.transform, "STitle", "ตั้งค่า", 46, new Vector2(0.5f, 1f), new Vector2(0, -40), new Vector2(600, 60), new Color(1f, 0.9f, 0.5f), FontStyles.Bold);
 

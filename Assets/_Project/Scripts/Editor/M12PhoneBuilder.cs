@@ -141,7 +141,7 @@ namespace NisitSimulator.EditorTools
             var st = strip.rectTransform; st.anchorMin = new Vector2(0, 1); st.anchorMax = new Vector2(1, 1); st.pivot = new Vector2(0.5f, 1f);
             st.offsetMin = new Vector2(14, -6); st.offsetMax = new Vector2(-14, 0); st.sizeDelta = new Vector2(0, 6);
 
-            pc.appBody = MakeText(card.transform, "AppBody", "...", 27, new Vector2(0.5f, 1f), new Vector2(0, -26), new Vector2(400, 610), Color.white, FontStyles.Normal, TextAlignmentOptions.TopLeft);
+            pc.appBody = MakeText(card.transform, "AppBody", "...", 27, new Vector2(0.5f, 1f), new Vector2(0, -26), new Vector2(400, 596), Color.white, FontStyles.Normal, TextAlignmentOptions.TopLeft);
             pc.appBody.lineSpacing = 12f;
             pc.appBody.richText = true;
             pc.appCard = card.gameObject;

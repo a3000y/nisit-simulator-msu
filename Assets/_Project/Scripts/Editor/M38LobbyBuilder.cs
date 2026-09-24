@@ -117,15 +117,17 @@ namespace NisitSimulator.EditorTools
             rrt.anchoredPosition = new Vector2(-158f, -92f); rrt.sizeDelta = new Vector2(248f, 336f);
             var rawImg = rawGo.GetComponent<RawImage>(); rawImg.color = Color.white;
 
-            // ขวา: ชื่อ/สี/แบบ
+            // ขวา: ชื่อ/สี/แบบ (ป้ายต้องอยู่คอลัมน์ขวา x=rx ไม่งั้นทับพรีวิวฝั่งซ้าย)
             float rx = 148f;
-            MakeLabel(custGrp, font, "ชื่อ:", -84); var nameIn = MakeInput(custGrp, font, new Vector2(rx, -108), new Vector2(300, 44)); nameIn.characterLimit = 16;
-            MakeLabel(custGrp, font, "สี:", -162);
+            var lblC = new Color(0.85f, 0.88f, 1f);
+            MakeText(custGrp, font, "ชื่อ:", new Vector2(0.5f, 1f), new Vector2(rx, -84), new Vector2(300, 26), 18, lblC, TextAlignmentOptions.Left);
+            var nameIn = MakeInput(custGrp, font, new Vector2(rx, -108), new Vector2(300, 44)); nameIn.characterLimit = 16;
+            MakeText(custGrp, font, "สี:", new Vector2(0.5f, 1f), new Vector2(rx, -162), new Vector2(300, 26), 18, lblC, TextAlignmentOptions.Left);
             var pal = NetworkAvatar.Palette;
             var swatches = new Button[pal.Length];
             float sw = 30f, gp2 = 4f; float tot = pal.Length * (sw + gp2) - gp2; float x0 = rx - tot / 2f + sw / 2f;
             for (int i = 0; i < pal.Length; i++) swatches[i] = MakeSwatch(custGrp, new Vector2(x0 + i * (sw + gp2), -190f), sw, pal[i]);
-            MakeLabel(custGrp, font, "แบบ:", -238);
+            MakeText(custGrp, font, "แบบ:", new Vector2(0.5f, 1f), new Vector2(rx, -238), new Vector2(300, 26), 18, lblC, TextAlignmentOptions.Left);
             int mCount = (cat != null && cat.Count > 0) ? cat.Count : 1;
             var modelBtns = new Button[mCount];
             float mw = 56f, mg = 5f; float mtot = mCount * (mw + mg) - mg; float mx0 = rx - mtot / 2f + mw / 2f;
@@ -162,7 +164,7 @@ namespace NisitSimulator.EditorTools
             var rcard = MakeCard(root, new Vector2(470, 0), new Vector2(640, 860));
             MakeText(rcard, font, "ห้องของเรา", new Vector2(0.5f, 1f), new Vector2(0, -20), new Vector2(600, 40), 30, Color.white, TextAlignmentOptions.Center);
             var listText = MakeText(rcard, font, "ยังไม่มีผู้เล่นในห้อง", new Vector2(0.5f, 1f), new Vector2(0, -80), new Vector2(560, 380), 24, new Color(0.92f, 0.94f, 1f), TextAlignmentOptions.Top);
-            var hint = MakeText(rcard, font, "", new Vector2(0.5f, 0f), new Vector2(0, 150), new Vector2(560, 80), 20, new Color(0.8f, 0.85f, 0.95f), TextAlignmentOptions.Center);
+            var hint = MakeText(rcard, font, "", new Vector2(0.5f, 0f), new Vector2(0, 176), new Vector2(560, 80), 20, new Color(0.8f, 0.85f, 0.95f), TextAlignmentOptions.Center);
             var startBtn = MakeButton(rcard, font, "เริ่มเกม!", new Vector2(0, 96), new Vector2(400, 60), new Color(0.60f, 0.86f, 0.68f), 30, 0.5f, 0f);
             var backBtn = MakeButton(rcard, font, "กลับเมนู", new Vector2(0, 28), new Vector2(400, 50), new Color(0.86f, 0.80f, 0.88f), 24, 0.5f, 0f);
 

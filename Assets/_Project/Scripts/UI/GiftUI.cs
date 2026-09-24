@@ -155,7 +155,7 @@ namespace NisitSimulator.UI
             listGo.transform.SetParent(card.transform, false);
             listRoot = (RectTransform)listGo.transform;
             listRoot.anchorMin = new Vector2(0f, 1f); listRoot.anchorMax = new Vector2(1f, 1f); listRoot.pivot = new Vector2(0.5f, 1f);
-            listRoot.anchoredPosition = new Vector2(0f, 232f); listRoot.sizeDelta = new Vector2(-40f, 460f);
+            listRoot.anchoredPosition = new Vector2(0f, -100f); listRoot.sizeDelta = new Vector2(-40f, 430f);
 
             var close = MakeButton(card.transform, "ปิด", new Vector2(0f, -312f), new Vector2(200f, 50f), new Color(0.86f, 0.80f, 0.88f));
             close.onClick.AddListener(Close);

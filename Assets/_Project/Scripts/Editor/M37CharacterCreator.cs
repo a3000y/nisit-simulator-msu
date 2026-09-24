@@ -91,7 +91,7 @@ namespace NisitSimulator.EditorTools
             var lblCol = Color.white;
 
             // ชื่อ
-            MakeText(card.transform, font, "ชื่อผู้เล่น", new Vector2(rx, 328f), new Vector2(470, 32), 25, lblCol, TextAlignmentOptions.Left);
+            MakeText(card.transform, font, "ชื่อผู้เล่น", new Vector2(rx, 336f), new Vector2(470, 30), 25, lblCol, TextAlignmentOptions.Left);
             var nameInput = MakeInput(card.transform, font, "ใส่ชื่อ...", new Vector2(rx, 290f), new Vector2(470f, 50f));
 
             // แบบตัวละคร (สูงสุด 6 ปุ่ม, 3 ต่อแถว)
@@ -117,7 +117,7 @@ namespace NisitSimulator.EditorTools
             for (int s = 0; s < slotNames.Length; s++)
             {
                 float labelY = 18f - s * 76f;
-                float btnY = labelY - 34f;
+                float btnY = labelY - 42f;
                 MakeText(card.transform, font, slotNames[s], new Vector2(rx, labelY), new Vector2(470, 28), 23, lblCol, TextAlignmentOptions.Left);
                 var btns = new Button[4];
                 for (int b = 0; b < 4; b++)

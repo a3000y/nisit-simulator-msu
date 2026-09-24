@@ -62,7 +62,7 @@ namespace NisitSimulator.EditorTools
             panel.rectTransform.offsetMin = Vector2.zero; panel.rectTransform.offsetMax = Vector2.zero;
 
             // การ์ดกลางทึบ (บังปุ่มเมนูข้างหลัง + รวมเนื้อหาให้เป็นระเบียบ) — ขนาดพอดีเนื้อหา
-            var card = MakeRounded(panel.transform, "Card", new Vector2(0.5f, 0.5f), new Vector2(0, 24), new Vector2(720, 700), new Color(0.11f, 0.14f, 0.24f, 0.98f));
+            var card = MakeRounded(panel.transform, "Card", new Vector2(0.5f, 0.5f), new Vector2(0, 24), new Vector2(720, 740), new Color(0.11f, 0.14f, 0.24f, 0.98f));
             Deco(card);
 
             MakeText(panel.transform, "Title", "เลือกคณะของคุณ", 54, new Vector2(0.5f, 0.5f), new Vector2(0, 286),

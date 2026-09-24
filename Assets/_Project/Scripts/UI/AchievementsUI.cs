@@ -125,9 +125,9 @@ namespace NisitSimulator.UI
 
             MakeText(card.transform, "สมุดนิสิต — สถิติ & ความสำเร็จ", new Vector2(0f, 315f), new Vector2(940, 50), 30, new Color(1f, 0.9f, 0.5f)).alignment = TextAlignmentOptions.Center;
 
-            statsText = MakeText(card.transform, "", new Vector2(-238f, -20f), new Vector2(420, 560), 22, Color.white);
+            statsText = MakeText(card.transform, "", new Vector2(-238f, -14f), new Vector2(420, 540), 22, Color.white);
             statsText.alignment = TextAlignmentOptions.TopLeft;
-            achText = MakeText(card.transform, "", new Vector2(232f, -20f), new Vector2(460, 560), 21, Color.white);
+            achText = MakeText(card.transform, "", new Vector2(232f, -14f), new Vector2(460, 540), 21, Color.white);
             achText.alignment = TextAlignmentOptions.TopLeft;
 
             var close = MakeButton(card.transform, "ปิด (J)", new Vector2(0f, -320f), new Vector2(220f, 50f), new Color(0.86f, 0.80f, 0.88f));

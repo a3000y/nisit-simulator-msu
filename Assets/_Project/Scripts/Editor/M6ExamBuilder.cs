@@ -67,7 +67,7 @@ namespace NisitSimulator.EditorTools
 
             var answerBtns = new Button[4];
             var answerLbls = new TMP_Text[4];
-            float y0 = 30f;
+            float y0 = -18f;   // ขยับปุ่มตอบลง กันกล่องคำถาม (2-3 บรรทัด) ทับปุ่มข้อแรก
             for (int i = 0; i < 4; i++)
             {
                 answerBtns[i] = MakeButton(cardT, "AnsBtn" + i, "ตัวเลือก", new Vector2(0, y0 - i * 88f),

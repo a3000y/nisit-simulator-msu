@@ -345,7 +345,7 @@ namespace NisitSimulator.EditorTools
             var card = MakeImage(dim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(760, 660), Round, PanelCol);
             Deco(card, 6f);
 
-            var title = CardText(card.transform, "GAME OVER", 238, 72, Color.white, FontStyles.Bold, false);
+            var title = CardText(card.transform, "GAME OVER", 252, 72, Color.white, FontStyles.Bold, false);
             var msg   = CardText(card.transform, "ข้อความ", 150, 30, new Color(0.9f, 0.9f, 0.95f), FontStyles.Normal, true);
             var score = CardText(card.transform, "คะแนนรวม: 0", -25, 30, new Color(1f, 0.86f, 0.42f), FontStyles.Bold, false);
             score.rectTransform.sizeDelta = new Vector2(660, 200);   // รองรับ 4 บรรทัด (คณะ/ชั้นปี/GPA/คะแนน)
