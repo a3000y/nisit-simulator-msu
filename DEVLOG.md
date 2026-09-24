@@ -310,6 +310,12 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - 🔊 **รวมเสียงเข้า ★ Rebuild All** — M18AudioBuilder เพิ่ม `SuppressDialog` → ★ Rebuild All สร้างเสียง (fanfare/eat/page + แปะปุ่มทุกฉาก) ให้เลยในคลิกเดียว ไม่ต้องกด Build Audio แยก
 - ⚠️ ยังไม่ได้เทสต์รันจริง — รัน ★ Rebuild All 1 ครั้งแล้วเทสต์ Esc + ปุ่มกลับเมนู/ออกเกม พร้อมรอบก่อน
 
+### ปุ่ม Multiplayer ในเมนู + หน้าเครดิต + แก้บั๊กเงินซ้ำ (2026-09-24)
+- 🌐 **ต่อปุ่ม "เล่นหลายคน" ในเมนูให้ใช้งานจริง** (เดิมโชว์ "กำลังพัฒนา") — ปุ่ม → เริ่มเกมใหม่ + เปิดแผง Multiplayer (F3) อัตโนมัติ เล่น LAN ได้เลย (Host/Join) · เพิ่ม `GameSession.OpenNetworkOnStart` (ตั้งจากเมนู อ่านครั้งเดียวใน [NetworkUI.cs](Assets/_Project/Scripts/Net/NetworkUI.cs)) · ข้อความสถานะบอก IP + วิธี Join · **logic ล้วน ไม่ต้อง re-bake** (Relay ข้ามเน็ตยังไม่เปิด — รอ hotspot/บ้าน)
+- ℹ️ **หน้าเกี่ยวกับ/ผู้จัดทำ** — เพิ่มปุ่ม + แผงในเมนู (สร้างใน [M4MenuBuilder.cs](Assets/_Project/Scripts/Editor/M4MenuBuilder.cs) ให้รอด ★ Rebuild All) · แสดงชื่อเกม/สาขา/มหาลัย + ช่อง [ ] ให้กรอกชื่อผู้จัดทำ+อาจารย์ที่ปรึกษา (กรอกหลัง Rebuild All ครั้งสุดท้าย)
+- 🐛 **แก้บั๊กเงินตั้งต้นซ้ำตอน "เล่นต่อ"** — `DailyAllowance.Start()` บวก +100 เสมอ ทับกับเงินที่คืนจากเซฟ (order-dependent) · เพิ่ม `GameSession.IsContinue` (ไม่ถูกกิน) → ให้เงินตั้งต้นเฉพาะเกมใหม่
+- 📋 ผลสำรวจช่องว่าง: core loop สมบูรณ์ (4 คณะ + ข้อสอบแยกคณะ + จบเกม win/lose ครบ) · ที่ยังเหลือ (เล็ก): เควส/objective/เข้าเรียน/สถานะป่วย ไม่ถูกเซฟ (มีผลเฉพาะออกเกมกลางวัน), สไลเดอร์เสียง vol_voice ยังไม่มีโค้ดอ่าน, ScriptableObject ItemData/CourseData ไม่ถูกใช้
+
 ---
 
 ## Version Control
