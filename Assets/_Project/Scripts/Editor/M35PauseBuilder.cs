@@ -44,7 +44,7 @@ namespace NisitSimulator.EditorTools
             card.transform.SetParent(panel.transform, false);
             var crt = card.GetComponent<RectTransform>();
             crt.anchorMin = crt.anchorMax = new Vector2(0.5f, 0.5f); crt.pivot = new Vector2(0.5f, 0.5f);
-            crt.sizeDelta = new Vector2(460f, 400f);
+            crt.sizeDelta = new Vector2(460f, 480f);
             card.GetComponent<Image>().color = new Color(0.16f, 0.18f, 0.28f, 0.98f);
 
             var title = MakeText(card.transform, font, "หยุดชั่วคราว", new Vector2(0f, -30f), 40, Color.white);
@@ -53,19 +53,101 @@ namespace NisitSimulator.EditorTools
             trt.anchorMin = new Vector2(0, 1); trt.anchorMax = new Vector2(1, 1); trt.pivot = new Vector2(0.5f, 1f);
             trt.sizeDelta = new Vector2(0, 60); trt.anchoredPosition = new Vector2(0, -30);
 
-            var resume = MakeButton(card.transform, font, "เล่นต่อ", new Vector2(0f, 30f), new Color(0.60f, 0.86f, 0.68f));
-            var menu = MakeButton(card.transform, font, "กลับเมนูหลัก", new Vector2(0f, -46f), new Color(0.62f, 0.80f, 0.96f));
-            var quit = MakeButton(card.transform, font, "ออกจากเกม", new Vector2(0f, -122f), new Color(0.99f, 0.74f, 0.78f));
+            var resume   = MakeButton(card.transform, font, "เล่นต่อ", new Vector2(0f, 62f), new Color(0.60f, 0.86f, 0.68f));
+            var settings = MakeButton(card.transform, font, "ตั้งค่าเสียง", new Vector2(0f, -12f), new Color(0.80f, 0.72f, 0.96f));
+            var menu     = MakeButton(card.transform, font, "กลับเมนูหลัก", new Vector2(0f, -86f), new Color(0.62f, 0.80f, 0.96f));
+            var quit     = MakeButton(card.transform, font, "ออกจากเกม", new Vector2(0f, -160f), new Color(0.99f, 0.74f, 0.78f));
+
+            // แผงตั้งค่าเสียง (ซ้อนบนหน้า Pause) — สร้างหลัง panel เพื่อให้อยู่ด้านบน
+            var settingsPanel = BuildSettingsPanel(canGo.transform, font);
 
             var pm = canGo.AddComponent<PauseMenu>();
             pm.panel = panel; pm.resumeButton = resume; pm.menuButton = menu; pm.quitButton = quit;
+            pm.settingsButton = settings; pm.settingsPanel = settingsPanel;
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
 
             Debug.Log("<color=lime>[Nisit] สร้างเมนู Pause แล้ว</color>");
             if (!SuppressDialog)
-                EditorUtility.DisplayDialog("Nisit Simulator", "สร้างเมนู Pause แล้ว! ⏸️\n\nกด Esc ในเกม → เล่นต่อ / กลับเมนูหลัก / ออกเกม", "เยี่ยม!");
+                EditorUtility.DisplayDialog("Nisit Simulator", "สร้างเมนู Pause แล้ว! ⏸️\n\nกด Esc ในเกม → เล่นต่อ / ตั้งค่าเสียง / กลับเมนูหลัก / ออกเกม", "เยี่ยม!");
+        }
+
+        // ---------- แผงตั้งค่าเสียงในเกม ----------
+        static GameObject BuildSettingsPanel(Transform canvasRoot, TMP_FontAsset font)
+        {
+            var dim = new GameObject("Pause Settings", typeof(RectTransform), typeof(Image));
+            dim.transform.SetParent(canvasRoot, false);
+            var drt = dim.GetComponent<RectTransform>();
+            drt.anchorMin = Vector2.zero; drt.anchorMax = Vector2.one; drt.offsetMin = Vector2.zero; drt.offsetMax = Vector2.zero;
+            dim.GetComponent<Image>().color = new Color(0f, 0f, 0f, 0.75f);
+
+            var card = new GameObject("Card", typeof(RectTransform), typeof(Image));
+            card.transform.SetParent(dim.transform, false);
+            var crt = card.GetComponent<RectTransform>();
+            crt.anchorMin = crt.anchorMax = crt.pivot = new Vector2(0.5f, 0.5f);
+            crt.sizeDelta = new Vector2(560f, 640f);
+            card.GetComponent<Image>().color = new Color(0.16f, 0.18f, 0.28f, 0.99f);
+
+            var title = MakeText(card.transform, font, "ตั้งค่าเสียง", new Vector2(0f, 280f), 36, new Color(1f, 0.9f, 0.5f));
+            title.alignment = TextAlignmentOptions.Center;
+
+            var sc = card.AddComponent<SettingsController>();
+            sc.panel = dim;
+            sc.masterSlider  = LabeledSlider(card.transform, font, "เสียงรวม (Master)", 210f);
+            sc.musicSlider   = LabeledSlider(card.transform, font, "เพลง (Music)", 140f);
+            sc.sfxSlider     = LabeledSlider(card.transform, font, "เอฟเฟกต์ (SFX)", 70f);
+            sc.voiceSlider   = LabeledSlider(card.transform, font, "เสียงพูด (Voice)", 0f);
+            sc.ambientSlider = LabeledSlider(card.transform, font, "บรรยากาศ (Ambient)", -70f);
+            sc.closeButton   = MakeButton(card.transform, font, "ปิด", new Vector2(0f, -250f), new Color(0.80f, 0.72f, 0.96f));
+
+            dim.SetActive(false);
+            return dim;
+        }
+
+        static Slider LabeledSlider(Transform parent, TMP_FontAsset font, string label, float y)
+        {
+            var lbl = MakeText(parent, font, label, new Vector2(0f, y), 22, new Color(0.95f, 0.96f, 0.92f));
+            lbl.alignment = TextAlignmentOptions.Center;
+            return MakeSlider(parent, new Vector2(0f, y - 28f), new Vector2(460f, 22f));
+        }
+
+        static Slider MakeSlider(Transform parent, Vector2 pos, Vector2 size)
+        {
+            var go = new GameObject("Slider", typeof(RectTransform), typeof(Image), typeof(Slider));
+            go.transform.SetParent(parent, false);
+            var rt = (RectTransform)go.transform;
+            rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.anchoredPosition = pos; rt.sizeDelta = size;
+            var bg = go.GetComponent<Image>(); bg.color = new Color(0f, 0f, 0f, 0.4f);
+            var slider = go.GetComponent<Slider>();
+
+            var fillArea = new GameObject("Fill Area", typeof(RectTransform));
+            fillArea.transform.SetParent(go.transform, false);
+            var fart = (RectTransform)fillArea.transform;
+            fart.anchorMin = new Vector2(0, 0f); fart.anchorMax = new Vector2(1, 1f);
+            fart.offsetMin = new Vector2(4, 4); fart.offsetMax = new Vector2(-4, -4);
+            var fill = new GameObject("Fill", typeof(RectTransform), typeof(Image));
+            fill.transform.SetParent(fillArea.transform, false);
+            fill.GetComponent<Image>().color = new Color(0.30f, 0.85f, 0.48f);
+            ((RectTransform)fill.transform).sizeDelta = new Vector2(10, 0);
+
+            var hsa = new GameObject("Handle Slide Area", typeof(RectTransform));
+            hsa.transform.SetParent(go.transform, false);
+            var hart = (RectTransform)hsa.transform;
+            hart.anchorMin = new Vector2(0, 0); hart.anchorMax = new Vector2(1, 1);
+            hart.offsetMin = new Vector2(12, 0); hart.offsetMax = new Vector2(-12, 0);
+            var handle = new GameObject("Handle", typeof(RectTransform), typeof(Image));
+            handle.transform.SetParent(hsa.transform, false);
+            var hImg = handle.GetComponent<Image>(); hImg.color = Color.white;
+            var hrt = (RectTransform)handle.transform; hrt.sizeDelta = new Vector2(26, 0);
+
+            slider.fillRect = (RectTransform)fill.transform;
+            slider.handleRect = hrt;
+            slider.targetGraphic = hImg;
+            slider.direction = Slider.Direction.LeftToRight;
+            slider.minValue = 0f; slider.maxValue = 1f; slider.value = 1f;
+            return slider;
         }
 
         static Button MakeButton(Transform parent, TMP_FontAsset font, string label, Vector2 pos, Color col)

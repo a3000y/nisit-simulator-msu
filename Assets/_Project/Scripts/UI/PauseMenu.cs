@@ -14,6 +14,8 @@ namespace NisitSimulator.UI
     {
         public GameObject panel;
         public Button resumeButton, menuButton, quitButton;
+        public Button settingsButton;      // เปิดแผงตั้งค่าเสียงในเกม (เซ็ตโดย Editor)
+        public GameObject settingsPanel;
 
         private NisitSimulator.Player.PlayerMovement move;
         private bool isOpen;
@@ -25,12 +27,17 @@ namespace NisitSimulator.UI
             if (resumeButton != null) resumeButton.onClick.AddListener(Resume);
             if (menuButton != null) menuButton.onClick.AddListener(ToMenu);
             if (quitButton != null) quitButton.onClick.AddListener(Quit);
+            if (settingsButton != null && settingsPanel != null)
+                settingsButton.onClick.AddListener(() => settingsPanel.SetActive(true));
             if (panel != null) panel.SetActive(false);
+            if (settingsPanel != null) settingsPanel.SetActive(false);
         }
 
         void Update()
         {
             if (!Input.GetKeyDown(KeyCode.Escape)) return;
+            // ถ้าแผงตั้งค่าเปิดอยู่ → Esc ปิดแค่แผงตั้งค่า (กลับไปหน้า Pause) ไม่ออกจาก Pause
+            if (settingsPanel != null && settingsPanel.activeSelf) { settingsPanel.SetActive(false); return; }
             if (isOpen) Resume();
             else if (CanPause()) Pause();
         }
@@ -53,6 +60,7 @@ namespace NisitSimulator.UI
         public void Resume()
         {
             isOpen = false;
+            if (settingsPanel != null) settingsPanel.SetActive(false);
             if (panel != null) panel.SetActive(false);
             if (GameManager.Instance != null) GameManager.Instance.ResumeGame();   // → timeScale=1
         }

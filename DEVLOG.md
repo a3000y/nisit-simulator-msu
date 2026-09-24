@@ -326,6 +326,11 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - 🧹 **เก็บงานเล็ก**: ลบ ScriptableObject โค้ดตาย `ItemData.cs`/`CourseData.cs` (ไม่มี .asset/โค้ดใดอ้าง) · ลบฟิลด์ตาย `SaveData.currentDay`
 - 🔊 **สไลเดอร์เสียงครบทุกตัว** — เพิ่ม `voiceSource` (สร้าง runtime) ใน [SFXManager.cs](Assets/_Project/Scripts/Core/SFXManager.cs) route เสียงตอบรับ UI (คลิก/แจ้งเตือน/สำเร็จ/ผิดพลาด/เปิดหน้า) ผ่านมัน → สไลเดอร์ Voice มีผลจริง · [SettingsController.cs](Assets/_Project/Scripts/UI/SettingsController.cs) ปรับทุกสไลเดอร์ให้มีผล live
 
+### ตั้งค่าเสียงในเมนู Pause (2026-09-24)
+- ⚙️ เพิ่มปุ่ม **"ตั้งค่าเสียง"** ในเมนู Pause (เดิม 3 ปุ่ม → 4 ปุ่ม) + แผงสไลเดอร์ 5 ตัว (Master/Music/SFX/Voice/Ambient) ในเกม — สร้างใน [M35PauseBuilder.cs](Assets/_Project/Scripts/Editor/M35PauseBuilder.cs) ใช้ `SettingsController` เดิม (apply live กับ SFXManager ในเกมได้แล้ว)
+- [PauseMenu.cs](Assets/_Project/Scripts/UI/PauseMenu.cs): เปิด/ปิดแผงตั้งค่า · Esc ปิดแผงตั้งค่าก่อน (ไม่ออกจาก Pause) · Resume ปิดทั้งคู่
+- ปิด gap "ปรับเสียงตอนอยู่ในเกมไม่ได้" — ต้อง re-bake (★ Rebuild All) 1 ครั้ง
+
 ---
 
 ## Version Control
