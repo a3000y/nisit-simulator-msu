@@ -122,6 +122,13 @@ namespace NisitSimulator.EditorTools
             mc.settingsButton    = MakeButton(root, "ตั้งค่า",      new Vector2(0, -192), new Color(0.80f, 0.72f, 0.96f));
             mc.quitButton        = MakeButton(root, "ออก",         new Vector2(0, -282), new Color(0.99f, 0.74f, 0.78f));
 
+            // ===== ช่องบันทึก 3 ช่อง (คอลัมน์ขวา) =====
+            MakeText(root, "SlotLabel", "ช่องบันทึก", 30, new Vector2(0.5f, 0.5f), new Vector2(560, 210), new Vector2(360, 40), Color.white, FontStyles.Bold);
+            var slotBtns = new Button[3];
+            for (int i = 0; i < 3; i++)
+                slotBtns[i] = MakeButton(root, "ช่อง " + (i + 1), new Vector2(560f, 130f - i * 92f), new Color(0.72f, 0.82f, 0.72f));
+            mc.slotButtons = slotBtns;
+
             // ===== แผงตั้งค่าเสียง (dim เต็มจอ + การ์ดกลาง) =====
             var sDim = MakeImage(root, "SettingsPanel", Vector2.zero, Vector2.one, new Color(0.04f, 0.06f, 0.12f, 0.62f));
             sDim.rectTransform.offsetMin = Vector2.zero; sDim.rectTransform.offsetMax = Vector2.zero;

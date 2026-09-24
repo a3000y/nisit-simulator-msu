@@ -381,6 +381,11 @@ Unity 6.1 (6000.5.1f1) · URP · C#
 - [SettingsController](Assets/_Project/Scripts/UI/SettingsController.cs) เพิ่ม qualityButton/fullscreenButton + `[RuntimeInitializeOnLoadMethod]` ใช้ค่าที่เซฟตอนเปิดแอป (แก้ปัญหาแผงเริ่มปิด Start ไม่รัน — ครอบคลุม master volume ด้วย) · [M4MenuBuilder](Assets/_Project/Scripts/Editor/M4MenuBuilder.cs) ขยายการ์ด + วางปุ่มกราฟิก (ต้อง re-bake)
 - QoL เหลือ: **หลายช่องเซฟ** (refactor SaveSystem เป็นหลายไฟล์ + UI เลือกช่อง) — ยังไม่ทำ
 
+### QoL: หลายช่องเซฟ (2026-09-24)
+- 💾 **3 ช่องบันทึก** — เมนูมีปุ่มเลือกช่อง (คอลัมน์ขวา) โชว์สรุป (ปี+เงิน) หรือ "ว่าง" · เลือกช่องแล้ว New Game/เล่นต่อ ทำงานกับช่องนั้น
+- [SaveSystem](Assets/_Project/Scripts/SaveLoad/SaveSystem.cs): path เป็น `nisit_save_{slot}.json` ตาม `GameSession.SaveSlot` · เพิ่ม HasSave(slot)/SummaryFor(slot) · [GameSession](Assets/_Project/Scripts/SaveLoad/GameSession.cs).SaveSlot (PlayerPrefs) · [MainMenuController](Assets/_Project/Scripts/UI/MainMenuController.cs) SelectSlot/RefreshSlots · [M4MenuBuilder](Assets/_Project/Scripts/Editor/M4MenuBuilder.cs) ปุ่ม 3 ช่อง (ต้อง re-bake)
+- **QoL (ข้อ 4) ครบแล้ว**: ความยาก + กราฟิก + หลายช่องเซฟ · เหลือลิสต์เทียบเกม: ข้อ 2 ลงทะเบียนวิชา · แล้ว polish อนิเมชัน/juice เป็นด่านสุดท้าย
+
 ---
 
 ## Version Control

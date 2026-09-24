@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 using NisitSimulator.SaveLoad;
 
 namespace NisitSimulator.UI
@@ -23,6 +24,7 @@ namespace NisitSimulator.UI
         public GameObject characterPanel;  // หน้าแต่งตัวละคร (เซ็ตโดย Editor)
         public Button characterConfirmButton;
         public Button characterBackButton;
+        public Button[] slotButtons;       // เลือกช่องเซฟ 1-3 (เซ็ตโดย Editor)
 
         void Start()
         {
@@ -30,11 +32,15 @@ namespace NisitSimulator.UI
 
             if (newGameButton) newGameButton.onClick.AddListener(() => { GameSession.OpenNetworkOnStart = false; OpenCustomize(); });
             if (multiplayerButton) multiplayerButton.onClick.AddListener(MultiplayerGame);
-            if (continueButton)
-            {
-                continueButton.onClick.AddListener(Continue);
-                continueButton.interactable = SaveSystem.HasSave();   // ปิดถ้าไม่มีเซฟ
-            }
+            if (continueButton) continueButton.onClick.AddListener(Continue);
+
+            if (slotButtons != null)
+                for (int i = 0; i < slotButtons.Length; i++)
+                {
+                    int idx = i;
+                    if (slotButtons[i] != null) slotButtons[i].onClick.AddListener(() => SelectSlot(idx));
+                }
+            RefreshSlots();   // ตั้งป้ายช่อง + เปิด/ปิด "เล่นต่อ" ตามช่องปัจจุบัน
             if (settingsButton && settingsPanel)
                 settingsButton.onClick.AddListener(() => settingsPanel.SetActive(true));
             if (quitButton) quitButton.onClick.AddListener(Quit);
@@ -54,6 +60,30 @@ namespace NisitSimulator.UI
             if (comingSoonPanel) comingSoonPanel.SetActive(false);
             if (creditsPanel) creditsPanel.SetActive(false);
             if (characterPanel) characterPanel.SetActive(false);
+        }
+
+        // เลือกช่องเซฟ → อัปเดตปุ่ม "เล่นต่อ" + ป้ายช่อง
+        public void SelectSlot(int i)
+        {
+            GameSession.SaveSlot = i;
+            RefreshSlots();
+        }
+
+        void RefreshSlots()
+        {
+            if (slotButtons != null)
+                for (int i = 0; i < slotButtons.Length; i++)
+                {
+                    if (slotButtons[i] == null) continue;
+                    var lbl = slotButtons[i].GetComponentInChildren<TMP_Text>();
+                    if (lbl != null)
+                    {
+                        string sum = SaveSystem.SummaryFor(i);
+                        lbl.text = $"ช่อง {i + 1}\n<size=55%>{(sum != null ? sum : "ว่าง")}</size>";
+                    }
+                    slotButtons[i].transform.localScale = Vector3.one * (i == GameSession.SaveSlot ? 1.12f : 1f);
+                }
+            if (continueButton != null) continueButton.interactable = SaveSystem.HasSave();   // มีเซฟในช่องนี้ไหม
         }
 
         // ปุ่มเล่นหลายคน — เริ่มเกมใหม่แล้วเปิดแผง Multiplayer (F3) อัตโนมัติ

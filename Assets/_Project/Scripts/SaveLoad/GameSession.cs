@@ -6,6 +6,13 @@ namespace NisitSimulator.SaveLoad
         public const string MenuScene = "Scene1";          // ฉากเมนูหลัก (ฉาก 1)
         public const string GameplayScene = "01_Gameplay"; // ฉากเล่นเกม
 
+        // ช่องเซฟปัจจุบัน (0-2) — เลือกในเมนู เก็บถาวร
+        public static int SaveSlot
+        {
+            get => UnityEngine.PlayerPrefs.GetInt("nisit_slot", 0);
+            set { UnityEngine.PlayerPrefs.SetInt("nisit_slot", UnityEngine.Mathf.Clamp(value, 0, 2)); UnityEngine.PlayerPrefs.Save(); }
+        }
+
         public static bool PendingLoad = false;  // true = ให้โหลดเซฟตอนเข้าฉากเกม (ถูก "กิน" ตอนโหลดเสร็จ)
         public static bool IsContinue = false;   // true = เข้าเกมแบบ "เล่นต่อ" — ไม่ถูกกิน ใช้เช็คตอนเล่น
                                                  //   (เช่น DailyAllowance ไม่ให้เงินตั้งต้นซ้ำ) กันปัญหาลำดับ Start()
