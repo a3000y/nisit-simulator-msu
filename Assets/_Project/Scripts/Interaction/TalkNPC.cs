@@ -66,6 +66,20 @@ namespace NisitSimulator.Interaction
             clock = Object.FindFirstObjectByType<GameClock>();
             // คีย์คงที่ (จากตำแหน่งเริ่ม — คนเดินก็ยังคงคีย์เดิม)
             relId = $"{npcName}_{Mathf.RoundToInt(transform.position.x)}_{Mathf.RoundToInt(transform.position.z)}";
+            if (!isVendor) RelationshipManager.Instance.Register(relId, npcName);   // ลงทะเบียนในรายชื่อเพื่อน
+        }
+
+        public string RelId => relId;
+        public string NpcName => npcName;
+        public bool CanBefriend => !isVendor;
+
+        // รับของขวัญจากผู้เล่น → เพิ่มค่าสนิท (เรียกจาก GiftUI)
+        public void ReceiveGift(string itemName, int friendship)
+        {
+            FacePlayer();
+            PlayGesture("Talking", 2.5f);
+            HUDController.Toast($"{npcName}: ว้าว ขอบคุณสำหรับ{itemName}นะ! ดีใจจัง");
+            RelationshipManager.Instance.AddPoints(relId, npcName, friendship);
         }
 
         void Update()

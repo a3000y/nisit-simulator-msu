@@ -16,6 +16,8 @@ namespace NisitSimulator.Systems
         public const int MaxPoints = 200;
 
         readonly Dictionary<string, int> points = new Dictionary<string, int>();
+        readonly Dictionary<string, string> names = new Dictionary<string, string>();   // id -> ชื่อโชว์ (ลงทะเบียนโดย NPC)
+        readonly List<string> order = new List<string>();                                // ลำดับที่พบ (ไว้โชว์ในรายชื่อ)
 
         static RelationshipManager _i;
         public static RelationshipManager Instance
@@ -41,6 +43,26 @@ namespace NisitSimulator.Systems
             _i = this;
             if (GameSession.IsContinue) LoadFromSave();   // เล่นต่อ → คืนค่าสนิท
         }
+
+        // NPC ลงทะเบียนตัวเองตอน Start (เพื่อให้หน้ารายชื่อเพื่อนโชว์ครบทุกคน)
+        public void Register(string id, string displayName)
+        {
+            if (string.IsNullOrEmpty(id)) return;
+            if (!names.ContainsKey(id)) order.Add(id);
+            names[id] = displayName;
+        }
+
+        public IReadOnlyList<string> AllIds => order;
+        public string DisplayName(string id) => (id != null && names.TryGetValue(id, out var n)) ? n : id;
+
+        // นับ NPC ที่สนิทถึงระดับ lvl ขึ้นไป (ใช้โบนัส/สรุปตอนจบ)
+        public int CountAtLeast(int lvl)
+        {
+            int c = 0;
+            foreach (var kv in points) if (LevelOf(kv.Value) >= lvl) c++;
+            return c;
+        }
+        public int FriendCount => CountAtLeast(2);   // "เพื่อน" ขึ้นไป
 
         // ---------- คะแนน/ระดับ ----------
         public int GetPoints(string id) => (id != null && points.TryGetValue(id, out var v)) ? v : 0;
