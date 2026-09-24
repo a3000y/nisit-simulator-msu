@@ -7,6 +7,9 @@ namespace NisitSimulator.UI
 {
     // เมนูหยุดชั่วคราว — กด Esc เปิด/ปิด (เมื่อไม่มีหน้าต่างอื่นเปิดอยู่) → เล่นต่อ / กลับเมนูหลัก / ออกเกม
     //   UI สร้าง+ต่อโดย Editor tool (Nisit -> Build Pause Menu)
+    //   [DefaultExecutionOrder(-100)] ให้ประเมิน Esc "ก่อน" แผงอื่น (กระเป๋า/ร้าน/แชท) จะปิดตัว+คืน move.enabled
+    //   ในเฟรมเดียวกัน — กัน Esc ปิดแผงแล้วเด้ง Pause ขึ้นทันทีในเฟรมนั้น
+    [DefaultExecutionOrder(-100)]
     public class PauseMenu : MonoBehaviour
     {
         public GameObject panel;
