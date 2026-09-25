@@ -18,6 +18,10 @@ namespace NisitSimulator.UI
         public Button closeButton;
         public GameObject panel;
 
+        [Header("แท็บ")]
+        public GameObject audioGroup, graphicsGroup;
+        public Button audioTab, graphicsTab;
+
         private TMP_Text qualityLabel, fullscreenLabel, resolutionLabel;
         private System.Collections.Generic.List<Vector2Int> resList;
         private int resIndex;
@@ -77,6 +81,18 @@ namespace NisitSimulator.UI
             }
 
             if (closeButton && panel) closeButton.onClick.AddListener(() => panel.SetActive(false));
+
+            if (audioTab != null) audioTab.onClick.AddListener(() => ShowTab(true));
+            if (graphicsTab != null) graphicsTab.onClick.AddListener(() => ShowTab(false));
+            if (audioGroup != null || graphicsGroup != null) ShowTab(true);   // เริ่มที่แท็บเสียง
+        }
+
+        void ShowTab(bool audio)
+        {
+            if (audioGroup != null) audioGroup.SetActive(audio);
+            if (graphicsGroup != null) graphicsGroup.SetActive(!audio);
+            if (audioTab != null) audioTab.transform.localScale = Vector3.one * (audio ? 0.94f : 0.8f);
+            if (graphicsTab != null) graphicsTab.transform.localScale = Vector3.one * (audio ? 0.8f : 0.94f);
         }
 
         void BuildResList()

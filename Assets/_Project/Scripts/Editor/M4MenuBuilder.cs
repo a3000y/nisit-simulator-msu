@@ -156,24 +156,36 @@ namespace NisitSimulator.EditorTools
             mc.slotCloseButton = slClose;
             slDim.gameObject.SetActive(false);
 
-            // ===== แผงตั้งค่าเสียง (dim เต็มจอ + การ์ดกลาง) =====
+            // ===== แผงตั้งค่า (แท็บ เสียง/กราฟิก) =====
             var sDim = MakeImage(root, "SettingsPanel", Vector2.zero, Vector2.one, new Color(0.04f, 0.06f, 0.12f, 0.62f));
             sDim.rectTransform.offsetMin = Vector2.zero; sDim.rectTransform.offsetMax = Vector2.zero;
-            var sCard = MakeRounded(sDim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(660, 960), new Color(0.11f, 0.14f, 0.24f, 0.99f));
+            var sCard = MakeRounded(sDim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(680, 660), new Color(0.11f, 0.14f, 0.24f, 0.99f));
             Deco(sCard);
-            MakeText(sCard.transform, "STitle", "ตั้งค่า", 46, new Vector2(0.5f, 1f), new Vector2(0, -40), new Vector2(600, 60), new Color(1f, 0.9f, 0.5f), FontStyles.Bold);
+            MakeText(sCard.transform, "STitle", "ตั้งค่า", 44, new Vector2(0.5f, 1f), new Vector2(0, -34), new Vector2(600, 56), new Color(1f, 0.9f, 0.5f), FontStyles.Bold);
 
             var sc = sCard.gameObject.AddComponent<SettingsController>();
             sc.panel = sDim.gameObject;
-            sc.masterSlider  = LabeledSlider(sCard.transform, "เสียงรวม (Master)", -108);
-            sc.musicSlider   = LabeledSlider(sCard.transform, "เพลง (Music)", -196);
-            sc.sfxSlider     = LabeledSlider(sCard.transform, "เอฟเฟกต์ (SFX)", -284);
-            sc.voiceSlider   = LabeledSlider(sCard.transform, "เสียงพูด (Voice)", -372);
-            sc.ambientSlider = LabeledSlider(sCard.transform, "บรรยากาศ (Ambient)", -460);
-            // กราฟิก (ปุ่มวน — คลิกเพื่อเปลี่ยนคุณภาพ/ความละเอียด/สลับเต็มจอ)
-            sc.qualityButton    = MakeButton(sCard.transform, "คุณภาพ", new Vector2(0, -556), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f);
-            sc.resolutionButton = MakeButton(sCard.transform, "ความละเอียด", new Vector2(0, -646), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f);
-            sc.fullscreenButton = MakeButton(sCard.transform, "เต็มจอ", new Vector2(0, -736), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f);
+
+            // แท็บ
+            sc.audioTab    = MakeButton(sCard.transform, "เสียง", new Vector2(-150, -96), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f);
+            sc.graphicsTab = MakeButton(sCard.transform, "กราฟิก", new Vector2(150, -96), new Color(0.80f, 0.72f, 0.96f), 0.5f, 1f);
+
+            // กลุ่ม "เสียง"
+            var audioGrp = MakeSettingsGroup(sCard.transform, "AudioGroup");
+            sc.masterSlider  = LabeledSlider(audioGrp, "เสียงรวม (Master)", -184);
+            sc.musicSlider   = LabeledSlider(audioGrp, "เพลง (Music)", -264);
+            sc.sfxSlider     = LabeledSlider(audioGrp, "เอฟเฟกต์ (SFX)", -344);
+            sc.voiceSlider   = LabeledSlider(audioGrp, "เสียงพูด (Voice)", -424);
+            sc.ambientSlider = LabeledSlider(audioGrp, "บรรยากาศ (Ambient)", -504);
+            sc.audioGroup = audioGrp.gameObject;
+
+            // กลุ่ม "กราฟิก"
+            var gfxGrp = MakeSettingsGroup(sCard.transform, "GraphicsGroup");
+            sc.qualityButton    = MakeButton(gfxGrp, "คุณภาพ", new Vector2(0, -200), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f);
+            sc.resolutionButton = MakeButton(gfxGrp, "ความละเอียด", new Vector2(0, -290), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f);
+            sc.fullscreenButton = MakeButton(gfxGrp, "เต็มจอ", new Vector2(0, -380), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f);
+            sc.graphicsGroup = gfxGrp.gameObject;
+
             sc.closeButton   = MakeButton(sCard.transform, "ปิด", new Vector2(0, 28), new Color(0.80f, 0.72f, 0.96f), 0.5f, 0f);
 
             mc.settingsPanel = sDim.gameObject;
@@ -319,6 +331,16 @@ namespace NisitSimulator.EditorTools
             slider.direction = Slider.Direction.LeftToRight;
             slider.minValue = 0f; slider.maxValue = 1f; slider.value = 1f;
             return slider;
+        }
+
+        // กลุ่มว่างเต็มการ์ด (ไว้สลับแท็บ)
+        static Transform MakeSettingsGroup(Transform parent, string name)
+        {
+            var go = new GameObject(name, typeof(RectTransform));
+            go.transform.SetParent(parent, false);
+            var rt = (RectTransform)go.transform;
+            rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one; rt.offsetMin = Vector2.zero; rt.offsetMax = Vector2.zero;
+            return go.transform;
         }
 
         // ---------- helper สไตล์ลูกกวาด ----------
