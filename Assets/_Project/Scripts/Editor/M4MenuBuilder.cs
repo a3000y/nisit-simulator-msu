@@ -278,7 +278,8 @@ namespace NisitSimulator.EditorTools
             var rt = (RectTransform)go.transform;
             rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 1f); rt.pivot = new Vector2(0.5f, 1f);
             rt.anchoredPosition = pos; rt.sizeDelta = size;
-            var bg = go.GetComponent<Image>(); bg.sprite = round ?? ui; bg.type = Image.Type.Sliced; bg.color = new Color(0f, 0f, 0f, 0.40f);
+            var bg = go.GetComponent<Image>(); bg.sprite = round ?? ui; bg.type = Image.Type.Sliced; bg.color = new Color(0.05f, 0.06f, 0.12f, 0.7f);
+            var bgOl = go.AddComponent<Outline>(); bgOl.effectColor = new Color(0f, 0f, 0f, 0.5f); bgOl.effectDistance = new Vector2(0f, -2f); bgOl.useGraphicAlpha = false;
             var slider = go.GetComponent<Slider>();
 
             var fillArea = new GameObject("Fill Area", typeof(RectTransform));
@@ -288,18 +289,28 @@ namespace NisitSimulator.EditorTools
             fart.offsetMin = new Vector2(4, 4); fart.offsetMax = new Vector2(-4, -4);
             var fill = new GameObject("Fill", typeof(RectTransform), typeof(Image));
             fill.transform.SetParent(fillArea.transform, false);
-            var fImg = fill.GetComponent<Image>(); fImg.sprite = round ?? ui; fImg.type = Image.Type.Sliced; fImg.color = new Color(0.30f, 0.85f, 0.48f);
+            var fImg = fill.GetComponent<Image>(); fImg.sprite = round ?? ui; fImg.type = Image.Type.Sliced; fImg.color = new Color(0.36f, 0.88f, 0.54f);
             ((RectTransform)fill.transform).sizeDelta = new Vector2(10, 0);
+            // แสงวาวบน fill
+            if (gloss != null)
+            {
+                var fg = new GameObject("FillGloss", typeof(RectTransform), typeof(Image));
+                fg.transform.SetParent(fill.transform, false);
+                var fgi = fg.GetComponent<Image>(); fgi.sprite = gloss; fgi.color = new Color(1f, 1f, 1f, 0.35f); fgi.raycastTarget = false;
+                var fgrt = (RectTransform)fg.transform; fgrt.anchorMin = new Vector2(0, 0.5f); fgrt.anchorMax = Vector2.one; fgrt.offsetMin = Vector2.zero; fgrt.offsetMax = Vector2.zero;
+            }
 
             var hsa = new GameObject("Handle Slide Area", typeof(RectTransform));
             hsa.transform.SetParent(go.transform, false);
             var hart = (RectTransform)hsa.transform;
             hart.anchorMin = new Vector2(0, 0); hart.anchorMax = new Vector2(1, 1);
-            hart.offsetMin = new Vector2(14, 0); hart.offsetMax = new Vector2(-14, 0);
+            hart.offsetMin = new Vector2(16, 0); hart.offsetMax = new Vector2(-16, 0);
             var handle = new GameObject("Handle", typeof(RectTransform), typeof(Image));
             handle.transform.SetParent(hsa.transform, false);
             var hImg = handle.GetComponent<Image>(); hImg.sprite = circle ?? ui; hImg.color = Color.white;
-            var hrt = (RectTransform)handle.transform; hrt.sizeDelta = new Vector2(32, 0);
+            var hSh = handle.AddComponent<Shadow>(); hSh.effectColor = new Color(0f, 0f, 0f, 0.4f); hSh.effectDistance = new Vector2(0f, -3f);
+            var hOl = handle.AddComponent<Outline>(); hOl.effectColor = new Color(0.30f, 0.72f, 0.46f, 0.9f); hOl.effectDistance = new Vector2(1.5f, -1.5f); hOl.useGraphicAlpha = false;
+            var hrt = (RectTransform)handle.transform; hrt.sizeDelta = new Vector2(40, 0);
 
             slider.fillRect = (RectTransform)fill.transform;
             slider.handleRect = hrt;

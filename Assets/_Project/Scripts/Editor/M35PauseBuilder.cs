@@ -119,7 +119,9 @@ namespace NisitSimulator.EditorTools
             var rt = (RectTransform)go.transform;
             rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
             rt.anchoredPosition = pos; rt.sizeDelta = size;
-            var bg = go.GetComponent<Image>(); bg.color = new Color(0f, 0f, 0f, 0.4f);
+            var bg = go.GetComponent<Image>(); bg.color = new Color(0.05f, 0.06f, 0.12f, 0.7f);
+            var round = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/ui_round.png");
+            if (round != null) { bg.sprite = round; bg.type = Image.Type.Sliced; }
             var slider = go.GetComponent<Slider>();
 
             var fillArea = new GameObject("Fill Area", typeof(RectTransform));
@@ -129,7 +131,8 @@ namespace NisitSimulator.EditorTools
             fart.offsetMin = new Vector2(4, 4); fart.offsetMax = new Vector2(-4, -4);
             var fill = new GameObject("Fill", typeof(RectTransform), typeof(Image));
             fill.transform.SetParent(fillArea.transform, false);
-            fill.GetComponent<Image>().color = new Color(0.30f, 0.85f, 0.48f);
+            var fImg = fill.GetComponent<Image>(); fImg.color = new Color(0.36f, 0.88f, 0.54f);
+            if (round != null) { fImg.sprite = round; fImg.type = Image.Type.Sliced; }
             ((RectTransform)fill.transform).sizeDelta = new Vector2(10, 0);
 
             var hsa = new GameObject("Handle Slide Area", typeof(RectTransform));
@@ -140,7 +143,8 @@ namespace NisitSimulator.EditorTools
             var handle = new GameObject("Handle", typeof(RectTransform), typeof(Image));
             handle.transform.SetParent(hsa.transform, false);
             var hImg = handle.GetComponent<Image>(); hImg.color = Color.white;
-            var hrt = (RectTransform)handle.transform; hrt.sizeDelta = new Vector2(26, 0);
+            var hSh = handle.AddComponent<Shadow>(); hSh.effectColor = new Color(0f, 0f, 0f, 0.4f); hSh.effectDistance = new Vector2(0f, -3f);
+            var hrt = (RectTransform)handle.transform; hrt.sizeDelta = new Vector2(34, 0);
 
             slider.fillRect = (RectTransform)fill.transform;
             slider.handleRect = hrt;
