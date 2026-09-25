@@ -38,6 +38,12 @@ namespace NisitSimulator.UI
                 var rt = b.transform as RectTransform;
                 if (rt == null || rt.rect.width < 160f) continue;             // ข้ามปุ่มเล็ก/สวอตช์
                 if (b.GetComponent<ButtonJuice>() == null) b.gameObject.AddComponent<ButtonJuice>();
+                // แต่งปุ่มให้กระจกวาว (ครั้งเดียว — เช็คลูก UIGloss)
+                if (b.transform.Find("UIGloss") == null)
+                {
+                    var col = b.image != null ? b.image.color : Color.white;
+                    UIStyle.Button(b.gameObject, col);
+                }
             }
 
             // แผง popup ที่มีลูกชื่อ "Card" → ใส่ PanelPop (เด้งเข้านุ่ม ๆ)
