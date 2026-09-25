@@ -58,7 +58,7 @@ namespace NisitSimulator.UI
                 var c = t.color;
                 float mn = Mathf.Min(c.r, Mathf.Min(c.g, c.b));
                 float mx = Mathf.Max(c.r, Mathf.Max(c.g, c.b));
-                if (mn > 0.72f && (mx - mn) < 0.12f)   // ขาว/เทาอ่อน (saturation ต่ำ + สว่าง)
+                if (mn > 0.70f && (mx - mn) < 0.20f)   // ขาว/ครีมอ่อน (saturation ต่ำ + สว่าง)
                     t.color = new Color(TextDark.r, TextDark.g, TextDark.b, c.a);
             }
         }
