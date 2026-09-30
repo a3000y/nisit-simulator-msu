@@ -108,7 +108,7 @@ namespace NisitSimulator.Systems
                 }
                 if (row.nameText)   row.nameText.text = item.name;
                 if (row.effectText) row.effectText.text = EffectText(item);
-                if (row.priceText)  row.priceText.text = $"{item.price}฿";
+                if (row.priceText)  row.priceText.text = Perks.Price(item.price) < item.price ? $"<s><size=70%>{item.price}</size></s> {Perks.Price(item.price)}฿" : $"{item.price}฿";
                 if (row.qtyBadge)   row.qtyBadge.SetActive(false);
                 int idx = i;
                 if (row.buyButton)  row.buyButton.onClick.AddListener(() => AddOne(idx));
@@ -128,7 +128,7 @@ namespace NisitSimulator.Systems
         {
             if (stats == null || qty == null) return;
             int total = 0;
-            for (int i = 0; i < catalog.Count; i++) total += qty[i] * catalog[i].price;
+            for (int i = 0; i < catalog.Count; i++) total += qty[i] * Perks.Price(catalog[i].price);   // ราคาหลังส่วนลด "นักต่อรอง"
             if (total <= 0) return;
             if (!stats.TrySpendMoney(total)) { HUDController.Toast("เงินไม่พอ!"); return; }
 
@@ -162,6 +162,7 @@ namespace NisitSimulator.Systems
                     }
                 }
             HUDController.Toast(inv != null ? $"ซื้อเข้ากระเป๋าแล้ว!  -{total}฿" : $"ซื้อสำเร็จ!  -{total}฿");
+            GameplayEvents.Raise(inv != null ? GameplayEvents.Buy : GameplayEvents.Eat);
             if (inv == null) NisitSimulator.Core.SFXManager.Eat();   // โรงอาหาร = กินทันที → เสียงกิน
             ClearCart();
         }
@@ -182,7 +183,7 @@ namespace NisitSimulator.Systems
             for (int i = 0; i < rows.Count && i < catalog.Count; i++)
             {
                 int q = qty != null ? qty[i] : 0;
-                total += q * catalog[i].price;
+                total += q * Perks.Price(catalog[i].price);
                 if (rows[i].qtyBadge) rows[i].qtyBadge.SetActive(q > 0);
                 if (rows[i].qtyText)  rows[i].qtyText.text = "x" + q;
             }

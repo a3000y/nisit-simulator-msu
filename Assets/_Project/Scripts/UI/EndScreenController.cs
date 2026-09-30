@@ -80,7 +80,7 @@ namespace NisitSimulator.UI
             switch (reason)
             {
                 case EndReason.Graduated:
-                    color = new Color(1f, 0.85f, 0.3f);
+                    color = new Color(0.85f, 0.52f, 0.10f); // สีทองเข้มสง่างาม (เด่นชัดบนการ์ดขาว)
                     string honors = gpa >= 3.5f ? "เกียรตินิยมอันดับหนึ่ง"
                                   : gpa >= 3.25f ? "เกียรตินิยมอันดับสอง" : "";
                     title = honors != "" ? "เกียรตินิยม!" : "GRADUATION!";
@@ -92,21 +92,27 @@ namespace NisitSimulator.UI
                     Confetti.Burst();                            // 🎉 โปรยคอนเฟตตีฉลอง
                     break;
                 case EndReason.Flunked:
-                    title = "FLUNKED OUT"; color = new Color(0.9f, 0.4f, 0.3f);
+                    title = "FLUNKED OUT"; color = new Color(0.85f, 0.25f, 0.25f);
                     msg = "ความรู้ไม่ถึงเป้าหมาย คุณถูกรีไทร์ ลองใหม่อีกครั้ง!";
                     break;
+                case EndReason.RetiredGPA:
+                    title = "RETIRED"; color = new Color(0.85f, 0.25f, 0.25f);
+                    msg = $"เกรดเฉลี่ยสะสม {gpa:0.00} ต่ำกว่า 2.00 คุณพ้นสภาพนิสิต ลองใหม่อีกครั้ง!";
+                    break;
                 default: // Died
-                    title = "GAME OVER"; color = new Color(0.85f, 0.3f, 0.3f);
+                    title = "GAME OVER"; color = new Color(0.85f, 0.22f, 0.22f);
                     msg = "พลังงาน/สุขภาพหมด อาชีพนักศึกษาของคุณจบลง";
                     break;
             }
 
             if (titleText != null) { titleText.text = title; titleText.color = color; }
-            if (messageText != null) messageText.text = msg;
+            if (messageText != null) { messageText.text = msg; messageText.color = new Color(0.25f, 0.30f, 0.42f); }
 
             int ng = PlayerPrefs.GetInt("nisit_ngplus", 0);
 
             if (scoreText != null)
+            {
+                scoreText.color = new Color(0.16f, 0.20f, 0.30f);
                 scoreText.text =
                     $"คณะ: {faculty}  ·  ความยาก: {GameSession.DifficultyName}\n" +
                     $"ชั้นปีที่ไปถึง: {year}\n" +
@@ -115,7 +121,8 @@ namespace NisitSimulator.UI
                     $"ความสำเร็จ: {am.UnlockedCount}/{am.Total}\n" +
                     (ng > 0 ? $"New Game+ รอบ {ng}\n" : "") +
                     $"คะแนนรวม: {score}" +
-                    (reason == EndReason.Graduated ? "\n\n<size=80%><color=#B9C2D6>กด \"เล่นใหม่\" เพื่อเริ่ม New Game+ (โบนัสเงิน + เก็บความสำเร็จ)</color></size>" : "");
+                    (reason == EndReason.Graduated ? "\n\n<size=80%><color=#64748B>กด \"เล่นใหม่\" เพื่อเริ่ม New Game+ (โบนัสเงิน + เก็บความสำเร็จ)</color></size>" : "");
+            }
         }
 
         // เส้นทางหลังเรียนจบ — ตาม GPA + เงินเก็บ + เพื่อน (networking)

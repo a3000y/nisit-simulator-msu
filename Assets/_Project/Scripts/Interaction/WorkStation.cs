@@ -24,6 +24,7 @@ namespace NisitSimulator.Interaction
 
         private GameClock clock;
         private int shiftsToday;
+        int Wage => Mathf.RoundToInt(wage * NisitSimulator.Systems.Perks.WageMul);   // + "ขยันทำงาน"
 
         void Start()
         {
@@ -34,7 +35,7 @@ namespace NisitSimulator.Interaction
         public string GetPrompt()
         {
             if (shiftsToday >= shiftsPerDay) return $"{jobName}: วันนี้ทำครบแล้ว";
-            return $"กด E ทำงาน {jobName} (+{wage}฿ / พลังงาน -{energyCost:0})";
+            return $"กด E ทำงาน {jobName} (+{Wage}฿ / พลังงาน -{energyCost:0})";
         }
 
         public void Interact(GameObject interactor)
@@ -63,12 +64,13 @@ namespace NisitSimulator.Interaction
         {
             if (interactor.TryGetComponent<PlayerStats>(out var stats))
             {
-                stats.ChangeMoney(wage);
+                stats.ChangeMoney(Wage);
                 stats.ChangeEnergy(-energyCost);
                 if (knowledgeBonus != 0) stats.ChangeKnowledge(knowledgeBonus);
                 if (satisfactionChange != 0) stats.ChangeSatisfaction(satisfactionChange);
                 if (expReward != 0) stats.AddExp(expReward);
-                HUDController.Toast($"ทำงานเสร็จ! ได้ค่าจ้าง +{wage}฿");
+                HUDController.Toast($"ทำงานเสร็จ! ได้ค่าจ้าง +{Wage}฿");
+                NisitSimulator.Systems.GameplayEvents.Raise(NisitSimulator.Systems.GameplayEvents.Work);
             }
         }
     }

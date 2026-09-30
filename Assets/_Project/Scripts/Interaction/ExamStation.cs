@@ -22,7 +22,9 @@ namespace NisitSimulator.Interaction
             if (!IsMyFaculty)
                 return $"ตึกคณะ {FacultyCatalog.NameOf(facultyIndex)} (ไม่ใช่คณะคุณ)";
             if (exam != null && exam.HasPendingExam)
-                return "กด E เพื่อเข้าห้องสอบ (วันนี้มีสอบ!)";
+                return NisitSimulator.Academics.CourseRegistrar.Active
+                    ? "กด E เพื่อเข้าห้องสอบ — เลือกวิชาที่ลงทะเบียนเพื่อสอบ (วันนี้มีสอบ!)"
+                    : "กด E เพื่อเข้าห้องสอบ (วันนี้มีสอบ!)";
             return "กด E — ห้องสอบคณะคุณ (วันนี้ยังไม่มีสอบ)";
         }
 

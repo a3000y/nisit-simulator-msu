@@ -51,100 +51,117 @@ namespace NisitSimulator.EditorTools
             var key = new GameObject("Key Light").AddComponent<Light>();
             key.transform.SetParent(stage.transform, false);
             key.transform.localPosition = new Vector3(1.2f, 2.4f, 2.0f);
-            key.type = LightType.Point; key.intensity = 14f; key.range = 30f; key.color = new Color(1f, 0.97f, 0.9f);
+            key.type = LightType.Point; key.intensity = 9f; key.range = 30f; key.color = new Color(1f, 0.97f, 0.9f);
 
             var fill = new GameObject("Fill Light").AddComponent<Light>();
             fill.transform.SetParent(stage.transform, false);
             fill.transform.localPosition = new Vector3(-1.4f, 1.6f, 1.8f);
-            fill.type = LightType.Point; fill.intensity = 7f; fill.range = 30f; fill.color = new Color(0.85f, 0.9f, 1f);
+            fill.type = LightType.Point; fill.intensity = 4.5f; fill.range = 30f; fill.color = new Color(0.85f, 0.9f, 1f);
 
             var camGo = new GameObject("CharPreviewCam");
             camGo.transform.SetParent(stage.transform, false);
-            camGo.transform.localPosition = new Vector3(0f, 1.0f, 2.7f);
+            camGo.transform.localPosition = new Vector3(0f, 0.98f, 3.3f);   // เผื่อหมวก/ผมยาวไม่ให้หัวตกขอบ
             var cam = camGo.AddComponent<Camera>();
-            cam.transform.LookAt(stage.transform.position + new Vector3(0f, 0.95f, 0f));
+            cam.transform.LookAt(stage.transform.position + new Vector3(0f, 0.90f, 0f));
             cam.clearFlags = CameraClearFlags.SolidColor;
-            cam.backgroundColor = new Color(0.20f, 0.24f, 0.34f);
+            cam.backgroundColor = new Color(0.86f, 0.83f, 0.95f);   // พื้นพรีวิวพาสเทล
             cam.fieldOfView = 30f; cam.nearClipPlane = 0.1f; cam.farClipPlane = 12f;
             cam.enabled = false;   // controller เปิดตอนโชว์หน้า + ต่อ RenderTexture
 
             EnsureAccessoryCatalog();
 
-            // ===== แผงแต่งตัว (ใน Menu Canvas) =====
+            // ===== แผงแต่งตัว (ใน Menu Canvas) — กริดแบบ mockup =====
             var root = mc.transform;
-            var dim = MakeImage(root, "Character Panel", Vector2.zero, Vector2.one, new Color(0.05f, 0.07f, 0.13f, 0.75f));
+            var dim = MakeImage(root, "Character Panel", Vector2.zero, Vector2.one, new Color(0.16f, 0.14f, 0.26f, 0.28f));
             dim.rectTransform.offsetMin = Vector2.zero; dim.rectTransform.offsetMax = Vector2.zero;
 
-            var card = MakeCard(dim.transform, new Vector2(1260f, 830f), new Color(0.13f, 0.16f, 0.26f, 0.99f));
+            var card = MakeCard(dim.transform, new Vector2(1520f, 884f), new Color(0.13f, 0.16f, 0.26f, 0.99f));
+            var lblCol = Color.white;
+            var titleCol = new Color(0.42f, 0.26f, 0.58f);
 
-            MakeText(card.transform, font, "แต่งตัวละคร", new Vector2(0f, 380f), new Vector2(900, 60), 44, new Color(1f, 0.9f, 0.5f), TextAlignmentOptions.Center);
+            // แถบหัว + ชื่อหน้า
+            var header = MakeImage(card.transform, "Header", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Color(0.82f, 0.78f, 0.94f, 1f));
+            var hround = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/ui_round.png");
+            if (hround != null) { header.sprite = hround; header.type = Image.Type.Sliced; }
+            header.raycastTarget = false;
+            header.rectTransform.anchoredPosition = new Vector2(0, 372f); header.rectTransform.sizeDelta = new Vector2(720f, 104f);
+            MakeText(card.transform, font, "สร้างนิสิตใหม่", new Vector2(0f, 374f), new Vector2(1200, 60), 46, titleCol, TextAlignmentOptions.Center);
 
-            // พรีวิว (ซ้าย)
+            // ชื่อผู้เล่น (กลางบน)
+            MakeText(card.transform, font, "ชื่อผู้เล่น", new Vector2(0f, 278f), new Vector2(420, 26), 22, lblCol, TextAlignmentOptions.Center);
+            var nameInput = MakeInput(card.transform, font, "ใส่ชื่อ...", new Vector2(0f, 238f), new Vector2(420f, 48f));
+
+            // กรอบพรีวิว (เฟรมมนขาว + เงา) — ให้ตัวละครดูเป็นภาพในกรอบ
+            var pframe = new GameObject("PreviewFrame", typeof(RectTransform), typeof(Image));
+            pframe.transform.SetParent(card.transform, false);
+            var pfImg = pframe.GetComponent<Image>(); pfImg.color = new Color(0.995f, 0.99f, 1f, 1f); pfImg.raycastTarget = false;
+            var pfRound = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/ui_round.png");
+            if (pfRound != null) { pfImg.sprite = pfRound; pfImg.type = Image.Type.Sliced; }
+            var pfrt = pfImg.rectTransform; pfrt.anchorMin = pfrt.anchorMax = pfrt.pivot = new Vector2(0.5f, 0.5f);
+            pfrt.anchoredPosition = new Vector2(0f, -30f); pfrt.sizeDelta = new Vector2(438f, 500f);
+            var pfOl = pframe.AddComponent<UnityEngine.UI.Outline>(); pfOl.effectColor = new Color(0.6f, 0.55f, 0.78f, 0.5f); pfOl.effectDistance = new Vector2(2f, -2f); pfOl.useGraphicAlpha = false;
+            var pfSh = pframe.AddComponent<UnityEngine.UI.Shadow>(); pfSh.effectColor = new Color(0.28f, 0.24f, 0.44f, 0.28f); pfSh.effectDistance = new Vector2(0f, -8f);
+
+            // พรีวิว 3D (กลาง)
             var raw = new GameObject("Preview", typeof(RectTransform), typeof(RawImage));
             raw.transform.SetParent(card.transform, false);
-            var rrt = (RectTransform)raw.transform;
-            rrt.anchorMin = rrt.anchorMax = rrt.pivot = new Vector2(0.5f, 0.5f);
-            rrt.anchoredPosition = new Vector2(-395f, -10f); rrt.sizeDelta = new Vector2(420f, 630f);
+            var rrt = (RectTransform)raw.transform; rrt.anchorMin = rrt.anchorMax = rrt.pivot = new Vector2(0.5f, 0.5f);
+            rrt.anchoredPosition = new Vector2(0f, -30f); rrt.sizeDelta = new Vector2(400f, 464f);
             var rawImg = raw.GetComponent<RawImage>(); rawImg.color = Color.white;
 
-            float rx = 155f;   // จุดกึ่งกลางคอลัมน์ขวา
-            var lblCol = Color.white;
+            // ----- คอลัมน์ซ้าย: เพศ / ชุด / ทรงผม / สีผม -----
+            const float LX = -500f, RX = 500f, CW = 470f;
+            var genderBtns = new Button[2];
+            genderBtns[0] = MakeButton(card.transform, font, "ชาย", new Vector2(LX - 118f, 290f), new Vector2(226f, 50f), new Color(0.62f, 0.78f, 0.98f), 24);
+            genderBtns[1] = MakeButton(card.transform, font, "หญิง", new Vector2(LX + 118f, 290f), new Vector2(226f, 50f), new Color(0.99f, 0.72f, 0.84f), 24);
+            foreach (var gb in genderBtns) AddRing(gb.transform, 226f);
+            var pModel = MakePanel(card.transform, font, "ชุด", new Vector2(LX, 125f), new Vector2(CW, 250f));
+            var modelBtns = Grid(pModel, 250f, 10, 5, new Vector2(80f, 86f), new Vector2(10f, 8f), true, font);
+            var pHair = MakePanel(card.transform, font, "ทรงผม", new Vector2(LX, -109f), new Vector2(CW, 194f));
+            var hairBtns = Grid(pHair, 194f, 16, 8, new Vector2(50f, 56f), new Vector2(6f, 6f), true, font);
+            var pHairCol = MakePanel(card.transform, font, "สีผม", new Vector2(LX, -280f), new Vector2(CW, 124f));
+            var hairColBtns = SwatchRow(pHairCol, 124f, 8, 8, 42f, 12f);
 
-            // ชื่อ
-            MakeText(card.transform, font, "ชื่อผู้เล่น", new Vector2(rx, 336f), new Vector2(470, 30), 25, lblCol, TextAlignmentOptions.Left);
-            var nameInput = MakeInput(card.transform, font, "ใส่ชื่อ...", new Vector2(rx, 290f), new Vector2(470f, 50f));
+            // ----- คอลัมน์ขวา: โทนสีชุด / สีผิว / หมวก / แว่นตา + หนวด -----
+            var pColor = MakePanel(card.transform, font, "โทนสีชุด", new Vector2(RX, 223f), new Vector2(CW, 190f));
+            var colorBtns = SwatchRow(pColor, 190f, 12, 6, 48f, 16f);
+            var pSkin = MakePanel(card.transform, font, "สีผิว", new Vector2(RX, 54f), new Vector2(CW, 124f));
+            var skinBtns = SwatchRow(pSkin, 124f, 5, 5, 44f, 18f);
+            var pHat = MakePanel(card.transform, font, "หมวก", new Vector2(RX, -87f), new Vector2(CW, 134f));
+            var hatBtns = Grid(pHat, 134f, 8, 8, new Vector2(50f, 56f), new Vector2(6f, 6f), true, font);
+            var pGlass = MakePanel(card.transform, font, "แว่นตา", new Vector2(RX - 160f, -233f), new Vector2(150f, 134f));
+            var glassBtns = Grid(pGlass, 134f, 2, 2, new Vector2(50f, 56f), new Vector2(8f, 6f), true, font);
+            var pBeard = MakePanel(card.transform, font, "หนวด/เครา", new Vector2(RX + 80f, -233f), new Vector2(310f, 134f));
+            var beardBtns = Grid(pBeard, 134f, 5, 5, new Vector2(50f, 56f), new Vector2(6f, 6f), true, font);
 
-            // แบบตัวละคร (สูงสุด 6 ปุ่ม, 3 ต่อแถว)
-            MakeText(card.transform, font, "แบบตัวละคร / เพศ", new Vector2(rx, 244f), new Vector2(470, 30), 25, lblCol, TextAlignmentOptions.Left);
-            var modelBtns = new Button[6];
-            for (int i = 0; i < 6; i++)
-            {
-                int col = i % 3, rowi = i / 3;
-                float x = rx + (col - 1) * 156f;
-                float y = 204f - rowi * 54f;
-                modelBtns[i] = MakeButton(card.transform, font, "แบบ " + (i + 1), new Vector2(x, y), new Vector2(140f, 46f), new Color(0.62f, 0.80f, 0.96f), 21);
-            }
+            // ลำดับต้องตรงกับ AccessoryCatalog (Setup Synty Characters): ทรงผม / หมวก / แว่นตา / หนวด-เครา
+            var accSlots = new CharacterCreatorController.AccessorySlotUI[] {
+                new CharacterCreatorController.AccessorySlotUI { buttons = hairBtns },
+                new CharacterCreatorController.AccessorySlotUI { buttons = hatBtns },
+                new CharacterCreatorController.AccessorySlotUI { buttons = glassBtns },
+                new CharacterCreatorController.AccessorySlotUI { buttons = beardBtns },
+            };
 
-            // สี (8)
-            MakeText(card.transform, font, "สีชุด", new Vector2(rx, 100f), new Vector2(470, 30), 25, lblCol, TextAlignmentOptions.Left);
-            var colorBtns = new Button[8];
-            for (int i = 0; i < 8; i++)
-                colorBtns[i] = MakeSwatch(card.transform, new Vector2(rx + (i - 3.5f) * 46f, 62f), 40f);
-
-            // ของแต่ง (4 ช่อง: หมวก/แว่น/เป้/ของถือ) — แต่ละช่อง 4 ปุ่ม (ไม่ใส่ + 3 แบบ)
-            string[] slotNames = { "หมวก", "แว่นตา", "กระเป๋าเป้", "ของถือ" };
-            var accSlots = new CharacterCreatorController.AccessorySlotUI[slotNames.Length];
-            for (int s = 0; s < slotNames.Length; s++)
-            {
-                float labelY = 18f - s * 76f;
-                float btnY = labelY - 42f;
-                MakeText(card.transform, font, slotNames[s], new Vector2(rx, labelY), new Vector2(470, 28), 23, lblCol, TextAlignmentOptions.Left);
-                var btns = new Button[4];
-                for (int b = 0; b < 4; b++)
-                {
-                    float x = rx + (b - 1.5f) * 116f;
-                    btns[b] = MakeButton(card.transform, font, "-", new Vector2(x, btnY), new Vector2(108f, 40f), new Color(0.86f, 0.82f, 0.72f), 19);
-                }
-                accSlots[s] = new CharacterCreatorController.AccessorySlotUI { buttons = btns };
-            }
-
-            // ระดับความยาก (ง่าย/ปกติ/ยาก)
-            MakeText(card.transform, font, "ระดับความยาก", new Vector2(rx, -286f), new Vector2(470, 28), 23, lblCol, TextAlignmentOptions.Left);
+            // ----- ระดับความยาก (กลาง ใต้พรีวิว) -----
+            MakeText(card.transform, font, "ระดับความยาก", new Vector2(0f, -304f), new Vector2(420, 26), 20, lblCol, TextAlignmentOptions.Center);
             var diffBtns = new Button[3];
             string[] diffNames = { "ง่าย", "ปกติ", "ยาก" };
             Color[] diffCols = { new Color(0.60f, 0.86f, 0.68f), new Color(0.62f, 0.80f, 0.96f), new Color(0.99f, 0.66f, 0.62f) };
             for (int i = 0; i < 3; i++)
-                diffBtns[i] = MakeButton(card.transform, font, diffNames[i], new Vector2(rx + (i - 1) * 150f, -324f), new Vector2(140f, 42f), diffCols[i], 21);
+                diffBtns[i] = MakeButton(card.transform, font, diffNames[i], new Vector2((i - 1) * 132f, -338f), new Vector2(122f, 42f), diffCols[i], 20);
 
-            // ปุ่มยืนยัน / ย้อนกลับ
-            var back = MakeButton(card.transform, font, "ย้อนกลับ", new Vector2(-395f, -378f), new Vector2(300f, 60f), new Color(0.86f, 0.80f, 0.88f), 26);
-            var confirm = MakeButton(card.transform, font, "เริ่มเล่น", new Vector2(255f, -378f), new Vector2(330f, 62f), new Color(0.60f, 0.86f, 0.68f), 28);
+            // ----- ปุ่มล่าง: สุ่ม / เริ่มเล่น / ย้อนกลับ -----
+            var randomBtn = MakeButton(card.transform, font, "สุ่ม", new Vector2(-470f, -406f), new Vector2(300f, 62f), new Color(0.99f, 0.86f, 0.6f), 26);
+            var confirm   = MakeButton(card.transform, font, "เริ่มเล่น", new Vector2(0f, -406f), new Vector2(360f, 66f), new Color(0.60f, 0.86f, 0.68f), 28);
+            var back      = MakeButton(card.transform, font, "ย้อนกลับ", new Vector2(470f, -406f), new Vector2(300f, 62f), new Color(0.86f, 0.80f, 0.88f), 26);
 
             // ===== ต่อ controller + เมนู =====
             var cc = card.gameObject.AddComponent<CharacterCreatorController>();
             cc.nameInput = nameInput; cc.modelButtons = modelBtns; cc.colorButtons = colorBtns;
-            cc.accessorySlots = accSlots;
-            cc.difficultyButtons = diffBtns;
+            cc.hairColorButtons = hairColBtns; cc.skinButtons = skinBtns;
+            cc.genderButtons = genderBtns;
+            cc.hairOnlyPanels = new[] { pHair.gameObject, pHairCol.gameObject, pBeard.gameObject };
+            cc.accessorySlots = accSlots; cc.difficultyButtons = diffBtns; cc.randomButton = randomBtn;
             cc.previewCamera = cam; cc.previewRoot = modelRoot; cc.previewImage = rawImg;
 
             mc.characterPanel = dim.gameObject;
@@ -159,7 +176,7 @@ namespace NisitSimulator.EditorTools
             Debug.Log("<color=lime>[Nisit] สร้างหน้าแต่งตัวละคร (พรีวิว 3D) แล้ว</color>");
             if (!SuppressDialog)
                 EditorUtility.DisplayDialog("Nisit Simulator",
-                    "สร้างหน้าแต่งตัวละครแล้ว! 🧑‍🎨\n\nกด 'เล่นคนเดียว' → เลือกแบบ/สี/ชื่อ + หมวก/แว่น/เป้/ของถือ (พรีวิว 3D หมุนได้) → เริ่มเล่น\n\n* แบบตัวละคร: มาจาก CharacterCatalog (Setup Multiplayer)\n* ของแต่ง: ลากโมเดล prop ใส่ options[] ใน Assets/_Project/Resources/AccessoryCatalog แล้วกดสร้างซ้ำ", "เยี่ยม!");
+                    "สร้างหน้าแต่งตัวละครแล้ว! 🧑‍🎨\n\nกด 'เล่นคนเดียว' → เลือกชุด/ทรงผม/สีผม/สีผิว/โทนสีชุด + หมวก/แว่น/หนวด (พรีวิว 3D หมุนได้) → เริ่มเล่น\n\n* ตัวละคร Synty: Nisit ▸ Setup Synty Characters", "เยี่ยม!");
         }
 
         // สร้างโครง AccessoryCatalog เริ่มต้น (4 ช่องว่าง) ถ้ายังไม่มี — ผู้ใช้ลาก prop ใส่ options[] เอง
@@ -249,8 +266,154 @@ namespace NisitSimulator.EditorTools
             var rt = (RectTransform)go.transform;
             rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
             rt.anchoredPosition = pos; rt.sizeDelta = new Vector2(d, d);
-            go.GetComponent<Image>().color = Color.white;
+            var img = go.GetComponent<Image>(); img.color = Color.white;
+            var round = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/ui_round.png");
+            if (round != null) { img.sprite = round; img.type = Image.Type.Sliced; }
+            var ol = go.AddComponent<UnityEngine.UI.Outline>(); ol.effectColor = new Color(1f, 1f, 1f, 0.9f); ol.effectDistance = new Vector2(2f, -2f); ol.useGraphicAlpha = false;
+            var sh = go.AddComponent<UnityEngine.UI.Shadow>(); sh.effectColor = new Color(0.25f, 0.22f, 0.4f, 0.28f); sh.effectDistance = new Vector2(0f, -3f);
             return go.GetComponent<Button>();
+        }
+
+        // แผงหมวด (กล่องพาสเทลมีแถบหัว + เงา = มีมิติ) — คืน transform ไว้วางช่องข้างใน
+        static RectTransform MakePanel(Transform parent, TMP_FontAsset font, string title, Vector2 pos, Vector2 size)
+        {
+            var round = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/ui_round.png");
+
+            var go = new GameObject("Panel_" + title, typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(parent, false);
+            var img = go.GetComponent<Image>(); img.color = new Color(0.905f, 0.875f, 0.975f, 1f);   // ตัวแผงอ่อนนุ่ม
+            if (round != null) { img.sprite = round; img.type = Image.Type.Sliced; }
+            img.raycastTarget = false;
+            var rt = (RectTransform)go.transform; rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.anchoredPosition = pos; rt.sizeDelta = size;
+            var sh = go.AddComponent<UnityEngine.UI.Shadow>(); sh.effectColor = new Color(0.30f, 0.26f, 0.46f, 0.22f); sh.effectDistance = new Vector2(0f, -6f);
+
+            // แถบหัวแผง (พิลล์เข้มขึ้นเล็กน้อย ให้เป็นชั้น)
+            var strip = new GameObject("Head", typeof(RectTransform), typeof(Image));
+            strip.transform.SetParent(go.transform, false);
+            var simg = strip.GetComponent<Image>(); simg.color = new Color(0.78f, 0.71f, 0.93f, 1f); simg.raycastTarget = false;
+            if (round != null) { simg.sprite = round; simg.type = Image.Type.Sliced; }
+            var srt = simg.rectTransform; srt.anchorMin = srt.anchorMax = srt.pivot = new Vector2(0.5f, 1f);
+            srt.anchoredPosition = new Vector2(0f, -9f); srt.sizeDelta = new Vector2(size.x - 26f, 42f);
+            MakeText(strip.transform, font, title, Vector2.zero, new Vector2(size.x - 34f, 40f), 21, new Color(0.30f, 0.25f, 0.46f), TextAlignmentOptions.Center);
+            return rt;
+        }
+
+        // ช่องเลือกแบบ "รูป" (image slot) — ผู้ใช้เอา sprite มาใส่ทีหลังได้ · caption ล่างให้ controller เขียนชื่อ
+        static Button MakeSlot(Transform parent, TMP_FontAsset font, Vector2 pos, Vector2 size)
+        {
+            var go = new GameObject("Slot", typeof(RectTransform), typeof(Image), typeof(Button));
+            go.transform.SetParent(parent, false);
+            var rt = (RectTransform)go.transform; rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.anchoredPosition = pos; rt.sizeDelta = size;
+            var img = go.GetComponent<Image>(); img.color = new Color(0.99f, 0.99f, 1f);
+            var round = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/ui_round.png");
+            if (round != null) { img.sprite = round; img.type = Image.Type.Sliced; }
+            var ol = go.AddComponent<UnityEngine.UI.Outline>(); ol.effectColor = new Color(0.55f, 0.5f, 0.72f, 0.55f); ol.effectDistance = new Vector2(2f, -2f); ol.useGraphicAlpha = false;
+            var sh = go.AddComponent<UnityEngine.UI.Shadow>(); sh.effectColor = new Color(0.25f, 0.22f, 0.4f, 0.22f); sh.effectDistance = new Vector2(0f, -3f);
+            var cap = MakeText(go.transform, font, "", new Vector2(0, -size.y / 2f + 13f), new Vector2(size.x - 6f, 24f), 14, new Color(0.30f, 0.25f, 0.46f), TextAlignmentOptions.Center);
+            cap.raycastTarget = false; cap.enableWordWrapping = false; cap.overflowMode = TextOverflowModes.Ellipsis;
+            return go.GetComponent<Button>();
+        }
+
+        // แถวช่องรูป n ช่อง (สำหรับของแต่ง: ไม่ใส่ + option) — เว้นระยะเท่ากันอัตโนมัติตามจำนวน
+        static Button[] MakeSlotRow(Transform panel, TMP_FontAsset font, int n)
+        {
+            var arr = new Button[n];
+            float slotW = n <= 4 ? 82f : 56f;
+            float gap = 8f;
+            float total = n * slotW + (n - 1) * gap;
+            float x0 = -total / 2f + slotW / 2f;
+            for (int i = 0; i < n; i++)
+                arr[i] = MakeSlot(panel, font, new Vector2(x0 + i * (slotW + gap), -16f), new Vector2(slotW, slotW * 0.95f));
+            return arr;
+        }
+
+        // กริดช่องรูป (ไอคอน + ชื่อเล็ก ๆ ด้านล่าง + วงเลือก) ใต้แถบหัวแผง · เรียงซ้าย→ขวา บน→ล่าง จัดกลาง
+        static Button[] Grid(RectTransform panel, float panelH, int n, int cols, Vector2 cell, Vector2 gap, bool caption, TMP_FontAsset font)
+        {
+            var arr = new Button[n];
+            int rows = Mathf.CeilToInt(n / (float)cols);
+            float totalW = cols * cell.x + (cols - 1) * gap.x;
+            float top = panelH / 2f - 60f;
+            for (int i = 0; i < n; i++)
+            {
+                int r = i / cols, c = i % cols;
+                int inRow = Mathf.Min(cols, n - r * cols);
+                float rowW = inRow * cell.x + (inRow - 1) * gap.x;
+                float x = -rowW / 2f + cell.x / 2f + c * (cell.x + gap.x);
+                float y = top - cell.y / 2f - r * (cell.y + gap.y);
+                arr[i] = MakeIconSlot(panel, font, new Vector2(x, y), cell, caption);
+            }
+            return arr;
+        }
+
+        static Button[] SwatchRow(RectTransform panel, float panelH, int n, int cols, float d, float gap)
+        {
+            var arr = new Button[n];
+            float top = panelH / 2f - 62f;
+            for (int i = 0; i < n; i++)
+            {
+                int r = i / cols, c = i % cols;
+                int inRow = Mathf.Min(cols, n - r * cols);
+                float rowW = inRow * d + (inRow - 1) * gap;
+                arr[i] = MakeSwatch(panel, new Vector2(-rowW / 2f + d / 2f + c * (d + gap), top - d / 2f - r * (d + gap)), d);
+                AddRing(arr[i].transform, d);
+            }
+            return arr;
+        }
+
+        static Button MakeIconSlot(Transform parent, TMP_FontAsset font, Vector2 pos, Vector2 size, bool caption)
+        {
+            var round = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/ui_round.png");
+            var go = new GameObject("Slot", typeof(RectTransform), typeof(Image), typeof(Button));
+            go.transform.SetParent(parent, false);
+            var rt = (RectTransform)go.transform; rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.anchoredPosition = pos; rt.sizeDelta = size;
+            var img = go.GetComponent<Image>(); img.color = new Color(0.99f, 0.99f, 1f);
+            if (round != null) { img.sprite = round; img.type = Image.Type.Sliced; }
+            var sh = go.AddComponent<UnityEngine.UI.Shadow>(); sh.effectColor = new Color(0.25f, 0.22f, 0.4f, 0.22f); sh.effectDistance = new Vector2(0f, -3f);
+            // ไอคอน (ซ่อนจนกว่า controller จะใส่รูป)
+            var ic = new GameObject("Icon", typeof(RectTransform), typeof(Image));
+            ic.transform.SetParent(go.transform, false);
+            var icImg = ic.GetComponent<Image>(); icImg.raycastTarget = false; icImg.preserveAspect = true; icImg.enabled = false;
+            var irt = icImg.rectTransform; irt.anchorMin = new Vector2(0f, caption ? 0.18f : 0f); irt.anchorMax = Vector2.one;
+            irt.offsetMin = new Vector2(3f, 1f); irt.offsetMax = new Vector2(-3f, -3f);
+
+            if (caption)
+            {
+                float fs = size.x >= 70f ? 14f : 10f;
+                var cap = MakeText(go.transform, font, "", Vector2.zero, Vector2.zero, fs, new Color(0.30f, 0.25f, 0.46f), TextAlignmentOptions.Bottom);
+                var crt = cap.rectTransform; crt.anchorMin = Vector2.zero; crt.anchorMax = new Vector2(1f, 1f); crt.offsetMin = new Vector2(1f, 1f); crt.offsetMax = new Vector2(-1f, -1f);
+                cap.raycastTarget = false; cap.enableWordWrapping = false; cap.overflowMode = TextOverflowModes.Ellipsis;
+                cap.enableAutoSizing = true; cap.fontSizeMin = 8f; cap.fontSizeMax = fs;
+            }
+            AddRing(go.transform, Mathf.Max(size.x, size.y));
+            return go.GetComponent<Button>();
+        }
+
+        // กรอบไฮไลต์ตอนเลือก (4 แถบรอบปุ่ม ไม่ทับสี/ไอคอน) — controller เปิด/ปิดลูกชื่อ Selected
+        static void AddRing(Transform t, float size)
+        {
+            var ring = new GameObject("Selected", typeof(RectTransform));
+            ring.transform.SetParent(t, false);
+            var rt = (RectTransform)ring.transform; rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one;
+            rt.offsetMin = new Vector2(-5f, -5f); rt.offsetMax = new Vector2(5f, 5f);
+            var gold = new Color(1f, 0.70f, 0.18f, 1f);
+            const float th = 4f;
+            Bar(ring.transform, gold, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -th), Vector2.zero);   // บน
+            Bar(ring.transform, gold, new Vector2(0f, 0f), new Vector2(1f, 0f), Vector2.zero, new Vector2(0f, th));    // ล่าง
+            Bar(ring.transform, gold, new Vector2(0f, 0f), new Vector2(0f, 1f), Vector2.zero, new Vector2(th, 0f));    // ซ้าย
+            Bar(ring.transform, gold, new Vector2(1f, 0f), new Vector2(1f, 1f), new Vector2(-th, 0f), Vector2.zero);   // ขวา
+            ring.SetActive(false);
+        }
+
+        static void Bar(Transform parent, Color col, Vector2 aMin, Vector2 aMax, Vector2 oMin, Vector2 oMax)
+        {
+            var go = new GameObject("Bar", typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(parent, false);
+            var im = go.GetComponent<Image>(); im.color = col; im.raycastTarget = false;
+            var rt = im.rectTransform; rt.anchorMin = aMin; rt.anchorMax = aMax; rt.offsetMin = oMin; rt.offsetMax = oMax;
         }
 
         static TMP_InputField MakeInput(Transform parent, TMP_FontAsset font, string placeholder, Vector2 pos, Vector2 size)

@@ -86,7 +86,13 @@ namespace NisitSimulator.EditorTools
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080);
             var root = canGo.transform;
 
-            MakeImage(root, "BG", Vector2.zero, Vector2.one, new Color(0.10f, 0.13f, 0.21f, 1f));
+            // พื้นหลังพาสเทลเดียวกับเมนู (ให้ทั้งเกมเข้าชุด) — ถ้าหาภาพไม่เจอใช้สีเข้มเดิม
+            var lobbyBg = MakeImage(root, "BG", Vector2.zero, Vector2.one, new Color(0.10f, 0.13f, 0.21f, 1f));
+            var lobbyBgSprite = PastelBgUtil.Load();
+            if (lobbyBgSprite != null) { lobbyBg.sprite = lobbyBgSprite; lobbyBg.type = Image.Type.Simple; lobbyBg.preserveAspect = false; lobbyBg.color = Color.white; }
+            // ม่านนุ่มบางทับภาพ ให้การ์ดอ่านง่าย (โปร่งพอให้เห็นพื้นหลัง)
+            var lobbyVeil = MakeImage(root, "BGVeil", Vector2.zero, Vector2.one, new Color(0.20f, 0.18f, 0.30f, 0.18f));
+            lobbyVeil.raycastTarget = false;
 
             // ----- การ์ดซ้าย: เชื่อมต่อ + แต่งตัว (NetworkUI) -----
             var card = MakeCard(root, new Vector2(-470, 0), new Vector2(640, 860));
@@ -97,10 +103,10 @@ namespace NisitSimulator.EditorTools
             // ===== กลุ่ม A: สร้าง/เข้าห้อง (โชว์ตอนยังไม่เชื่อมต่อ) =====
             var connGrp = MakeGroup(card, "ConnectGroup");
             MakeLabel(connGrp, font, "สร้างห้องใหม่:", -66);
-            var host = MakeButton(connGrp, font, "Host (สร้างห้อง)", new Vector2(0, -94), new Vector2(560, 58), new Color(0.60f, 0.86f, 0.68f), 26);
+            var host = MakeButton(connGrp, font, "สร้างห้อง", new Vector2(0, -94), new Vector2(560, 58), new Color(0.60f, 0.86f, 0.68f), 26);
             MakeLabel(connGrp, font, "เข้าห้อง (LAN) — กรอก IP ของ Host:", -186);
             var ip = MakeInput(connGrp, font, new Vector2(0, -214), new Vector2(560, 44));
-            var client = MakeButton(connGrp, font, "Join (เข้าห้อง)", new Vector2(0, -268), new Vector2(560, 52), new Color(0.62f, 0.80f, 0.96f), 24);
+            var client = MakeButton(connGrp, font, "เข้าร่วมห้อง", new Vector2(0, -268), new Vector2(560, 52), new Color(0.62f, 0.80f, 0.96f), 24);
             MakeLabel(connGrp, font, "— หรือเล่นออนไลน์ (Join Code) —", -348);
             var code = MakeInput(connGrp, font, new Vector2(0, -376), new Vector2(560, 44));
             var hostR = MakeButton(connGrp, font, "Host ออนไลน์", new Vector2(-145, -430), new Vector2(270, 50), new Color(0.55f, 0.82f, 0.70f), 20);
@@ -108,7 +114,7 @@ namespace NisitSimulator.EditorTools
 
             // ===== กลุ่ม B: แต่งตัว (โชว์เมื่อเข้าห้องแล้ว) — พรีวิว 3D + สี/แบบ/ของแต่ง =====
             var custGrp = MakeGroup(card, "CustomizeGroup");
-            MakeText(custGrp, font, "แต่งตัวละครของคุณ", new Vector2(0.5f, 1f), new Vector2(0, -44), new Vector2(560, 40), 26, new Color(1f, 0.9f, 0.5f), TextAlignmentOptions.Center);
+            MakeText(custGrp, font, "แต่งตัวละครของคุณ", new Vector2(0.5f, 1f), new Vector2(0, -44), new Vector2(560, 40), 26, new Color(0.42f, 0.26f, 0.58f), TextAlignmentOptions.Center);
 
             // พรีวิว 3D (ซ้าย)
             var rawGo = new GameObject("Preview", typeof(RectTransform), typeof(RawImage));

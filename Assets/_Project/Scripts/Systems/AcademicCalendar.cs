@@ -7,7 +7,9 @@ namespace NisitSimulator.Systems
     //   ภาคต้น(ฝน) 5 [มิ.ย.-ต.ค.] → ภาคปลาย(หนาว) 5 [พ.ย.-มี.ค.] → ภาคฤดูร้อน(ร้อน) 2 [เม.ย.-พ.ค.]
     public static class AcademicCalendar
     {
-        static readonly int[]    TermDays  = { 5, 5, 2 };
+        // บีบจาก 5/5/2 (12 วัน) เหลือ 3/3/2 (8 วัน) เพื่อให้เล่นจบ 4 ปีได้ในหนึ่งนั่ง
+        // ยังคงภาคต้น/ปลายไว้ 3 วัน จึงยังมีสอบกลางภาคทั้งสองภาค (HasMidterm ต้องการ >= 3)
+        static readonly int[]    TermDays  = { 3, 3, 2 };
         static readonly string[] TermNames = { "ภาคต้น", "ภาคปลาย", "ภาคฤดูร้อน" };
         static readonly string[] Seasons   = { "ฤดูฝน", "ฤดูหนาว", "ฤดูร้อน" };
 
@@ -57,7 +59,15 @@ namespace NisitSimulator.Systems
         public static bool HasMidterm(int sem) => SemesterLen(sem) >= 3;
 
         // ชื่อเดือนของวันนี้ (1 วัน = 1 เดือนตามปีการศึกษา)
-        public static string MonthName(int dayInYear) => Months[Mathf.Clamp(dayInYear - 1, 0, Months.Length - 1)];
+        // ชื่อเดือนของวันนี้ — กระจาย 12 เดือนให้ทั่วปี ไม่ว่าปีจะยาวกี่วัน
+        // เดิมใช้ dayInYear-1 ตรง ๆ พอลดวันต่อปีแล้วเกมจะจบปีแค่เดือนพฤศจิกายน
+        public static string MonthName(int dayInYear)
+        {
+            int total = Mathf.Max(1, TotalDays);
+            int d = Mathf.Clamp(dayInYear, 1, total);
+            int idx = Mathf.Clamp((d - 1) * Months.Length / total, 0, Months.Length - 1);
+            return Months[idx];
+        }
 
         public static string SemesterName(int sem) => TermNames[Mathf.Clamp(sem, 0, TermNames.Length - 1)];
         public static string SeasonName(int sem)   => Seasons[Mathf.Clamp(sem, 0, Seasons.Length - 1)];

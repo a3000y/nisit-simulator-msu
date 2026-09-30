@@ -32,7 +32,7 @@ namespace NisitSimulator.EditorTools
             if (prog != null)
             {
                 prog.daysPerYear = 12;   // 12 เดือน: ต้น 5 + ปลาย 5 + ฤดูร้อน 2
-                prog.knowledgeTargets = new float[] { 180f, 420f, 720f, 1080f };
+                prog.knowledgeTargets = new float[] { 400f, 850f, 1350f, 1900f };
                 EditorUtility.SetDirty(prog);
             }
 

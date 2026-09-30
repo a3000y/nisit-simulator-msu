@@ -1,0 +1,97 @@
+using System;
+using System.Collections.Generic;
+
+namespace NisitSimulator.Academics
+{
+    // ===== ข้อมูลการเรียนของผู้เล่น (ถูกเซฟลง SaveData เป็น JSON) =====
+    //   อ้างอิงรายวิชาด้วยรหัสเท่านั้น → แก้ชื่อ/เวลาในหลักสูตรภายหลังได้โดยเซฟเดิมไม่พัง
+
+    // การลงเรียนหนึ่งครั้ง (หนึ่งวิชา × หนึ่งภาค) — เก็บทุกครั้ง รวมครั้งที่ตก = ประวัติเรียนซ้ำ
+    [Serializable]
+    public class Enrollment
+    {
+        public string code;
+        public int attempt = 1;          // ครั้งที่ลงเรียนวิชานี้
+        public int termSerial;           // ภาคที่ลง (นับภาคปกติที่เล่นจริง 1,2,3...)
+        public int calendarYear;         // ปีการศึกษาที่ (นับปีที่เล่นจริง)
+        public int semIndex;             // 0 = ภาคต้น, 1 = ภาคปลาย
+        public int classYear;            // ชั้นปีตอนลง
+        public bool retakeSection;       // true = ตอนเรียนซ้ำ (ภาคค่ำ)
+
+        // ความคืบหน้า (หน่วย = ชั่วโมงเรียนที่มีคุณภาพ) แยกตามคาบ
+        public float progress;
+        public float selfStudy;
+        public List<string> meetingKeys = new List<string>();   // "วัน:ลำดับคาบ"
+        public List<int> meetingTicks = new List<int>();        // ชั่วโมงที่นับแล้วของคาบนั้น
+
+        // คะแนนสอบ 0..1 (-1 = ยังไม่สอบ)
+        public float midterm = -1f;
+        public float final = -1f;
+        public bool missedMidterm;
+        public bool missedFinal;
+
+        // ผลการเรียน (ประกาศตอนจบภาค)
+        public bool graded;
+        public float score;
+        public string letter = "";
+        public float point;
+        public bool passed;
+        public bool transfer;            // เทียบโอนจากเซฟเก่า (ไม่คิด GPA)
+
+        public int TicksFor(string key)
+        {
+            int i = meetingKeys.IndexOf(key);
+            return i >= 0 && i < meetingTicks.Count ? meetingTicks[i] : 0;
+        }
+
+        public void AddTick(string key)
+        {
+            int i = meetingKeys.IndexOf(key);
+            if (i < 0) { meetingKeys.Add(key); meetingTicks.Add(1); }
+            else
+            {
+                while (meetingTicks.Count <= i) meetingTicks.Add(0);
+                meetingTicks[i]++;
+            }
+        }
+
+        public int MeetingsAttended
+        {
+            get { int n = 0; foreach (var t in meetingTicks) if (t > 0) n++; return n; }
+        }
+    }
+
+    // สถานะภาคเรียนปัจจุบัน
+    [Serializable]
+    public class TermState
+    {
+        public int serial;               // ลำดับภาคปกติ (ภาคฤดูร้อน = เลขเดียวกับภาคก่อนหน้า)
+        public int calendarYear;
+        public int semIndex;             // 0 ต้น 1 ปลาย 2 ฤดูร้อน
+        public int classYear;            // ชั้นปีตอนเปิดภาค
+        public int planSemester;         // 1 / 2 (0 = ปิดภาค)
+        public bool isBreak;             // ภาคฤดูร้อน — ไม่เปิดสอนในหลักสูตรนี้
+        public bool isExtra;             // ภาคเรียนเพิ่มเติม (เรียนครบแผน 4 ปีแล้วแต่ยังไม่จบ)
+        public bool registrationOpen;
+        public bool confirmed;
+        public bool closed;
+        public bool lateRegistration;    // ย้ายจากเซฟเก่า → ลงทะเบียนได้ถึงสิ้นภาค
+        public List<string> selected = new List<string>();
+    }
+
+    [Serializable]
+    public class AcademicRecord
+    {
+        public int version = 1;
+        public int classYear = 1;              // ชั้นปี (แยกจากจำนวนภาค/ปีที่เล่นจริง)
+        public int regularTermsStarted;        // จำนวนภาคปกติที่เปิดไปแล้ว
+        public bool finishedPlan;              // ผ่านภาค 2 ของชั้นปี 4 มาแล้ว → ต่อไปเป็นภาคเพิ่มเติม
+        public bool graduated;
+        public bool migratedFromLegacy;
+        public bool hasCurrent;
+        public TermState current = new TermState();
+        public List<Enrollment> enrollments = new List<Enrollment>();
+
+        public TermState Current => hasCurrent ? current : null;
+    }
+}

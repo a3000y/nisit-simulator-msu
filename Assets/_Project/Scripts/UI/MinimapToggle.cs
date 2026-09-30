@@ -13,6 +13,13 @@ namespace NisitSimulator.UI
         public bool startOpen = false;
 
         private bool open;
+        public bool IsOpen => open;
+
+        // โทรศัพท์ปิดกล้องแผนที่ตอนปิดแอป — ถ้ามินิแมป (M) ยังเปิดอยู่ ให้เปิดกล้องกลับ
+        void LateUpdate()
+        {
+            if (open && minimapCam != null && !minimapCam.enabled) minimapCam.enabled = true;
+        }
 
         void Start() { Apply(startOpen); }
 

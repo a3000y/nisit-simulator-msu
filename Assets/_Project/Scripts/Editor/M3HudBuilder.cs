@@ -53,7 +53,9 @@ namespace NisitSimulator.EditorTools
             if (gm.GetComponent<GameClock>() == null) gm.AddComponent<GameClock>();
             if (gm.GetComponent<GameOverWatcher>() == null) gm.AddComponent<GameOverWatcher>();
             if (gm.GetComponent<ProgressionManager>() == null) gm.AddComponent<ProgressionManager>();
-            gm.GetComponent<GameClock>().gameMinutesPerRealSecond = 1f;   // ติ๊กเหมือนนาฬิกาจริง: 1 วิจริง = 1 นาทีเกม → นาทีขยับทีละ 1 (จบวันด้วยการนอน)
+            // 3 นาทีเกมต่อ 1 วินาทีจริง — หนึ่งวันตื่นถึงเข้านอนราว 5 นาทีจริง เล่นจบ 4 ปีได้ในหนึ่งนั่ง
+            // อย่าเปลี่ยนกลับเป็น 1 โดยไม่ปรับ StatDecay ด้วย เกมจะกลับไปยาว 19 ชั่วโมงต่อรอบ
+            gm.GetComponent<GameClock>().gameMinutesPerRealSecond = 3f;
 
             // ---- Canvas ----
             DestroyIfExists("HUD Canvas");
@@ -74,6 +76,8 @@ namespace NisitSimulator.EditorTools
             hud.energyFill = CartoonBar(root, "Energy", 0, new Color(0.40f, 0.86f, 0.40f), "พลังงาน", out var eVal); hud.energyText = eVal;
             hud.healthFill = CartoonBar(root, "Health", 1, new Color(1.00f, 0.44f, 0.46f), "สุขภาพ",  out var hVal); hud.healthText = hVal;
             hud.hungerFill = CartoonBar(root, "Hunger", 2, new Color(1.00f, 0.73f, 0.24f), "ความอิ่ม", out var uVal); hud.hungerText = uVal;
+            // แถบความเครียด — อ่านกลับกับอีกสามแถบ เต็มคือแย่ จึงใช้สีม่วงแดงเป็นสัญญาณเตือน
+            hud.stressFill = CartoonBar(root, "Stress", 3, new Color(0.85f, 0.45f, 0.85f), "ความเครียด", out var sVal); hud.stressText = sVal;
 
             // ===== ข้อมูล (ขวาบน) แบบชิปแยก =====
             // นาฬิกา (ชิปเด่นสุด สีทอง)
@@ -89,8 +93,8 @@ namespace NisitSimulator.EditorTools
             InfoChip(root, -204, new Color(1f, 0.80f, 0.30f),  out var mTxt); hud.moneyText = mTxt;
             InfoChip(root, -254, new Color(0.72f, 0.56f, 0.96f), out var yTxt); hud.yearText  = yTxt;
 
-            // ===== toast (กลางบน) =====
-            hud.toastText = FloatText(root, "ToastText", new Vector2(0.5f, 1f), new Vector2(0, -160), "", 52, new Color(1f, 0.92f, 0.35f));
+            // ===== toast (กลางบน) ปรับเป็นสีขาว ขนาดพอเหมาะ =====
+            hud.toastText = FloatText(root, "ToastText", new Vector2(0.5f, 1f), new Vector2(0, -140), "", 32, Color.white);
 
             // ===== prompt (ล่างกลาง) แบบเม็ดยา =====
             var pill = Panel(root, new Vector2(0.5f, 0f), new Vector2(0, 120), new Vector2(520, 84));
@@ -345,9 +349,9 @@ namespace NisitSimulator.EditorTools
             var card = MakeImage(dim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(760, 660), Round, PanelCol);
             Deco(card, 6f);
 
-            var title = CardText(card.transform, "GAME OVER", 252, 72, Color.white, FontStyles.Bold, false);
-            var msg   = CardText(card.transform, "ข้อความ", 150, 30, new Color(0.9f, 0.9f, 0.95f), FontStyles.Normal, true);
-            var score = CardText(card.transform, "คะแนนรวม: 0", -25, 30, new Color(1f, 0.86f, 0.42f), FontStyles.Bold, false);
+            var title = CardText(card.transform, "GAME OVER", 252, 72, new Color(0.85f, 0.22f, 0.22f), FontStyles.Bold, false);
+            var msg   = CardText(card.transform, "ข้อความ", 150, 30, new Color(0.25f, 0.30f, 0.42f), FontStyles.Normal, true);
+            var score = CardText(card.transform, "คะแนนรวม: 0", -25, 30, new Color(0.16f, 0.20f, 0.30f), FontStyles.Bold, false);
             score.rectTransform.sizeDelta = new Vector2(660, 200);   // รองรับ 4 บรรทัด (คณะ/ชั้นปี/GPA/คะแนน)
             score.lineSpacing = 12f;
 

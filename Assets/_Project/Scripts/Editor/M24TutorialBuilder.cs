@@ -16,7 +16,7 @@ namespace NisitSimulator.EditorTools
         const string GameplayPath = "Assets/_Project/Scenes/01_Gameplay.unity";
         static readonly Color Ink = new Color(0.12f, 0.14f, 0.24f, 1f);
         static readonly Color CardCol = new Color(0.11f, 0.14f, 0.24f, 0.99f);
-        static readonly Color Gold = new Color(1f, 0.9f, 0.5f);
+        static readonly Color Gold = new Color(0.42f, 0.26f, 0.58f);   // หัวข้อการ์ด — ม่วงเข้มเข้าธีมพาสเทล (อ่านง่ายบนพื้นสว่าง)
         public static bool SuppressDialog = false;
 
         static Sprite Round => AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Project/Art/UI/ui_round.png")

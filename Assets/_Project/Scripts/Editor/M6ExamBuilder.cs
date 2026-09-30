@@ -53,13 +53,19 @@ namespace NisitSimulator.EditorTools
             root.rectTransform.offsetMin = Vector2.zero; root.rectTransform.offsetMax = Vector2.zero;
             var rootT = root.transform;
 
+            // พื้นหลังพาสเทลคลุมม่านมืด → หน้าสอบเป็นฉากพาสเทลเข้าชุดกับทั้งเกม (การ์ดจะซ้อนทับด้านบน)
+            NisitSimulator.EditorTools.PastelBgUtil.AddFullscreen(rootT, "ExamBG");
+            var examVeil = MakeImage(rootT, "ExamVeil", Vector2.zero, Vector2.one, new Color(0.18f, 0.16f, 0.28f, 0.20f));
+            examVeil.rectTransform.offsetMin = Vector2.zero; examVeil.rectTransform.offsetMax = Vector2.zero;
+            examVeil.raycastTarget = false;
+
             // การ์ดข้อสอบ (มุมโค้ง + เงา)
             var card = MakeImage(rootT, "Card", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Color(0.13f, 0.16f, 0.26f, 1f));
             card.sprite = round ?? ui; Deco(card);
             card.rectTransform.sizeDelta = new Vector2(920, 660);
             var cardT = card.transform;
 
-            var header = MakeText(cardT, "Header", "สอบกลางภาค", 46, new Vector2(0.5f, 1f), new Vector2(0, -46), new Vector2(700, 60), new Color(1f, 0.86f, 0.42f), FontStyles.Bold);
+            var header = MakeText(cardT, "Header", "สอบกลางภาค", 46, new Vector2(0.5f, 1f), new Vector2(0, -46), new Vector2(700, 60), new Color(0.42f, 0.26f, 0.58f), FontStyles.Bold);
             var progress = MakeText(cardT, "Progress", "ข้อ 1/3", 28, new Vector2(1f, 1f), new Vector2(-40, -50), new Vector2(220, 40), Color.white, FontStyles.Normal);
             progress.alignment = TextAlignmentOptions.Right;
             var question = MakeText(cardT, "Question", "คำถาม...", 34, new Vector2(0.5f, 1f), new Vector2(0, -150), new Vector2(820, 170), Color.white, FontStyles.Normal);

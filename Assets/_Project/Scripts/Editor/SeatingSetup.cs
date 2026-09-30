@@ -74,11 +74,11 @@ namespace NisitSimulator.EditorTools
             // ---- ผล + ชื่อกิจกรรม ตามชนิดห้อง ----
             switch (room)
             {
-                case "Classroom": spot.activityName = "เรียน";            spot.knowledgeChange = 8f; spot.energyChange = -4f; spot.satisfactionChange = 1f; spot.expReward = 5; break;
-                case "ITLab":     spot.activityName = "เรียนคอมพิวเตอร์"; spot.knowledgeChange = 9f; spot.energyChange = -4f; spot.satisfactionChange = 2f; spot.expReward = 6; break;
-                case "Library":   spot.activityName = "อ่านหนังสือ";       spot.knowledgeChange = 6f; spot.energyChange = -2f; spot.satisfactionChange = 2f; spot.expReward = 3; break;
-                case "Office":    spot.activityName = "ทำงานเอกสาร";       spot.knowledgeChange = 3f; spot.energyChange = -2f; spot.satisfactionChange = 3f; spot.expReward = 2; break;
-                case "ClubRoom":  spot.activityName = "ทำกิจกรรมชมรม";    spot.knowledgeChange = 2f; spot.energyChange = -2f; spot.satisfactionChange = 8f; spot.expReward = 3; break;
+                case "Classroom": spot.activityName = "เรียน";            spot.knowledgeChange = 8f; spot.energyChange = -4f; spot.stressChange = 3f; spot.satisfactionChange = 1f; spot.expReward = 5; break;
+                case "ITLab":     spot.activityName = "เรียนคอมพิวเตอร์"; spot.knowledgeChange = 9f; spot.energyChange = -4f; spot.stressChange = 3f; spot.satisfactionChange = 2f; spot.expReward = 6; break;
+                case "Library":   spot.activityName = "อ่านหนังสือ";       spot.knowledgeChange = 6f; spot.energyChange = -2f; spot.stressChange = 2f; spot.satisfactionChange = 2f; spot.expReward = 3; break;
+                case "Office":    spot.activityName = "ทำงานเอกสาร";       spot.knowledgeChange = 3f; spot.energyChange = -2f; spot.stressChange = 1f; spot.satisfactionChange = 3f; spot.expReward = 2; break;
+                case "ClubRoom":  spot.activityName = "ทำกิจกรรมชมรม";    spot.knowledgeChange = 2f; spot.energyChange = -2f; spot.stressChange = -5f; spot.satisfactionChange = 8f; spot.expReward = 3; break;
                 case "Cafeteria": spot.activityName = "กินข้าว";           spot.hungerChange = 35f;   spot.energyChange = 8f;  spot.satisfactionChange = 5f; break;
                 case "Shop":      spot.activityName = "นั่งพักในร้าน";      spot.hungerChange = 15f;   spot.satisfactionChange = 4f; break;
                 case "Dorm":      spot.activityName = "อ่านหนังสือ";       spot.knowledgeChange = 4f; spot.energyChange = 2f;  spot.satisfactionChange = 3f; break;

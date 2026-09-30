@@ -184,6 +184,7 @@ namespace NisitSimulator.Interaction
             int lvl = RelationshipManager.Instance.GetLevel(relId);
             string line = (lines != null && lines.Length > 0) ? lines[Random.Range(0, lines.Length)] : "สวัสดี!";
             HUDController.Toast($"{npcName}: {line}");    // Toast มีเสียงแจ้งเตือนในตัว
+            NisitSimulator.Systems.GameplayEvents.Raise(NisitSimulator.Systems.GameplayEvents.Talk);
 
             if (satisfactionReward != 0f && Time.time - lastReward >= rewardCooldown)
             {

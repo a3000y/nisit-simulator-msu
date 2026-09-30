@@ -13,6 +13,12 @@ namespace NisitSimulator.Player
         public float walkSpeed = 4f;
         public float runSpeed = 7f;        // วิ่งเมื่อกด Shift (ตามสโคป 1.3.1.1)
         public float rotationSpeed = 12f;
+
+        [Header("หันตัวด้วยคลิกขวา")]
+        [Tooltip("กดค้างคลิกขวาเพื่อหันตัวละครไปทางเมาส์ (กล้องย้ายไปใช้ปุ่มกลางแทนแล้ว)")]
+        public bool rightClickToFace = true;
+        [Tooltip("ระดับพื้นที่ใช้คำนวณจุดที่เมาส์ชี้ ปกติคือระดับเท้าตัวละคร")]
+        public float facePlaneHeightOffset = 0f;
         public float gravity = -20f;
         public float jumpHeight = 1.3f;   // ความสูงกระโดด (กด Space)
 
@@ -26,6 +32,15 @@ namespace NisitSimulator.Player
         private CharacterController controller;
         private PlayerStats stats;
         private Animator animator;              // ตัวเล่นแอนิเมชัน (ถ้ามีโมเดล)
+        private float airTime;                  // เวลาที่ลอยจากพื้น (ใช้กับท่า Fall)
+        private bool hasGroundedParam;
+
+        void CacheAnimParams()
+        {
+            hasGroundedParam = false;
+            if (animator == null || animator.runtimeAnimatorController == null) return;
+            foreach (var p in animator.parameters) if (p.name == "Grounded") { hasGroundedParam = true; break; }
+        }
         private PlayerEffects effects;          // ผลกระทบชั่วคราว (ป่วย ฯลฯ)
         private Vector3 velocity;
         // ซิงก์เสียงฝีเท้ากับกระดูกเท้าจริง (เล่นตอนเท้าลงต่ำสุด = แตะพื้น)
@@ -38,6 +53,7 @@ namespace NisitSimulator.Player
             controller = GetComponent<CharacterController>();
             stats = GetComponent<PlayerStats>();
             animator = GetComponentInChildren<Animator>();   // หา Animator จากโมเดลลูก
+            CacheAnimParams();
             if (animator != null && animator.isHuman)         // อ้างอิงกระดูกเท้า (Humanoid) ไว้ซิงก์เสียงเดิน
             {
                 leftFoot = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
@@ -52,6 +68,7 @@ namespace NisitSimulator.Player
         public void RefreshAnimator()
         {
             animator = GetComponentInChildren<Animator>();
+            CacheAnimParams();
             if (animator != null && animator.isHuman)
             {
                 leftFoot = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
@@ -83,7 +100,7 @@ namespace NisitSimulator.Player
             // วิ่งเมื่อกด Shift (ป่วย = เดินช้าลง)
             bool running = Input.GetKey(KeyCode.LeftShift);
             float moveMult = effects != null ? effects.moveMult : 1f;
-            float speed = (running ? runSpeed : walkSpeed) * moveMult;
+            float speed = (running ? runSpeed : walkSpeed) * moveMult * NisitSimulator.Systems.Perks.MoveMul;   // "ขาไว"
             controller.Move(moveDir * speed * Time.deltaTime);
 
             bool moving = moveDir.sqrMagnitude > 0.01f;
@@ -100,6 +117,11 @@ namespace NisitSimulator.Player
             {
                 Quaternion target = Quaternion.LookRotation(moveDir);
                 transform.rotation = Quaternion.Slerp(transform.rotation, target, rotationSpeed * Time.deltaTime);
+            }
+            else if (rightClickToFace && Input.GetMouseButton(1))
+            {
+                // คลิกขวาค้างไว้เพื่อหันหน้าตอนยืนนิ่ง (ตามสเปกปุ่มควบคุม)
+                FaceMouse();
 
                 // หักพลังงานตามการเคลื่อนที่ (วิ่งเปลืองกว่าเดิน · ป่วย = เหนื่อยเร็ว)
                 if (stats != null)
@@ -127,6 +149,10 @@ namespace NisitSimulator.Player
             {
                 float animSpeed = moving ? (running ? 1f : 0.5f) : 0f;
                 animator.SetFloat("Speed", animSpeed, 0.12f, Time.deltaTime);
+
+                // ท่าลอยกลางอากาศ (กระโดด/ตก) — หน่วงเวลานิดหน่อยกันกระพริบตอนเดินลงขั้นบันได
+                airTime = controller.isGrounded ? 0f : airTime + Time.deltaTime;
+                if (hasGroundedParam) animator.SetBool("Grounded", airTime < 0.18f);
             }
         }
 
@@ -143,5 +169,25 @@ namespace NisitSimulator.Player
             else if (ascending) wasDescending = false;
             prevY = y;
         }
-    }
+    
+
+        // หันตัวละครไปทางจุดที่เมาส์ชี้บนพื้นระดับเท้า
+        private void FaceMouse()
+        {
+            var cam = cameraTransform != null ? cameraTransform.GetComponent<Camera>() : Camera.main;
+            if (cam == null) return;
+
+            var plane = new Plane(Vector3.up, new Vector3(0f, transform.position.y + facePlaneHeightOffset, 0f));
+            var ray = cam.ScreenPointToRay(Input.mousePosition);
+            if (!plane.Raycast(ray, out float dist)) return;
+
+            Vector3 point = ray.GetPoint(dist);
+            Vector3 dir = point - transform.position;
+            dir.y = 0f;
+            if (dir.sqrMagnitude < 0.01f) return;
+
+            var look = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, look, rotationSpeed * Time.deltaTime);
+        }
+}
 }

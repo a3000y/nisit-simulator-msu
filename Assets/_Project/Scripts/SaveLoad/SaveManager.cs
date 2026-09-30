@@ -24,21 +24,26 @@ namespace NisitSimulator.SaveLoad
                 hunger = stats.Hunger,
                 knowledge = stats.Knowledge,
                 satisfaction = stats.Satisfaction,
+                stress = stats.Stress,
                 money = stats.Money,
                 exp = stats.Exp
             };
 
             var prog = Object.FindFirstObjectByType<ProgressionManager>();
-            if (prog != null) { data.currentYear = prog.CurrentYear; data.dayInYear = prog.DayInYear; }
+            if (prog != null) { data.currentYear = prog.CurrentYear; data.dayInYear = prog.DayInYear; data.calendarYear = prog.CalendarYear; }
+
+            // ระบบลงทะเบียนเรียน (ชั้นปี ภาค รายวิชา ความคืบหน้า ผลสอบ ประวัติเรียนซ้ำ)
+            var registrar = NisitSimulator.Academics.CourseRegistrar.Instance;
+            if (registrar != null) registrar.CollectSave(data);
+
+            // มินิเกมสอบที่กำลังทำ (ชุดข้อ/ลำดับ/คำตอบ/เวลาคงเหลือ/คำใบ้)
+            var miniExam = NisitSimulator.Academics.ExamMinigame.ExamMinigameController.Instance;
+            if (miniExam != null) miniExam.CollectSave(data);
 
             data.facultyIndex = GameSession.SelectedFacultyIndex;   // เก็บคณะลงเซฟ
 
-            var player = GameObject.Find("Player");
-            if (player != null)
-            {
-                var p = player.transform.position;
-                data.posX = p.x; data.posY = p.y; data.posZ = p.z;
-            }
+            // ตำแหน่ง + ทิศ + ฉาก + อาคารที่อยู่ (ระบบจุดเกิดหอพัก — Continue กลับมาที่เดิม ไม่ถูกบังคับกลับหอ)
+            PlayerSpawnSystem.CollectSave(data);
 
             var inv = Object.FindFirstObjectByType<InventoryManager>();
             if (inv != null) data.inventoryItemIds = inv.ToSaveList();   // เก็บไอเทมในกระเป๋า
@@ -70,6 +75,8 @@ namespace NisitSimulator.SaveLoad
             if (st2 != null) st2.CollectSave(data);
             var ach = Object.FindFirstObjectByType<AchievementManager>();
             if (ach != null) ach.CollectSave(data);
+            var lvl = Object.FindFirstObjectByType<LevelSystem>();
+            if (lvl != null) lvl.CollectSave(data);
 
             // เข้าเรียนของวันนี้ (ทุกห้อง)
             data.classAttendance = new List<string>();
@@ -80,27 +87,33 @@ namespace NisitSimulator.SaveLoad
         }
 
         // ถ้าเมนูสั่ง "เล่นต่อ" → โหลดเซฟมาใส่
-        public static void ApplyIfPending()
+        //   คืน SaveData ที่โหลด (null = เกมใหม่/ไม่มีเซฟ) — "ไม่" ย้ายผู้เล่นที่นี่
+        //   GameplayBootstrap ส่งต่อให้ PlayerSpawnSystem.ResolveInitialSpawn ซึ่งเป็นที่เดียวที่วางตัวละครตอนเข้าฉาก
+        //   (กันสคริปต์จุดเกิดย้ายตัวละครกลับหอหลังคืนตำแหน่งจากเซฟแล้ว)
+        public static SaveData ApplyIfPending()
         {
-            if (!GameSession.PendingLoad) return;
+            if (!GameSession.PendingLoad) return null;
             GameSession.PendingLoad = false;
 
             var data = SaveSystem.Load();
-            if (data == null) return;
+            if (data == null) return null;
 
             GameSession.SelectedFacultyIndex = data.facultyIndex;   // คืนคณะจากเซฟ (ไม่รีเซ็ตเป็น IT อีก)
 
             var stats = Object.FindFirstObjectByType<PlayerStats>();
             if (stats != null)
                 stats.LoadState(data.energy, data.health, data.hunger, data.knowledge,
-                                data.satisfaction, data.money, data.exp);
+                                data.satisfaction, data.money, data.exp, data.stress);
 
             // คืน "สอบที่ทำแล้ว" ก่อน RestoreState (เพราะ RestoreState จะยิง OnDayInYearChanged → เช็กว่าจะเปิดสอบไหม)
             var exam = Object.FindFirstObjectByType<ExamController>();
             if (exam != null) exam.RestoreDoneExams(data.doneExams);
 
+            // คืนข้อมูลลงทะเบียนก่อน RestoreState (RestoreState ยิง event วัน → ระบบลงทะเบียนต้องรู้ภาคปัจจุบันแล้ว ไม่งั้นจะเปิดภาคซ้ำ)
+            NisitSimulator.Academics.CourseRegistrar.EnsureExists().RestoreFrom(data);
+
             var prog = Object.FindFirstObjectByType<ProgressionManager>();
-            if (prog != null) prog.RestoreState(data.currentYear, data.dayInYear);
+            if (prog != null) prog.RestoreState(data.currentYear, data.dayInYear, data.calendarYear);
 
             var inv = Object.FindFirstObjectByType<InventoryManager>();
             if (inv != null) inv.LoadFromList(data.inventoryItemIds);   // คืนไอเทมในกระเป๋า
@@ -110,20 +123,13 @@ namespace NisitSimulator.SaveLoad
             var clock = Object.FindFirstObjectByType<GameClock>();
             if (clock != null) clock.RestoreClock(data.gameDay, data.gameMinutes);  // คืนเวลา
 
-            var player = GameObject.Find("Player");
-            if (player != null)
-                MovePlayer(player, new Vector3(data.posX, data.posY, data.posZ));
+            // ตำแหน่งผู้เล่นคืนโดย PlayerSpawnSystem.ResolveInitialSpawn หลังฉากพร้อม (ตรวจว่าใช้งานได้ก่อน ไม่งั้นใช้จุดเกิดหอพัก)
+
+            // มินิเกมสอบที่ค้าง (หลังคืนหลักสูตร/วัน/เวลา) — ไม่สุ่มข้อใหม่ ไม่คืนคำใบ้ ไม่เพิ่มเวลา
+            NisitSimulator.Academics.ExamMinigame.ExamMinigameController.EnsureExists().RestoreFrom(data);
 
             Debug.Log("[SaveManager] โหลดเซฟเรียบร้อย");
-        }
-
-        // ย้ายตัวละคร (ต้องปิด CharacterController ชั่วคราวก่อนตั้งตำแหน่ง)
-        private static void MovePlayer(GameObject player, Vector3 pos)
-        {
-            if (pos == Vector3.zero) return; // ยังไม่เคยเซฟตำแหน่ง
-            var cc = player.GetComponent<CharacterController>();
-            if (cc != null) { cc.enabled = false; player.transform.position = pos; cc.enabled = true; }
-            else player.transform.position = pos;
+            return data;
         }
     }
 }

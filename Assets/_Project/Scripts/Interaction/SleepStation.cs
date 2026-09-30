@@ -1,57 +1,76 @@
 using UnityEngine;
 using NisitSimulator.Stats;
 using NisitSimulator.TimeSystem;
-using NisitSimulator.Player;
 using NisitSimulator.UI;
 
 namespace NisitSimulator.Interaction
 {
-    // จุดนอนบนเตียง — กด E → ข้ามเวลาไปเช้า + ฟื้นพลังงาน (นอนได้เฉพาะช่วงเย็น/ค่ำ)
+    // จุดนอนบนเตียง — กด E → หน้ายืนยัน "นอนพักจนถึง 07:00" → เฟดดำ → ข้ามเวลาไป 07:00 ครั้งถัดไป + ฟื้นสถานะ
+    //   นอนได้เฉพาะช่วงเย็น/ค่ำ (กติกาเดิม: ตั้งแต่ sleepFromHour ถึงก่อน wakeHour) · ห้ามนอนระหว่างสอบ/หน้าต่างอื่นหยุดเวลา
+    //   ขั้นตอนการนอนทั้งหมดอยู่ที่ SleepController (กันกดซ้ำ/ข้ามหลายวัน/ฟื้นสถานะซ้ำ)
     public class SleepStation : MonoBehaviour, IInteractable
     {
         public int sleepFromHour = 18;   // นอนได้ตั้งแต่กี่โมง (เย็น)
         public int wakeHour = 7;         // ตื่นกี่โมง
 
+        [Tooltip("จุดยืนข้างเตียงตอนตื่น (ว่าง = DormSpawnPoint)")]
+        public Transform wakePoint;
+
+        [Header("ฟื้นฟูเมื่อตื่น (ค่าเดิมของเกม)")]
+        public float energyRestore = 999f;       // เต็ม
+        public float healthRestore = 12f;
+        public float hungerChange = -25f;        // ตื่นมาหิว → ต้องไปกินข้าว
+        public float satisfactionChange = 5f;
+        public float stressChange = -35f;        // นอนคือทางคลายเครียดหลักของเกม
+
         private GameClock _clock;
         private GameClock Clock => _clock != null ? _clock : (_clock = Object.FindFirstObjectByType<GameClock>());
 
         // นอนได้เฉพาะ เย็น(>=18) ถึง เช้ามืด(<7)
-        private bool CanSleep()
+        public bool IsSleepHour()
         {
             int h = Clock != null ? Clock.Hour : sleepFromHour;
             return h >= sleepFromHour || h < wakeHour;
         }
 
-        public string GetPrompt() =>
-            CanSleep() ? "กด E เพื่อนอน (ข้ามไปเช้า)" : $"ยังไม่ถึงเวลานอน (หลัง {sleepFromHour}:00 น.)";
+        public string GetPrompt()
+        {
+            if (SleepController.IsSleeping) return "";
+            return IsSleepHour() ? $"กด E เพื่อนอน (ตื่น {wakeHour:00}:00 น.)" : $"ยังไม่ถึงเวลานอน (หลัง {sleepFromHour}:00 น.)";
+        }
 
         public void Interact(GameObject interactor)
         {
-            if (!CanSleep())
+            if (!IsSleepHour())
             {
                 HUDController.Toast($"ยังไม่ง่วง! นอนได้หลัง {sleepFromHour}:00 น.");
                 return;
             }
-
-            var action = interactor.GetComponent<PlayerActionController>()
-                         ?? interactor.AddComponent<PlayerActionController>();
-            if (action.IsBusy) { HUDController.Toast("กำลังทำกิจกรรมอยู่"); return; }
-
-            NisitSimulator.Core.SFXManager.Sleep();
-            action.PerformState(2f, () => WakeUp(interactor), "Sleeping_A", "Sleeping_B");   // นอนท่าสุ่มก่อน
+            SleepController.EnsureExists().RequestSleep(this, interactor, false);
         }
 
-        private void WakeUp(GameObject interactor)
+        public Transform WakePoint
         {
-            if (Clock != null) Clock.SkipToNextMorning(wakeHour);
-            if (interactor.TryGetComponent<PlayerStats>(out var s))
+            get
             {
-                s.ChangeEnergy(999f);       // เต็ม
-                s.ChangeHealth(12f);
-                s.ChangeHunger(-25f);       // ตื่นมาหิว → ต้องไปกินข้าว
-                s.ChangeSatisfaction(5f);
+                if (wakePoint != null) return wakePoint;
+                var d = DormSpawnPoint.Main;
+                return d != null ? d.transform : transform;
             }
-            HUDController.Toast("หลับสบาย! พลังงานเต็ม (แต่หิวแล้ว)");
+        }
+
+        // ฟื้นสถานะตามกติกาการนอน — เรียกโดย SleepController ครั้งเดียวต่อการนอนหนึ่งครั้ง
+        public void ApplyWakeEffects(GameObject interactor)
+        {
+            if (interactor != null && interactor.TryGetComponent<PlayerStats>(out var s))
+            {
+                s.ChangeEnergy(energyRestore);
+                s.ChangeHealth(healthRestore);
+                s.ChangeHunger(hungerChange);
+                s.ChangeSatisfaction(satisfactionChange);
+                s.ChangeStress(stressChange);
+            }
+            NisitSimulator.Systems.GameplayEvents.Raise(NisitSimulator.Systems.GameplayEvents.Sleep);
         }
     }
 }

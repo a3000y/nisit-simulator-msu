@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -7,39 +8,54 @@ using NisitSimulator.Net;
 
 namespace NisitSimulator.UI
 {
-    // หน้าจอแต่งตัวละคร — เลือกแบบ/เพศ + สี + ชื่อ พร้อมพรีวิว 3D หมุนได้
-    //   เขียนค่าลง GameSession (PlayerName/PlayerColor/PlayerModel) → เข้าเกมแล้ว PlayerModelSwapper ใส่ให้ + sync MP
-    //   UI + เวที (กล้อง/ไฟ/จุดวางโมเดล) สร้าง+ต่อโดย Editor tool (Nisit -> Build Character Creator)
+    // หน้าจอแต่งตัวละคร (Synty POLYGON Generic + City) — เลือกเพศ → ชุด + ทรงผม + สีผม/สีผิว/โทนชุด + หมวก/แว่น/หนวด + ชื่อ
+    //   ตัวเลือกกรองตามเพศ · ชุด City มีผม/หนวดติดมา (ปิดช่องทรงผม/สีผม/หนวด)
+    //   เขียนค่าลง GameSession (PlayerName/PlayerColor/PlayerModel/PlayerAccessories) → เข้าเกมแล้ว PlayerModelSwapper ใส่ให้ + sync MP
+    //   UI สร้างโดย Nisit -> Build Character Creator · ข้อมูลจาก Nisit -> Setup Synty Characters
     public class CharacterCreatorController : MonoBehaviour
     {
         [System.Serializable]
-        public class AccessorySlotUI { public Button[] buttons; }   // buttons[0]=ไม่ใส่, [1..]=option
+        public class AccessorySlotUI { public Button[] buttons; }   // buttons[0]=ไม่ใส่, [1..]=option ที่เข้ากับเพศ
 
         [Header("ต่อโดย Editor")]
         public TMP_InputField nameInput;
-        public Button[] modelButtons;
-        public Button[] colorButtons;
-        public AccessorySlotUI[] accessorySlots;   // 1 ช่องต่อชนิดของแต่ง (หมวก/แว่น/...)
+        public Button[] genderButtons;             // 0 = ชาย, 1 = หญิง
+        public Button[] modelButtons;              // ชุด (กรองตามเพศ)
+        public Button[] colorButtons;              // โทนสีชุด
+        public Button[] hairColorButtons;          // สีผม
+        public Button[] skinButtons;               // สีผิว
+        public AccessorySlotUI[] accessorySlots;   // ทรงผม/หมวก/แว่น/หนวด เรียงตาม AccessoryCatalog
+        public GameObject[] hairOnlyPanels;        // แผงที่ปิดเมื่อชุดมีผมติดมา (ทรงผม/สีผม/หนวด)
         public Button[] difficultyButtons;         // 0=ง่าย 1=ปกติ 2=ยาก
-        public Camera previewCamera;   // กล้องส่องเวที (render → RawImage)
-        public Transform previewRoot;  // จุดวางโมเดลพรีวิว
-        public RawImage previewImage;  // แสดงผลพรีวิว
+        public Button randomButton;
+        public Camera previewCamera;
+        public Transform previewRoot;
+        public RawImage previewImage;
 
         [Header("ปรับได้")]
         public float rotateSpeed = 25f;
         public float targetHeight = 1.7f;
 
-        private int model, color;
+        private int model, gender;
         private GameObject current;
         private RenderTexture rt;
         private bool initialized;
+        private readonly List<int> modelMap = new List<int>();          // ปุ่ม → index ชุด
+        private readonly List<List<int>> accMap = new List<List<int>>(); // [ช่อง][ปุ่ม-1] → option
+        private readonly int[] lastModelOf = { -1, -1 };                 // ชุดล่าสุดของแต่ละเพศ
+
+        int Tone => CharacterCatalog.ToneOf(GameSession.PlayerColor);
+        int HairCol => CharacterCatalog.HairOf(GameSession.PlayerColor);
+        int Skin => CharacterCatalog.SkinOf(GameSession.PlayerColor);
 
         void Start()
         {
-            model = GameSession.PlayerModel;
-            color = GameSession.PlayerColor;
+            var cat = CharacterCatalog.Load();
+            int count = cat != null ? cat.Count : 0;
+            model = Mathf.Clamp(GameSession.PlayerModel, 0, Mathf.Max(0, count - 1));
+            GameSession.PlayerModel = model;
+            gender = cat != null ? cat.Gender(model) : 0;
 
-            // สร้าง RenderTexture รันไทม์ (ไม่ต้องมีไฟล์ asset)
             if (previewCamera != null && previewImage != null)
             {
                 rt = new RenderTexture(512, 640, 16) { name = "CharPreviewRT" };
@@ -53,46 +69,25 @@ namespace NisitSimulator.UI
                 nameInput.onValueChanged.AddListener(s => { GameSession.PlayerName = s; PushToNetwork(); });
             }
 
-            var cat = CharacterCatalog.Load();
-            int count = cat != null ? cat.Count : 0;
-            if (modelButtons != null)
-                for (int i = 0; i < modelButtons.Length; i++)
+            // ผูกปุ่มครั้งเดียว — ความหมายของปุ่มเปลี่ยนตามเพศ/ชุดผ่าน map
+            Bind(genderButtons, PickGender);
+            Bind(modelButtons, b => { if (b < modelMap.Count) PickModel(modelMap[b]); });
+            Bind(colorButtons, PickTone);
+            Bind(hairColorButtons, PickHairColor);
+            Bind(skinButtons, PickSkin);
+            if (accessorySlots != null)
+                for (int s = 0; s < accessorySlots.Length; s++)
                 {
-                    if (modelButtons[i] == null) continue;
-                    bool has = i < count;
-                    modelButtons[i].gameObject.SetActive(has);
-                    if (!has) continue;
-                    int idx = i;
-                    var lbl = modelButtons[i].GetComponentInChildren<TMP_Text>();
-                    if (lbl != null) lbl.text = cat.Label(i);
-                    modelButtons[i].onClick.AddListener(() => PickModel(idx));
+                    int slot = s;
+                    if (accessorySlots[s] != null) Bind(accessorySlots[s].buttons, b => PickAccessoryButton(slot, b));
                 }
+            Bind(difficultyButtons, PickDifficulty);
+            if (randomButton != null) randomButton.onClick.AddListener(Randomize);
 
-            if (colorButtons != null)
-                for (int i = 0; i < colorButtons.Length; i++)
-                {
-                    if (colorButtons[i] == null) continue;
-                    int idx = i;
-                    var img = colorButtons[i].GetComponent<Image>();
-                    if (img != null) img.color = (i > 0 && i < NetworkAvatar.Palette.Length) ? NetworkAvatar.Palette[i] : Color.white;
-                    colorButtons[i].onClick.AddListener(() => PickColor(idx));
-                }
-
-            SetupAccessoryUI();
-
-            if (difficultyButtons != null)
-                for (int i = 0; i < difficultyButtons.Length; i++)
-                {
-                    if (difficultyButtons[i] == null) continue;
-                    int idx = i;
-                    difficultyButtons[i].onClick.AddListener(() => PickDifficulty(idx));
-                }
-
+            EnsureAccessoryArray();
+            SanitizeForModel();
+            RefreshAllUI();
             SpawnPreview(model);
-            HighlightModel();
-            HighlightColor();
-            HighlightAccessories();
-            HighlightDifficulty();
 
             initialized = true;
             if (previewCamera != null) previewCamera.enabled = true;
@@ -113,20 +108,80 @@ namespace NisitSimulator.UI
                 previewRoot.Rotate(0f, rotateSpeed * Time.unscaledDeltaTime, 0f);
         }
 
-        void PickModel(int i)
+        static void Bind(Button[] buttons, System.Action<int> onPick)
         {
+            if (buttons == null) return;
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                if (buttons[i] == null) continue;
+                int idx = i;
+                buttons[i].onClick.AddListener(() => onPick(idx));
+            }
+        }
+
+        // ---------- เลือก ----------
+        void PickGender(int g)
+        {
+            var cat = CharacterCatalog.Load();
+            if (cat == null || g == gender) return;
+            lastModelOf[gender] = model;
+            gender = g;
+            int m = lastModelOf[g] >= 0 ? lastModelOf[g] : FirstUnlockedOfGender(g);
+            SetModel(m);
+        }
+
+        void PickModel(int i) => SetModel(i);
+
+        void SetModel(int i)
+        {
+            var cat = CharacterCatalog.Load();
             model = i; GameSession.PlayerModel = i;
+            if (cat != null) gender = cat.Gender(i);
+            SanitizeForModel();
+            RefreshAllUI();
             SpawnPreview(i);
-            HighlightModel();
             PushToNetwork();
         }
 
-        void PickColor(int i)
+        void PickTone(int i)      { SetColor(CharacterCatalog.PackColor(i, HairCol, Skin)); }
+        void PickHairColor(int i) { SetColor(CharacterCatalog.PackColor(Tone, i, Skin)); }
+        void PickSkin(int i)      { SetColor(CharacterCatalog.PackColor(Tone, HairCol, i)); }
+
+        void SetColor(int packed)
         {
-            color = i; GameSession.PlayerColor = i;
-            if (current != null) NetworkAvatar.ApplyColor(current, i);
-            HighlightColor();
+            GameSession.PlayerColor = packed;
+            RefreshLook();
+            HighlightAll();
             PushToNetwork();
+        }
+
+        void PickAccessoryButton(int slot, int button)
+        {
+            var acc = GameSession.PlayerAccessories;
+            if (acc == null || slot >= acc.Length) return;
+            if (button == 0) acc[slot] = 0;
+            else
+            {
+                var map = slot < accMap.Count ? accMap[slot] : null;
+                if (map == null || button - 1 >= map.Count) return;
+                acc[slot] = map[button - 1] + 1;
+            }
+            if (current != null) CharacterAccessories.Apply(current.transform, acc);
+            HighlightAll();
+            PushToNetwork();
+        }
+
+        void PickDifficulty(int i)
+        {
+            GameSession.Difficulty = i;
+            HighlightAll();
+        }
+
+        void RefreshLook()
+        {
+            if (current == null) return;
+            NetworkAvatar.ApplyColor(current, GameSession.PlayerColor);
+            CharacterAccessories.Apply(current.transform, GameSession.PlayerAccessories);
         }
 
         // sync การแต่งตัวขึ้นเครือข่าย (ใช้ในล็อบบี้ MP — ถ้าเล่นคนเดียวจะ no-op)
@@ -139,86 +194,270 @@ namespace NisitSimulator.UI
             if (av != null) { av.SetIdentity(GameSession.PlayerName, GameSession.PlayerColor, GameSession.PlayerModel); av.SetAccessories(); }
         }
 
-        // ---------- ของแต่ง (หมวก/แว่น/...) ----------
-        void SetupAccessoryUI()
+        // ---------- กติกา: ของแต่ง/สีต้องเข้ากับเพศ+ชุด ----------
+        void EnsureAccessoryArray()
         {
-            var cat = AccessoryCatalog.Load();
-            int slotCount = cat != null ? cat.SlotCount : 0;
-
-            // ให้ GameSession.PlayerAccessories ยาวเท่าจำนวนช่อง (คงค่าที่เคยเลือกไว้)
+            var acat = AccessoryCatalog.Load();
+            int n = acat != null ? acat.SlotCount : 0;
             var sel = GameSession.PlayerAccessories;
-            if (sel == null || sel.Length != slotCount)
+            if (sel != null && sel.Length == n) return;
+            var arr = new int[n];
+            if (sel != null) for (int i = 0; i < Mathf.Min(n, sel.Length); i++) arr[i] = sel[i];
+            GameSession.PlayerAccessories = arr;
+        }
+
+        void SanitizeForModel()
+        {
+            var cat = CharacterCatalog.Load();
+            var acat = AccessoryCatalog.Load();
+            var acc = GameSession.PlayerAccessories;
+            // ชุดที่ยังล็อก (เช่นค่าจากรอบก่อน) → ใช้ชุดแรกที่ปลดแล้วของเพศนั้น
+            if (cat != null && !ModelUnlocked(model))
             {
-                var arr = new int[slotCount];
-                if (sel != null) for (int i = 0; i < Mathf.Min(slotCount, sel.Length); i++) arr[i] = sel[i];
-                GameSession.PlayerAccessories = arr;
+                model = FirstUnlockedOfGender(gender); GameSession.PlayerModel = model;
             }
-
-            if (accessorySlots == null) return;
-            for (int s = 0; s < accessorySlots.Length; s++)
+            if (acat != null && acc != null)
             {
-                var slotUI = accessorySlots[s];
-                if (slotUI == null || slotUI.buttons == null) continue;
-                bool slotExists = s < slotCount;
-                int optCount = slotExists ? cat.OptionCount(s) : 0;
-
-                for (int b = 0; b < slotUI.buttons.Length; b++)
+                int hair = SlotByName(acat, "ทรงผม");
+                for (int s = 0; s < acc.Length && s < acat.SlotCount; s++)
                 {
-                    var btn = slotUI.buttons[b];
-                    if (btn == null) continue;
-                    // ปุ่ม b=0 คือ "ไม่ใส่"; b>=1 คือ option b-1
-                    bool has = slotExists && (b == 0 || (b - 1) < optCount);
-                    btn.gameObject.SetActive(has);
-                    if (!has) continue;
-
-                    var lbl = btn.GetComponentInChildren<TMP_Text>();
-                    if (lbl != null) lbl.text = (b == 0) ? "ไม่ใส่" : cat.OptionLabel(s, b - 1);
-
-                    int slotIdx = s, val = b;
-                    btn.onClick.AddListener(() => PickAccessory(slotIdx, val));
+                    if (acc[s] > 0 && !acat.Fits(s, acc[s] - 1, gender)) acc[s] = 0;   // ของต่างเพศ → ถอด
+                    else if (acc[s] > 0 && acc[s] - 1 < acat.OptionCount(s) && !OptionUnlocked(acat, s, acc[s] - 1)) acc[s] = 0;   // ยังล็อก → ถอด
+                    else if (acc[s] > 0 && acc[s] - 1 < acat.OptionCount(s) && !CharacterAccessories.CanWear(cat != null ? cat.Model(model) : null, acat.GetSlot(s).options[acc[s] - 1]) && !acat.GetSlot(s).hairLike) acc[s] = 0;   // ใส่กับชุดนี้ไม่ได้ (ฮู้ดบนชุด City)
                 }
+                // ไม่ให้หัวโล้นโดยไม่ตั้งใจเวลาเปลี่ยนเพศ: ใส่ทรงแรกของเพศนั้น
+                if (hair >= 0 && hair < acc.Length && acc[hair] == 0)
+                    for (int o = 0; o < acat.OptionCount(hair); o++) if (acat.Fits(hair, o, gender) && OptionUnlocked(acat, hair, o)) { acc[hair] = o + 1; break; }
+            }
+            // สีให้อยู่ในช่วงของชุดสีของชุดนี้
+            var set = cat != null ? cat.ToneSetOf(model) : null;
+            if (set != null)
+            {
+                int t = Mathf.Clamp(Tone, 0, Mathf.Max(0, set.ToneCount - 1));
+                int sk = Mathf.Clamp(Skin, 0, Mathf.Max(0, set.SkinCount - 1));
+                GameSession.PlayerColor = CharacterCatalog.PackColor(t, HairCol, sk);
             }
         }
 
-        void PickAccessory(int slot, int value)
+        static int SlotByName(AccessoryCatalog cat, string name)
         {
-            if (GameSession.PlayerAccessories == null || slot >= GameSession.PlayerAccessories.Length) return;
-            GameSession.PlayerAccessories[slot] = value;
-            if (current != null) CharacterAccessories.Apply(current.transform, GameSession.PlayerAccessories);
-            HighlightAccessories();
+            if (cat == null) return -1;
+            for (int i = 0; i < cat.SlotCount; i++) { var s = cat.GetSlot(i); if (s != null && s.slotName == name) return i; }
+            return -1;
+        }
+
+        // ---------- วาด UI ตามเพศ/ชุดปัจจุบัน ----------
+        void RefreshAllUI()
+        {
+            var cat = CharacterCatalog.Load();
+            var acat = AccessoryCatalog.Load();
+
+            // ชุด (กรองเพศ)
+            modelMap.Clear();
+            if (cat != null) for (int i = 0; i < cat.Count; i++) if (cat.Gender(i) == gender) modelMap.Add(i);
+            if (modelButtons != null)
+                for (int b = 0; b < modelButtons.Length; b++)
+                {
+                    if (modelButtons[b] == null) continue;
+                    bool has = b < modelMap.Count;
+                    modelButtons[b].gameObject.SetActive(has);
+                    if (!has) continue;
+                    SetCaption(modelButtons[b], cat.Label(modelMap[b]));
+                    SetIcon(modelButtons[b], cat.Icon(modelMap[b]));
+                    var mo = cat.Model(modelMap[b]);
+                    SetLocked(modelButtons[b], !CosmeticUnlocks.IsUnlocked(mo), CosmeticUnlocks.LockHint(mo));
+                }
+
+            // สี (ตามชุดสีของชุด)
+            var set = cat != null ? cat.ToneSetOf(model) : null;
+            ShowSwatches(colorButtons, set != null ? set.toneSwatches : NetworkAvatar.Palette, set != null ? set.ToneCount : NetworkAvatar.Palette.Length);
+            ShowSwatches(skinButtons, set != null ? set.skinSwatches : null, set != null ? set.SkinCount : 0);
+            ShowSwatches(hairColorButtons, cat != null ? cat.hairColors : null, cat != null && cat.hairColors != null ? cat.hairColors.Length : 0);
+
+            // ของแต่ง (กรองเพศ)
+            bool preset = cat != null && cat.PresetHair(model);
+            accMap.Clear();
+            int hairSlot = SlotByName(acat, "ทรงผม");
+            if (accessorySlots != null)
+                for (int s = 0; s < accessorySlots.Length; s++)
+                {
+                    var map = new List<int>();
+                    accMap.Add(map);
+                    var ui = accessorySlots[s];
+                    if (ui == null || ui.buttons == null) continue;
+                    bool exists = acat != null && s < acat.SlotCount;
+                    var mdl = cat != null ? cat.Model(model) : null;
+                    if (exists) for (int o = 0; o < acat.OptionCount(s); o++)
+                        if (acat.Fits(s, o, gender) && CharacterAccessories.CanWear(mdl, acat.GetSlot(s).options[o])) map.Add(o);
+                    for (int b = 0; b < ui.buttons.Length; b++)
+                    {
+                        var btn = ui.buttons[b];
+                        if (btn == null) continue;
+                        bool has = exists && (b == 0 || b - 1 < map.Count);
+                        btn.gameObject.SetActive(has);
+                        if (!has) continue;
+                        if (b == 0) { SetCaption(btn, s == hairSlot ? "หัวโล้น" : "ไม่ใส่"); SetIcon(btn, null); SetLocked(btn, false, null); }
+                        else
+                        {
+                            SetCaption(btn, acat.OptionLabel(s, map[b - 1])); SetIcon(btn, acat.OptionIcon(s, map[b - 1]));
+                            var opt = acat.GetSlot(s).options[map[b - 1]];
+                            SetLocked(btn, !CosmeticUnlocks.IsUnlocked(opt), CosmeticUnlocks.LockHint(opt));
+                        }
+                    }
+                }
+
+            // ชุดที่มีผมติดมา / เพศหญิง(หนวด) → หรี่แผง
+            if (hairOnlyPanels != null)
+                for (int i = 0; i < hairOnlyPanels.Length; i++)
+                {
+                    var p = hairOnlyPanels[i];
+                    if (p == null) continue;
+                    var cg = p.GetComponent<CanvasGroup>();
+                    if (cg == null) cg = p.AddComponent<CanvasGroup>();
+                    bool isBeard = p.name.Contains("หนวด");
+                    bool off = preset || (isBeard && gender == 1);
+                    cg.alpha = off ? 0.35f : 1f;
+                    cg.interactable = !off; cg.blocksRaycasts = !off;
+                }
+
+            HighlightAll();
+        }
+
+        void ShowSwatches(Button[] buttons, Color[] colors, int n)
+        {
+            if (buttons == null) return;
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                if (buttons[i] == null) continue;
+                bool has = colors != null && i < n && i < colors.Length;
+                buttons[i].gameObject.SetActive(has);
+                if (!has) continue;
+                var img = buttons[i].GetComponent<Image>();
+                if (img != null) img.color = colors[i];
+            }
+        }
+
+        // ล็อกปุ่ม (ยังไม่ได้ความสำเร็จที่ต้องใช้) — กดไม่ได้ + ไอคอนจาง + บอกชื่อความสำเร็จ
+        static void SetLocked(Button b, bool locked, string hint)
+        {
+            b.interactable = !locked;
+            var ic = b.transform.Find("Icon");
+            var im = ic != null ? ic.GetComponent<Image>() : null;
+            if (im != null) im.color = locked ? new Color(0.55f, 0.55f, 0.6f, 0.35f) : Color.white;
+            if (locked) SetCaption(b, "<color=#9A8FB8>ล็อก: " + hint + "</color>");
+        }
+
+        bool ModelUnlocked(int i) { var c = CharacterCatalog.Load(); return c != null && CosmeticUnlocks.IsUnlocked(c.Model(i)); }
+
+        int FirstUnlockedOfGender(int g)
+        {
+            var c = CharacterCatalog.Load();
+            if (c == null) return 0;
+            for (int i = 0; i < c.Count; i++) if (c.Gender(i) == g && ModelUnlocked(i)) return i;
+            return c.FirstOfGender(g);
+        }
+
+        static bool OptionUnlocked(AccessoryCatalog acat, int slot, int opt)
+            => CosmeticUnlocks.IsUnlocked(acat.GetSlot(slot).options[opt]);
+
+        static void SetCaption(Button b, string s)
+        {
+            var lbl = b.GetComponentInChildren<TMP_Text>(true);
+            if (lbl != null) lbl.text = s;
+        }
+
+        static void SetIcon(Button b, Sprite icon)
+        {
+            var ic = b.transform.Find("Icon");
+            if (ic != null)
+            {
+                var im = ic.GetComponent<Image>();
+                if (im != null) { im.sprite = icon; im.preserveAspect = true; im.color = Color.white; im.enabled = icon != null; }
+            }
+            else if (icon != null)
+            {
+                var img = b.GetComponent<Image>();
+                if (img != null) { img.sprite = icon; img.type = Image.Type.Simple; img.preserveAspect = true; img.color = Color.white; }
+            }
+        }
+
+        // ---------- สุ่ม (ภายในเพศที่เลือก) ----------
+        public void Randomize()
+        {
+            var cat = CharacterCatalog.Load();
+            var acat = AccessoryCatalog.Load();
+            if (cat == null) return;
+            var pool = new List<int>();
+            for (int i = 0; i < cat.Count; i++) if (cat.Gender(i) == gender && ModelUnlocked(i)) pool.Add(i);
+            if (pool.Count > 0) { model = pool[Random.Range(0, pool.Count)]; GameSession.PlayerModel = model; }
+
+            var set = cat.ToneSetOf(model);
+            int nt = set != null ? Mathf.Max(1, set.ToneCount) : NetworkAvatar.Palette.Length;
+            int ns = set != null ? Mathf.Max(1, set.SkinCount) : 1;
+            int nh = cat.hairColors != null ? Mathf.Max(1, cat.hairColors.Length) : 1;
+            int hairPick = Random.value < 0.6f ? Random.Range(0, Mathf.Min(3, nh)) : Random.Range(0, nh);   // ส่วนใหญ่สีธรรมชาติ
+            GameSession.PlayerColor = CharacterCatalog.PackColor(Random.Range(0, nt), hairPick, Random.Range(0, ns));
+
+            var acc = GameSession.PlayerAccessories;
+            if (acat != null && acc != null)
+            {
+                for (int s = 0; s < acc.Length; s++) acc[s] = 0;
+                RandomSlot(acat, acc, SlotByName(acat, "ทรงผม"), 1f);
+                RandomSlot(acat, acc, SlotByName(acat, "หมวก"), 0.3f);
+                RandomSlot(acat, acc, SlotByName(acat, "แว่นตา"), 0.25f);
+                RandomSlot(acat, acc, SlotByName(acat, "หนวด/เครา"), 0.3f);
+            }
+
+            SanitizeForModel();
+            RefreshAllUI();
+            SpawnPreview(model);
             PushToNetwork();
         }
 
-        void PickDifficulty(int i)
+        void RandomSlot(AccessoryCatalog acat, int[] acc, int slot, float chance)
         {
-            GameSession.Difficulty = i;
-            HighlightDifficulty();
+            if (slot < 0 || slot >= acc.Length || Random.value > chance) return;
+            var opts = new List<int>();
+            var mdl = CharacterCatalog.Load() != null ? CharacterCatalog.Load().Model(model) : null;
+            for (int o = 0; o < acat.OptionCount(slot); o++) if (acat.Fits(slot, o, gender) && CharacterAccessories.CanWear(mdl, acat.GetSlot(slot).options[o]) && OptionUnlocked(acat, slot, o)) opts.Add(o);
+            if (opts.Count > 0) acc[slot] = opts[Random.Range(0, opts.Count)] + 1;
         }
 
-        void HighlightDifficulty()
+        // ---------- ไฮไลต์ ----------
+        void HighlightAll()
         {
-            if (difficultyButtons == null) return;
-            int d = GameSession.Difficulty;
-            for (int i = 0; i < difficultyButtons.Length; i++)
-                if (difficultyButtons[i] != null)
-                    difficultyButtons[i].transform.localScale = Vector3.one * (i == d ? 1.14f : 1f);
-        }
+            Mark(genderButtons, gender, 1.08f);
+            Mark(modelButtons, modelMap.IndexOf(model), 1.12f);
+            Mark(colorButtons, Tone, 1.3f);
+            Mark(hairColorButtons, HairCol, 1.3f);
+            Mark(skinButtons, Skin, 1.3f);
+            Mark(difficultyButtons, GameSession.Difficulty, 1.14f);
 
-        void HighlightAccessories()
-        {
             if (accessorySlots == null) return;
             var sel = GameSession.PlayerAccessories;
             for (int s = 0; s < accessorySlots.Length; s++)
             {
-                var slotUI = accessorySlots[s];
-                if (slotUI == null || slotUI.buttons == null) continue;
-                int chosen = (sel != null && s < sel.Length) ? sel[s] : 0;
-                for (int b = 0; b < slotUI.buttons.Length; b++)
-                    if (slotUI.buttons[b] != null)
-                        slotUI.buttons[b].transform.localScale = Vector3.one * (b == chosen ? 1.12f : 1f);
+                if (accessorySlots[s] == null) continue;
+                int v = (sel != null && s < sel.Length) ? sel[s] : 0;
+                int button = v == 0 ? 0 : (s < accMap.Count ? accMap[s].IndexOf(v - 1) + 1 : -1);
+                Mark(accessorySlots[s].buttons, button, 1.12f);
             }
         }
 
+        static void Mark(Button[] buttons, int chosen, float scale)
+        {
+            if (buttons == null) return;
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                if (buttons[i] == null) continue;
+                bool on = i == chosen;
+                buttons[i].transform.localScale = Vector3.one * (on ? scale : 1f);
+                var ring = buttons[i].transform.Find("Selected");
+                if (ring != null) ring.gameObject.SetActive(on);
+            }
+        }
+
+        // ---------- พรีวิว ----------
         void SpawnPreview(int i)
         {
             if (previewRoot == null) return;
@@ -235,14 +474,12 @@ namespace NisitSimulator.UI
             current.transform.localScale = Vector3.one;
 
             var anim = current.GetComponentInChildren<Animator>();
-            if (anim != null && cat.controller != null) anim.runtimeAnimatorController = cat.controller;
+            if (anim != null && cat.ControllerFor(i) != null) anim.runtimeAnimatorController = cat.ControllerFor(i);
 
             AutoScaleToFeet(current);
-            NetworkAvatar.ApplyColor(current, color);
-            CharacterAccessories.Apply(current.transform, GameSession.PlayerAccessories);   // ใส่ของแต่งกับโมเดลใหม่
+            RefreshLook();
         }
 
-        // ปรับสเกลให้สูงเท่า targetHeight + วางเท้าที่ระดับ previewRoot (โมเดลต่างขนาดกัน)
         void AutoScaleToFeet(GameObject go)
         {
             var rends = go.GetComponentsInChildren<Renderer>();
@@ -250,33 +487,11 @@ namespace NisitSimulator.UI
 
             Bounds b = rends[0].bounds;
             for (int i = 1; i < rends.Length; i++) b.Encapsulate(rends[i].bounds);
-            if (b.size.y > 0.01f)
-            {
-                float s = targetHeight / b.size.y;
-                go.transform.localScale *= s;
-            }
+            if (b.size.y > 0.01f) go.transform.localScale *= targetHeight / b.size.y;
 
-            // คำนวณใหม่หลังสเกล แล้วยกให้เท้าอยู่ที่ระดับ previewRoot
             b = rends[0].bounds;
             for (int i = 1; i < rends.Length; i++) b.Encapsulate(rends[i].bounds);
-            float footOffset = previewRoot.position.y - b.min.y;
-            go.transform.position += new Vector3(0f, footOffset, 0f);
-        }
-
-        void HighlightModel()
-        {
-            if (modelButtons == null) return;
-            for (int i = 0; i < modelButtons.Length; i++)
-                if (modelButtons[i] != null)
-                    modelButtons[i].transform.localScale = Vector3.one * (i == model ? 1.12f : 1f);
-        }
-
-        void HighlightColor()
-        {
-            if (colorButtons == null) return;
-            for (int i = 0; i < colorButtons.Length; i++)
-                if (colorButtons[i] != null)
-                    colorButtons[i].transform.localScale = Vector3.one * (i == color ? 1.35f : 1f);
+            go.transform.position += new Vector3(0f, previewRoot.position.y - b.min.y, 0f);
         }
     }
 }

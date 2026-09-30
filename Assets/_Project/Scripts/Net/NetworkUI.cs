@@ -34,6 +34,12 @@ namespace NisitSimulator.Net
         public Button hostRelayButton, joinRelayButton;
         private string relayCode;   // โค้ดห้องตอนเป็น Host ออนไลน์
 
+        void Awake()
+        {
+            if (panel != null && !GameSession.OpenNetworkOnStart)
+                panel.SetActive(false);
+        }
+
         void Start()
         {
             if (hostButton) hostButton.onClick.AddListener(Host);
@@ -59,13 +65,13 @@ namespace NisitSimulator.Net
                     int idx = i;
                     if (modelButtons[i] != null) modelButtons[i].onClick.AddListener(() => PickModel(idx));
                 }
-            HighlightColor(GameSession.PlayerColor);
+            HighlightColor(GameSession.PlayerColor & 15);
             HighlightModel(GameSession.PlayerModel);
 
-            // เปิดแผงอัตโนมัติถ้ามาจากปุ่ม "เล่นหลายคน" ในเมนู (อ่านครั้งเดียวแล้วเคลียร์)
+            // ซ่อนแผงเป็นค่าเริ่มต้น (เปิดเฉพาะเมื่อมาจากปุ่มเล่นหลายคน)
             if (panel != null)
             {
-                if (GameSession.OpenNetworkOnStart) panel.SetActive(true);
+                panel.SetActive(GameSession.OpenNetworkOnStart);
                 GameSession.OpenNetworkOnStart = false;
             }
 
@@ -75,7 +81,7 @@ namespace NisitSimulator.Net
         // ---------- ปรับแต่งตัวละคร ----------
         void OnNameEdited(string s) { GameSession.PlayerName = s; PushIdentity(); }
 
-        void PickColor(int i) { GameSession.PlayerColor = i; HighlightColor(i); PushIdentity(); }
+        void PickColor(int i) { GameSession.PlayerColor = (GameSession.PlayerColor & ~15) | (i & 15); HighlightColor(i); PushIdentity(); }
 
         void PickModel(int i)
         {
@@ -115,9 +121,11 @@ namespace NisitSimulator.Net
 
         float nextRefresh;
 
+        public void Hide() { if (panel != null) panel.SetActive(false); }
+
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F3) && panel != null) panel.SetActive(!panel.activeSelf);
+            if (Input.GetKeyDown(KeyCode.F11) && panel != null) panel.SetActive(!panel.activeSelf);
             if (Time.unscaledTime >= nextRefresh) { nextRefresh = Time.unscaledTime + 0.5f; Refresh(); }   // ไม่ต้องทุกเฟรม
         }
 
@@ -246,7 +254,7 @@ namespace NisitSimulator.Net
             {
                 var nm = NetworkManager.Singleton;
                 statusText.text = !on
-                    ? $"เล่น LAN: Host (IP {LocalIP()}) / กรอก IP แล้ว Join\nหรือเล่นออนไลน์ด้วยโค้ด · F3 ปิด/เปิด"
+                    ? $"เล่น LAN: Host (IP {LocalIP()}) / กรอก IP แล้ว Join\nหรือเล่นออนไลน์ด้วยโค้ด · F11 ปิด/เปิด"
                     : (nm.IsHost ? (relayCode != null ? $"ออนไลน์! โค้ดห้อง: {relayCode}" : $"Host! บอกเพื่อน Join IP: {LocalIP()}")
                                  : nm.IsServer ? "เซิร์ฟเวอร์"
                                  : "เชื่อมต่อแล้ว (ผู้เล่น)");

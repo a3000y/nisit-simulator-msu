@@ -4,7 +4,7 @@ using TMPro;
 
 namespace NisitSimulator.UI
 {
-    // ตั้งค่าเสียง + กราฟิก — เสียงมีผลทันที · กราฟิก (คุณภาพ/เต็มจอ) เป็นปุ่มวน · เก็บใน PlayerPrefs
+    // ตั้งค่าเสียง + กราฟิก — เสียงมีผลทันที · กราฟิก: คุณภาพ/ความละเอียดเลือกด้วย ◀▶ · เต็มจอเป็นสวิตช์ · เก็บใน PlayerPrefs
     public class SettingsController : MonoBehaviour
     {
         public Slider masterSlider;
@@ -12,9 +12,19 @@ namespace NisitSimulator.UI
         public Slider sfxSlider;
         public Slider voiceSlider;     // เสียงพูด NPC / ตอบรับปุ่ม
         public Slider ambientSlider;   // เสียงบรรยากาศ (ลม/นก/ในตึก)
-        public Button qualityButton;   // กราฟิก: วนระดับคุณภาพ
-        public Button fullscreenButton;// กราฟิก: สลับเต็มจอ/หน้าต่าง
-        public Button resolutionButton;// กราฟิก: วนความละเอียด
+
+        [Header("กราฟิก — ตัวเลือกแบบ ◀ ค่า ▶")]
+        public Button qualityPrev, qualityNext;  // คุณภาพ: เลือกซ้าย/ขวา
+        public TMP_Text qualityValue;
+        public Button resPrev, resNext;           // ความละเอียด: เลือกซ้าย/ขวา
+        public TMP_Text resValue;
+        [Header("กราฟิก — สวิตช์เต็มจอ")]
+        public Button fullscreenToggle;           // ปุ่มรางสวิตช์
+        public RectTransform fullscreenKnob;      // ลูกบิดเลื่อนซ้าย(ปิด)/ขวา(เปิด)
+        public Image fullscreenTrack;             // ราง(เปลี่ยนสีเขียวเมื่อเปิด)
+        public TMP_Text fullscreenValue;          // ข้อความ เปิด/ปิด
+        public float knobOnX = 45f;               // ระยะเลื่อนลูกบิดเมื่อเปิด
+
         public Button closeButton;
         public GameObject panel;
 
@@ -22,9 +32,11 @@ namespace NisitSimulator.UI
         public GameObject audioGroup, graphicsGroup;
         public Button audioTab, graphicsTab;
 
-        private TMP_Text qualityLabel, fullscreenLabel, resolutionLabel;
         private System.Collections.Generic.List<Vector2Int> resList;
         private int resIndex;
+
+        static readonly Color TrackOff = new Color(0.55f, 0.55f, 0.62f);
+        static readonly Color TrackOn  = new Color(0.42f, 0.80f, 0.52f);
 
         // ใช้ค่าที่เซฟไว้ตอนเปิดแอป (ก่อนโหลดฉากแรก) — เพราะแผงตั้งค่าเริ่มปิด Start จึงยังไม่รัน
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -60,25 +72,18 @@ namespace NisitSimulator.UI
             bool fs = PlayerPrefs.GetInt("gfx_fullscreen", Screen.fullScreen ? 1 : 0) == 1;
             Screen.fullScreen = fs;
 
-            if (qualityButton != null)
-            {
-                qualityLabel = qualityButton.GetComponentInChildren<TMP_Text>();
-                UpdateQualityLabel();
-                qualityButton.onClick.AddListener(CycleQuality);
-            }
-            if (fullscreenButton != null)
-            {
-                fullscreenLabel = fullscreenButton.GetComponentInChildren<TMP_Text>();
-                UpdateFullscreenLabel();
-                fullscreenButton.onClick.AddListener(ToggleFullscreen);
-            }
-            if (resolutionButton != null)
-            {
-                resolutionLabel = resolutionButton.GetComponentInChildren<TMP_Text>();
-                BuildResList();
-                UpdateResLabel();
-                resolutionButton.onClick.AddListener(CycleResolution);
-            }
+            // คุณภาพ: ◀ / ▶
+            UpdateQualityLabel();
+            if (qualityPrev != null) qualityPrev.onClick.AddListener(() => CycleQuality(-1));
+            if (qualityNext != null) qualityNext.onClick.AddListener(() => CycleQuality(+1));
+            // ความละเอียด: ◀ / ▶
+            BuildResList();
+            UpdateResLabel();
+            if (resPrev != null) resPrev.onClick.AddListener(() => CycleResolution(-1));
+            if (resNext != null) resNext.onClick.AddListener(() => CycleResolution(+1));
+            // เต็มจอ: สวิตช์
+            UpdateFullscreenLabel();
+            if (fullscreenToggle != null) fullscreenToggle.onClick.AddListener(ToggleFullscreen);
 
             if (closeButton && panel) closeButton.onClick.AddListener(() => panel.SetActive(false));
 
@@ -109,10 +114,10 @@ namespace NisitSimulator.UI
             if (resIndex < 0) resIndex = resList.Count - 1;
         }
 
-        private void CycleResolution()
+        private void CycleResolution(int dir)
         {
             if (resList == null || resList.Count == 0) return;
-            resIndex = (resIndex + 1) % resList.Count;
+            resIndex = ((resIndex + dir) % resList.Count + resList.Count) % resList.Count;
             var v = resList[resIndex];
             Screen.SetResolution(v.x, v.y, Screen.fullScreenMode);
             PlayerPrefs.SetInt("gfx_resW", v.x); PlayerPrefs.SetInt("gfx_resH", v.y); PlayerPrefs.Save();
@@ -120,21 +125,21 @@ namespace NisitSimulator.UI
         }
         private void UpdateResLabel()
         {
-            if (resolutionLabel != null && resList != null && resList.Count > 0)
-                resolutionLabel.text = $"ความละเอียด: {resList[resIndex].x}×{resList[resIndex].y}";
+            if (resValue != null && resList != null && resList.Count > 0)
+                resValue.text = $"{resList[resIndex].x}×{resList[resIndex].y}";
         }
 
-        private void CycleQuality()
+        private void CycleQuality(int dir)
         {
             int n = QualitySettings.names.Length;
-            int next = (QualitySettings.GetQualityLevel() + 1) % n;
+            int next = ((QualitySettings.GetQualityLevel() + dir) % n + n) % n;
             QualitySettings.SetQualityLevel(next, true);
             PlayerPrefs.SetInt("gfx_quality", next); PlayerPrefs.Save();
             UpdateQualityLabel();
         }
         private void UpdateQualityLabel()
         {
-            if (qualityLabel != null) qualityLabel.text = "คุณภาพ: " + QualityThai(QualitySettings.GetQualityLevel());
+            if (qualityValue != null) qualityValue.text = QualityThai(QualitySettings.GetQualityLevel());
         }
         // แปลงระดับคุณภาพเป็นไทย (แทนชื่อ level เช่น PC/Mobile ที่ผู้เล่นงง)
         static string QualityThai(int i)
@@ -151,9 +156,13 @@ namespace NisitSimulator.UI
             PlayerPrefs.SetInt("gfx_fullscreen", Screen.fullScreen ? 1 : 0); PlayerPrefs.Save();
             UpdateFullscreenLabel();
         }
+        // เลื่อนลูกบิด + เปลี่ยนสีราง + ข้อความ ตามสถานะเต็มจอ
         private void UpdateFullscreenLabel()
         {
-            if (fullscreenLabel != null) fullscreenLabel.text = "เต็มจอ: " + (Screen.fullScreen ? "เปิด" : "ปิด");
+            bool fs = Screen.fullScreen;
+            if (fullscreenKnob != null) fullscreenKnob.anchoredPosition = new Vector2(fs ? knobOnX : -knobOnX, 0f);
+            if (fullscreenTrack != null) fullscreenTrack.color = fs ? TrackOn : TrackOff;
+            if (fullscreenValue != null) fullscreenValue.text = fs ? "เปิด" : "ปิด";
         }
 
         private void SetMaster(float v)  { AudioListener.volume = v; Save("vol_master", v); }

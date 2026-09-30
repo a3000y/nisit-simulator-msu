@@ -1,0 +1,158 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ea90ecd64794d349837b3b2604368c5, type: 3}
+  m_Name: CharacterCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::NisitSimulator.Systems.CharacterCatalog
+  models:
+  - {fileID: 4462605797890622209, guid: 2a4fadfe3b7f2484fbd551a7f712cec4, type: 3}
+  - {fileID: 7144543340567192326, guid: 8e4c245765594994785f179c64105bf2, type: 3}
+  - {fileID: 7938581495190348860, guid: 21649e2f70c81a544a06a09f34591535, type: 3}
+  - {fileID: 5963293136810695266, guid: bd2052353bd3fd24aab08e275dc025a2, type: 3}
+  - {fileID: 4062457423681622268, guid: ed082fc1dbb0e6349b3e9e23dffe98da, type: 3}
+  - {fileID: 2683625963922368734, guid: 1f06b46f10f86de4d948ec82cb7e9d14, type: 3}
+  - {fileID: 9004799208462920321, guid: 4b0ee9762e78cd749a0247d516739d64, type: 3}
+  - {fileID: 4892052179971951778, guid: e3eb2164a76cee94794b2f6a5abef310, type: 3}
+  - {fileID: 3795494275582002838, guid: e01762bdeeddcca45913fb9e5048feb0, type: 3}
+  - {fileID: 2125792212368588334, guid: 4cd247ea2c426be4fa5b7a760a68b6ce, type: 3}
+  - {fileID: 1506738394667303230, guid: 5235b04ee7410624a86d95c905249462, type: 3}
+  - {fileID: 1415947039611625390, guid: e4622525cd973a644a93d00d63c467b1, type: 3}
+  - {fileID: 6117702472869250307, guid: 3e6c1984fcfcdfd4eb17cb753f765b42, type: 3}
+  - {fileID: 5884140766756138833, guid: c93791b0eb73d1d459e39b9f9a4e7ac3, type: 3}
+  - {fileID: 3928320102789845533, guid: 15f96d84c0ce7e4498f6f6ff61291ae7, type: 3}
+  - {fileID: 4706733272969936581, guid: 943eb61ec0ddee5458809e95e2a132fd, type: 3}
+  - {fileID: 7372910695071472612, guid: 859ac5dfae3138a47b035f6e3c67019a, type: 3}
+  labels:
+  - "\u0E25\u0E33\u0E25\u0E2D\u0E07 1"
+  - "\u0E25\u0E33\u0E25\u0E2D\u0E07 2"
+  - "\u0E25\u0E33\u0E25\u0E2D\u0E07 3"
+  - "\u0E25\u0E33\u0E25\u0E2D\u0E07 4"
+  - "\u0E17\u0E32\u0E07\u0E01\u0E32\u0E23"
+  - "\u0E40\u0E0A\u0E34\u0E49\u0E15"
+  - "\u0E2A\u0E39\u0E17"
+  - "\u0E2E\u0E39\u0E49\u0E14\u0E14\u0E35\u0E49"
+  - "\u0E41\u0E08\u0E47\u0E01\u0E40\u0E01\u0E47\u0E15"
+  - "\u0E25\u0E33\u0E25\u0E2D\u0E07 1"
+  - "\u0E25\u0E33\u0E25\u0E2D\u0E07 2"
+  - "\u0E25\u0E33\u0E25\u0E2D\u0E07 3"
+  - "\u0E25\u0E33\u0E25\u0E2D\u0E07 4"
+  - "\u0E17\u0E32\u0E07\u0E01\u0E32\u0E23"
+  - "\u0E0A\u0E38\u0E14\u0E17\u0E33\u0E07\u0E32\u0E19"
+  - "\u0E42\u0E04\u0E49\u0E17"
+  - "\u0E41\u0E08\u0E47\u0E01\u0E40\u0E01\u0E47\u0E15"
+  icons:
+  - {fileID: 21300000, guid: be1c53e9a463810468c57d86c6092563, type: 3}
+  - {fileID: 21300000, guid: 280fd170ba19cd74f9bd2458537fc7f0, type: 3}
+  - {fileID: 21300000, guid: 87b4ce3fdc764684c8380e79740a28f1, type: 3}
+  - {fileID: 21300000, guid: f551c5599c88da848899fe3c1478ccc0, type: 3}
+  - {fileID: 21300000, guid: e6ac0ae559cc6804ba6ea3ca3005e407, type: 3}
+  - {fileID: 21300000, guid: 940dc4e8e715efd4280050b4605d6c10, type: 3}
+  - {fileID: 21300000, guid: fd3cbd087a5d3624bac3e2f7f760b8d0, type: 3}
+  - {fileID: 21300000, guid: b0a57b5c6063dbd4a9d749d12af0a4fc, type: 3}
+  - {fileID: 21300000, guid: a8f81310f5563f444b98a07845fdd703, type: 3}
+  - {fileID: 21300000, guid: 682a0f1d8172f634bb29878fa6d09ef8, type: 3}
+  - {fileID: 21300000, guid: ea80691251392974c8178869810553da, type: 3}
+  - {fileID: 21300000, guid: 131076960a8c55c42af92f2012c2f783, type: 3}
+  - {fileID: 21300000, guid: 620ddb9ebc7bfeb4d9db2bbc7e40dd70, type: 3}
+  - {fileID: 21300000, guid: fc20ef093a1f8644c9cc2f2d2cb86943, type: 3}
+  - {fileID: 21300000, guid: e62775d0aad57ec4bad3a8b8612960c0, type: 3}
+  - {fileID: 21300000, guid: 6fa555e66a681534d9d2f2c2a45bad71, type: 3}
+  - {fileID: 21300000, guid: 57e152976165ebd42869cfc882597691, type: 3}
+  modelGender: 0000000000000000000000000000000000000000000000000000000000000000000000000100000001000000010000000100000001000000010000000100000001000000
+  modelToneSet: 0000000000000000000000000000000000000000010000000100000001000000010000000000000000000000000000000000000000000000010000000100000001000000
+  modelPresetHair: 0000000000010101010000000000010101
+  controller: {fileID: 9100000, guid: b1211f5d8868bbc48b6fb29d2294279f, type: 2}
+  femaleController: {fileID: 22100000, guid: b358bfa2388ac124893126825b94cc84, type: 2}
+  toneSets:
+  - name: Generic
+    materials:
+    - {fileID: 2100000, guid: 0f82d97dad4a63342a4edf792dbdf207, type: 2}
+    - {fileID: 2100000, guid: d9f37710b6c9cf748b9af9878dfbf322, type: 2}
+    - {fileID: 2100000, guid: 2e1de7f7e3956f54db0834bc58a8f316, type: 2}
+    - {fileID: 2100000, guid: 6c354e808cb838845a1596c7cfa5d5de, type: 2}
+    - {fileID: 2100000, guid: 4feb214661b470941904ee615bd88a9d, type: 2}
+    - {fileID: 2100000, guid: 877d85244a44bf142bda92c43136f17f, type: 2}
+    - {fileID: 2100000, guid: 00740ca8eee71b941846488ae6227da4, type: 2}
+    - {fileID: 2100000, guid: 73b4336a1ddea6549b1f142363fbc1bd, type: 2}
+    - {fileID: 2100000, guid: 9b4ab4e7560786e4dad6ababba442102, type: 2}
+    - {fileID: 2100000, guid: e73c330a6886a074995684ee527756cb, type: 2}
+    - {fileID: 2100000, guid: cff3271d3dfd3df46b9d08246fa36a80, type: 2}
+    - {fileID: 2100000, guid: 521f26deb3a767e44a9873b186d29b9a, type: 2}
+    skinVariants: 1
+    hairSkinMasks: 1
+    toneSwatches:
+    - {r: 0.8784314, g: 0.38039216, b: 0.3529412, a: 1}
+    - {r: 0.2901961, g: 0.5647059, b: 0.8862745, a: 1}
+    - {r: 0.36078432, g: 0.79607844, b: 0.37254903, a: 1}
+    - {r: 0.9490196, g: 0.81960785, b: 0.23529412, a: 1}
+    - {r: 0.9490196, g: 0.6392157, b: 0.22745098, a: 1}
+    - {r: 0.60784316, g: 0.41960785, b: 0.8784314, a: 1}
+    - {r: 0.8784314, g: 0.38431373, b: 0.78431374, a: 1}
+    - {r: 0.61960787, g: 0.8509804, b: 0.72156864, a: 1}
+    - {r: 0.6117647, g: 0.79607844, b: 0.9411765, a: 1}
+    - {r: 0.9490196, g: 0.72156864, b: 0.8784314, a: 1}
+    - {r: 0.95686275, g: 0.95686275, b: 0.95686275, a: 1}
+    - {r: 0.43137255, g: 0.43137255, b: 0.45490196, a: 1}
+    skinSwatches:
+    - {r: 1, g: 0.84, b: 0.72, a: 1}
+    - {r: 0.96, g: 0.76, b: 0.6, a: 1}
+    - {r: 0.85, g: 0.63, b: 0.46, a: 1}
+    - {r: 0.66, g: 0.46, b: 0.31, a: 1}
+    - {r: 0.45, g: 0.3, b: 0.2, a: 1}
+    hairAlbedo:
+    - {r: 0.36376274, g: 0.29580542, b: 0.21573593, a: 1}
+    - {r: 0.36376274, g: 0.29580542, b: 0.21573593, a: 1}
+    - {r: 0.36376274, g: 0.29580542, b: 0.21578556, a: 1}
+    - {r: 0.36376274, g: 0.29580542, b: 0.21573593, a: 1}
+    - {r: 0.36376274, g: 0.29580542, b: 0.21573593, a: 1}
+    - {r: 0.36376274, g: 0.29580542, b: 0.21578556, a: 1}
+    - {r: 0.36376274, g: 0.29580542, b: 0.21573593, a: 1}
+    - {r: 0.36376274, g: 0.29580542, b: 0.21573593, a: 1}
+    - {r: 0.36376274, g: 0.29580542, b: 0.21578556, a: 1}
+    - {r: 0.36376274, g: 0.29580542, b: 0.21573593, a: 1}
+    - {r: 0.36376274, g: 0.29580542, b: 0.21573593, a: 1}
+    - {r: 0.36376274, g: 0.29580542, b: 0.21578556, a: 1}
+  - name: City
+    materials:
+    - {fileID: 2100000, guid: 62e25ef75a2216f418d06453c9ad15cb, type: 2}
+    - {fileID: 2100000, guid: a8e32d2cd442e564aa46c99f0ae7c0c8, type: 2}
+    - {fileID: 2100000, guid: c01b7c8cb1175b54aab24b670c2d58dd, type: 2}
+    - {fileID: 2100000, guid: 49ef76ea47782eb4b93ac08b234fd6c3, type: 2}
+    - {fileID: 2100000, guid: ee26ded8aeae32044836748251f93891, type: 2}
+    - {fileID: 2100000, guid: f145fd98abc7a354f83c3a2e8df80a75, type: 2}
+    - {fileID: 2100000, guid: 97942cb5527e6f24eb8b8f5c86f8744d, type: 2}
+    - {fileID: 2100000, guid: ae4870cba172f524491e4431ce936a9d, type: 2}
+    - {fileID: 2100000, guid: ac4517348fefb604bbf10afeb378a491, type: 2}
+    - {fileID: 2100000, guid: ee5d59fcc8497a641905c26644c20880, type: 2}
+    - {fileID: 2100000, guid: 912f300affe60c543ac3ac40ef980902, type: 2}
+    - {fileID: 2100000, guid: bb694a94be4a3c64ca9ef44c62415782, type: 2}
+    skinVariants: 3
+    hairSkinMasks: 0
+    toneSwatches:
+    - {r: 0.8509804, g: 0.3254902, b: 0.30980393, a: 1}
+    - {r: 0.35686275, g: 0.5254902, b: 0.8392157, a: 1}
+    - {r: 0.29411766, g: 0.3529412, b: 0.61960787, a: 1}
+    - {r: 0.6039216, g: 0.30588236, b: 0.5254902, a: 1}
+    skinSwatches:
+    - {r: 0.9647059, g: 0.81960785, b: 0.72156864, a: 1}
+    - {r: 0.8509804, g: 0.627451, b: 0.47843137, a: 1}
+    - {r: 0.5411765, g: 0.3529412, b: 0.23529412, a: 1}
+    hairAlbedo: []
+  hairColors:
+  - {r: 0.09, g: 0.08, b: 0.08, a: 1}
+  - {r: 0.25, g: 0.16, b: 0.1, a: 1}
+  - {r: 0.48, g: 0.31, b: 0.18, a: 1}
+  - {r: 0.86, g: 0.7, b: 0.42, a: 1}
+  - {r: 0.62, g: 0.2, b: 0.12, a: 1}
+  - {r: 0.95, g: 0.55, b: 0.72, a: 1}
+  - {r: 0.36, g: 0.56, b: 0.92, a: 1}
+  - {r: 0.8, g: 0.8, b: 0.84, a: 1}
+  hairAlbedo: {r: 0.357, g: 0.283, b: 0.186, a: 1}

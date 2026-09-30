@@ -50,6 +50,8 @@ namespace NisitSimulator.Interaction
                 stats.ChangeSatisfaction(satisfactionChange);
                 stats.AddExp(expReward);
                 HUDController.Toast($"{activityName}สำเร็จ!");
+                NisitSimulator.Systems.GameplayEvents.Raise(hungerChange > 0f ? NisitSimulator.Systems.GameplayEvents.Eat
+                    : knowledgeChange > 0f ? NisitSimulator.Systems.GameplayEvents.Study : NisitSimulator.Systems.GameplayEvents.Relax);
             }
         }
     }

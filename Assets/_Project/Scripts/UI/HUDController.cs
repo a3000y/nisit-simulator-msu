@@ -17,12 +17,14 @@ namespace NisitSimulator.UI
         public Image energyFill;
         public Image healthFill;
         public Image hungerFill;
+        public Image stressFill;      // แถบความเครียด (เต็ม = แย่ ต่างจากแถบอื่น)
         public Image knowledgeFill;   // แถบความคืบหน้าความรู้ (เทียบเป้าปี)
 
         [Header("ตัวเลขบนแถบ")]
         public TMP_Text energyText;
         public TMP_Text healthText;
         public TMP_Text hungerText;
+        public TMP_Text stressText;
 
         [Header("ข้อความ")]
         public TMP_Text clockText;
@@ -39,7 +41,11 @@ namespace NisitSimulator.UI
         private ProgressionManager progression;
         private float knowledgeTarget = 100f;
 
-        void Awake() => Instance = this;
+        void Awake()
+        {
+            Instance = this;
+            if (toastText != null) toastText.text = "";
+        }
 
         void Start()
         {
@@ -54,6 +60,7 @@ namespace NisitSimulator.UI
                 stats.OnHungerChanged    += UpdateHunger;
                 stats.OnMoneyChanged     += UpdateMoney;
                 stats.OnKnowledgeChanged += UpdateKnowledge;
+                stats.OnStressChanged    += UpdateStress;
             }
             if (clock != null)
             {
@@ -67,6 +74,7 @@ namespace NisitSimulator.UI
             }
 
             RefreshFromStats();
+            SetupToastStyle();
             if (toastText != null) toastText.text = "";
             SetPrompt("");
         }
@@ -93,6 +101,7 @@ namespace NisitSimulator.UI
                 stats.OnHungerChanged    -= UpdateHunger;
                 stats.OnMoneyChanged     -= UpdateMoney;
                 stats.OnKnowledgeChanged -= UpdateKnowledge;
+                stats.OnStressChanged    -= UpdateStress;
             }
             if (clock != null)
             {
@@ -114,6 +123,46 @@ namespace NisitSimulator.UI
             if (progression != null) UpdateYear(progression.CurrentYear, progression.CurrentTarget);
         }
 
+        [Header("Toast Card (พื้นหลังแจ้งเตือน)")]
+        public GameObject toastBg;
+
+        void SetupToastStyle()
+        {
+            if (toastText == null) return;
+
+            toastText.color = Color.white;
+            toastText.fontSize = 32f;
+            toastText.fontStyle = FontStyles.Bold;
+            toastText.alignment = TextAlignmentOptions.Center;
+
+            if (toastBg == null)
+            {
+                var bgObj = new GameObject("ToastBg", typeof(RectTransform), typeof(Image));
+                bgObj.transform.SetParent(toastText.transform.parent, false);
+                bgObj.transform.SetSiblingIndex(toastText.transform.GetSiblingIndex());
+
+                var bgImg = bgObj.GetComponent<Image>();
+                bgImg.color = new Color(0.12f, 0.14f, 0.22f, 0.88f); // สีกรมท่าเข้มหรูหรา
+
+                var rt = bgObj.GetComponent<RectTransform>();
+                rt.anchorMin = toastText.rectTransform.anchorMin;
+                rt.anchorMax = toastText.rectTransform.anchorMax;
+                rt.pivot = toastText.rectTransform.pivot;
+                rt.anchoredPosition = toastText.rectTransform.anchoredPosition;
+                rt.sizeDelta = new Vector2(580, 68);
+
+                toastText.transform.SetParent(bgObj.transform, true);
+                var trt = toastText.rectTransform;
+                trt.anchorMin = Vector2.zero;
+                trt.anchorMax = Vector2.one;
+                trt.offsetMin = trt.offsetMax = Vector2.zero;
+
+                toastBg = bgObj;
+            }
+
+            if (toastBg != null) toastBg.SetActive(false);
+        }
+
         // ---------- แสดงข้อความแจ้งเตือน (เรียกจากที่ไหนก็ได้) ----------
         public static void Toast(string msg)
         {
@@ -125,15 +174,22 @@ namespace NisitSimulator.UI
         private void ShowToast(string msg)
         {
             if (toastText == null) return;
+            bool has = !string.IsNullOrEmpty(msg);
             toastText.text = msg;
+            if (!toastText.gameObject.activeSelf) toastText.gameObject.SetActive(true);   // กันกล่องแจ้งเตือนว่าง (ข้อความถูกปิดไว้ในฉาก)
+            if (toastBg != null) toastBg.SetActive(has);
             CancelInvoke(nameof(ClearToast));
-            Invoke(nameof(ClearToast), 2.5f);
+            if (has) Invoke(nameof(ClearToast), 2.5f);
         }
 
-        private void ClearToast() { if (toastText != null) toastText.text = ""; }
+        public void ClearToast()
+        {
+            if (toastText != null) toastText.text = "";
+            if (toastBg != null) toastBg.SetActive(false);
+        }
 
         // แถบวิ่งนุ่ม: เก็บค่าเป้า แล้วค่อย ๆ ไล่ใน Update (ไม่กระตุก)
-        private float energyT = 1f, healthT = 1f, hungerT = 1f, knowT = -1f;
+        private float energyT = 1f, healthT = 1f, hungerT = 1f, knowT = -1f, stressT = 0f;
 
         void Update()
         {
@@ -141,6 +197,7 @@ namespace NisitSimulator.UI
             if (energyFill) energyFill.fillAmount = Mathf.Lerp(energyFill.fillAmount, energyT, k);
             if (healthFill) healthFill.fillAmount = Mathf.Lerp(healthFill.fillAmount, healthT, k);
             if (hungerFill) hungerFill.fillAmount = Mathf.Lerp(hungerFill.fillAmount, hungerT, k);
+            if (stressFill) stressFill.fillAmount = Mathf.Lerp(stressFill.fillAmount, stressT, k);
             if (knowledgeFill && knowT >= 0f) knowledgeFill.fillAmount = Mathf.Lerp(knowledgeFill.fillAmount, knowT, k);
         }
 
@@ -148,6 +205,8 @@ namespace NisitSimulator.UI
         private void UpdateEnergy(float cur, float max) { energyT = max > 0 ? cur / max : 0f; if (energyText) energyText.text = $"{cur:0}"; }
         private void UpdateHealth(float cur, float max) { healthT = max > 0 ? cur / max : 0f; if (healthText) healthText.text = $"{cur:0}"; }
         private void UpdateHunger(float cur, float max) { hungerT = max > 0 ? cur / max : 0f; if (hungerText) hungerText.text = $"{cur:0}"; }
+        // ความเครียดอ่านกลับกับแถบอื่น — แถบเต็มคือแย่ จึงไม่กลับด้านสัดส่วน
+        private void UpdateStress(float cur, float max) { stressT = max > 0 ? cur / max : 0f; if (stressText) stressText.text = $"{cur:0}"; }
 
         private void UpdateMoney(int money) { if (moneyText) moneyText.text = $"฿ {money}"; }
 

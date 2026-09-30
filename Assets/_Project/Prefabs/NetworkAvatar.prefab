@@ -93,6 +93,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4ee26f96d24c22a49bfe5998ecb3c882, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7677049049278160555}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4ee26f96d24c22a49bfe5998ecb3c882, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6268514420527183956}
   m_SourcePrefab: {fileID: 100100000, guid: 4ee26f96d24c22a49bfe5998ecb3c882, type: 3}
 --- !u!1 &2975922231009302537 stripped
 GameObject:
@@ -111,7 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1398430820
+  GlobalObjectIdHash: 3800102797
   InScenePlacedSourceGlobalObjectIdHash: 0
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -152,4 +155,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f227aa91b72fff4b82cfa202a54c228, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NisitSimulator.Net.ChatRelay
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &6268514420527183956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2975922231009302537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20a13be6a62e8c647b523424dd501ff5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NisitSimulator.Net.TradeRelay
   ShowTopMostFoldoutHeaderGroup: 1

@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf2f443d41ca1274aa64563cb26cdfcc, type: 3}
+  m_Name: AccessoryCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::NisitSimulator.Systems.AccessoryCatalog
+  slots:
+  - slotName: "\u0E17\u0E23\u0E07\u0E1C\u0E21"
+    bone: 10
+    posOffset: {x: 0, y: 0, z: 0}
+    eulerOffset: {x: 0, y: 0, z: 0}
+    scale: 1
+    options:
+    - {fileID: 3051544637601550317, guid: 69ac49a48a29c9448ac5a507d38a3301, type: 3}
+    - {fileID: 1816054855935763832, guid: 260657d29bfb17c47841ae7a62fcf3f4, type: 3}
+    - {fileID: 1272386763867106638, guid: 515a24c6c0ff2404782d8d7c7de093af, type: 3}
+    - {fileID: 593454656204496684, guid: 8f87914eee5a99b4381f0a1c7fdcd158, type: 3}
+    - {fileID: -7598800947870056966, guid: b483452accc2f0e4d905f130aaa38390, type: 3}
+    - {fileID: 6243506356972650884, guid: b483452accc2f0e4d905f130aaa38390, type: 3}
+    - {fileID: 1090390649989844869, guid: d30df5bb55089ad4a989b1473c7a2293, type: 3}
+    - {fileID: 1213043109083764429, guid: d8091c7a2d9d8f2448b954f8720e99d5, type: 3}
+    - {fileID: 3727251502233779392, guid: b483452accc2f0e4d905f130aaa38390, type: 3}
+    - {fileID: -5211849741789478834, guid: b483452accc2f0e4d905f130aaa38390, type: 3}
+    - {fileID: 5359095326366316309, guid: 6acd4702716c64b49bd8504d04baea3b, type: 3}
+    - {fileID: 3331492727679041586, guid: 460174f6fb6cdb841bd0f562d9221ac3, type: 3}
+    - {fileID: 4248136288128711640, guid: 6599356a61fd47a4eaaeed1ac887d65a, type: 3}
+    - {fileID: 1106478296852725836, guid: afe26f4606a9fe64bb6b410887d090e6, type: 3}
+    - {fileID: 8508486158502393311, guid: 6cb373b2b2b152a488ee6126d93518da, type: 3}
+    labels:
+    - "\u0E2A\u0E31\u0E49\u0E19 1"
+    - "\u0E2A\u0E31\u0E49\u0E19 2"
+    - "\u0E2A\u0E31\u0E49\u0E19 3"
+    - "\u0E2A\u0E31\u0E49\u0E19 4"
+    - "\u0E22\u0E32\u0E27 1"
+    - "\u0E22\u0E32\u0E27 2"
+    - "\u0E01\u0E25\u0E32\u0E07 1"
+    - "\u0E01\u0E25\u0E32\u0E07 2"
+    - "\u0E22\u0E32\u0E27 1"
+    - "\u0E22\u0E32\u0E27 2"
+    - "\u0E22\u0E32\u0E27 3"
+    - "\u0E22\u0E32\u0E27 4"
+    - "\u0E1A\u0E4A\u0E2D\u0E1A"
+    - "\u0E2B\u0E32\u0E07\u0E21\u0E49\u0E32"
+    - "\u0E21\u0E27\u0E22"
+    icons:
+    - {fileID: 21300000, guid: 420cb7e6343f81642ad3234cf8b7a953, type: 3}
+    - {fileID: 21300000, guid: c1ed4e6668804004090257d676743ba2, type: 3}
+    - {fileID: 21300000, guid: 7e4f0da3aee94354ea90cf4c8f251d68, type: 3}
+    - {fileID: 21300000, guid: da6ce36e0a49b604facbda7fd8a7b648, type: 3}
+    - {fileID: 21300000, guid: f8349fad59bbdf54f8897a81c556a98b, type: 3}
+    - {fileID: 21300000, guid: 0c956d5811f265142805488799564120, type: 3}
+    - {fileID: 21300000, guid: 60e6f24eaead8874082aee85c44a476a, type: 3}
+    - {fileID: 21300000, guid: c0d0d447936c68349b498d3a4ae89cd4, type: 3}
+    - {fileID: 21300000, guid: 0aba7b06b757d264190c3f588fa68bb9, type: 3}
+    - {fileID: 21300000, guid: 748da2e8f3d7a834791cca200d72696c, type: 3}
+    - {fileID: 21300000, guid: aa6be76e0b371854989f462b0574366c, type: 3}
+    - {fileID: 21300000, guid: ff6f86d2974258048afdb8e1d15cfe10, type: 3}
+    - {fileID: 21300000, guid: 00dea4df5d1bfc64ea1b69bd1ce1019e, type: 3}
+    - {fileID: 21300000, guid: c91c3bc863ea91f4abb205d1ff67f165, type: 3}
+    - {fileID: 21300000, guid: 45aef4eb6bf7a024aa400801b5c9e159, type: 3}
+    genders: 000000000000000000000000000000000000000000000000020000000200000001000000010000000100000001000000010000000100000001000000
+    hairLike: 1
+  - slotName: "\u0E2B\u0E21\u0E27\u0E01"
+    bone: 10
+    posOffset: {x: 0, y: 0, z: 0}
+    eulerOffset: {x: 0, y: 0, z: 0}
+    scale: 1
+    options:
+    - {fileID: 3818721685182870944, guid: 91a234a5ac753554e82d04a2bedc0e25, type: 3}
+    - {fileID: 7202588604819645970, guid: 72b4eb657d88d5d4ca05e983848f7bef, type: 3}
+    - {fileID: 517384152127186018, guid: 740f72d010e55ad458e797ec6483f908, type: 3}
+    - {fileID: 8035157745277479645, guid: b483452accc2f0e4d905f130aaa38390, type: 3}
+    - {fileID: 5483532631979247779, guid: 04e2a0f1ad1a87f4fa83b8972846ec96, type: 3}
+    - {fileID: 6771057364726623960, guid: 51428052337eae34084b8f9fe3955594, type: 3}
+    - {fileID: 7624828572083015622, guid: 640045eb994ac644d9f89980114f4305, type: 3}
+    labels:
+    - "\u0E1A\u0E35\u0E19\u0E19\u0E35\u0E48"
+    - "\u0E2B\u0E21\u0E27\u0E01 1"
+    - "\u0E2B\u0E21\u0E27\u0E01 2"
+    - "\u0E2E\u0E39\u0E49\u0E14"
+    - "\u0E2B\u0E39\u0E1F\u0E31\u0E07 1"
+    - "\u0E2B\u0E39\u0E1F\u0E31\u0E07 2"
+    - "\u0E2B\u0E39\u0E1F\u0E31\u0E07 3"
+    icons:
+    - {fileID: 21300000, guid: e7eb354c0acb5b748b9663e500807d0a, type: 3}
+    - {fileID: 21300000, guid: 748d524ceec88d144ac2e72fb1bb9db8, type: 3}
+    - {fileID: 21300000, guid: 8e7720711228cbc47bcd3e64854ea3a7, type: 3}
+    - {fileID: 21300000, guid: 4937a8a3c0e213d47bb5a4a9f0797936, type: 3}
+    - {fileID: 21300000, guid: 9861ba06cad767c47b3edf9348259ea6, type: 3}
+    - {fileID: 21300000, guid: 24fea15254ed9b44ab1c379644d27dbe, type: 3}
+    - {fileID: 21300000, guid: 1fe48a58360230342af84d22e84de996, type: 3}
+    genders: 02000000020000000200000002000000020000000200000002000000
+    hairLike: 0
+  - slotName: "\u0E41\u0E27\u0E48\u0E19\u0E15\u0E32"
+    bone: 10
+    posOffset: {x: 0, y: 0, z: 0}
+    eulerOffset: {x: 0, y: 0, z: 0}
+    scale: 1
+    options:
+    - {fileID: 8314516393528333455, guid: 1c99f1025f7ca5b41bfc6c615178cf3c, type: 3}
+    labels:
+    - "\u0E41\u0E27\u0E48\u0E19\u0E01\u0E31\u0E19\u0E41\u0E14\u0E14"
+    icons:
+    - {fileID: 21300000, guid: 60a057ee277bb44429c722388f21e061, type: 3}
+    genders: 02000000
+    hairLike: 0
+  - slotName: "\u0E2B\u0E19\u0E27\u0E14/\u0E40\u0E04\u0E23\u0E32"
+    bone: 10
+    posOffset: {x: 0, y: 0, z: 0}
+    eulerOffset: {x: 0, y: 0, z: 0}
+    scale: 1
+    options:
+    - {fileID: 3252513830353061635, guid: 5552d13d2d0636b4b84403bca027f0c0, type: 3}
+    - {fileID: 5381899529043745372, guid: 2c3db847c027ff04f9f95cf539c047de, type: 3}
+    - {fileID: 4609227968844860818, guid: 6b5f1a42b82110e49988de1ad2a41fd9, type: 3}
+    - {fileID: 4158117797329843660, guid: 1d06f16f48b790548b778a5bdf7a69d6, type: 3}
+    labels:
+    - "\u0E40\u0E04\u0E23\u0E32 1"
+    - "\u0E40\u0E04\u0E23\u0E32 2"
+    - "\u0E2B\u0E19\u0E27\u0E14"
+    - "\u0E08\u0E2D\u0E19"
+    icons:
+    - {fileID: 21300000, guid: 23509c72db63a4541a61a6db636f13da, type: 3}
+    - {fileID: 21300000, guid: 97c58ac0f8e28604e85d1ba0761bec23, type: 3}
+    - {fileID: 21300000, guid: 8a17f88c676f9c34f8a4b6452471c0de, type: 3}
+    - {fileID: 21300000, guid: df57b6d3a1b93994d885be4cc751280f, type: 3}
+    genders: 00000000000000000000000000000000
+    hairLike: 1

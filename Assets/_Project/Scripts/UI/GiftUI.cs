@@ -118,6 +118,7 @@ namespace NisitSimulator.UI
 
             target.ReceiveGift(itemName, friendship);
             StatsTracker.Instance.Add("gifts", 1);
+            GameplayEvents.Raise(GameplayEvents.Gift);
             SFXManager.Coin();
 
             if (inv.TotalCount() == 0) Close();
@@ -147,7 +148,7 @@ namespace NisitSimulator.UI
             crt.sizeDelta = new Vector2(560f, 680f);
             UIStyle.Card(card, new Color(0.15f, 0.17f, 0.27f, 0.99f));   // มุมมนเข้าชุด
 
-            titleText = MakeText(card.transform, "ให้ของขวัญ", new Vector2(0f, 300f), new Vector2(520, 50), 30, new Color(1f, 0.9f, 0.5f));
+            titleText = MakeText(card.transform, "ให้ของขวัญ", new Vector2(0f, 300f), new Vector2(520, 50), 30, new Color(0.42f, 0.26f, 0.58f));
             titleText.alignment = TextAlignmentOptions.Center;
             MakeText(card.transform, "เลือกไอเทมเพื่อให้ (กด H หรือ Esc เพื่อปิด)", new Vector2(0f, 262f), new Vector2(520, 30), 18, new Color(0.75f, 0.8f, 0.9f)).alignment = TextAlignmentOptions.Center;
 

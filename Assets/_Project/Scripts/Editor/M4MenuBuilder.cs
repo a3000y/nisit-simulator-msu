@@ -126,10 +126,14 @@ namespace NisitSimulator.EditorTools
             mc.quitButton        = MakeButton(root, "ออก",         new Vector2(0, -282), new Color(0.99f, 0.74f, 0.78f));
 
             // ===== ตัวละคร 3D โชว์ด้านขวา (สไตล์ cinematic) =====
+            // ลบเวทีตัวละครเก่าทั้งหมดก่อน (กันซ้ำจากการ rebuild หลายรอบ → ไฟซ้อนกันจนสว่างโอเวอร์)
+            foreach (var oldStage in Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+                if (oldStage != null && oldStage.name == "MenuCharStage") Object.DestroyImmediate(oldStage.gameObject);
+
             var pStage = new GameObject("MenuCharStage"); pStage.transform.position = new Vector3(800f, 0f, 800f);
             var pRoot = new GameObject("ModelRoot").transform; pRoot.SetParent(pStage.transform, false); pRoot.localPosition = Vector3.zero;
-            var pKey = new GameObject("Key").AddComponent<Light>(); pKey.transform.SetParent(pStage.transform, false); pKey.transform.localPosition = new Vector3(1.2f, 2.4f, 2f); pKey.type = LightType.Point; pKey.intensity = 4f; pKey.range = 26f; pKey.color = new Color(1f, 0.97f, 0.9f);
-            var pFill = new GameObject("Fill").AddComponent<Light>(); pFill.transform.SetParent(pStage.transform, false); pFill.transform.localPosition = new Vector3(-1.4f, 1.6f, 1.8f); pFill.type = LightType.Point; pFill.intensity = 1.8f; pFill.range = 26f; pFill.color = new Color(0.85f, 0.9f, 1f);
+            var pKey = new GameObject("Key").AddComponent<Light>(); pKey.transform.SetParent(pStage.transform, false); pKey.transform.localPosition = new Vector3(1.2f, 2.4f, 2f); pKey.type = LightType.Point; pKey.intensity = 3.2f; pKey.range = 24f; pKey.color = new Color(1f, 0.97f, 0.9f);
+            var pFill = new GameObject("Fill").AddComponent<Light>(); pFill.transform.SetParent(pStage.transform, false); pFill.transform.localPosition = new Vector3(-1.4f, 1.6f, 1.8f); pFill.type = LightType.Point; pFill.intensity = 1.3f; pFill.range = 24f; pFill.color = new Color(0.85f, 0.9f, 1f);
             var pCamGo = new GameObject("MenuCharCam"); pCamGo.transform.SetParent(pStage.transform, false); pCamGo.transform.localPosition = new Vector3(0f, 1.0f, 3.0f);
             var pCam = pCamGo.AddComponent<Camera>(); pCam.transform.LookAt(pStage.transform.position + new Vector3(0f, 0.95f, 0f));
             pCam.clearFlags = CameraClearFlags.SolidColor; pCam.backgroundColor = new Color(0f, 0f, 0f, 0f);   // โปร่งใส → เห็นฉากหลัง
@@ -146,7 +150,7 @@ namespace NisitSimulator.EditorTools
             slDim.rectTransform.offsetMin = Vector2.zero; slDim.rectTransform.offsetMax = Vector2.zero;
             var slCard = MakeRounded(slDim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(620, 600), new Color(0.11f, 0.14f, 0.24f, 0.99f));
             Deco(slCard);
-            MakeText(slCard.transform, "SlTitle", "เลือกช่องบันทึก", 42, new Vector2(0.5f, 1f), new Vector2(0, -46), new Vector2(560, 56), new Color(1f, 0.9f, 0.5f), FontStyles.Bold);
+            MakeText(slCard.transform, "SlTitle", "เลือกช่องบันทึก", 42, new Vector2(0.5f, 1f), new Vector2(0, -46), new Vector2(560, 56), new Color(0.42f, 0.26f, 0.58f), FontStyles.Bold);
             var slotBtns = new Button[3];
             for (int i = 0; i < 3; i++)
                 slotBtns[i] = MakeButton(slCard.transform, "ช่อง " + (i + 1), new Vector2(0f, 120f - i * 118f), new Color(0.72f, 0.82f, 0.72f));
@@ -159,34 +163,49 @@ namespace NisitSimulator.EditorTools
             // ===== แผงตั้งค่า (แท็บ เสียง/กราฟิก) =====
             var sDim = MakeImage(root, "SettingsPanel", Vector2.zero, Vector2.one, new Color(0.04f, 0.06f, 0.12f, 0.62f));
             sDim.rectTransform.offsetMin = Vector2.zero; sDim.rectTransform.offsetMax = Vector2.zero;
-            var sCard = MakeRounded(sDim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(680, 660), new Color(0.11f, 0.14f, 0.24f, 0.99f));
+
+            // เงานุ่มใต้การ์ด (ทำให้การ์ดลอยเด่น มีมิติ) — วางก่อนการ์ดจะได้อยู่ด้านหลัง
+            MakeRounded(sDim.transform, "CardShadow", new Vector2(0.5f, 0.5f), new Vector2(7, -28), new Vector2(796, 896), new Color(0.04f, 0.03f, 0.09f, 0.34f));
+
+            // การ์ดใหญ่ขึ้น (กว้าง+สูง) + หัวข้อมีที่ว่างด้านบนเยอะ (ไม้โท/สระไม่โดนตัด)
+            var sCard = MakeRounded(sDim.transform, "Card", new Vector2(0.5f, 0.5f), new Vector2(0, -10), new Vector2(780, 880), new Color(0.11f, 0.14f, 0.24f, 0.99f));
             Deco(sCard);
-            MakeText(sCard.transform, "STitle", "ตั้งค่า", 44, new Vector2(0.5f, 1f), new Vector2(0, -34), new Vector2(600, 56), new Color(1f, 0.9f, 0.5f), FontStyles.Bold);
+
+            // แถบหัวการ์ด (โทนพีเรียงเกิลอ่อน = แยกชั้นหัว/เนื้อหา ให้มีมิติ)
+            MakeRounded(sCard.transform, "HeaderBand", new Vector2(0.5f, 1f), new Vector2(0, -8), new Vector2(740, 236), new Color(0.80f, 0.76f, 0.93f, 1f));
+            // เส้นแบ่งบางใต้แถบหัว
+            var sDiv = MakeRounded(sCard.transform, "HeaderDiv", new Vector2(0.5f, 1f), new Vector2(0, -246), new Vector2(700, 3), new Color(1f, 1f, 1f, 0.55f));
+            sDiv.raycastTarget = false;
+
+            MakeText(sCard.transform, "STitle", "ตั้งค่า", 48, new Vector2(0.5f, 1f), new Vector2(0, -62), new Vector2(640, 96), new Color(0.40f, 0.24f, 0.56f), FontStyles.Bold);
 
             var sc = sCard.gameObject.AddComponent<SettingsController>();
             sc.panel = sDim.gameObject;
 
-            // แท็บ
-            sc.audioTab    = MakeButton(sCard.transform, "เสียง", new Vector2(-150, -96), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f);
-            sc.graphicsTab = MakeButton(sCard.transform, "กราฟิก", new Vector2(150, -96), new Color(0.80f, 0.72f, 0.96f), 0.5f, 1f);
+            // แท็บ (บนแถบหัว)
+            sc.audioTab    = MakeButton(sCard.transform, "เสียง", new Vector2(-162, -166), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f, 306f, 72f);
+            sc.graphicsTab = MakeButton(sCard.transform, "กราฟิก", new Vector2(162, -166), new Color(0.80f, 0.72f, 0.96f), 0.5f, 1f, 306f, 72f);
 
             // กลุ่ม "เสียง"
             var audioGrp = MakeSettingsGroup(sCard.transform, "AudioGroup");
-            sc.masterSlider  = LabeledSlider(audioGrp, "เสียงรวม (Master)", -184);
-            sc.musicSlider   = LabeledSlider(audioGrp, "เพลง (Music)", -264);
-            sc.sfxSlider     = LabeledSlider(audioGrp, "เอฟเฟกต์ (SFX)", -344);
-            sc.voiceSlider   = LabeledSlider(audioGrp, "เสียงพูด (Voice)", -424);
-            sc.ambientSlider = LabeledSlider(audioGrp, "บรรยากาศ (Ambient)", -504);
+            sc.masterSlider  = LabeledSlider(audioGrp, "เสียงรวม (Master)", -300);
+            sc.musicSlider   = LabeledSlider(audioGrp, "เพลง (Music)", -378);
+            sc.sfxSlider     = LabeledSlider(audioGrp, "เอฟเฟกต์ (SFX)", -456);
+            sc.voiceSlider   = LabeledSlider(audioGrp, "เสียงพูด (Voice)", -534);
+            sc.ambientSlider = LabeledSlider(audioGrp, "บรรยากาศ (Ambient)", -612);
             sc.audioGroup = audioGrp.gameObject;
 
-            // กลุ่ม "กราฟิก"
+            // กลุ่ม "กราฟิก" — ตัวเลือกแบบเกมจริง: ◀ ค่า ▶ (คุณภาพ/ความละเอียด) + สวิตช์เปิด-ปิด (เต็มจอ)
             var gfxGrp = MakeSettingsGroup(sCard.transform, "GraphicsGroup");
-            sc.qualityButton    = MakeButton(gfxGrp, "คุณภาพ", new Vector2(0, -200), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f);
-            sc.resolutionButton = MakeButton(gfxGrp, "ความละเอียด", new Vector2(0, -290), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f);
-            sc.fullscreenButton = MakeButton(gfxGrp, "เต็มจอ", new Vector2(0, -380), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f);
+            var qSel = MakeSelector(gfxGrp, "คุณภาพกราฟิก", -298);
+            sc.qualityPrev = qSel.prev; sc.qualityNext = qSel.next; sc.qualityValue = qSel.val;
+            var rSel = MakeSelector(gfxGrp, "ความละเอียด", -456);
+            sc.resPrev = rSel.prev; sc.resNext = rSel.next; sc.resValue = rSel.val;
+            var fsw = MakeToggle(gfxGrp, "โหมดเต็มจอ", -614);
+            sc.fullscreenToggle = fsw.toggle; sc.fullscreenKnob = fsw.knob; sc.fullscreenTrack = fsw.track; sc.fullscreenValue = fsw.val; sc.knobOnX = fsw.onX;
             sc.graphicsGroup = gfxGrp.gameObject;
 
-            sc.closeButton   = MakeButton(sCard.transform, "ปิด", new Vector2(0, 28), new Color(0.80f, 0.72f, 0.96f), 0.5f, 0f);
+            sc.closeButton   = MakeButton(sCard.transform, "ปิด", new Vector2(0, 36), new Color(0.80f, 0.72f, 0.96f), 0.5f, 0f);
 
             mc.settingsPanel = sDim.gameObject;
             sDim.gameObject.SetActive(false);
@@ -196,7 +215,7 @@ namespace NisitSimulator.EditorTools
             csDim.rectTransform.offsetMin = Vector2.zero; csDim.rectTransform.offsetMax = Vector2.zero;
             var csCard = MakeRounded(csDim.transform, "Card", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(680, 360), new Color(0.11f, 0.14f, 0.24f, 0.99f));
             Deco(csCard);
-            MakeText(csCard.transform, "CSTitle", "กำลังพัฒนา", 46, new Vector2(0.5f, 1f), new Vector2(0, -48), new Vector2(640, 62), new Color(1f, 0.9f, 0.5f), FontStyles.Bold);
+            MakeText(csCard.transform, "CSTitle", "กำลังพัฒนา", 46, new Vector2(0.5f, 1f), new Vector2(0, -48), new Vector2(640, 62), new Color(0.44f, 0.28f, 0.60f), FontStyles.Bold);
             var csBody = MakeText(csCard.transform, "CSBody", "โหมดเล่นหลายคน (Multiplayer)\nจะเปิดให้เล่นในเวอร์ชันถัดไป", 27, new Vector2(0.5f, 1f), new Vector2(0, -140), new Vector2(600, 110), new Color(0.92f, 0.94f, 0.88f), FontStyles.Normal);
             csBody.enableWordWrapping = true; csBody.alignment = TextAlignmentOptions.Center;
             var csClose = MakeButton(csCard.transform, "เข้าใจแล้ว", new Vector2(0, 30), new Color(0.80f, 0.72f, 0.96f), 0.5f, 0f);
@@ -235,9 +254,9 @@ namespace NisitSimulator.EditorTools
             return t;
         }
 
-        static Button MakeButton(Transform parent, string label, Vector2 pos, Color col, float ax = 0.5f, float ay = 0.5f)
+        static Button MakeButton(Transform parent, string label, Vector2 pos, Color col, float ax = 0.5f, float ay = 0.5f, float width = 360f, float height = 76f)
         {
-            var size = new Vector2(360, 76);
+            var size = new Vector2(width, height);
             var sprite = pill ?? ui;
             var anchor = new Vector2(ax, ay);
 
@@ -273,7 +292,10 @@ namespace NisitSimulator.EditorTools
 
             var txt = MakeText(go.transform, "Text", label, 34, new Vector2(0.5f, 0.5f), Vector2.zero, size, new Color(0.20f, 0.22f, 0.38f), FontStyles.Bold);
             var trt = txt.rectTransform;
-            trt.anchorMin = Vector2.zero; trt.anchorMax = Vector2.one; trt.offsetMin = trt.offsetMax = Vector2.zero;
+            trt.anchorMin = Vector2.zero; trt.anchorMax = Vector2.one;
+            trt.offsetMin = new Vector2(14, 0); trt.offsetMax = new Vector2(-14, 0);   // เว้นขอบซ้าย-ขวา กันชิดขอบ
+            txt.enableWordWrapping = false;                                            // บรรทัดเดียวเสมอ (กันตกบรรทัด เช่น "1920×1080")
+            txt.enableAutoSizing = true; txt.fontSizeMin = 20; txt.fontSizeMax = 34;   // ยาวเกินให้ย่อลงพอดี
             txt.transform.SetAsLastSibling();
             return btn;
         }
@@ -331,6 +353,50 @@ namespace NisitSimulator.EditorTools
             slider.direction = Slider.Direction.LeftToRight;
             slider.minValue = 0f; slider.maxValue = 1f; slider.value = 1f;
             return slider;
+        }
+
+        // แถวตัวเลือกแบบเกม: หัวข้อ + ◀ [กล่องค่า] ▶  (คืนปุ่มซ้าย/ขวา + ข้อความค่า)
+        static (Button prev, Button next, TMP_Text val) MakeSelector(Transform parent, string title, float y)
+        {
+            MakeText(parent, title + "Head", title, 27, new Vector2(0.5f, 1f), new Vector2(0, y), new Vector2(560, 36),
+                new Color(0.34f, 0.28f, 0.50f), FontStyles.Bold);
+            float ly = y - 54;                                   // บรรทัดตัวเลือกอยู่ใต้หัวข้อ
+            var prev = MakeButton(parent, "<", new Vector2(-274, ly), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f, 84f, 84f);
+            var next = MakeButton(parent, ">", new Vector2(274, ly), new Color(0.62f, 0.80f, 0.96f), 0.5f, 1f, 84f, 84f);
+
+            // กล่องค่าตรงกลาง (ขาวนวล มีกรอบ + เงาใน = มีมิติ) — ธีมพาสเทลไม่แตะ (สว่างอยู่แล้ว)
+            var box = MakeRounded(parent, title + "Box", new Vector2(0.5f, 1f), new Vector2(0, ly), new Vector2(392, 84), new Color(0.99f, 0.99f, 1f, 1f));
+            var bOl = box.gameObject.AddComponent<Outline>(); bOl.effectColor = new Color(0.55f, 0.5f, 0.72f, 0.95f); bOl.effectDistance = new Vector2(2.5f, -2.5f); bOl.useGraphicAlpha = false;
+            var bSh = box.gameObject.AddComponent<Shadow>(); bSh.effectColor = new Color(0.12f, 0.10f, 0.22f, 0.22f); bSh.effectDistance = new Vector2(0, -4);
+            var val = MakeText(box.transform, "Val", "-", 32, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(360, 66), new Color(0.30f, 0.25f, 0.46f), FontStyles.Bold);
+            val.rectTransform.anchorMin = Vector2.zero; val.rectTransform.anchorMax = Vector2.one; val.rectTransform.offsetMin = new Vector2(10, 0); val.rectTransform.offsetMax = new Vector2(-10, 0);
+            val.enableWordWrapping = false; val.enableAutoSizing = true; val.fontSizeMin = 18; val.fontSizeMax = 32;
+            return (prev, next, val);
+        }
+
+        // สวิตช์ เปิด/ปิด: หัวข้อ + ราง + ลูกบิดเลื่อน + คำว่า เปิด/ปิด (คืนปุ่มราง, ลูกบิด, รูปราง, ข้อความ, ระยะเลื่อน)
+        static (Button toggle, RectTransform knob, Image track, TMP_Text val, float onX) MakeToggle(Transform parent, string title, float y)
+        {
+            MakeText(parent, title + "Head", title, 27, new Vector2(0.5f, 1f), new Vector2(0, y), new Vector2(560, 36),
+                new Color(0.34f, 0.28f, 0.50f), FontStyles.Bold);
+            float ly = y - 52;
+            // ราง (เป็นปุ่มกดสลับ) — กว้าง <160 กันตัวติดตั้ง juice ไปแต่งทับ
+            var trackGo = new GameObject(title + "Track", typeof(Image), typeof(Button));
+            trackGo.transform.SetParent(parent, false);
+            var track = trackGo.GetComponent<Image>();
+            track.sprite = pill ?? ui; track.type = Image.Type.Sliced; track.color = new Color(0.55f, 0.55f, 0.62f);
+            var trt = track.rectTransform; trt.anchorMin = trt.anchorMax = trt.pivot = new Vector2(0.5f, 1f); trt.anchoredPosition = new Vector2(-90, ly); trt.sizeDelta = new Vector2(150, 64);
+            var trOl = trackGo.AddComponent<Outline>(); trOl.effectColor = new Color(0f, 0f, 0f, 0.25f); trOl.effectDistance = new Vector2(0, -2); trOl.useGraphicAlpha = false;
+            var toggle = trackGo.GetComponent<Button>(); toggle.transition = Selectable.Transition.None;
+
+            var knobGo = new GameObject("Knob", typeof(Image));
+            knobGo.transform.SetParent(trackGo.transform, false);
+            var knobImg = knobGo.GetComponent<Image>(); knobImg.sprite = circle ?? ui; knobImg.color = Color.white; knobImg.raycastTarget = false;
+            var krt = knobImg.rectTransform; krt.anchorMin = krt.anchorMax = krt.pivot = new Vector2(0.5f, 0.5f); krt.sizeDelta = new Vector2(52, 52); krt.anchoredPosition = new Vector2(-45, 0);
+            var kSh = knobGo.AddComponent<Shadow>(); kSh.effectColor = new Color(0f, 0f, 0f, 0.35f); kSh.effectDistance = new Vector2(0, -2);
+
+            var val = MakeText(parent, title + "Val", "ปิด", 30, new Vector2(0.5f, 1f), new Vector2(150, ly), new Vector2(180, 64), new Color(0.34f, 0.28f, 0.50f), FontStyles.Bold);
+            return (toggle, krt, track, val, 45f);
         }
 
         // กลุ่มว่างเต็มการ์ด (ไว้สลับแท็บ)

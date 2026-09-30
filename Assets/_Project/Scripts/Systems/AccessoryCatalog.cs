@@ -18,6 +18,9 @@ namespace NisitSimulator.Systems
             public float scale = 1f;                               // ขนาด prop
             public GameObject[] options;                           // โมเดล prop (ผู้ใช้ใส่เอง)
             public string[] labels;                                // ชื่อโชว์ของแต่ละ option (ไม่ใส่ = "แบบ n")
+            public Sprite[] icons;                                 // รูปตัวอย่างของแต่ละ option (ไม่ใส่ = โชว์ชื่อ)
+            public int[] genders;                                  // เพศของแต่ละ option: 0 = ชาย, 1 = หญิง, 2 = ใส่ได้ทั้งคู่ (ไม่ใส่ = ทั้งคู่)
+            public bool hairLike;                                  // ผม/หนวด — ซ่อนเมื่อชุดมีผมติดมาแล้ว (POLYGON City)
         }
 
         public Slot[] slots;
@@ -39,6 +42,17 @@ namespace NisitSimulator.Systems
                 return s.labels[opt];
             return "แบบ " + (opt + 1);
         }
+        public Sprite OptionIcon(int slot, int opt)
+        {
+            var s = GetSlot(slot);
+            return (s != null && s.icons != null && opt >= 0 && opt < s.icons.Length) ? s.icons[opt] : null;
+        }
+        public int OptionGender(int slot, int opt)
+        {
+            var s = GetSlot(slot);
+            return (s != null && s.genders != null && opt >= 0 && opt < s.genders.Length) ? s.genders[opt] : 2;
+        }
+        public bool Fits(int slot, int opt, int gender) { int g = OptionGender(slot, opt); return g == 2 || g == gender; }
         public int OptionCount(int slot)
         {
             var s = GetSlot(slot);

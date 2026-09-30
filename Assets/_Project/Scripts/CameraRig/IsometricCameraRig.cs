@@ -38,6 +38,11 @@ namespace NisitSimulator.CameraRig
         public float rotateSpeed = 4f;
         public float mouseSensitivity = 3f;
         public bool holdRightMouseToRotate = true;
+        [Tooltip("ปุ่มเมาส์ที่ใช้หมุนกล้อง 0=ซ้าย 1=ขวา 2=กลาง — ใช้ปุ่มกลางเพราะสเปกให้คลิกขวาไว้หันตัวละคร")]
+        public int rotateMouseButton = 2;
+        [Tooltip("ปุ่มหมุนกล้องซ้าย/ขวา — เลี่ยง E เพราะ E คือปุ่มโต้ตอบ")]
+        public KeyCode rotateLeftKey = KeyCode.Q;
+        public KeyCode rotateRightKey = KeyCode.R;
         public float zoomSpeed = 4f;
 
         private Camera cam;
@@ -59,14 +64,13 @@ namespace NisitSimulator.CameraRig
         void Update()
         {
             if (Input.GetKeyDown(toggleKey)) { mode = (mode == Mode.Isometric) ? Mode.ThirdPerson : Mode.Isometric; Apply(); }
-
-            bool rotating = !holdRightMouseToRotate || Input.GetMouseButton(1);
+            bool rotating = !holdRightMouseToRotate || Input.GetMouseButton(rotateMouseButton);
 
             if (mode == Mode.Isometric)
             {
                 if (rotating) yawAngle += Input.GetAxis("Mouse X") * rotateSpeed;
-                if (Input.GetKey(KeyCode.Q)) yawAngle -= rotateSpeed * 12f * Time.deltaTime;
-                if (Input.GetKey(KeyCode.E)) yawAngle += rotateSpeed * 12f * Time.deltaTime;
+                if (Input.GetKey(rotateLeftKey))  yawAngle -= rotateSpeed * 12f * Time.deltaTime;
+                if (Input.GetKey(rotateRightKey)) yawAngle += rotateSpeed * 12f * Time.deltaTime;
 
                 float sc = Input.GetAxis("Mouse ScrollWheel");
                 if (Mathf.Abs(sc) > 0.0001f)
@@ -97,6 +101,21 @@ namespace NisitSimulator.CameraRig
                 ? Quaternion.Euler(pitchAngle, yawAngle, 0f)
                 : Quaternion.Euler(tpPitch, yawAngle, 0f);
         }
+
+        // วางกล้องตรงเป้าทันที (ไม่ Lerp) — ใช้หลังวาร์ป/เกิด/โหลดเซฟ กันกล้องลากข้ามแผนที่
+        public void SnapToTarget()
+        {
+            if (target == null) return;
+            UpdateOffset();
+            transform.position = target.position + offset;
+            transform.rotation = (mode == Mode.Isometric) ? Quaternion.Euler(pitchAngle, yawAngle, 0f) : Quaternion.Euler(tpPitch, yawAngle, 0f);
+        }
+
+        public static void SnapAll()
+        {
+            foreach (var rig in FindObjectsByType<IsometricCameraRig>(FindObjectsSortMode.None)) rig.SnapToTarget();
+        }
+
 
         private void UpdateOffset()
         {

@@ -52,7 +52,7 @@ namespace NisitSimulator.EditorTools
             card.rectTransform.sizeDelta = new Vector2(820, 480);
             var cardT = card.transform;
 
-            var title = MakeText(cardT, "Title", "เหตุการณ์!", 42, new Vector2(0.5f, 1f), new Vector2(0, -48), new Vector2(740, 60), new Color(1f, 0.86f, 0.42f), FontStyles.Bold, TextAlignmentOptions.Center);
+            var title = MakeText(cardT, "Title", "เหตุการณ์!", 42, new Vector2(0.5f, 1f), new Vector2(0, -48), new Vector2(740, 60), new Color(0.42f, 0.26f, 0.58f), FontStyles.Bold, TextAlignmentOptions.Center);
             var desc = MakeText(cardT, "Desc", "รายละเอียด...", 30, new Vector2(0.5f, 1f), new Vector2(0, -140), new Vector2(720, 150), Color.white, FontStyles.Normal, TextAlignmentOptions.Top);
 
             var btns = new Button[2];

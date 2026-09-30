@@ -37,6 +37,7 @@ namespace NisitSimulator.UI
             foreach (var img in Object.FindObjectsByType<Image>(FindObjectsInactive.Include, FindObjectsSortMode.None))
             {
                 if (img == null || img.GetComponent<Canvas>() != null) continue;
+                if (img.gameObject.name == "Swatch") continue;   // ปุ่มเลือกสี (สีผมดำ ฯลฯ) ต้องคงสีจริง
                 var c = img.color;
                 float lum = c.r + c.g + c.b;
                 if (c.a >= 0.88f && c.r < 0.22f && c.g < 0.24f && c.b < 0.34f)

@@ -53,7 +53,8 @@ namespace NisitSimulator.UI
             current.transform.localScale = Vector3.one;
 
             var anim = current.GetComponentInChildren<Animator>();
-            if (anim != null && cat.controller != null) anim.runtimeAnimatorController = cat.controller;
+            var ctl = cat.ControllerFor(cat.Model(GameSession.PlayerModel) != null ? GameSession.PlayerModel : 0);
+            if (anim != null && ctl != null) anim.runtimeAnimatorController = ctl;
 
             // auto-scale + วางเท้าที่ระดับ root
             var rends = current.GetComponentsInChildren<Renderer>();

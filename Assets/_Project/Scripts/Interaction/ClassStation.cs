@@ -15,7 +15,9 @@ namespace NisitSimulator.Interaction
     {
         [Header("ตารางเรียน (ชั่วโมงที่คาบเริ่ม)")]
         public int[] classHours = { 9, 13 };   // เช้า 9 โมง, บ่าย 13 น.
-        public int windowHours = 3;             // เข้าได้ภายในกี่ชั่วโมงหลังคาบเริ่ม (9-12, 13-16)
+        // ขยายจาก 3 เป็น 4 ชั่วโมง เพราะนาฬิกาเดินเร็วขึ้น 3 เท่า คาบ 3 ชม. จะเหลือเวลาจริงแค่นาทีเดียว
+        // เดินข้ามแมพไม่ทัน กลายเป็นเกมที่พลาดคาบเรียนเพราะเดินไปไม่ทัน ไม่ใช่เพราะเล่นผิด
+        public int windowHours = 4;             // เข้าได้ภายในกี่ชั่วโมงหลังคาบเริ่ม (9-13, 13-17)
 
         [Header("ผลตอบแทนต่อคาบ")]
         public float knowledgePerClass = 35f;
@@ -62,6 +64,14 @@ namespace NisitSimulator.Interaction
 
         public void Interact(GameObject interactor)
         {
+            // หลักสูตรลงทะเบียน: เข้าเรียนได้เฉพาะช่วงคาบของวิชาที่ลงทะเบียนไว้
+            var reg = NisitSimulator.Academics.CourseRegistrar.Instance;
+            if (reg != null && reg.IsActive && !reg.TryGetOngoingSession(out _, out _))
+            {
+                HUDController.Toast("ตอนนี้ไม่มีคาบของวิชาที่คุณลงทะเบียน (ดูตารางเรียนในโทรศัพท์)");
+                return;
+            }
+
             int session = CurrentOpenSession();
 
             if (session < 0)
@@ -92,15 +102,23 @@ namespace NisitSimulator.Interaction
                 // โบนัสจากเพื่อนสนิท (เพื่อนติวให้) — +5%/คน สูงสุด +25%
                 int closeFriends = RelationshipManager.Instance.CountAtLeast(3);
                 float friendMult = 1f + Mathf.Min(closeFriends, 5) * 0.05f;
-                float k = knowledgePerClass * kMult * friendMult;
-                stats.ChangeKnowledge(k);
+                float want = knowledgePerClass * kMult * friendMult;
+
+                // ChangeKnowledge หักความเครียดให้เอง แล้วคืนค่าที่ได้จริงมา
+                float k = stats.ChangeKnowledge(want);
+                // หลักสูตรลงทะเบียน: นับเข้าเรียนจากตารางเดียวกันกับแอป (วิชา/เวลา/ตึก)
+                string course = NisitSimulator.Academics.CourseRegistrar.NotifyStudyTick(transform, k, want);
                 stats.AddExp(expPerClass);
                 stats.ChangeEnergy(-energyCost);
                 stats.ChangeSatisfaction(3f);
                 StatsTracker.Instance.Add("classes", 1);
+                GameplayEvents.Raise(GameplayEvents.Class);
+
                 HUDController.Toast($"เรียนจบคาบ +{k:0} ความรู้"
                     + (kMult > 1f ? " (ไฟแรง!)" : "")
-                    + (closeFriends > 0 ? $" (เพื่อนติว +{Mathf.Min(closeFriends,5)*5}%)" : ""));
+                    + (closeFriends > 0 ? $" (เพื่อนติว +{Mathf.Min(closeFriends,5)*5}%)" : "")
+                    + (k < want - 0.05f ? " (เครียดมาก เรียนได้น้อยลง)" : "")
+                    + course);
             }
         }
 

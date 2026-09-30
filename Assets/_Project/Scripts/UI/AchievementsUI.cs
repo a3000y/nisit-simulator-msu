@@ -81,6 +81,12 @@ namespace NisitSimulator.UI
             sb.AppendLine($"เพื่อน: {friends} คน");
             sb.AppendLine($"เงินที่หาได้รวม: {s.GetInt("moneyEarned"):n0}฿");
             sb.AppendLine($"ความรู้สะสมรวม: {s.GetInt("knowledgeGained"):n0}");
+            sb.AppendLine($"ทำภารกิจครบทั้งวัน: {s.GetInt("allQuestDays")} วัน (ติดกันสูงสุด {s.GetInt("bestStreak")})");
+            if (LevelSystem.Instance != null)
+            {
+                sb.AppendLine($"\n<b>เลเวล</b>  {LevelSystem.Instance.ProgressText()}");
+                sb.AppendLine("<size=85%>" + LevelSystem.Instance.PerkListText() + "</size>");
+            }
             return sb.ToString();
         }
 
@@ -95,7 +101,8 @@ namespace NisitSimulator.UI
                 string mark = got ? "<color=#7BE38B>[สำเร็จ]</color>" : "<color=#6B7386>[ล็อก]</color>";
                 string title = got ? a.title : $"<color=#9AA6BF>{a.title}</color>";
                 sb.AppendLine($"{mark} {title}");
-                sb.AppendLine($"<size=68%><color=#8A93AB>{a.desc}</color></size>");
+                string unl = CosmeticUnlocks.UnlocksText(a.id);
+                sb.AppendLine($"<size=68%><color=#8A93AB>{a.desc}  ·  รางวัล {AchievementManager.RewardText(a)}{(unl.Length > 0 ? "  ·  ปลดล็อก " + unl : "")}</color></size>");
             }
             return sb.ToString();
         }
@@ -123,7 +130,7 @@ namespace NisitSimulator.UI
             crt.sizeDelta = new Vector2(980f, 700f);
             UIStyle.Card(card, new Color(0.14f, 0.16f, 0.26f, 0.99f));   // มุมมนเข้าชุด
 
-            MakeText(card.transform, "สมุดนิสิต — สถิติ & ความสำเร็จ", new Vector2(0f, 315f), new Vector2(940, 50), 30, new Color(1f, 0.9f, 0.5f)).alignment = TextAlignmentOptions.Center;
+            MakeText(card.transform, "สมุดนิสิต — สถิติ & ความสำเร็จ", new Vector2(0f, 315f), new Vector2(940, 50), 30, new Color(0.42f, 0.26f, 0.58f)).alignment = TextAlignmentOptions.Center;
 
             statsText = MakeText(card.transform, "", new Vector2(-238f, -14f), new Vector2(420, 540), 22, Color.white);
             statsText.alignment = TextAlignmentOptions.TopLeft;

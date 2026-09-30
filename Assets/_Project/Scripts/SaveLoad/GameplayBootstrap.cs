@@ -3,6 +3,7 @@ using NisitSimulator.Core;
 using NisitSimulator.TimeSystem;
 using NisitSimulator.Systems;
 using NisitSimulator.UI;
+using NisitSimulator.Interaction;
 
 namespace NisitSimulator.SaveLoad
 {
@@ -14,13 +15,25 @@ namespace NisitSimulator.SaveLoad
 
         void Start()
         {
-            SaveManager.ApplyIfPending();
+            // ระบบลงทะเบียนเรียน — สร้างก่อนโหลดเซฟ เพื่อรับข้อมูลการเรียนคืน (เกมใหม่ = เริ่มปี 1 ภาค 1 เปิดลงทะเบียน)
+            NisitSimulator.Academics.CourseRegistrar.EnsureExists();
+            DayNightCycle.EnsureExists();                  // แสงกลางวัน–กลางคืน (ฟังนาฬิกาเกมก่อนคืนเวลาจากเซฟ)
+
+            // ===== ลำดับเข้าฉาก: คืนสถานะจากเซฟ → วางตัวละคร (ที่เดียว) → แสงตรงเวลา ก่อนเฟรมแรกถูกวาด =====
+            var loaded = SaveManager.ApplyIfPending();     // null = เกมใหม่ (เวลาเริ่มตาม GameClock.startHour = 07:00)
+            PlayerSpawnSystem.ResolveInitialSpawn(loaded); // เกมใหม่/เซฟใช้ไม่ได้ → หอพัก · เล่นต่อ → ตำแหน่งเดิม
+            SleepController.EnsureExists();                // นอนพักที่หอพัก (หน้ายืนยัน + เฟด)
+            NisitSimulator.Net.WorldTimeSync.EnsureExists(); // Multiplayer: Host คุมเวลาโลก (เล่นคนเดียว = ไม่ทำงาน)
+            RegistrationUI.EnsureExists();        // แอป "ลงทะเบียนเรียน" ในโทรศัพท์ (TAB)
+            NisitSimulator.Academics.ExamMinigame.ExamMinigameController.EnsureExists();   // มินิเกมสอบรายวิชา (เปิดเฉพาะตอนสอบที่ห้องสอบ)
 
             // สร้างระบบสถิติ/ความสำเร็จ + หน้ากด J (หลังโหลดเซฟ → baseline/คืนค่าถูกต้อง)
             _ = StatsTracker.Instance;
             _ = AchievementManager.Instance;
             AchievementsUI.EnsureExists();
             FloatingTextSpawner.EnsureExists();   // เด้งตัวเลข +เงิน/+ความรู้/+EXP
+            LevelSystem.EnsureExists();           // เลเวลนิสิต + เลือกความสามารถ (กด L)
+            DaySummaryUI.EnsureExists();          // สรุปผลตอนจบวัน
 
             clock = Object.FindFirstObjectByType<GameClock>();
             if (clock != null) clock.OnDayChanged += OnDay;

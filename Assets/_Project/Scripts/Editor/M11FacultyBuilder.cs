@@ -66,7 +66,7 @@ namespace NisitSimulator.EditorTools
             Deco(card);
 
             MakeText(panel.transform, "Title", "เลือกคณะของคุณ", 54, new Vector2(0.5f, 0.5f), new Vector2(0, 286),
-                new Vector2(640, 76), new Color(1f, 0.9f, 0.5f), FontStyles.Bold);
+                new Vector2(640, 76), new Color(0.42f, 0.26f, 0.58f), FontStyles.Bold);
             MakeText(panel.transform, "Sub", "คณะจะกำหนดแนวข้อสอบของคุณ", 27, new Vector2(0.5f, 0.5f), new Vector2(0, 233),
                 new Vector2(640, 42), new Color(0.9f, 0.92f, 0.86f), FontStyles.Normal);
 

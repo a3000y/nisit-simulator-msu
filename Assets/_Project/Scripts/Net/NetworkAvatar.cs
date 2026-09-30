@@ -42,10 +42,14 @@ namespace NisitSimulator.Net
         // พาเลตต์สีตัวละคร (0 = สีจริงของโมเดล)
         public static readonly Color[] Palette =
         {
-            Color.white,
-            new Color(0.72f, 0.84f, 1.00f), new Color(1.00f, 0.78f, 0.82f), new Color(0.80f, 1.00f, 0.84f),
-            new Color(1.00f, 0.94f, 0.72f), new Color(0.88f, 0.80f, 1.00f), new Color(1.00f, 0.84f, 0.68f),
-            new Color(1.00f, 0.62f, 0.62f),
+            Color.white,                         // สีจริงของโมเดล (ไม่ทับสี)
+            new Color(0.64f, 0.79f, 0.98f),      // ฟ้าพาสเทล
+            new Color(1.00f, 0.74f, 0.82f),      // ชมพูกุหลาบ
+            new Color(0.70f, 0.92f, 0.78f),      // มินต์
+            new Color(1.00f, 0.90f, 0.64f),      // เหลืองบัตเตอร์
+            new Color(0.82f, 0.75f, 0.98f),      // ลาเวนเดอร์
+            new Color(1.00f, 0.80f, 0.64f),      // พีช
+            new Color(0.68f, 0.90f, 0.92f),      // ฟ้า-เขียว (teal อ่อน)
         };
 
         Transform localPlayer;   // owner: อ้างอิง Player ในฉาก
@@ -58,7 +62,7 @@ namespace NisitSimulator.Net
         public override void OnNetworkSpawn()
         {
             // สลับโมเดลตามที่ผู้เล่นเลือก (เฉพาะตัวที่มองเห็น = remote) ก่อน cache Animator
-            if (!IsOwner && netModel.Value > 0) CharacterCatalog.Apply(transform, netModel.Value);
+            if (!IsOwner && netModel.Value >= 0) CharacterCatalog.Apply(transform, netModel.Value);
 
             anim = GetComponentInChildren<Animator>();
             if (anim != null) anim.applyRootMotion = false;   // กันหุ่นไถล/ลอย (ตำแหน่งมาจาก sync ไม่ใช่ root motion)
@@ -269,20 +273,12 @@ namespace NisitSimulator.Net
             if (localPlayer != null) ApplyColor(localPlayer.gameObject, idx);
         }
 
-        // ทาสีทั้งตัว (MaterialPropertyBlock — ไม่แตะ material asset) · idx 0 = สีจริง
+        // ลงสีทั้งตัว (Synty = สลับโทน material + สีผม/ผิว, โมเดลอื่น = ย้อมสี) · idx 0 = สีจริง
         //   public เพื่อให้หน้าแต่งตัว (พรีวิว) ทาสีแบบเดียวกับในเกม
         public static void ApplyColor(GameObject go, int idx)
         {
-            if (go == null) return;
-            var col = (idx > 0 && idx < Palette.Length) ? Palette[idx] : Color.white;
-            var mpb = new MaterialPropertyBlock();
-            foreach (var r in go.GetComponentsInChildren<Renderer>())
-            {
-                r.GetPropertyBlock(mpb);
-                mpb.SetColor("_BaseColor", col);
-                mpb.SetColor("_Color", col);
-                r.SetPropertyBlock(mpb);
-            }
+            // idx = ค่าสีแบบแพ็ก (โทน | สีผม<<4 | สีผิว<<8) — ดู CharacterCatalog.ApplyLook
+            CharacterCatalog.ApplyLook(go, idx, Palette);
         }
     }
 }

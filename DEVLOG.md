@@ -431,3 +431,35 @@ Build M4 Menu · Menu Background (3D) · **Polish Menu Layout** · **Epic Menu B
 **Clean Placeholder Stations** · **Setup Character Animations** · **Build Inventory** · **Build Cafeteria** ·
 **★ Rebuild All UI (กดครั้งเดียว)** · **Add Screenshot Helper** ·
 CampusBuilder · InteriorBuilder · ShopBuilder ฯลฯ
+
+
+### ระบบลงทะเบียนเรียน ปี 1–4 (หลักสูตรวิทยาการคอมพิวเตอร์สมมติ) (2026-09-29)
+- ใช้เฉพาะคณะ index 0 (สายคอมพิวเตอร์) — คณะอื่นใช้ระบบเดิม (เป้าความรู้/GPA สอบ) ไม่เปลี่ยน
+- ข้อมูล: `Academics/CurriculumDefinition` (ScriptableObject) ที่ `Resources/Curricula/CS_Curriculum.asset` สร้างด้วย `Nisit ▸ Build CS Curriculum` (ค่าเริ่มต้นใน `CsCurriculumDefaults`) · 44 วิชา (บังคับ 114 + เลือก 2 วิชา) = 120 หน่วยกิต
+- ตรรกะล้วน: `RegistrationService` (ลง/ถอน/ยืนยัน, วิชาบังคับก่อน, ตารางชน, เพดาน 18, เกรด, GPA ถ่วงหน่วยกิต, เลื่อนชั้นปี 24/54/84, จบการศึกษา, ย้ายเซฟเก่า)
+- ตัวเชื่อม: `CourseRegistrar` (สร้างเองใน GameplayBootstrap) ฟัง `ProgressionManager.OnDayInYearChangedEarly` → เปิด/ปิดภาค · ActivitySpot (โต๊ะเรียน) นับเข้าเรียนตามตึก+เวลา · ExamController บันทึกคะแนนสอบรายวิชา
+- ProgressionManager: เพิ่ม `CalendarYear` (ปีที่เล่นจริง) แยกจาก `CurrentYear` (ชั้นปี) · SaveData: `calendarYear`, `hasAcademicRecord`, `academic`
+- UI: `RegistrationUI` (ปุ่มแอป "ลงทะเบียนเรียน" ในโทรศัพท์ TAB) แท็บ ลงทะเบียน/ตารางเรียน/ผลการเรียน
+- เทสต์: `Editor/Tests/CourseRegistrationTests` 21 เคส (EditMode) ผ่านทั้งหมด
+
+
+### แผนที่ มมส เขตพื้นที่ขามเรียง (2026-09-30)
+- `Editor/M44MsuCampus.cs` → เมนู **Nisit ▸ Build MSU Campus (แผนที่ มมส)** อ้างอิงแผนผัง KHAM RIANG Campus (ทิศเหนือขึ้นบน)
+- ถนนวงแหวน + ถนนขามเรียง–ท่าขอนยางตัดทแยง + วงเวียน SE + ประตูทางเข้าหลัก NE (ซุ้ม+ป้าย) · คลองรอบใน · สระ 3 แห่ง · เส้นทางศึกษาธรรมชาติ
+- ลานอัฐศิลป์กลางแมพ ล้อมด้วยตึก A สำนักวิทยบริการ(ห้องสมุด)/B/C(ห้องสอบ)/D · คณะวิทยาการสารสนเทศ(คณะ IT) · สำนักศึกษาทั่วไป(อาคารเรียน) · สำนักงานอธิการบดี(อาคารบริหาร)+เสาธง
+- โซนเหนือ: ตลาดน้อย(โรงอาหาร) หอพักนิสิต MSU Plaza(ร้านค้า) กองกิจการนิสิต(ชมรม) สระว่ายน้ำ สนามฟุตบอล อาคารพลศึกษา
+- ประตู/ห้องภายใน/ระบบเรียนใช้ชื่อเดิม ย้ายตำแหน่งอัตโนมัติ · ฉากก่อนหน้าสำรองที่ `01_Gameplay_BeforeMSU.unity` · M42 ยังใช้สร้างแผนที่เดิมได้
+
+
+### มินิเกมเฉพาะตอนสอบ (สอบรายวิชา) (2026-09-30)
+- เปิดเฉพาะตอน "สอบ" ที่ห้องสอบ (ExamStation กด E) — การเข้าเรียนปกติ (ActivitySpot/ClassStation) ไม่เปลี่ยน ไม่มีมินิเกม · ใช้กับคณะที่ใช้หลักสูตรลงทะเบียน (index 0) คณะอื่นใช้สอบแบบเดิม
+- โฟลเดอร์ `Scripts/Academics/ExamMinigame/`: `ExamBankData` (ScriptableObject คลังข้อสอบ) · `ExamBankDefaults` (คลังตั้งต้น CS102/CS202/CS207/GE102 วิชาละ 11–12 ข้อ) · `ExamSessionState` (สถานะรอบสอบที่เซฟ) · `ExamMinigameLogic` (สุ่ม/ตรวจ 4 แบบ/คำใบ้/ส่ง) · `ExamMinigameController` (สิทธิ์สอบ จับเวลา ล็อกผู้เล่น บันทึกคะแนน Save/Load) · `ExamMinigameUI` (UI สร้างตอนรัน ไม่แก้ฉาก)
+- 4 แบบ: เลือกคำตอบ · เรียงลำดับ (คะแนนตามตำแหน่งที่ถูก รองรับหลายลำดับ) · จับคู่ (ตามคู่ที่ถูก) · หาจุดผิด — คลิกได้ทั้งหมด ไม่ต้องลาก · ค่าเริ่มต้น 5 ข้อ 180 วินาที ปรับรายวิชาได้
+- คะแนนมินิเกม (ความถูกต้องล้วน) → `RegistrationService.RecordCourseExam` ใช้สูตรเดิม (ตอบถูก×examQuizWeight + การเข้าเรียน×ส่วนที่เหลือ) บันทึกครั้งเดียวต่อรอบ · เกรดรายวิชาออกตอนปิดภาคตามเดิม
+- คำใบ้จากความรู้ของวิชาที่สอบ = StudyRatio×100 (<40 ไม่มี · 40–69 = 1 · 70+ = 2) ไม่หักคะแนน ข้อละครั้ง
+- โครงงาน/ฝึกงาน + วิชาที่ยังไม่มีคลัง → ปุ่ม "สอบแบบเดิม" (ExamController.BeginLegacyForCourses บันทึกเฉพาะวิชานั้น)
+- ระหว่างอยู่ห้องสอบ: หยุด `GameClock` + `StatDecay` ด้วย `GameClock.Suspended` (ไม่ใช้ timeScale) · ตัวจับเวลาสอบใช้ unscaledDeltaTime · PlayerInteraction ถูกบล็อก
+- SaveData: `hasExamSession`, `examSession` (เซฟเก่าโหลดได้) · แก้บั๊กเดิม: เล่นต่อจากเซฟในวันสอบแล้ว ExamController พลาด event วัน (ซิงก์ตารางสอบใน Start)
+- เมนู: **Nisit ▸ Build Exam Minigame Banks** / Reset / Report Exam Bank Coverage · asset `Resources/ExamBanks/ExamBankDatabase.asset`
+- เทสต์: `Editor/Tests/ExamMinigameTests` 14 เคส + ของเดิม 21 = 35/35 ผ่าน · ทดสอบ Play Mode ครบโฟลว์ (สอบ/ซ่อนหน้าต่าง/เซฟ-โหลดกลางสอบ/หมดเวลา/สอบแบบเดิม/ขาดสอบ)
+- สำรองไฟล์เดิมก่อนแก้: `Backups/ExamMinigame_20260930/`

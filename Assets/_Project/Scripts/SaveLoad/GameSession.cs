@@ -35,8 +35,8 @@ namespace NisitSimulator.SaveLoad
 
         // ปรับแต่งตัวละคร (sync ใน multiplayer) — ตั้งจากแผงแต่งตัว
         public static string PlayerName = "";   // ว่าง = ใช้ "ผู้เล่น N"
-        public static int PlayerColor = 0;       // index ในพาเลตต์สี (0 = สีจริงของโมเดล)
-        public static int PlayerModel = 0;       // index ในแคตตาล็อกตัวละคร (แบบ/เพศ)
+        public static int PlayerColor = 0;       // สีแบบแพ็ก: โทนชุด | สีผม<<4 | สีผิว<<8 (ดู CharacterCatalog.PackColor)
+        public static int PlayerModel = 0;       // index ในแคตตาล็อกตัวละคร (ชุด)
         public static int[] PlayerAccessories = new int[0];   // ของแต่งต่อช่อง (0=ไม่ใส่, k=option k) — sync MP ได้
     }
 }

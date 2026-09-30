@@ -279,6 +279,19 @@ namespace NisitSimulator.EditorTools
 
             var vg = root.Find("Vignette");
             if (vg != null) { var i = vg.GetComponent<Image>(); if (i) i.color = new Color(1f, 1f, 1f, vignetteAlpha); }
+
+            // *** สำคัญ: สลับเข้าโหมดพื้นหลัง 2D จริง ***
+            // ปิดฉาก 3D (MenuScenery) + ตั้งกล้องหลักเป็นสีพื้น → ภาพ 2D จะไม่โดน 3D เรนเดอร์ทับ
+            var scenery = GameObject.Find("MenuScenery") ?? FindInactive("MenuScenery");
+            if (scenery != null) scenery.SetActive(false);
+            var cam = Camera.main;
+            if (cam != null)
+            {
+                cam.clearFlags = CameraClearFlags.SolidColor;
+                cam.backgroundColor = new Color(0.86f, 0.83f, 0.95f);   // พลัมพาสเทล (เผื่อภาพยังโหลดไม่ทัน)
+                var orbit = cam.GetComponent<MenuCameraOrbit>();
+                if (orbit != null) Object.DestroyImmediate(orbit);
+            }
         }
 
         // ---------------------------------------------------------------- vignette
@@ -326,28 +339,28 @@ namespace NisitSimulator.EditorTools
             title.alignment = TextAlignmentOptions.Left;   // โลโก้ชิดซ้าย (สไตล์ cinematic)
             title.enableVertexGradient = true;
             title.colorGradient = new VertexGradient(
-                new Color(1.00f, 0.95f, 0.66f), new Color(1.00f, 0.95f, 0.66f),   // ทองอ่อนบน
-                new Color(0.96f, 0.64f, 0.11f), new Color(0.96f, 0.64f, 0.11f));  // ทองเข้มล่าง
+                new Color(0.72f, 0.62f, 0.95f), new Color(0.78f, 0.68f, 0.97f),   // ม่วงลาเวนเดอร์บน (แบบ mockup)
+                new Color(0.98f, 0.70f, 0.84f), new Color(0.99f, 0.74f, 0.80f));  // ชมพูพาสเทลล่าง
             Place(title.rectTransform, new Vector2(-300, 340), new Vector2(1100, 120));
 
-            // ขอบเข้มหนา + เงานูน 3D ผ่าน material instance (ไม่กระทบข้อความอื่น)
+            // ขอบนุ่ม (ม่วงเข้ม บางลง) + เงานูนอ่อน — แบบ mockup พาสเทล (ไม่ดำหนา)
             var mat = title.fontMaterial;
-            Color ink = new Color(0.09f, 0.15f, 0.27f, 1f);
+            Color ink = new Color(0.42f, 0.30f, 0.58f, 1f);
             mat.EnableKeyword(ShaderUtilities.Keyword_Outline);
             mat.SetColor(ShaderUtilities.ID_OutlineColor, ink);
-            mat.SetFloat(ShaderUtilities.ID_OutlineWidth, 0.24f);
+            mat.SetFloat(ShaderUtilities.ID_OutlineWidth, 0.16f);
             mat.EnableKeyword(ShaderUtilities.Keyword_Underlay);
-            mat.SetColor(ShaderUtilities.ID_UnderlayColor, new Color(0f, 0f, 0f, 0.55f));
-            mat.SetFloat(ShaderUtilities.ID_UnderlayOffsetX, 0.7f);
-            mat.SetFloat(ShaderUtilities.ID_UnderlayOffsetY, -1.2f);
+            mat.SetColor(ShaderUtilities.ID_UnderlayColor, new Color(0.35f, 0.28f, 0.5f, 0.45f));
+            mat.SetFloat(ShaderUtilities.ID_UnderlayOffsetX, 0.6f);
+            mat.SetFloat(ShaderUtilities.ID_UnderlayOffsetY, -1.0f);
             mat.SetFloat(ShaderUtilities.ID_UnderlayDilate, 0.1f);
-            mat.SetFloat(ShaderUtilities.ID_UnderlaySoftness, 0.12f);
+            mat.SetFloat(ShaderUtilities.ID_UnderlaySoftness, 0.2f);
 
-            // แสงเรืองทองนุ่มหลังโลโก้ (grandeur)
+            // แสงเรืองพาสเทลนุ่มหลังโลโก้ (ชมพู-ลาเวนเดอร์)
             var glowT = root.Find("LogoGlow");
             Image lglow = glowT != null ? glowT.GetComponent<Image>() : NewImage(root, "LogoGlow");
             if (glowSprite != null) { lglow.sprite = glowSprite; lglow.type = Image.Type.Simple; }
-            lglow.color = new Color(1f, 0.86f, 0.5f, 0.26f);
+            lglow.color = new Color(0.88f, 0.78f, 0.98f, 0.28f);
             lglow.raycastTarget = false;
             Place(lglow.rectTransform, new Vector2(-300, 340), new Vector2(900, 340));
         }
@@ -378,12 +391,12 @@ namespace NisitSimulator.EditorTools
 
         static void LayoutButtons(Transform root)
         {
-            // คอลัมน์ซ้าย (สไตล์ cinematic — ตัวละครโชว์ด้านขวา)
-            StyleButton(root, "เล่นคนเดียวBtn", new Vector2(-560,  120), new Color(0.60f, 0.86f, 0.68f), icPlay);     // มินต์พาสเทล
-            StyleButton(root, "เล่นหลายคนBtn", new Vector2(-560,   30), new Color(0.99f, 0.82f, 0.62f), icContinue); // พีชพาสเทล
-            StyleButton(root, "เล่นต่อBtn",     new Vector2(-560,  -60), new Color(0.62f, 0.80f, 0.96f), icContinue); // ฟ้าพาสเทล
-            StyleButton(root, "ตั้งค่าBtn",      new Vector2(-560, -150), new Color(0.80f, 0.72f, 0.96f), icSettings); // ลาเวนเดอร์
-            StyleButton(root, "ออกBtn",         new Vector2(-560, -240), new Color(0.99f, 0.74f, 0.78f), icExit);     // ชมพูพาสเทล
+            // คอลัมน์ซ้าย (สไตล์ cinematic — ตัวละครโชว์ด้านขวา) · สีอ่อนพาสเทล-ขาว แบบ mockup
+            StyleButton(root, "เล่นคนเดียวBtn", new Vector2(-560,  120), new Color(0.74f, 0.91f, 0.79f), icPlay);     // มินต์อ่อน
+            StyleButton(root, "เล่นหลายคนBtn", new Vector2(-560,   30), new Color(0.76f, 0.88f, 0.98f), icContinue); // ฟ้าอ่อน
+            StyleButton(root, "เล่นต่อBtn",     new Vector2(-560,  -60), new Color(0.99f, 0.89f, 0.76f), icContinue); // พีชอ่อน
+            StyleButton(root, "ตั้งค่าBtn",      new Vector2(-560, -150), new Color(0.87f, 0.82f, 0.98f), icSettings); // ลาเวนเดอร์อ่อน
+            StyleButton(root, "ออกBtn",         new Vector2(-560, -240), new Color(0.99f, 0.84f, 0.86f), icExit);     // ชมพูอ่อน
         }
 
         static void StyleButton(Transform root, string name, Vector2 pos, Color baseCol, Sprite icon)
@@ -399,9 +412,9 @@ namespace NisitSimulator.EditorTools
             if (buttonSprite != null) { img.sprite = buttonSprite; img.type = Image.Type.Sliced; }
             img.color = baseCol;
 
-            // เส้นขอบดำหนา (สไตล์การ์ตูน)
+            // เส้นขอบนุ่มบาง (โทนลาเวนเดอร์ ไม่ดำหนา) — แบบ mockup พาสเทล
             var ol = img.GetComponent<Outline>() ?? img.gameObject.AddComponent<Outline>();
-            ol.effectColor = new Color(0.12f, 0.14f, 0.24f, 1f); ol.effectDistance = new Vector2(5f, -5f); ol.useGraphicAlpha = false;
+            ol.effectColor = new Color(0.56f, 0.50f, 0.72f, 0.75f); ol.effectDistance = new Vector2(2.5f, -2.5f); ol.useGraphicAlpha = false;
 
             btn.transition = Selectable.Transition.ColorTint;
             btn.targetGraphic = img;
@@ -415,13 +428,13 @@ namespace NisitSimulator.EditorTools
             cb.colorMultiplier  = 1f;
             btn.colors = cb;
 
-            // ---- ฐานหนา 3D (สีเข้ม เยื้องลง อยู่หลังปุ่ม) ----
+            // ---- ฐานนุ่ม 3D (เยื้องลงเล็กน้อย ให้มีมิติแบบ soft ไม่ทึบ) ----
             var baseT = root.Find(name + "Base");
             Image bas = baseT != null ? baseT.GetComponent<Image>() : NewImage(root, name + "Base");
             if (buttonSprite != null) { bas.sprite = buttonSprite; bas.type = Image.Type.Sliced; }
-            bas.color = Shift(baseCol, -0.26f);
+            bas.color = Shift(baseCol, -0.13f);
             bas.raycastTarget = false;
-            Place(bas.rectTransform, pos + new Vector2(0, -8), size);
+            Place(bas.rectTransform, pos + new Vector2(0, -5), size);
 
             // ---- แผ่นเงาวาวด้านบน (candy gloss) ----
             var glossT = t.Find("Gloss");

@@ -60,6 +60,8 @@ namespace NisitSimulator.Systems
                 stats.ChangeSatisfaction(s.item.satisfaction);
             }
             NisitSimulator.UI.HUDController.Toast($"ใช้ {s.item.name}");
+            GameplayEvents.Raise(GameplayEvents.UseItem);
+            if (s.item.hunger > 0) GameplayEvents.Raise(GameplayEvents.Eat);
             NisitSimulator.Core.SFXManager.Eat();
 
             s.count--;

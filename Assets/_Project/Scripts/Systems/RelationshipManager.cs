@@ -87,6 +87,7 @@ namespace NisitSimulator.Systems
         public void AddPoints(string id, string displayName, int amount)
         {
             if (string.IsNullOrEmpty(id) || amount == 0) return;
+            if (amount > 0) amount = Mathf.RoundToInt(amount * Perks.FriendMul);   // "มนุษย์สัมพันธ์"
             int before = GetPoints(id);
             int after = Mathf.Clamp(before + amount, 0, MaxPoints);
             points[id] = after;

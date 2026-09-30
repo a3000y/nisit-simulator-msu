@@ -89,7 +89,7 @@ namespace NisitSimulator.EditorTools
             crt.sizeDelta = new Vector2(560f, 640f);
             Roundify(card, new Color(0.16f, 0.18f, 0.28f, 0.99f));
 
-            var title = MakeText(card.transform, font, "ตั้งค่าเสียง", new Vector2(0f, 280f), 36, new Color(1f, 0.9f, 0.5f));
+            var title = MakeText(card.transform, font, "ตั้งค่าเสียง", new Vector2(0f, 280f), 36, new Color(0.42f, 0.26f, 0.58f));
             title.alignment = TextAlignmentOptions.Center;
 
             var sc = card.AddComponent<SettingsController>();

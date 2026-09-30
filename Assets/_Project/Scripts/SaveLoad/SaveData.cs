@@ -13,14 +13,27 @@ namespace NisitSimulator.SaveLoad
         public float hunger;
         public float knowledge;
         public float satisfaction;
+        public float stress;          // ความเครียด (เซฟเก่าไม่มีฟิลด์นี้ JsonUtility จะให้ค่า 0 เอง)
         public int money;
         public int exp;
 
         // ความคืบหน้า
         public int currentYear = 1;    // ชั้นปี 1-4
         public int dayInYear = 1;      // วันในปีการศึกษาปัจจุบัน
+        public int calendarYear = 0;   // ปีการศึกษาที่เล่นจริง (0 = เซฟเก่า → ใช้ currentYear)
         public int facultyIndex = 0;   // คณะที่เลือก (0=IT,1=บริหาร,2=วิทย์,3=นิเทศ)
         public float posX, posY, posZ; // ตำแหน่งตัวละคร
+
+        // ===== ตำแหน่ง/ฉาก/อาคาร (ระบบจุดเกิดหอพัก) =====
+        //   เซฟเก่าไม่มี → hasPlayerTransform = false → ใช้ posX/Y/Z เดิม (ถ้าใช้ได้) ไม่งั้นใช้จุดเกิดหอพักเป็นตำแหน่งสำรอง
+        //   เวลา/วันเก็บที่ gameDay/gameMinutes เท่านั้น (ไม่เก็บช่วงกลางวัน/คืนหรือค่าแสง → คำนวณใหม่จากเวลาเสมอ ไม่ขัดแย้งกัน)
+        public bool hasPlayerTransform = false;
+        public float rotY;                 // ทิศที่ตัวละครหัน (องศา Y)
+        public string sceneName = "";     // ฉากที่ผู้เล่นอยู่ตอนเซฟ
+        public bool insideInterior;        // อยู่ในอาคาร (InteriorManager) ไหม
+        public string interiorName = "";  // เช่น Spawn_หอพัก
+        public float interiorReturnX, interiorReturnY, interiorReturnZ, interiorReturnRotY;   // จุดออกจากอาคาร
+        public string dormRoomId = "";     // ห้องพักของผู้เล่น (ตอนนี้มีห้องเดียว = "dorm_1" · เผื่อหลายห้อง)
 
         // ไอเทมในกระเป๋า (เก็บเป็น itemId)
         public List<string> inventoryItemIds = new List<string>();
@@ -58,6 +71,27 @@ namespace NisitSimulator.SaveLoad
         public string objText = "";
         public float objEnergy, objHealth, objHunger, objKnowledge, objSatisfaction;
         public int objMoney, objExp;
+
+        // ===== เลเวล/ความสามารถ (LevelSystem + Perks) =====
+        public string perks = "";
+        public int perkPicks;
+
+        // ===== ภารกิจแบบไปทำ + ต่อเนื่อง =====
+        public List<string> questActKeys = new List<string>();
+        public List<int> questActVals = new List<int>();
+        public int questStreak;
+        public int questLastAllDay = -99;
+        public bool questBonusToday;
+
+        // ===== ระบบลงทะเบียนเรียน (หลักสูตรคณะสายคอมพิวเตอร์) =====
+        //   เซฟเก่าไม่มี → hasAcademicRecord = false → CourseRegistrar ย้ายข้อมูล (เทียบโอนภาคที่ผ่านมาแล้ว) ไม่ล้างความคืบหน้าเดิม
+        public bool hasAcademicRecord = false;
+        public NisitSimulator.Academics.AcademicRecord academic = new NisitSimulator.Academics.AcademicRecord();
+
+        // ===== มินิเกมสอบรายวิชาที่กำลังทำ (ชุดข้อ/ลำดับ/คำตอบ/เวลาคงเหลือ/คำใบ้/สถานะส่ง-บันทึก) =====
+        //   เซฟเก่าไม่มี → hasExamSession = false → ไม่มีการสอบค้าง
+        public bool hasExamSession = false;
+        public NisitSimulator.Academics.ExamMinigame.ExamSessionState examSession = new NisitSimulator.Academics.ExamMinigame.ExamSessionState();
     }
 
     // หนึ่งภารกิจที่สุ่มได้ (เก็บพอให้สร้างใหม่ + สถานะสำเร็จ)
@@ -66,6 +100,7 @@ namespace NisitSimulator.SaveLoad
     {
         public string desc;
         public int metric;      // (int ของ QuestSystem.Metric)
+        public string actionKey; // Metric.Action: คีย์กิจกรรม (GameplayEvents)
         public float target;
         public int rewardMoney;
         public int rewardExp;

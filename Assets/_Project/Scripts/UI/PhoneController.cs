@@ -251,15 +251,44 @@ namespace NisitSimulator.UI
                 $"{semName}  |  ฤดู{season}\n" +
                 $"ชั้นปีที่ {year}\n" +
                 $"คณะ{faculty}" +
+                CourseLine() +
                 examLine;
         }
 
-        string GradesText()
+// หลักสูตรลงทะเบียน: สถานะภาค + คาบที่กำลังเรียนอยู่ (คณะอื่น = ว่าง)
+        string CourseLine()
+        {
+            var reg = NisitSimulator.Academics.CourseRegistrar.Instance;
+            if (reg == null || !reg.IsActive) return "";
+            string s = "\n<size=85%>" + reg.ShortSummary() + "</size>";
+            if (reg.TryGetOngoingSession(out var e, out var cs))
+                s += $"\n<color=#E0843A><b>ตอนนี้: {e.code} @ {cs.building} ({cs.TimeText})</b></color>";
+            return s;
+        }
+
+
+string GradesText()
         {
             float gpa = exam != null ? exam.GPA : 0f;
             int taken = exam != null ? exam.ExamsTaken : 0;
             int mo = stats != null ? stats.Money : 0;
             int xp = stats != null ? stats.Exp : 0;
+
+            // หลักสูตรลงทะเบียน (คณะสายคอมพิวเตอร์): GPA ถ่วงหน่วยกิต + หน่วยกิตสะสม (รายละเอียดอยู่ในแอปลงทะเบียนเรียน)
+            var reg = NisitSimulator.Academics.CourseRegistrar.Instance;
+            if (reg != null && reg.IsActive && reg.Service != null)
+            {
+                var svc = reg.Service;
+                return
+                    $"<size=140%><b>GPA {(svc.HasGpa ? svc.Gpa().ToString("0.00") : "–")}</b></size>\n" +
+                    $"{reg.ShortSummary()}\n" +
+                    $"วิชาเลือกผ่าน {svc.PassedElectiveCount()}/{svc.Curriculum.electivesRequired}\n" +
+                    "<size=80%>ดูเกรดรายวิชา: แอป \"ลงทะเบียนเรียน\" ▸ ผลการเรียน</size>\n" +
+                    "<color=#556>----------------------</color>\n" +
+                    $"เงิน\t<b>{mo}</b> บาท\n" +
+                    $"EXP\t<b>{xp}</b>";
+            }
+
             return
                 $"<size=140%><b>GPA {gpa:0.00}</b></size>\n" +
                 $"สอบไปแล้ว {taken} ครั้ง\n" +
