@@ -14,6 +14,7 @@ namespace NisitSimulator.SaveLoad
         // เก็บสถานะปัจจุบันลงไฟล์
         public static void Save()
         {
+            if (NisitSimulator.UI.OnboardingFlow.IsPractice) return;
             var stats = Object.FindFirstObjectByType<PlayerStats>();
             if (stats == null) return;
 

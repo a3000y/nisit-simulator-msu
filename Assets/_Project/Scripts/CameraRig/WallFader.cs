@@ -24,6 +24,7 @@ namespace NisitSimulator.CameraRig
 
         [Header("การตรวจจับสิ่งกีดขวาง")]
         [Tooltip("เลเยอร์ที่ถือว่าเป็นผนัง/อาคาร โดยปกติคือ Default")]
+        public Renderer[] additionalObstructions = new Renderer[0]; // Roof panels without physics colliders
         public LayerMask obstructionMask = 1;         // 1 = Default
         [Tooltip("รัศมีลำแสง ยิ่งกว้างยิ่งจับผนังที่เฉียด ๆ ได้")]
         public float castRadius = 0.45f;
@@ -110,6 +111,22 @@ namespace NisitSimulator.CameraRig
                     if (rend == null || !rend.enabled) continue;
                     if (rend is ParticleSystemRenderer) continue;
                     _hitBuffer.Add(rend);
+                }
+            }
+
+            // Render-only roof panels still need to fade when they cross the view ray.
+            var viewRay = new Ray(from, dir);
+            if (additionalObstructions != null)
+            {
+                foreach (var rend in additionalObstructions)
+                {
+                    if (rend == null || !rend.enabled || !rend.gameObject.activeInHierarchy) continue;
+                    if (rend.shadowCastingMode == ShadowCastingMode.ShadowsOnly) continue;
+                    if (rend.transform == target || rend.transform.IsChildOf(target)) continue;
+                    var bounds = rend.bounds;
+                    bounds.Expand(castRadius * 2f);
+                    if (bounds.IntersectRay(viewRay, out float hitDistance) && hitDistance <= dist && !_hitBuffer.Contains(rend))
+                        _hitBuffer.Add(rend);
                 }
             }
 

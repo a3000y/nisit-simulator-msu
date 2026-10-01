@@ -19,6 +19,7 @@ namespace NisitSimulator.UI
         static RegistrationUI _i;
         public static bool IsOpen => _i != null && _i.open;
         public static RegistrationUI Instance => _i;
+        public int CurrentTab => tab;
         public static RegistrationUI EnsureExists()
         {
             if (_i == null) _i = new GameObject("RegistrationUI").AddComponent<RegistrationUI>();

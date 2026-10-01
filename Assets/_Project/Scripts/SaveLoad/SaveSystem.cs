@@ -65,6 +65,7 @@ namespace NisitSimulator.SaveLoad
 
         public static void Save(SaveData data)
         {
+            if (NisitSimulator.UI.OnboardingFlow.IsPractice) return;
             string json = JsonUtility.ToJson(data, prettyPrint: true);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (DevBlocks(SavePath, "เขียน")) return;
@@ -91,6 +92,7 @@ namespace NisitSimulator.SaveLoad
 
         public static void DeleteSave()
         {
+            if (NisitSimulator.UI.OnboardingFlow.IsPractice) return;
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (DevBlocks(SavePath, "ลบ")) return;
 #endif
@@ -108,6 +110,7 @@ namespace NisitSimulator.SaveLoad
         // ลบเซฟช่องที่ระบุ (ใช้ปุ่มลบในหน้าโหลดเซฟ)
         public static void DeleteSlot(int slot)
         {
+            if (NisitSimulator.UI.OnboardingFlow.IsPractice) return;
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (DevBlocks(PathFor(slot), "ลบ")) return;
 #endif

@@ -166,10 +166,7 @@ namespace NisitSimulator.UI
 
         private void StartNewGame()
         {
-            SaveSystem.DeleteSave();
-            GameSession.PendingLoad = false;
-            GameSession.IsContinue = false;   // เกมใหม่ → รับเงินตั้งต้น
-            SceneManager.LoadScene(GameSession.GameplayScene);
+            OnboardingFlow.BeginNewGame();
         }
 
         // เล่นต่อจากเซฟ

@@ -1,0 +1,1 @@
+using UnityEngine; namespace NisitSimulator.UI { public class TutorialCheckpoint : MonoBehaviour, NisitSimulator.Interaction.IInteractable { public OnboardingTutorial tutorial; public string GetPrompt() => "กด E เพื่ออ่านป้ายต้อนรับ"; public void Interact(GameObject interactor) { tutorial.CheckpointReached(interactor); HUDController.Toast("ยินดีต้อนรับ! โต้ตอบสำเร็จแล้ว"); } } }

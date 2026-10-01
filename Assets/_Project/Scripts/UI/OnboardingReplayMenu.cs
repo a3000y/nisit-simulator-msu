@@ -1,0 +1,1 @@
+using UnityEngine; using UnityEngine.UI; namespace NisitSimulator.UI { public class OnboardingReplayMenu : MonoBehaviour { public Button replayButton; void Start() { replayButton.onClick.AddListener(OnboardingFlow.BeginReplay); } } }
