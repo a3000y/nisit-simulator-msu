@@ -48,7 +48,7 @@ namespace NisitSimulator.Net
                     stats.ChangeSatisfaction(satPerTick);
                     stats.ChangeKnowledge(knowledgePerTick);
                 }
-                HUDController.Toast($"เรียนกับเพื่อน! ความรู้ +{knowledgePerTick:0} พอใจ +{satPerTick:0} 🤝");
+                HUDController.Toast($"เรียนกับเพื่อน! EXP +{knowledgePerTick:0} พอใจ +{satPerTick:0} 🤝");
             }
         }
 

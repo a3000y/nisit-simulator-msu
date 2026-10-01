@@ -31,7 +31,7 @@ namespace NisitSimulator.Interaction
         public float rewardEveryGameMinutes = 60f;
         [Tooltip("บังคับให้ผลทันทีครั้งเดียว แม้เป็นกิจกรรมที่ให้ความรู้")]
         public bool forceInstant = false;
-        [Tooltip("พลังงานเหลือต่ำกว่านี้จะลุกเอง กันนั่งเรียนเพลินจนพลังงานหมดแล้ว Game Over")]
+        [Tooltip("พลังงานเหลือต่ำกว่านี้จะลุกเอง กันนั่งเรียนเพลินจนหมดแรง")]
         public float minEnergyToContinue = 8f;
 
         private bool _seated;
@@ -54,6 +54,12 @@ namespace NisitSimulator.Interaction
             else
             {
                 if (act.IsBusy) return;                 // กำลังนั่งที่อื่นอยู่
+                // กิจกรรมที่ใช้พลังงาน (เรียน/ออกกำลังกาย/ฯลฯ) — ตรวจก่อนนั่ง ก่อนหักค่า/ให้รางวัล · หมดแรง = ปฏิเสธพร้อมเหตุผล
+                if (UsesEnergy)
+                {
+                    float need = IsOverTime ? minEnergyToContinue + Mathf.Max(0f, -energyChange) : Mathf.Max(0f, -energyChange);
+                    if (!PlayerExhaustion.CanStartEnergyActivity(interactor, need, activityName, out var why)) { HUDController.Toast(why); return; }
+                }
                 var t = seat != null ? seat : transform;
                 act.Sit(t.position + Vector3.up * sitYOffset, t.rotation);
                 _seated = true;
@@ -61,7 +67,7 @@ namespace NisitSimulator.Interaction
                 _accum = 0f;
 
                 if (IsOverTime)
-                    HUDController.Toast($"เริ่ม{activityName}... นั่งค้างไว้เพื่อสะสมความรู้");
+                    HUDController.Toast($"เริ่ม{activityName}... นั่งค้างไว้เพื่อสะสม EXP");
                 else
                     ApplyEffect(interactor);   // กินข้าว / นั่งพัก — ได้ผลทันทีเหมือนเดิม
             }
@@ -73,6 +79,8 @@ namespace NisitSimulator.Interaction
         // เกมจึงไม่เหลือการตัดสินใจอะไรเลย กลายเป็นแค่ฉากไว้เดินถ่ายรูป
         // พอผูกกับเวลา การเรียนจึงแย่งเวลากับกินข้าว นอน ทำงาน เข้าสังคม — กลายเป็นวงจรจริง
         private bool IsOverTime => !forceInstant && knowledgeChange > 0f && rewardEveryGameMinutes > 0f;
+        // ใช้พลังงาน = หักพลังงาน หรือเป็นการเรียน (กิน/นั่งพัก ที่ไม่หักพลังงานยังทำได้ตอนหมดแรง)
+        private bool UsesEnergy => energyChange < 0f || knowledgeChange > 0f;
 
         void Start()
         {
@@ -83,6 +91,17 @@ namespace NisitSimulator.Interaction
         {
             if (!_seated || !IsOverTime || _who == null) return;
             if (GameManager.Instance != null && !GameManager.Instance.IsActive) return;
+
+            // หมดแรงระหว่างนั่ง (เช่น เหตุการณ์หักพลังงาน) → ลุกอย่างปลอดภัย ไม่ให้รางวัลรอบที่ยังไม่ครบ
+            var ex = _who.GetComponent<PlayerExhaustion>();
+            if (ex != null && ex.IsExhausted)
+            {
+                var a = _who.GetComponent<PlayerActivity>();
+                if (a != null) a.Stand();
+                HUDController.Toast($"หมดแรง หยุด{activityName}แล้ว");
+                StopSitting();
+                return;
+            }
 
             float speed = _clock != null ? _clock.gameMinutesPerRealSecond : 1f;
             _accum += Time.deltaTime * speed;
@@ -135,7 +154,7 @@ namespace NisitSimulator.Interaction
         private string BuildToast(float actualKnowledge)
         {
             var parts = new List<string>();
-            if (actualKnowledge != 0f)    parts.Add($"ความรู้ {actualKnowledge:+0.#;-0.#}");
+            if (actualKnowledge != 0f)    parts.Add($"EXP {actualKnowledge:+0.#;-0.#}");
             if (energyChange != 0f)       parts.Add($"พลังงาน {energyChange:+0;-0}");
             if (hungerChange != 0f)       parts.Add($"ความอิ่ม {hungerChange:+0;-0}");
             if (satisfactionChange != 0f) parts.Add($"พอใจ {satisfactionChange:+0;-0}");

@@ -43,7 +43,6 @@ namespace NisitSimulator.UI
 
             if (stats.Money > lastMoney) Spawn($"+{stats.Money - lastMoney}฿", new Color(1f, 0.85f, 0.3f));
             if (stats.Exp > lastExp) Spawn($"+{stats.Exp - lastExp} EXP", new Color(0.75f, 0.85f, 1f));
-            if (stats.Knowledge - lastKnow >= 1f) Spawn($"+{Mathf.RoundToInt(stats.Knowledge - lastKnow)} ความรู้", new Color(0.62f, 0.95f, 0.72f));
 
             lastMoney = stats.Money; lastExp = stats.Exp; lastKnow = stats.Knowledge;
         }

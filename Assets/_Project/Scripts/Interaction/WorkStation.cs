@@ -45,9 +45,10 @@ namespace NisitSimulator.Interaction
                 HUDController.Toast($"วันนี้ทำงาน {jobName} ครบแล้ว ({shiftsPerDay} กะ)");
                 return;
             }
-            if (interactor.TryGetComponent<PlayerStats>(out var pre) && pre.Energy < energyCost)
+            // หมดแรง/พลังงานไม่พอ → ปฏิเสธก่อนนับกะ ก่อนจ่ายค่าจ้าง
+            if (!PlayerExhaustion.CanStartEnergyActivity(interactor, energyCost, "ทำงาน", out var why))
             {
-                HUDController.Toast("พลังงานไม่พอทำงาน ไปพักผ่อนก่อน");
+                HUDController.Toast(why);
                 return;
             }
 

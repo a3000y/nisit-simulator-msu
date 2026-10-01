@@ -60,3 +60,29 @@ crashlytics-build.properties
 .idea/
 Thumbs.db
 .DS_Store
+
+# ===== Added for nisit-simulator upload (2026-09-30) =====
+# Unity generated IDE solution / project files
+*.slnx
+.vs/
+*.sln.DotSettings.user
+
+# Profiler / memory captures and recordings made while testing
+/[Pp]rofiler[Cc]aptures/
+/[Rr]ecordings/
+*.data.raw
+
+# Logs and crash dumps produced while playing / building
+*.log
+*.dmp
+crashlytics-build.properties
+
+# Test / dev save files (game normally saves to persistentDataPath, outside the project)
+nisit_save_*.json
+dev_profile_save.json
+/dev_test/
+
+
+# ===== Multiplayer test harness (local only: dev build + test logs/saves) =====
+/Build_MPTest/
+/MPTestRuns/

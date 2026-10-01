@@ -80,7 +80,7 @@ namespace NisitSimulator.UI
             sb.AppendLine($"ให้ของขวัญ: {s.GetInt("gifts")} ครั้ง");
             sb.AppendLine($"เพื่อน: {friends} คน");
             sb.AppendLine($"เงินที่หาได้รวม: {s.GetInt("moneyEarned"):n0}฿");
-            sb.AppendLine($"ความรู้สะสมรวม: {s.GetInt("knowledgeGained"):n0}");
+            sb.AppendLine($"EXP สะสมรวม: {s.GetInt("knowledgeGained"):n0}");
             sb.AppendLine($"ทำภารกิจครบทั้งวัน: {s.GetInt("allQuestDays")} วัน (ติดกันสูงสุด {s.GetInt("bestStreak")})");
             if (LevelSystem.Instance != null)
             {

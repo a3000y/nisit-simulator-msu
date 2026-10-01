@@ -16,7 +16,7 @@ namespace NisitSimulator.Systems
 
         public static readonly Def[] All =
         {
-            new Def { id = "brain",    name = "หัวไว",          desc = "ได้ความรู้เพิ่ม +8%" },
+            new Def { id = "brain",    name = "หัวไว",          desc = "ได้รับ EXP เพิ่ม +8%" },
             new Def { id = "stamina",  name = "อึด",            desc = "พลังงานลดช้าลง 10%" },
             new Def { id = "appetite", name = "กินน้อย",        desc = "หิวช้าลง 10%" },
             new Def { id = "calm",     name = "ใจเย็น",         desc = "เครียดขึ้นช้าลง 12%" },

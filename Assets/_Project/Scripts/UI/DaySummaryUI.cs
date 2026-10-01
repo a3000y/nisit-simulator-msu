@@ -99,7 +99,6 @@ namespace NisitSimulator.UI
 
             var L = new System.Text.StringBuilder();
             var V = new System.Text.StringBuilder();
-            L.AppendLine("ความรู้");         V.AppendLine($"<color=#3A9E60>+{kGain:0}</color>");
             L.AppendLine("เงินที่ได้");       V.AppendLine($"<color=#3A9E60>+{moneyIn:n0}฿</color>  <size=80%><color=#8A83A6>ใช้ไป {moneyOut:n0}฿</color></size>");
             L.AppendLine("EXP");             V.AppendLine($"<color=#3A9E60>+{xpGain}</color>  <size=80%><color=#8A83A6>{(lv != null ? lv.ProgressText() : "")}</color></size>");
             if (lv != null && lv.Level > levelAtStart) { L.AppendLine("เลเวล"); V.AppendLine($"<color=#D9922B>Lv.{levelAtStart} → Lv.{lv.Level}</color>"); }

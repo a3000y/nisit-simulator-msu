@@ -32,7 +32,8 @@ namespace NisitSimulator.Net
         void Update()
         {
             var nm = NetworkManager.Singleton;
-            bool connected = nm != null && (nm.IsHost || nm.IsClient || nm.IsServer);
+            // "เข้าห้องแล้ว" = Host หรือ Client ที่เชื่อมต่อสำเร็จจริง (ระหว่างกำลังต่อ ยังโชว์หน้าสร้าง/เข้าห้อง + สถานะ "กำลังเชื่อมต่อ")
+            bool connected = nm != null && (nm.IsHost || nm.IsServer || nm.IsConnectedClient);
             bool isHost = nm != null && nm.IsHost;
 
             // 2 ขั้น: ยังไม่ต่อ = โชว์สร้าง/เข้าห้อง · ต่อแล้ว = โชว์แต่งตัว
@@ -76,7 +77,7 @@ namespace NisitSimulator.Net
         void BackToMenu()
         {
             var nm = NetworkManager.Singleton;
-            if (nm != null && (nm.IsHost || nm.IsClient || nm.IsServer)) nm.Shutdown();
+            if (nm != null && (nm.IsHost || nm.IsClient || nm.IsServer)) { WorldTimeSync.ExpectDisconnect = true; nm.Shutdown(); }
             SceneManager.LoadScene(GameSession.MenuScene);
         }
     }

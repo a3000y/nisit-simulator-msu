@@ -66,6 +66,10 @@ namespace NisitSimulator.SaveLoad
             var fx = Object.FindFirstObjectByType<PlayerEffects>();
             if (fx != null) { data.fxMove = fx.moveMult; data.fxDrain = fx.energyDrainMult; data.fxKnow = fx.knowledgeMult; }
 
+            // สถานะหมดแรง (กันโหลดแล้ววิ่งได้ทั้งที่ยังหมดแรง)
+            var exh = stats.GetComponent<PlayerExhaustion>();
+            data.exhausted = exh != null && exh.IsExhausted;
+
             // ความสัมพันธ์กับ NPC
             var rel = Object.FindFirstObjectByType<RelationshipManager>();
             if (rel != null) rel.CollectSave(data);
@@ -102,8 +106,12 @@ namespace NisitSimulator.SaveLoad
 
             var stats = Object.FindFirstObjectByType<PlayerStats>();
             if (stats != null)
+            {
                 stats.LoadState(data.energy, data.health, data.hunger, data.knowledge,
                                 data.satisfaction, data.money, data.exp, data.stress);
+                // พลังงาน 0 / เซฟที่หมดแรงค้าง → เข้าสถานะหมดแรง (ไม่ใช่ Game Over) · ไม่ฟื้นพลัง/ไม่ข้ามเวลา
+                PlayerExhaustion.EnsureOn(stats.gameObject).RestoreFromSave(data.exhausted);
+            }
 
             // คืน "สอบที่ทำแล้ว" ก่อน RestoreState (เพราะ RestoreState จะยิง OnDayInYearChanged → เช็กว่าจะเปิดสอบไหม)
             var exam = Object.FindFirstObjectByType<ExamController>();

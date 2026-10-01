@@ -93,7 +93,7 @@ namespace NisitSimulator.UI
                     break;
                 case EndReason.Flunked:
                     title = "FLUNKED OUT"; color = new Color(0.85f, 0.25f, 0.25f);
-                    msg = "ความรู้ไม่ถึงเป้าหมาย คุณถูกรีไทร์ ลองใหม่อีกครั้ง!";
+                    msg = "EXP ไม่ถึงเป้าหมาย คุณถูกรีไทร์ ลองใหม่อีกครั้ง!";
                     break;
                 case EndReason.RetiredGPA:
                     title = "RETIRED"; color = new Color(0.85f, 0.25f, 0.25f);

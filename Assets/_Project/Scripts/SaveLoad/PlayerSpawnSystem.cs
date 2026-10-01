@@ -66,8 +66,9 @@ namespace NisitSimulator.SaveLoad
             }
             else
             {
-                SpawnAtDorm(p, NetworkSlotIndex());
-                if (loaded == null) { LastSpawnReason = "new_game_dorm"; Debug.Log("[Spawn] เกมใหม่: เกิดที่หอพัก"); }
+                int slot = NetworkSlotIndex();
+                SpawnAtDorm(p, slot);
+                if (loaded == null) { LastSpawnReason = "new_game_dorm_slot" + slot; Debug.Log($"[Spawn] เกมใหม่: เกิดที่หอพัก (ช่อง {slot}) {p.transform.position}"); }
                 else { LastSpawnReason = "fallback_dorm: " + why; Debug.LogWarning($"[Spawn] ตำแหน่งในเซฟใช้ไม่ได้ ({why}) → ใช้จุดเกิดหอพักแทน (ความคืบหน้าอื่นคืนครบ)"); }
             }
 
@@ -244,13 +245,27 @@ namespace NisitSimulator.SaveLoad
         }
 
         // ---------- Multiplayer: ผู้เล่นแต่ละเครื่องใช้จุดเกิดคนละจุด (ไม่ซ้อนกัน) ----------
+        //   ใช้ "ลำดับ" ของผู้เล่นในห้อง (เรียง ClientId ของตัวละครผู้เล่นที่ทุกเครื่องเห็นเหมือนกัน) — ไม่ใช้ ClientId % จำนวนช่องตรง ๆ
+        //   เดิม: ClientId ของ NGO ไม่นำกลับมาใช้ซ้ำ (หลุด/เข้าใหม่ในล็อบบี้ = เลขเพิ่มไปเรื่อย ๆ) → id 4 ได้ช่อง 0 ซ้อนกับ Host
         public static int NetworkSlotIndex()
         {
             var nm = Unity.Netcode.NetworkManager.Singleton;
             if (nm == null || !nm.IsClient || !nm.IsConnectedClient) return 0;
             var dorm = DormSpawnPoint.Main;
             int n = dorm != null ? dorm.SlotCount : 1;
-            return (int)(nm.LocalClientId % (ulong)Mathf.Max(1, n));
+            var ids = new System.Collections.Generic.List<ulong>();
+            foreach (var no in Object.FindObjectsByType<Unity.Netcode.NetworkObject>(FindObjectsSortMode.None))
+                if (no.IsPlayerObject && !ids.Contains(no.OwnerClientId)) ids.Add(no.OwnerClientId);
+            return SlotFor(nm.LocalClientId, ids, n);
+        }
+
+        // ช่องหอพักของผู้เล่น = ลำดับของ ClientId ตัวเองในรายชื่อผู้เล่นทั้งหมด (ฟังก์ชันล้วน ทดสอบได้)
+        public static int SlotFor(ulong localId, System.Collections.Generic.IEnumerable<ulong> playerIds, int slotCount)
+        {
+            var list = new System.Collections.Generic.List<ulong>(playerIds);
+            if (!list.Contains(localId)) list.Add(localId);
+            list.Sort();
+            return list.IndexOf(localId) % Mathf.Max(1, slotCount);
         }
 
         static bool IsFinite(Vector3 v) =>

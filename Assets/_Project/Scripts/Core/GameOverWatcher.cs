@@ -3,7 +3,8 @@ using NisitSimulator.Stats;
 
 namespace NisitSimulator.Core
 {
-    // เฝ้าดูสถานะวิกฤต — เมื่อพลังงานหรือสุขภาพหมด สั่งเกมเข้าสู่ Game Over
+    // เฝ้าดูสถานะวิกฤต — เมื่อสุขภาพหมด สั่งเกมเข้าสู่ Game Over
+    //   พลังงานหมดไม่จบเกมแล้ว (PlayerStats ไม่ยิง OnCriticalState จากพลังงาน → เข้าสถานะหมดแรงของ PlayerExhaustion)
     // ใส่ไว้ที่ GameManager (หรือ object ใดก็ได้ในฉาก)
     public class GameOverWatcher : MonoBehaviour
     {
@@ -27,7 +28,7 @@ namespace NisitSimulator.Core
             if (GameManager.Instance == null) return;
 
             GameManager.Instance.EndGame(EndReason.Died);
-            Debug.Log("<color=red>[GameOver] พลังงาน/สุขภาพหมด! (ฉาก 6 - เสียชีวิต)</color>");
+            Debug.Log("<color=red>[GameOver] สุขภาพหมด! (ฉาก 6 - เสียชีวิต)</color>");
         }
     }
 }

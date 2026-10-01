@@ -18,6 +18,10 @@ namespace NisitSimulator.SaveLoad
         public static bool IsContinue = false;   // true = เข้าเกมแบบ "เล่นต่อ" — ไม่ถูกกิน ใช้เช็คตอนเล่น
                                                  //   (เช่น DailyAllowance ไม่ให้เงินตั้งต้นซ้ำ) กันปัญหาลำดับ Start()
 
+        // true = ฉากเล่นเกมรอบนี้เริ่มจากห้อง Multiplayer (ตั้งโดย GameplayBootstrap ตอนเข้าฉาก · คงค่าไว้จนเข้าเกมรอบใหม่)
+        //   ใช้แยกไฟล์ autosave ของโหมดหลายคนออกจากช่องเซฟเล่นคนเดียว — ห้องหลายคนเริ่มเกมใหม่เสมอ จึงห้ามเขียนทับ/ลบเซฟคนเดียว
+        public static bool IsMultiplayerGame = false;
+
         public static bool OpenNetworkOnStart = false;  // true = เปิดแผง Multiplayer (F3) อัตโนมัติตอนเข้าเกม
                                                         //   (ตั้งจากปุ่ม "เล่นหลายคน" ในเมนู) NetworkUI อ่านครั้งเดียว
 

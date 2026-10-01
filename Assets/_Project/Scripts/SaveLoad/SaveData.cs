@@ -56,6 +56,10 @@ namespace NisitSimulator.SaveLoad
         // ===== ผลกระทบทั้งวัน (PlayerEffects: ป่วย/ไฟแรง) =====
         public float fxMove = 1f, fxDrain = 1f, fxKnow = 1f;
 
+        // ===== สถานะหมดแรง (PlayerExhaustion) — เซฟเก่าไม่มี = false → คำนวณคืนจากพลังงาน (0 = หมดแรง) =====
+        //   ไม่เก็บ "การพักที่ค้าง" — การพักให้ผลครั้งเดียวตอนสำเร็จ แล้วค่อยเซฟ → โหลดแล้วไม่ได้ผลฟื้น/ข้ามเวลาซ้ำ
+        public bool exhausted;
+
         // ===== ความสัมพันธ์กับ NPC (id -> คะแนนสนิท) =====
         public List<string> relIds = new List<string>();
         public List<int> relPoints = new List<int>();

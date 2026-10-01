@@ -407,8 +407,11 @@ namespace NisitSimulator.TimeSystem
         void Validate()
         {
             if (sun == null) Debug.LogWarning("[DayNight] ไม่พบ Directional Light หลัก — ระบบจะไม่หมุนแสง");
+#if UNITY_EDITOR
+            // Light.lightmapBakeType มีเฉพาะใน Editor — ห่อไว้ไม่ให้ Player Build คอมไพล์ไม่ผ่าน
             else if (sun.lightmapBakeType == LightmapBakeType.Baked)
                 Debug.LogWarning("[DayNight] Directional Light ตั้งเป็น Baked — แสงที่อบไว้จะไม่เปลี่ยนตามเวลา (ควรเป็น Realtime/Mixed)");
+#endif
             if (LightmapSettings.lightmaps != null && LightmapSettings.lightmaps.Length > 0)
                 Debug.LogWarning("[DayNight] ฉากมี lightmap ที่อบไว้ — ส่วนที่อบไว้จะไม่เปลี่ยนตามเวลา มีผลเฉพาะแสง realtime/ambient");
         }

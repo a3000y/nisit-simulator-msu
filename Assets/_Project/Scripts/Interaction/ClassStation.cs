@@ -88,6 +88,8 @@ namespace NisitSimulator.Interaction
             var action = interactor.GetComponent<PlayerActionController>()
                          ?? interactor.AddComponent<PlayerActionController>();
             if (action.IsBusy) { HUDController.Toast("กำลังทำกิจกรรมอยู่"); return; }
+            // ตรวจพลังงานก่อนนับเข้าเรียน (ไม่เสียสิทธิ์คาบนี้ถ้าถูกปฏิเสธ) · หักพลังงานตอนเรียนจบ → ได้ผลครั้งเดียวแล้วค่อยหมดแรงถ้าเหลือ 0
+            if (!PlayerExhaustion.CanStartEnergyActivity(interactor, energyCost, "เข้าเรียน", out var why)) { HUDController.Toast(why); return; }
 
             attendedToday.Add(session);
             HUDController.Toast("เข้าเรียน... ตั้งใจฟังเลกเชอร์");
@@ -114,7 +116,7 @@ namespace NisitSimulator.Interaction
                 StatsTracker.Instance.Add("classes", 1);
                 GameplayEvents.Raise(GameplayEvents.Class);
 
-                HUDController.Toast($"เรียนจบคาบ +{k:0} ความรู้"
+                HUDController.Toast($"เรียนจบคาบ +{k:0} EXP"
                     + (kMult > 1f ? " (ไฟแรง!)" : "")
                     + (closeFriends > 0 ? $" (เพื่อนติว +{Mathf.Min(closeFriends,5)*5}%)" : "")
                     + (k < want - 0.05f ? " (เครียดมาก เรียนได้น้อยลง)" : "")

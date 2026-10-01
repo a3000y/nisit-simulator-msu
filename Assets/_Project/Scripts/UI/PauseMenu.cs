@@ -53,6 +53,7 @@ namespace NisitSimulator.UI
         {
             isOpen = true;
             if (panel != null) panel.SetActive(true);
+            ShowMultiplayerNote();
             Cursor.visible = true; Cursor.lockState = CursorLockMode.None;
             if (GameManager.Instance != null) GameManager.Instance.PauseGame();   // State=Paused → timeScale=0
         }
@@ -63,6 +64,30 @@ namespace NisitSimulator.UI
             if (settingsPanel != null) settingsPanel.SetActive(false);
             if (panel != null) panel.SetActive(false);
             if (GameManager.Instance != null) GameManager.Instance.ResumeGame();   // → timeScale=1
+        }
+
+        // Multiplayer: Pause หยุดแค่เครื่องนี้ — บอกผู้เล่นว่าโลก/เวลายังเดินต่อสำหรับทุกคน (Host ไม่หยุดเวลาโลก ดู GameClock)
+        TMPro.TMP_Text mpNote;
+        void ShowMultiplayerNote()
+        {
+            var sync = NisitSimulator.Net.WorldTimeSync.Instance;
+            bool mp = sync != null && sync.IsMultiplayerSession;
+            if (mp && mpNote == null && panel != null)
+            {
+                var src = panel.GetComponentInChildren<TMPro.TMP_Text>(true);
+                var go = new GameObject("MPPauseNote", typeof(RectTransform));
+                go.transform.SetParent(panel.transform, false);
+                var rt = (RectTransform)go.transform;
+                rt.anchorMin = new Vector2(0.5f, 0f); rt.anchorMax = new Vector2(0.5f, 0f); rt.pivot = new Vector2(0.5f, 0f);
+                rt.anchoredPosition = new Vector2(0f, 24f); rt.sizeDelta = new Vector2(900f, 60f);
+                mpNote = go.AddComponent<TMPro.TextMeshProUGUI>();
+                if (src != null) mpNote.font = src.font;
+                mpNote.fontSize = 24f; mpNote.alignment = TMPro.TextAlignmentOptions.Center;
+                mpNote.color = new Color(0.95f, 0.45f, 0.35f);
+                mpNote.raycastTarget = false;
+                mpNote.text = "กำลังเล่นหลายคน — โลกและเวลายังเดินต่อ ผู้เล่นคนอื่นไม่ได้หยุดตามคุณ";
+            }
+            if (mpNote != null) mpNote.gameObject.SetActive(mp);
         }
 
         void ToMenu()
@@ -76,7 +101,7 @@ namespace NisitSimulator.UI
 
             Time.timeScale = 1f;
             var nm = Unity.Netcode.NetworkManager.Singleton;
-            if (nm != null && (nm.IsClient || nm.IsServer)) nm.Shutdown();   // ตัดการเชื่อมต่อ MP ก่อนออก
+            if (nm != null && (nm.IsClient || nm.IsServer)) { NisitSimulator.Net.WorldTimeSync.ExpectDisconnect = true; nm.Shutdown(); }   // ตัดการเชื่อมต่อ MP ก่อนออก
             SceneManager.LoadScene(NisitSimulator.SaveLoad.GameSession.MenuScene);
         }
 

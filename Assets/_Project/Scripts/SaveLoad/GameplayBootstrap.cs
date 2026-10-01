@@ -15,9 +15,17 @@ namespace NisitSimulator.SaveLoad
 
         void Start()
         {
+            // เข้าฉากนี้จากห้อง Multiplayer ไหม (เชื่อมต่ออยู่ตอนโหลดฉาก) → autosave แยกไฟล์ ไม่ทับ/ลบเซฟเล่นคนเดียว
+            var netMgr = Unity.Netcode.NetworkManager.Singleton;
+            GameSession.IsMultiplayerGame = netMgr != null && netMgr.IsListening;
+
             // ระบบลงทะเบียนเรียน — สร้างก่อนโหลดเซฟ เพื่อรับข้อมูลการเรียนคืน (เกมใหม่ = เริ่มปี 1 ภาค 1 เปิดลงทะเบียน)
             NisitSimulator.Academics.CourseRegistrar.EnsureExists();
             DayNightCycle.EnsureExists();                  // แสงกลางวัน–กลางคืน (ฟังนาฬิกาเกมก่อนคืนเวลาจากเซฟ)
+
+            // สถานะหมดแรง (แทน Game Over เมื่อพลังงาน 0) — ใส่ให้ Player ก่อนโหลดเซฟ ถ้าในฉากยังไม่มีคอมโพเนนต์
+            var playerStats = Object.FindFirstObjectByType<NisitSimulator.Stats.PlayerStats>();
+            if (playerStats != null) NisitSimulator.Player.PlayerExhaustion.EnsureOn(playerStats.gameObject);
 
             // ===== ลำดับเข้าฉาก: คืนสถานะจากเซฟ → วางตัวละคร (ที่เดียว) → แสงตรงเวลา ก่อนเฟรมแรกถูกวาด =====
             var loaded = SaveManager.ApplyIfPending();     // null = เกมใหม่ (เวลาเริ่มตาม GameClock.startHour = 07:00)

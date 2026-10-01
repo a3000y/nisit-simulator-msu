@@ -23,6 +23,10 @@ namespace NisitSimulator.Net
         const string MsgWake = "nisit_sleep_wake";
 
         public static WorldTimeSync Instance { get; private set; }
+
+        // ผู้เล่นกดออกเอง (เมนูหยุด/ปุ่มออกจากห้อง) — ไม่ต้องแจ้ง "โฮสต์ออก" ซ้ำ
+        public static bool ExpectDisconnect;
+        [Tooltip("วินาทีจริงที่แสดงข้อความก่อนกลับเมนูเมื่อหลุดจาก Host")] public float returnToMenuDelay = 3f;
         public static bool IsClientFollower => GameClock.NetworkFollower;
 
         [Tooltip("Host ส่งเวลาโลกทุกกี่วินาทีจริง")] public float broadcastInterval = 1f;
@@ -105,6 +109,8 @@ namespace NisitSimulator.Net
             cmm.RegisterNamedMessageHandler(MsgStatus, OnStatusMsg);
             cmm.RegisterNamedMessageHandler(MsgWake, OnWakeMsg);
             nm.OnClientDisconnectCallback += OnClientDisconnect;
+            nm.OnClientStopped += OnLocalStopped;
+            ExpectDisconnect = false;   // เข้าฉากเกมพร้อมการเชื่อมต่อใหม่ — ล้างค่าค้างจากการกดออกครั้งก่อน (เช่น ออกจากห้องในล็อบบี้)
             registered = true;
             firstSync = true;
             ready.Clear();
@@ -124,7 +130,30 @@ namespace NisitSimulator.Net
                 cmm.UnregisterNamedMessageHandler(MsgWake);
             }
             nm.OnClientDisconnectCallback -= OnClientDisconnect;
+            nm.OnClientStopped -= OnLocalStopped;
             ready.Clear();
+        }
+
+        // ---------- Client หลุดจาก Host (Host ออก/ปิดเกม/เน็ตหลุด) ----------
+        //   ไม่มี Host Migration → แจ้งผู้เล่น แล้วพากลับเมนูหลักอย่างปลอดภัย (เดิม: ค้างอยู่ในฉากโดยไม่มีข้อความ เวลาโลกหยุดซิงค์)
+        void OnLocalStopped(bool wasHost)
+        {
+            bool expected = ExpectDisconnect;
+            ExpectDisconnect = false;
+            if (wasHost || expected) return;
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != NisitSimulator.SaveLoad.GameSession.GameplayScene) return;
+            string reason = nm != null ? nm.DisconnectReason : "";
+            Debug.LogWarning("[Net] หลุดจากห้อง (Host ออก/เชื่อมต่อขาด) → กลับเมนูหลัก" + (string.IsNullOrEmpty(reason) ? "" : " · " + reason));
+            StartCoroutine(ReturnToMenu());
+        }
+
+        System.Collections.IEnumerator ReturnToMenu()
+        {
+            Time.timeScale = 1f;
+            NisitSimulator.UI.HUDController.Toast("การเชื่อมต่อกับโฮสต์สิ้นสุดแล้ว (โฮสต์ออกจากเกม) — กำลังกลับเมนูหลัก...");
+            NisitSimulator.SaveLoad.SaveManager.Save();   // บันทึกลงไฟล์ autosave ของโหมดหลายคน (ไม่แตะเซฟเล่นคนเดียว)
+            yield return new WaitForSecondsRealtime(returnToMenuDelay);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(NisitSimulator.SaveLoad.GameSession.MenuScene);
         }
 
         // ---------- Host → ทุกคน: เวลาโลก ----------
@@ -191,6 +220,7 @@ namespace NisitSimulator.Net
         {
             if (nm == null || !nm.IsServer) return;
             ready.Remove(id);
+            TradeRelay.ServerForgetClient(id);
             EvaluateSleep();
         }
 

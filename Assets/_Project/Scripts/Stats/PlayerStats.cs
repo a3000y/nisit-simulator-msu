@@ -40,7 +40,8 @@ namespace NisitSimulator.Stats
         public event Action<int> OnMoneyChanged;
         public event Action<int> OnExpChanged;
 
-        // event: ยิงเมื่อสถานะถึงจุดวิกฤต (พลังงาน/สุขภาพหมด) → ใช้ trigger Game Over
+        // event: ยิงเมื่อสุขภาพหมด → ใช้ trigger Game Over
+        //   พลังงานหมด "ไม่" ยิง event นี้แล้ว → เข้าสถานะหมดแรงแทน (PlayerExhaustion ฟัง OnEnergyChanged)
         public event Action OnCriticalState;
 
         void Start()
@@ -73,12 +74,14 @@ namespace NisitSimulator.Stats
 
         // คืนค่าความรู้ที่ได้จริงหลังหักความเครียดแล้ว
         // หักที่นี่ที่เดียว ผู้เรียกจึงไม่มีทางลืมใส่ และ UI เอาค่าที่คืนไปแสดงได้ตรงความจริง
-        public float ChangeKnowledge(float amount)
+public float ChangeKnowledge(float amount)
         {
-            if (amount > 0f) amount *= KnowledgeMultiplier * NisitSimulator.Systems.Perks.KnowledgeMul;   // หักเครียด + โบนัสความสามารถ "หัวไว" (เฉพาะขาได้)
-            knowledge = Mathf.Max(0f, knowledge + amount);
-            OnKnowledgeChanged?.Invoke(knowledge);
-            return amount;
+            if (amount > 0f)
+                amount *= KnowledgeMultiplier * NisitSimulator.Systems.Perks.KnowledgeMul;
+
+            int expDelta = Mathf.RoundToInt(amount);
+            AddExp(expDelta);
+            return expDelta;
         }
 
         public void ChangeSatisfaction(float amount)
@@ -108,17 +111,20 @@ namespace NisitSimulator.Stats
             return true;
         }
 
-        public void AddExp(int amount)
+public void AddExp(int amount)
         {
-            exp += amount;
+            if (amount == 0) return;
+            exp = Mathf.Max(0, exp + amount);
+            knowledge = exp; // เก็บ field เดิมไว้เพื่อความเข้ากันได้กับ scene/save เก่า
             OnExpChanged?.Invoke(exp);
+            OnKnowledgeChanged?.Invoke(exp);
         }
 
         // ---------- อ่านค่า (property) ----------
         public float Energy => energy;
         public float Health => health;
         public float Hunger => hunger;
-        public float Knowledge => knowledge;
+        public float Knowledge => exp; // compatibility alias: ความรู้เดิมคือ EXP ค่าเดียวกัน
         public float Satisfaction => satisfaction;
         public float Stress => stress;
 
@@ -138,17 +144,25 @@ namespace NisitSimulator.Stats
 
         // ---------- โหลดค่าจากเซฟ (M4) ----------
         // พารามิเตอร์ str เป็น optional เซฟเก่าที่ไม่มีความเครียดจึงโหลดได้ตามปกติ
-        public void LoadState(float e, float h, float hun, float know, float sat, int mon, int xp, float str = 0f)
+public void LoadState(float e, float h, float hun, float know, float sat, int mon, int xp, float str = 0f)
         {
-            energy = e; health = h; hunger = hun; knowledge = know;
-            satisfaction = sat; money = mon; exp = xp; stress = Mathf.Clamp(str, 0f, maxStress);
+            energy = Mathf.Clamp(e, 0f, maxEnergy);      // จำกัด 0..สูงสุด (เซฟพลังงาน 0 → หมดแรง ไม่ใช่ Game Over)
+            health = Mathf.Clamp(h, 0f, maxHealth);
+            hunger = Mathf.Clamp(hun, 0f, maxHunger);
+            satisfaction = sat;
+            money = mon;
+            stress = Mathf.Clamp(str, 0f, maxStress);
+
+            // เซฟเก่าเคยแยกความรู้กับ EXP: ใช้ค่าที่สูงกว่าเพื่อไม่ให้ความคืบหน้าหาย
+            exp = Mathf.Max(xp, Mathf.RoundToInt(know));
+            knowledge = exp;
             BroadcastAll();
         }
 
-        // เช็คว่าถึงจุดวิกฤตไหม (พลังงานหรือสุขภาพหมด)
+        // เช็คว่าถึงจุดวิกฤตไหม — เฉพาะสุขภาพหมด (พลังงาน 0 = หมดแรง พักแล้วเล่นต่อได้ ไม่จบเกม)
         private void CheckCritical()
         {
-            if (energy <= 0f || health <= 0f)
+            if (health <= 0f)
                 OnCriticalState?.Invoke();
         }
 
@@ -157,7 +171,7 @@ namespace NisitSimulator.Stats
             OnEnergyChanged?.Invoke(energy, maxEnergy);
             OnHealthChanged?.Invoke(health, maxHealth);
             OnHungerChanged?.Invoke(hunger, maxHunger);
-            OnKnowledgeChanged?.Invoke(knowledge);
+            OnKnowledgeChanged?.Invoke(exp);
             OnSatisfactionChanged?.Invoke(satisfaction);
             OnStressChanged?.Invoke(stress, maxStress);
             OnMoneyChanged?.Invoke(money);

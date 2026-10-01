@@ -151,6 +151,16 @@ namespace NisitSimulator.Interaction
             StartCoroutine(SleepRoutine(true));
         }
 
+        // จุดตื่น: เล่นคนเดียว = จุดข้างเตียงเดิม · Multiplayer = ช่องหอพักของผู้เล่นคนนี้ (เดิมทุกคนตื่นที่จุดเดียวกัน → ตัวละครซ้อนกัน)
+        static Transform WakePointFor(SleepStation st)
+        {
+            var sync = NisitSimulator.Net.WorldTimeSync.Instance;
+            var dorm = DormSpawnPoint.Main;
+            if (sync != null && sync.IsMultiplayerSession && dorm != null)
+                return dorm.GetSlot(PlayerSpawnSystem.NetworkSlotIndex());
+            return st.WakePoint;
+        }
+
         // ---------- Multiplayer ----------
         public void UpdateWaiting(int ready, int total)
         {
@@ -193,7 +203,7 @@ namespace NisitSimulator.Interaction
 
             station.ApplyWakeEffects(sleeper);                                           // ฟื้นสถานะ 1 ครั้ง
             PlaySleepAnim(false);
-            PlayerSpawnSystem.PlaceInDorm(sleeper, station.WakePoint);                  // ยืนข้างเตียง + กล้องตามทันที
+            PlayerSpawnSystem.PlaceInDorm(sleeper, WakePointFor(station));              // ยืนข้างเตียง + กล้องตามทันที
             if (DayNightCycle.Instance != null) DayNightCycle.Instance.ApplyNow();       // แสง/ท้องฟ้าตรงเวลาใหม่ทันที
 
             SaveManager.Save();   // บันทึกตามระบบเดิม (โหมด Dev = เขียนลงโปรไฟล์ทดสอบ ไม่ทับเซฟจริง)

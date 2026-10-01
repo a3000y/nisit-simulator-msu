@@ -376,7 +376,7 @@ namespace NisitSimulator.Systems
         // ---------- ภารกิจค่าสถานะ (สำรอง) ----------
         List<Quest> Templates() => new List<Quest>
         {
-            new Quest("ตั้งใจเรียน: ได้ความรู้ +60",   Metric.KnowledgeGain, 60f,  40, 20, 4f),
+            new Quest("ตั้งใจเรียน: ได้ EXP +60",   Metric.KnowledgeGain, 60f,  40, 20, 4f),
             new Quest("หารายได้: ได้เงิน +80฿",         Metric.MoneyEarn,     80f,  0,  25, 5f),
             new Quest("ใช้ชีวิตให้มีความสุข: พอใจถึง 70", Metric.SatisfactionReach, 70f, 30, 15, 0f),
             new Quest("อิ่มท้อง: ความอิ่มถึง 80",       Metric.HungerReach,   80f,  20, 10, 3f),
@@ -391,21 +391,21 @@ namespace NisitSimulator.Systems
                 case 1: return new List<Quest>   // น้องใหม่: ปรับตัว + รับน้อง
                 {
                     new Quest("รับน้อง: คุยทำความรู้จักเพื่อน 2 ครั้ง", GameplayEvents.Talk,  2, 40, 20, 5f),
-                    new Quest("ปรับตัวปี 1: ตั้งใจเรียน ได้ความรู้ +70", Metric.KnowledgeGain, 70f, 50, 25, 5f),
+                    new Quest("ปรับตัวปี 1: ตั้งใจเรียน ได้ EXP +70", Metric.KnowledgeGain, 70f, 50, 25, 5f),
                 };
                 case 2: return new List<Quest>   // ปี 2: วิชาเอก + ชมรม
                 {
                     new Quest("กิจกรรมชมรม: พักผ่อนกับเพื่อน 2 รอบ",   GameplayEvents.Relax, 2, 40, 25, 6f),
-                    new Quest("โปรเจกต์กลุ่ม: ได้ความรู้ +100",          Metric.KnowledgeGain, 100f, 70, 35, 6f),
+                    new Quest("โปรเจกต์กลุ่ม: ได้ EXP +100",          Metric.KnowledgeGain, 100f, 70, 35, 6f),
                 };
                 case 3: return new List<Quest>   // ปี 3: วิชาเข้มข้น + ฝึกงาน
                 {
                     new Quest("ฝึกงาน: ทำงานพาร์ทไทม์ 2 กะ",            GameplayEvents.Work,  2, 30, 40, 4f),
-                    new Quest("วิชาเอกเข้มข้น: ได้ความรู้ +130",         Metric.KnowledgeGain, 130f, 90, 45, 7f),
+                    new Quest("วิชาเอกเข้มข้น: ได้ EXP +130",         Metric.KnowledgeGain, 130f, 90, 45, 7f),
                 };
                 default: return new List<Quest>  // ปี 4: โปรเจกต์จบ + เตรียมทำงาน
                 {
-                    new Quest("โปรเจกต์จบ: ได้ความรู้ +150",            Metric.KnowledgeGain, 150f, 120, 60, 8f),
+                    new Quest("โปรเจกต์จบ: ได้ EXP +150",            Metric.KnowledgeGain, 150f, 120, 60, 8f),
                     new Quest("เตรียมเข้าทำงาน: มีเงินเก็บถึง 400฿",     Metric.MoneyReach,    400f,   0, 50, 8f),
                 };
             }

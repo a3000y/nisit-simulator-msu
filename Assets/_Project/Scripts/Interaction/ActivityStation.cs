@@ -31,6 +31,10 @@ namespace NisitSimulator.Interaction
             var action = interactor.GetComponent<PlayerActionController>()
                          ?? interactor.AddComponent<PlayerActionController>();
             if (action.IsBusy) { HUDController.Toast("กำลังทำกิจกรรมอยู่"); return; }
+            // กิจกรรมที่ใช้พลังงาน — ตรวจก่อนเริ่ม (ก่อนให้รางวัล) · หักพลังงานตอนจบ: ทำเสร็จ → ได้รางวัลครั้งเดียว → ถ้าเหลือ 0 ค่อยเข้าหมดแรง
+            if ((energyChange < 0f || knowledgeChange > 0f)
+                && !PlayerExhaustion.CanStartEnergyActivity(interactor, Mathf.Max(0f, -energyChange), activityName, out var why))
+            { HUDController.Toast(why); return; }
 
             HUDController.Toast($"กำลัง{activityName}...");
             if (actionStates != null && actionStates.Length > 0)

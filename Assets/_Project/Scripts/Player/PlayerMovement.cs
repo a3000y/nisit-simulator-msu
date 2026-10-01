@@ -42,6 +42,7 @@ namespace NisitSimulator.Player
             foreach (var p in animator.parameters) if (p.name == "Grounded") { hasGroundedParam = true; break; }
         }
         private PlayerEffects effects;          // ผลกระทบชั่วคราว (ป่วย ฯลฯ)
+        private PlayerExhaustion exhaustion;    // สถานะหมดแรง (ไม่มีคอมโพเนนต์ = ปกติ)
         private Vector3 velocity;
         // ซิงก์เสียงฝีเท้ากับกระดูกเท้าจริง (เล่นตอนเท้าลงต่ำสุด = แตะพื้น)
         private Transform leftFoot, rightFoot;
@@ -97,10 +98,15 @@ namespace NisitSimulator.Player
 
             Vector3 moveDir = (camForward * v + camRight * h).normalized;
 
-            // วิ่งเมื่อกด Shift (ป่วย = เดินช้าลง)
-            bool running = Input.GetKey(KeyCode.LeftShift);
+            // วิ่งเมื่อกด Shift (ป่วย = เดินช้าลง · หมดแรง = วิ่งไม่ได้ + เดินช้าลง)
+            if (exhaustion == null) exhaustion = GetComponent<PlayerExhaustion>();
+            bool exhausted = exhaustion != null && exhaustion.IsExhausted;
+            bool running = Input.GetKey(KeyCode.LeftShift) && !exhausted;
+            if (exhausted && Input.GetKeyDown(KeyCode.LeftShift)) exhaustion.NotifyBlocked("วิ่ง");
             float moveMult = effects != null ? effects.moveMult : 1f;
-            float speed = (running ? runSpeed : walkSpeed) * moveMult * NisitSimulator.Systems.Perks.MoveMul;   // "ขาไว"
+            // ตัวคูณหมดแรงเป็น "ตัวคูณแยก" อ่านค่าทุกเฟรม (ไม่สะสม) → ไม่เขียนทับอาการป่วย/ความสามารถ และไม่ลดซ้ำทุกเฟรม
+            float exhaustMult = exhaustion != null ? exhaustion.MoveSpeedMultiplier : 1f;
+            float speed = (running ? runSpeed : walkSpeed) * moveMult * NisitSimulator.Systems.Perks.MoveMul * exhaustMult;   // "ขาไว"
             controller.Move(moveDir * speed * Time.deltaTime);
 
             bool moving = moveDir.sqrMagnitude > 0.01f;
@@ -135,7 +141,8 @@ namespace NisitSimulator.Player
             if (controller.isGrounded)
             {
                 if (velocity.y < 0) velocity.y = -2f;
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (Input.GetKeyDown(KeyCode.Space) && exhausted) exhaustion.NotifyBlocked("กระโดด");   // หมดแรง = กระโดดไม่ได้
+                else if (Input.GetKeyDown(KeyCode.Space))
                 {
                     velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);   // สูตรความสูงกระโดด
                     NisitSimulator.Core.SFXManager.Jump();

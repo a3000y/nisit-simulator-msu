@@ -392,7 +392,7 @@ namespace NisitSimulator.Academics.ExamMinigame
                 stats.ChangeSatisfaction(sat);
                 if (money > 0) stats.ChangeMoney(money);
             }
-            LastRewardText = $"ความรู้ +{k:0}   EXP +{exp}" + (money > 0 ? $"   ทุน +{money}฿" : "") + (Mathf.Abs(sat) >= 0.5f ? $"   ความพึงพอใจ {(sat >= 0 ? "+" : "")}{sat:0}" : "");
+            LastRewardText = $"EXP +{Mathf.RoundToInt(k) + exp}" + (money > 0 ? $"   ทุน +{money}฿" : "") + (Mathf.Abs(sat) >= 0.5f ? $"   ความพึงพอใจ {(sat >= 0 ? "+" : "")}{sat:0}" : "");
         }
 
         // เรียกจาก ExamController.ResolveMissedExam (ข้ามวัน) — ส่งคำตอบที่มีอยู่

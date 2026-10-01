@@ -55,9 +55,26 @@ namespace NisitSimulator.TimeSystem
         void Update()
         {
             // เดินเวลาเฉพาะตอนเกมยังดำเนินอยู่ (หยุดเมื่อ pause/จบเกม)
-            if (GameManager.Instance != null && !GameManager.Instance.IsActive) return;
-            if (Suspended && !NetworkAuthoritative) return;   // อยู่ในห้องสอบมินิเกม (MP: Host ไม่หยุดเวลาโลกของทุกคน)
-            Step(Time.deltaTime * gameMinutesPerRealSecond);
+            //   MP (Host ที่มีผู้เล่นอื่น): เวลาโลกเป็นของทุกคน — Host เปิด Pause/หน้าต่างที่ตั้ง timeScale = 0 (ยืนยันนอน/เลือกความสามารถ ฯลฯ)
+            //   ต้องไม่หยุดโลกของผู้เล่นอื่น → เดินด้วยเวลาจริงแทน (หยุดเฉพาะจบเกม) · เล่นคนเดียว = พฤติกรรมเดิมทุกประการ
+            var gm = GameManager.Instance;
+            float dt = WorldDeltaSeconds(gm != null, gm != null ? gm.State : GameState.Playing, Suspended, NetworkAuthoritative,
+                                         Time.timeScale, Time.deltaTime, Time.unscaledDeltaTime, Time.maximumDeltaTime);
+            if (dt > 0f) Step(dt * gameMinutesPerRealSecond);
+        }
+
+        // วินาทีจริงที่นาฬิกาเครื่องนี้ควรเดินในเฟรมนี้ (0 = หยุด) — ฟังก์ชันล้วน ทดสอบได้
+        //   เล่นคนเดียว/Client: หยุดเมื่อเกมหยุด/จบ หรืออยู่ในห้องสอบ · ใช้ deltaTime (timeScale = 0 → ไม่เดิน) = พฤติกรรมเดิม
+        //   Host ที่มีผู้เล่นอื่น (hostWorld): Pause/หน้าต่างที่ตั้ง timeScale = 0/ห้องสอบ ไม่หยุดเวลาโลก · หยุดเฉพาะจบเกม
+        public static float WorldDeltaSeconds(bool hasGameManager, GameState state, bool suspended, bool hostWorld,
+                                              float timeScale, float deltaTime, float unscaledDeltaTime, float maxDeltaTime)
+        {
+            bool ended = state == GameState.GameOver || state == GameState.Win;
+            if (hasGameManager && ended) return 0f;
+            if (hasGameManager && state == GameState.Paused && !hostWorld) return 0f;
+            if (suspended && !hostWorld) return 0f;
+            if (hostWorld && timeScale <= 0f) return Mathf.Min(unscaledDeltaTime, maxDeltaTime);
+            return deltaTime;
         }
 
         // เดินเวลาในเกมไปข้างหน้า N นาที ด้วยขั้นตอนเดียวกับการเดินเวลาทุกเฟรม (ยิง OnTimeChanged / OnDayChanged ตามจริง)

@@ -4,7 +4,7 @@ namespace NisitSimulator.Core
     public enum EndReason
     {
         None,
-        Died,       // พลังงาน/สุขภาพหมด → Game Over (ฉาก 6)
+        Died,       // สุขภาพหมด → Game Over (ฉาก 6) · พลังงานหมด = หมดแรง ไม่จบเกม
         Flunked,    // ความรู้ไม่ถึงเป้าตอนสิ้นปี → Flunked Out (ฉาก 8)
         Graduated,  // ผ่านครบปี 4 → Graduation (ฉาก 7)
         RetiredGPA  // เกรดเฉลี่ยสะสม < 2.00 ตอนสิ้นปี (ตั้งแต่ปี 2) → รีไทร์ (ใช้หน้าจอเดียวกับ Flunked)

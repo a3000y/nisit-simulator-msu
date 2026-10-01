@@ -62,9 +62,9 @@ namespace NisitSimulator.Net
         public override void OnNetworkSpawn()
         {
             // สลับโมเดลตามที่ผู้เล่นเลือก (เฉพาะตัวที่มองเห็น = remote) ก่อน cache Animator
-            if (!IsOwner && netModel.Value >= 0) CharacterCatalog.Apply(transform, netModel.Value);
+            if (!IsOwner && netModel.Value >= 0) anim = CharacterCatalog.Apply(transform, netModel.Value);
 
-            anim = GetComponentInChildren<Animator>();
+            if (anim == null) anim = GetComponentInChildren<Animator>();
             if (anim != null) anim.applyRootMotion = false;   // กันหุ่นไถล/ลอย (ตำแหน่งมาจาก sync ไม่ใช่ root motion)
 
             if (IsOwner)
@@ -124,12 +124,21 @@ namespace NisitSimulator.Net
             go.transform.SetParent(transform, false);
             go.transform.localPosition = new Vector3(0f, 2.3f, 0f);
             var tmp = go.AddComponent<TextMeshPro>();
+            // Player Build ไม่มีฟอนต์ค่าเริ่มต้นของ TMP → ใช้ฟอนต์เดียวกับ UI ในฉาก (เดิมตั้ง outline แล้ว NullReference → OnNetworkSpawn หยุดกลางทาง)
+            if (tmp.font == null)
+            {
+                var any = FindAnyObjectByType<TextMeshProUGUI>();
+                if (any != null && any.font != null) tmp.font = any.font;
+            }
             tmp.text = ResolveName();
             tmp.fontSize = 3f;
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.color = Color.white;
-            tmp.outlineWidth = 0.2f;
-            tmp.outlineColor = new Color32(20, 22, 38, 255);
+            if (tmp.font != null)
+            {
+                tmp.outlineWidth = 0.2f;
+                tmp.outlineColor = new Color32(20, 22, 38, 255);
+            }
             tmp.rectTransform.sizeDelta = new Vector2(4f, 1f);
             nameTag = go.transform;
         }
@@ -231,8 +240,8 @@ namespace NisitSimulator.Net
         void OnModelChanged(int prev, int cur)
         {
             if (IsOwner) return;   // ตัวเราเปลี่ยนที่ Player จริง (PlayerModelSwapper) ไม่ใช่ avatar
-            CharacterCatalog.Apply(transform, cur);
-            anim = GetComponentInChildren<Animator>();
+            anim = CharacterCatalog.Apply(transform, cur);
+            if (anim == null) anim = GetComponentInChildren<Animator>();
             if (anim != null) anim.applyRootMotion = false;
             ApplyColor(gameObject, netColor.Value);   // ทาสีโมเดลใหม่
             CharacterAccessories.Apply(transform, CharacterAccessories.Unpack(netAcc.Value.ToString()));   // ใส่ของแต่งคืน

@@ -10,6 +10,8 @@ namespace NisitSimulator.SaveLoad
         // ที่อยู่ไฟล์เซฟตามช่อง (Windows: C:/Users/<user>/AppData/LocalLow/<company>/<game>/)
         //   ช่องปัจจุบันมาจาก GameSession.SaveSlot (เลือกในเมนู)
         static string PathFor(int slot) => Path.Combine(Application.persistentDataPath, $"nisit_save_{slot}.json");
+        // Multiplayer: autosave แยกไฟล์ (ไม่แตะช่องเซฟเล่นคนเดียว) — เดิมเขียนทับช่องที่เลือกไว้ล่าสุด และจบเกมใน MP = ลบเซฟคนเดียวทิ้ง
+        public static string MultiplayerPath => Path.Combine(Application.persistentDataPath, "nisit_mp_autosave.json");
         static string SavePath
         {
             get
@@ -17,6 +19,7 @@ namespace NisitSimulator.SaveLoad
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
                 if (!string.IsNullOrEmpty(DevPathOverride)) return DevPathOverride;   // โปรไฟล์ทดสอบ (Dev Panel)
 #endif
+                if (GameSession.IsMultiplayerGame) return MultiplayerPath;
                 return PathFor(GameSession.SaveSlot);
             }
         }

@@ -436,6 +436,22 @@ namespace NisitSimulator.DevTools
             }
             if (B("รีเฟรชช่องกรอก", 130)) fields.Clear();
             GUILayout.EndHorizontal();
+
+            // ---- หมดแรง (PlayerExhaustion) — ใช้ PlayerStats.ChangeEnergy เส้นทางเดียวกับเกมจริง ----
+            var exh = st.GetComponent<NisitSimulator.Player.PlayerExhaustion>();
+            if (exh != null)
+            {
+                float exitE = NisitSimulator.Player.ExhaustionRules.ExitEnergy(st.maxEnergy, exh.exitAtEnergyPercent);
+                Head($"หมดแรง: {(exh.IsExhausted ? "ใช่" : "ไม่")} · เข้า ≤ {exh.enterAtEnergy:0} · ออก ≥ {exitE:0.#} · เข้าแล้ว {exh.EnterCount} ครั้ง · พักสำเร็จ {exh.CompletedRests} ครั้ง · สถานะพัก {exh.State}");
+                GUILayout.BeginHorizontal();
+                if (B("ตั้งพลังงานเป็น 0", 200, can))
+                { var before = Snap(st); st.ChangeEnergy(-st.Energy); Diff(before, Snap(st)); fields.Clear(); Say(exh.IsExhausted, "พลังงาน 0 → หมดแรง=" + exh.IsExhausted + " · GameState=" + (GameManager.Instance != null ? GameManager.Instance.State.ToString() : "-")); }
+                if (B($"ตั้งต่ำกว่าเกณฑ์ฟื้นตัว ({Mathf.Max(0f, exitE - 5f):0.#})", 260, can))
+                { var before = Snap(st); st.ChangeEnergy(Mathf.Max(0f, exitE - 5f) - st.Energy); Diff(before, Snap(st)); fields.Clear(); Say(true, "พลังงาน " + st.Energy.ToString("0.#") + " · หมดแรง=" + exh.IsExhausted); }
+                if (B($"ฟื้นถึงเกณฑ์ออก ({exitE:0.#})", 220, can))
+                { var before = Snap(st); st.ChangeEnergy(exitE - st.Energy); Diff(before, Snap(st)); fields.Clear(); Say(!exh.IsExhausted, "พลังงาน " + st.Energy.ToString("0.#") + " · หมดแรง=" + exh.IsExhausted); }
+                GUILayout.EndHorizontal();
+            }
             if (lastChange.Count > 0)
             {
                 Head("ค่าก่อน → หลังแก้ไขล่าสุด");

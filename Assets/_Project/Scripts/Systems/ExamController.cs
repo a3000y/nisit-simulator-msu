@@ -364,7 +364,7 @@ private void RecalcGpa()
             }
             if (resultDetailText != null)
             {
-                string reward = $"ความรู้ +{kBonus:0}   EXP +{exp}";
+                string reward = $"EXP +{Mathf.RoundToInt(kBonus) + exp}";
                 if (money > 0) reward += $"   ทุน +{money}฿";
                 if (courseMode)
                     resultDetailText.text =
@@ -410,7 +410,7 @@ private string GpaWarning()
             if (heldAction != null) { heldAction.EndHold(); heldAction = null; }   // ลุกจากท่านั่ง
             if (move != null) move.enabled = true;
 
-            if (stats != null && stats.Health > 0 && stats.Energy > 0)
+            if (stats != null && stats.Health > 0)   // พลังงาน 0 ไม่จบเกมแล้ว → ยังแจ้งผลสอบตามปกติ (PlayerExhaustion แสดงทางเลือกพักหลังสอบ)
                 HUDController.Toast($"สอบเสร็จ! GPA {GPA:0.00}");
         }
 

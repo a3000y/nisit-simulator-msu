@@ -144,9 +144,12 @@ namespace NisitSimulator.Systems
             if (prefab == null) return oldAnim;   // ไม่มีแคตตาล็อก/index → คงเดิม
 
             Transform oldModel = oldAnim != null ? oldAnim.transform : null;
+            // Animator อยู่ที่ root เอง (เช่น NetworkAvatar.prefab ที่มี NetworkObject บน root) → ห้ามทำลาย/ย้าย root
+            //   เดิมโค้ดถือว่า root คือ "โมเดลเก่า" แล้ว Destroy ทิ้ง = ทำลาย NetworkObject ของผู้เล่นอื่น (ตัวละครหายทั้งสองเครื่อง)
+            bool rigOnRoot = oldModel == root;
             var m = Instantiate(prefab, root);
             m.name = prefab.name;
-            if (oldModel != null)
+            if (oldModel != null && !rigOnRoot)
             {
                 m.transform.localPosition = oldModel.localPosition;
                 m.transform.localRotation = oldModel.localRotation;
@@ -167,8 +170,20 @@ namespace NisitSimulator.Systems
                 }
             }
 
-            if (oldModel != null) { oldModel.gameObject.SetActive(false); Destroy(oldModel.gameObject); }
+            if (rigOnRoot)
+            {
+                // ลบเฉพาะโมเดลเดิมที่เป็นลูก (mesh + กระดูก) และ Animator บน root — root/NetworkObject/ป้ายชื่อคงอยู่
+                var olds = new System.Collections.Generic.List<GameObject>();
+                foreach (Transform c in root)
+                    if (c != m.transform && c.name != "NameTag") olds.Add(c.gameObject);
+                foreach (var o in olds) { o.SetActive(false); Kill(o); }
+                oldAnim.enabled = false;
+                Kill(oldAnim);
+            }
+            else if (oldModel != null) { oldModel.gameObject.SetActive(false); Destroy(oldModel.gameObject); }
             return newAnim;
         }
+
+        static void Kill(Object o) { if (Application.isPlaying) Destroy(o); else DestroyImmediate(o); }
     }
 }

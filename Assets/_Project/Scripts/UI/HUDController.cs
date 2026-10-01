@@ -212,7 +212,7 @@ namespace NisitSimulator.UI
 
         private void UpdateKnowledge(float know)
         {
-            if (knowledgeText) knowledgeText.text = $"ความรู้ {know:0}/{knowledgeTarget:0}";
+            if (knowledgeText) knowledgeText.text = $"EXP {know:0}/{knowledgeTarget:0}";
             knowT = knowledgeTarget > 0f ? Mathf.Clamp01(know / knowledgeTarget) : 0f;
         }
 
