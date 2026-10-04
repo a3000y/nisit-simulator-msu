@@ -54,8 +54,15 @@ namespace NisitSimulator.EditorTools
             MakeRoomPrefab();
 
             var old = GameObject.Find("Dorm_Building");
+            var oldParent = old != null ? old.transform.parent : null;
+            var oldPosition = old != null ? old.transform.position : Vector3.zero;
+            var oldRotation = old != null ? old.transform.rotation : Quaternion.identity;
+            var oldScale = old != null ? old.transform.localScale : Vector3.one;
             if (old != null) Object.DestroyImmediate(old);
             var root = new GameObject("Dorm_Building").transform;
+            root.SetParent(oldParent, false);
+            root.SetPositionAndRotation(oldPosition, oldRotation);
+            root.localScale = oldScale;
             BuildExterior(G("Exterior", root));
             BuildStructure(G("Structure", root));
             for (int i = 0; i < Floors; i++) BuildFloor(G("Floor_" + (i + 1), root), i);
@@ -68,10 +75,32 @@ namespace NisitSimulator.EditorTools
             foreach (var t in root.GetComponentsInChildren<Transform>(true))
                 if (t.GetComponentInParent<GEDoor>() == null) t.gameObject.isStatic = true;
 
+            M46DayNightDormSetup.SetupDormBuilding(root);
+
             return $"Dorm_Building built: colliders={root.GetComponentsInChildren<Collider>().Length} lights={root.GetComponentsInChildren<Light>().Length} doors={root.GetComponentsInChildren<GEDoor>().Length} rooms={Floors * 8}";
         }
 
         // ------------------------------------------------------------ helpers
+        public static void EnsureEntranceDoors(Transform building)
+        {
+            var lobby = building.Find("Floor_1/Common/Lobby");
+            if (lobby == null) return;
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PfDir + "/DM_Door.prefab");
+            if (prefab == null) throw new System.InvalidOperationException("ไม่พบ DM_Door.prefab");
+            for (int i = 0; i < 2; i++)
+            {
+                string name = i == 0 ? "Door_Main_Left" : "Door_Main_Right";
+                var point = lobby.Find(name);
+                if (point == null) point = Inst(prefab, lobby, new Vector3(i == 0 ? -1.2f : 1.2f, B, 0f), i == 0 ? 0f : 180f, name).transform;
+                var door = point.GetComponent<GEDoor>();
+                door.startOpen = false;
+                door.openAngle = i == 0 ? -90f : 90f;
+                if (door.hinge != null) door.hinge.localRotation = Quaternion.identity;
+                EditorUtility.SetDirty(door);
+                PrefabUtility.RecordPrefabInstancePropertyModifications(door);
+            }
+        }
+
         static void EnsureFolder(string parent, string name) { if (!AssetDatabase.IsValidFolder(parent + "/" + name)) AssetDatabase.CreateFolder(parent, name); }
 
         static Transform G(string name, Transform parent, Vector3? pos = null, float rotY = 0f)
@@ -339,7 +368,7 @@ namespace NisitSimulator.EditorTools
             if (inter >= 0) leaf.layer = inter;
             Box("Handle_A", hinge, new Vector3(0.95f, 1.0f, 0.05f), new Vector3(0.14f, 0.03f, 0.03f), mMetal, false);
             Box("Handle_B", hinge, new Vector3(0.95f, 1.0f, -0.05f), new Vector3(0.14f, 0.03f, 0.03f), mMetal, false);
-            var door = d.AddComponent<GEDoor>(); door.hinge = hinge; door.openAngle = -90f; door.startOpen = true;
+            var door = d.AddComponent<GEDoor>(); door.hinge = hinge; door.openAngle = -90f; door.startOpen = false;
             hinge.localRotation = Quaternion.Euler(0, -90f, 0);
             pfDoor = SavePrefab(d, "DM_Door");
 

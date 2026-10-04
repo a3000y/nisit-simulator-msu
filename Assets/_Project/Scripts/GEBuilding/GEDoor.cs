@@ -21,7 +21,7 @@ namespace NisitSimulator.GEBuilding
 
         void Awake()
         {
-            isOpen = startOpen;
+            isOpen = NisitSimulator.Net.DoorSyncManager.MultiplayerDoor(this) ? false : startOpen;
             if (hinge != null) hinge.localRotation = Target();
         }
 
@@ -30,13 +30,27 @@ namespace NisitSimulator.GEBuilding
             if (hinge == null) return;
             var target = Target();
             if (hinge.localRotation != target)
-                hinge.localRotation = Quaternion.RotateTowards(hinge.localRotation, target, speed * Time.deltaTime);
+            {
+                float elapsed = NisitSimulator.Net.DoorSyncManager.MultiplayerDoor(this) ? Time.unscaledDeltaTime : Time.deltaTime;
+                hinge.localRotation = Quaternion.RotateTowards(hinge.localRotation, target, speed * elapsed);
+                if (hinge.localRotation == target && NisitSimulator.Net.DoorSyncManager.MultiplayerDoor(this))
+                    Debug.Log($"[DoorSync] settled key={NisitSimulator.Net.DoorSyncManager.Key(this)} open={isOpen} utc={System.DateTime.UtcNow:O}");
+            }
         }
 
         Quaternion Target() => Quaternion.Euler(0f, isOpen ? openAngle : 0f, 0f);
 
-        public void Toggle() => isOpen = !isOpen;
+        public void Toggle()
+        {
+            if (!NisitSimulator.Net.DoorSyncManager.RouteInteraction(this)) isOpen = !isOpen;
+        }
         public void SetOpen(bool open) => isOpen = open;
+
+        public void ApplyState(bool open, bool snap)
+        {
+            isOpen = open;
+            if (snap && hinge != null) hinge.localRotation = Target();
+        }
 
         public string GetPrompt() => isOpen ? "กด E เพื่อปิดประตู" : "กด E เพื่อเปิดประตู";
         public void Interact(GameObject interactor) => Toggle();

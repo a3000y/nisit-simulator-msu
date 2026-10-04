@@ -43,6 +43,7 @@ namespace NisitSimulator.Net
         string notice;              // ข้อความล่าสุดเมื่อหลุด/ถูกปฏิเสธ/ต่อไม่ได้ (แสดงตอนยังไม่เชื่อมต่อ)
         bool sawConnected;          // เคยเชื่อมต่อสำเร็จในรอบนี้ไหม (แยก "หลุด" กับ "ต่อไม่ได้")
         NetworkManager hookedNm;
+        static bool InLobby => UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameSession.LobbyScene;
 
         void Awake()
         {
@@ -75,6 +76,12 @@ namespace NisitSimulator.Net
                     int idx = i;
                     if (modelButtons[i] != null) modelButtons[i].onClick.AddListener(() => PickModel(idx));
                 }
+            if (InLobby)
+            {
+                LobbyConnection.EnsureExists(gameObject);
+                HighlightColor(GameSession.PlayerColor & 15); HighlightModel(GameSession.PlayerModel);
+                return;
+            }
             HookNetworkEvents();
             HighlightColor(GameSession.PlayerColor & 15);
             HighlightModel(GameSession.PlayerModel);
@@ -180,6 +187,8 @@ namespace NisitSimulator.Net
         public static string FriendlyReason(string reason, bool wasConnected)
         {
             reason = reason ?? "";
+            if (reason == LobbyRules.Full || reason == LobbyRules.Started || reason == LobbyRules.Closed || reason == LobbyRules.Kicked)
+                return LobbyRules.ErrorText(reason);
             if (reason.Contains("host shutting down")) return "โฮสต์ปิดห้องแล้ว";
             bool internalMsg = reason.Length == 0 || reason.StartsWith("[Disconnect Event]") || reason.Contains("disconnected by server") || reason.Contains("TransportShutdown");
             if (!internalMsg) return "เข้าห้องไม่ได้: " + reason;
@@ -214,6 +223,7 @@ namespace NisitSimulator.Net
 
         void Update()
         {
+            if (InLobby) return;
             if (Input.GetKeyDown(KeyCode.F11) && panel != null) panel.SetActive(!panel.activeSelf);
             HookNetworkEvents();
             var cur = NetworkManager.Singleton;
@@ -223,6 +233,7 @@ namespace NisitSimulator.Net
 
         void Host()
         {
+            if (InLobby) { var connection = LobbyConnection.EnsureExists(gameObject); connection.Mode = LobbyConnectionMode.Lan; connection.OpenHost(); return; }
             if (NetworkManager.Singleton == null || Connected()) return;
             if (!HasPlayerPrefab()) return;
             var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
@@ -235,6 +246,7 @@ namespace NisitSimulator.Net
 
         void Client()
         {
+            if (InLobby) { LobbyConnection.EnsureExists(gameObject).JoinAddress(ipInput != null && !string.IsNullOrWhiteSpace(ipInput.text) ? ipInput.text : "127.0.0.1"); return; }
             if (NetworkManager.Singleton == null || Connected()) return;
             string ip = (ipInput != null && !string.IsNullOrWhiteSpace(ipInput.text)) ? ipInput.text.Trim() : "127.0.0.1";
             var utp = NetworkManager.Singleton.GetComponent<UnityTransport>();
@@ -248,6 +260,7 @@ namespace NisitSimulator.Net
         // ---------- ออนไลน์ (Relay / Join Code) — เล่นข้ามเน็ตได้ ต้องต่อ Unity Cloud ----------
         async void HostRelay()
         {
+            if (InLobby) { var connection = LobbyConnection.EnsureExists(gameObject); connection.Mode = LobbyConnectionMode.Online; connection.OpenHost(); return; }
             if (NetworkManager.Singleton == null || Connected()) return;
             if (!HasPlayerPrefab()) return;
             SetStatus("กำลังสร้างห้องออนไลน์...");
@@ -269,6 +282,7 @@ namespace NisitSimulator.Net
 
         async void JoinRelay()
         {
+            if (InLobby) { LobbyConnection.EnsureExists(gameObject).JoinAddress(codeInput != null ? codeInput.text : ""); return; }
             if (NetworkManager.Singleton == null || Connected()) return;
             string c = codeInput != null ? codeInput.text.Trim().ToUpperInvariant() : "";
             if (string.IsNullOrEmpty(c)) { SetStatus("กรอกโค้ดห้องก่อน"); return; }
@@ -337,6 +351,7 @@ namespace NisitSimulator.Net
 
         void Disconnect()
         {
+            if (InLobby) { LobbyConnection.EnsureExists(gameObject).Leave(false); return; }
             if (NetworkManager.Singleton != null && Connected()) { WorldTimeSync.ExpectDisconnect = true; NetworkManager.Singleton.Shutdown(); }
             relayCode = null;
             notice = null;

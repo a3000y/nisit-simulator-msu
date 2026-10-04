@@ -32,6 +32,7 @@ namespace NisitSimulator.SaveLoad
             PlayerSpawnSystem.ResolveInitialSpawn(loaded); // เกมใหม่/เซฟใช้ไม่ได้ → หอพัก · เล่นต่อ → ตำแหน่งเดิม
             SleepController.EnsureExists();                // นอนพักที่หอพัก (หน้ายืนยัน + เฟด)
             NisitSimulator.Net.WorldTimeSync.EnsureExists(); // Multiplayer: Host คุมเวลาโลก (เล่นคนเดียว = ไม่ทำงาน)
+            NisitSimulator.Net.PartyRuntime.EnsureExists(); // Phase 1: scene-local team HUD and map overlays
             RegistrationUI.EnsureExists();        // แอป "ลงทะเบียนเรียน" ในโทรศัพท์ (TAB)
             NisitSimulator.Academics.ExamMinigame.ExamMinigameController.EnsureExists();   // มินิเกมสอบรายวิชา (เปิดเฉพาะตอนสอบที่ห้องสอบ)
 

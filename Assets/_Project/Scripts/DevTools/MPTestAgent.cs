@@ -23,7 +23,7 @@ namespace NisitSimulator.DevTools
     //   • รับคำสั่งจากไฟล์ <dir>/<id>.cmd (บรรทัดละคำสั่ง) → ทำแล้วลบไฟล์ · ผล/เหตุการณ์ → <dir>/<id>.log (มีเวลา + ClientId)
     //   • เขียนสถานะ <dir>/<id>.state.json ทุก 0.5 วินาที (บทบาท, ClientId, avatar, สถานะผู้เล่น, เวลาโลก ...)
     //   • ไม่มีการตรวจสิทธิ์ใดถูกปิด — คำสั่งทุกตัวเรียกโค้ดเกมเส้นทางเดิม (ปุ่ม UI / API สาธารณะ)
-    public class MPTestAgent : MonoBehaviour
+    public partial class MPTestAgent : MonoBehaviour
     {
         public static MPTestAgent Instance { get; private set; }
         public string Id { get; private set; } = "X";
@@ -72,6 +72,7 @@ namespace NisitSimulator.DevTools
             SaveSystem.DevPathOverride = SavePath;
             if (string.IsNullOrEmpty(GameSession.PlayerName)) GameSession.PlayerName = "Test-" + id;
             Application.runInBackground = true;
+            Application.targetFrameRate = 30;
             Application.logMessageReceived -= OnUnityLog;
             Application.logMessageReceived += OnUnityLog;
             Log($"agent ready · pid={System.Diagnostics.Process.GetCurrentProcess().Id} · save={SavePath} · name={GameSession.PlayerName}");
@@ -97,7 +98,8 @@ namespace NisitSimulator.DevTools
         {
             bool important = type == LogType.Error || type == LogType.Exception || type == LogType.Assert || type == LogType.Warning
                              || condition.StartsWith("[Net") || condition.StartsWith("[Spawn") || condition.StartsWith("[Save")
-                             || condition.StartsWith("[Relay") || condition.StartsWith("[Netcode") || condition.StartsWith("[MP");
+                             || condition.StartsWith("[Relay") || condition.StartsWith("[Netcode") || condition.StartsWith("[MP")
+                             || condition.StartsWith("[DoorSync");
             if (!important) return;
             string s = $"UNITY {type}: {condition}";
             if (type == LogType.Exception || type == LogType.Error)
@@ -152,6 +154,8 @@ namespace NisitSimulator.DevTools
         void Update()
         {
             EnforceProfile();
+            guardFrames++;
+            if (!SaveSystem.DevGuard) guardViolations++;
             HookNetwork();
             if (Time.unscaledTime >= nextPoll)
             {
@@ -204,7 +208,48 @@ namespace NisitSimulator.DevTools
             var nm = NetworkManager.Singleton;
             switch (cmd)
             {
+                case "lobby-ready":
+                    if (NisitSimulator.Net.LobbyController.Instance != null) NisitSimulator.Net.LobbyController.Instance.ToggleReady();
+                    return "ready toggle requested";
+                case "lobby-share":
+                    if (NisitSimulator.Net.LobbyState.Instance != null) NisitSimulator.Net.LobbyState.Instance.SetShareMode(a[0] == "everyone");
+                    return "share requested";
+                case "lobby-kick":
+                    var lobby = NisitSimulator.Net.LobbyState.Instance;
+                    if (lobby != null) foreach (var member in lobby.Snapshot()) if (member.SlotIndex == I(a[0])) return "kick=" + lobby.KickPlayer(member.PlayerId.ToString());
+                    return "slot not found";
+                case "screenshot": return CaptureUI(a[0]);
+                case "scene-info":
+                    var loaded = new List<string>(); for (int index = 0; index < SceneManager.sceneCount; index++) { var scene = SceneManager.GetSceneAt(index); loaded.Add(scene.name + ":" + scene.isLoaded); }
+                    return string.Join(",", loaded) + " enableManagement=" + (nm != null && nm.NetworkConfig.EnableSceneManagement);
+                case "party-ping":
+                {
+                    var party = NisitSimulator.Net.PartyRuntime.Instance;
+                    return party != null && party.TryPing(new Vector3(F(a[0]), 0, F(a[1]))) ? "ping requested" : "ping rejected";
+                }
+                case "party-raw":
+                {
+                    // owner routing id, event sequence, x, z. Deliberately allows selecting a remote
+                    // avatar so NGO ownership rejection can be observed without bypassing it.
+                    foreach (var av in FindObjectsByType<NisitSimulator.Net.NetworkAvatar>(FindObjectsSortMode.None))
+                        if (av.OwnerClientId == ulong.Parse(a[0]))
+                        { av.DevPartyPing(uint.Parse(a[1]), new Vector3(F(a[2]), 0, F(a[3]))); return "RPC attempted"; }
+                    return "avatar not found";
+                }
                 case "mark": return string.Join(" ", a);
+                case "door-approach": return DoorApproach(I(a[0]));
+                case "door-toggle": return DoorInteract(I(a[0]));
+                case "door-raw":
+                    if (NisitSimulator.Net.DoorSyncManager.Instance == null) return "no door sync";
+                    NisitSimulator.Net.DoorSyncManager.Instance.DevRawRequest(I(a[0]), uint.Parse(a[1]));
+                    return "real door RPC sent";
+                case "door-cycle": StartCoroutine(DoorCycle(a.Length == 0 ? "Dorm_Building" : a[0])); return "door cycle started";
+                case "door-probe": StartCoroutine(DoorProbeAll(a.Length == 0 ? "Dorm_Building" : a[0])); return "stable state collision probes started";
+                case "door-at": StartCoroutine(DoorAt(I(a[0]), long.Parse(a[1]))); return "scheduled original Interact";
+                case "door-collision": StartCoroutine(DoorCollision(I(a[0]))); return "collision probe started";
+                case "door-view": return DoorView();
+                case "door-burst": return DoorBurst(I(a[0]), I(a[1]));
+                case "door-all": StartCoroutine(DoorAll(a[0] == "open", a.Length > 1 ? a[1] : "Dorm_Building")); return "door all started";
                 case "click": return Click(string.Join(" ", a));
                 case "input": return SetInput(a[0], string.Join(" ", a.Skip(1)));
                 case "scene": SceneManager.LoadScene(a[0]); return "loading " + a[0];
@@ -229,6 +274,34 @@ namespace NisitSimulator.DevTools
         }
 
         // กดปุ่ม UI จริง (หาจากชื่อ GameObject หรือข้อความบนปุ่ม) — ใช้ onClick ของเกมเดิม
+        string CaptureUI(string label)
+        {
+            // Hidden test windows can skip their normal frame-end capture. Render the same canvases explicitly.
+            if (label.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 || label.Contains("..")) return "invalid screenshot name";
+            var camera = Camera.main; if (camera == null) return "main camera not found";
+            var oldTexture = camera.targetTexture; float oldAspect = camera.aspect; var oldActive = RenderTexture.active;
+            var rt = new RenderTexture(Screen.width, Screen.height, 24); rt.Create();
+            var canvases = new List<Canvas>(); var cameras = new List<Camera>(); var distances = new List<float>();
+            Texture2D texture = null;
+            try
+            {
+                camera.targetTexture = rt; camera.aspect = (float)Screen.width / Screen.height;
+                foreach (var canvas in FindObjectsByType<Canvas>(FindObjectsSortMode.None))
+                    if (canvas.enabled && canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+                    { canvases.Add(canvas); cameras.Add(canvas.worldCamera); distances.Add(canvas.planeDistance); canvas.renderMode = RenderMode.ScreenSpaceCamera; canvas.worldCamera = camera; canvas.planeDistance = 1; }
+                Canvas.ForceUpdateCanvases();
+                foreach (var preview in FindObjectsByType<Camera>(FindObjectsSortMode.None)) if (preview != camera && preview.enabled && preview.targetTexture != null) preview.Render();
+                camera.Render(); RenderTexture.active = rt;
+                texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false); texture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0); texture.Apply();
+                string path = Path.Combine(Dir, Id + "_" + label + ".png"); File.WriteAllBytes(path, texture.EncodeToPNG()); return "captured " + path;
+            }
+            finally
+            {
+                for (int i = 0; i < canvases.Count; i++) { canvases[i].renderMode = RenderMode.ScreenSpaceOverlay; canvases[i].worldCamera = cameras[i]; canvases[i].planeDistance = distances[i]; }
+                camera.targetTexture = oldTexture; camera.aspect = oldAspect; RenderTexture.active = oldActive; rt.Release(); Destroy(rt); if (texture != null) Destroy(texture); Canvas.ForceUpdateCanvases();
+            }
+        }
+
         string Click(string name)
         {
             foreach (var b in FindObjectsByType<Button>(FindObjectsInactive.Exclude))
@@ -503,10 +576,19 @@ namespace NisitSimulator.DevTools
         }
 
         // ---------- state snapshot ----------
-        [Serializable] class AvatarInfo { public string name; public ulong owner; public bool isOwner; public ulong netId; public Vector3 pos; public bool visible; }
+        [Serializable] class AvatarInfo { public string name; public ulong owner; public bool isOwner; public ulong netId; public Vector3 pos; public bool visible;
+            public string partyPlayerId, partyStatus; public int partySlot, partyEnergy, partyPings; public bool partyReady; public Vector3 partyMapPosition; public double pingExpiresAt; public uint pingSequence; }
         [Serializable]
         class State
         {
+            public bool devGuard, mptest, doorsReady;
+            public int guardFrames, guardViolations, doorCount, doorsClosed, doorAccepted, doorRejected;
+            public uint doorRevision;
+            public string doorCatalog, doorLastDecision;
+            public List<DoorInfo> doors = new List<DoorInfo>();
+            public string roomName, lobbyPhase, lobbyMessage, lobbyNotice, publicJoinCode, shareMode;
+            public int roomMax;
+            public List<LobbyMemberInfo> lobbyPlayers = new List<LobbyMemberInfo>();
             public string id, time, scene, role, gmState, lastSpawn, saveOverride;
             public ulong localClientId; public bool isConnectedClient, isListening;
             public List<ulong> connectedIds = new List<ulong>();
@@ -524,14 +606,29 @@ namespace NisitSimulator.DevTools
             public string disconnectReason; public List<string> recentErrors = new List<string>();
             public bool pausePanel;
         }
+        [Serializable] class LobbyMemberInfo { public string id, name, accessories; public ulong connection; public int slot, model, color, ping; public bool ready, host; }
 
         public void WriteState()
         {
             if (string.IsNullOrEmpty(Dir)) return;
             var s = new State { id = Id, time = DateTime.Now.ToString("HH:mm:ss.fff"), scene = SceneManager.GetActiveScene().name };
+            s.devGuard = SaveSystem.DevGuard; s.mptest = MPTestProfile.Enabled;
+            s.guardFrames = guardFrames; s.guardViolations = guardViolations;
             try
             {
                 var nm = NetworkManager.Singleton;
+                FillDoorState(s);
+                var lobby = NisitSimulator.Net.LobbyState.Instance;
+                s.lobbyNotice = NisitSimulator.Net.LobbyNotice.LastNotice;
+                var connection = NisitSimulator.Net.LobbyConnection.Instance;
+                if (connection != null) s.lobbyMessage = connection.Message;
+                if (lobby != null && lobby.IsSpawned)
+                {
+                    s.roomName = lobby.RoomName.Value.ToString(); s.roomMax = lobby.MaxPlayers.Value; s.lobbyPhase = lobby.RoomState.Value.ToString();
+                    s.publicJoinCode = lobby.JoinCode.Value.ToString(); s.shareMode = lobby.ShareCodeMode.Value.ToString();
+                    foreach (var p in lobby.Snapshot()) s.lobbyPlayers.Add(new LobbyMemberInfo { id = p.PlayerId.ToString(), name = p.Name.ToString(), connection = p.ConnectionId, slot = p.SlotIndex,
+                        ready = p.Ready, host = p.IsHost, model = p.Model, color = p.Color, accessories = p.Accessories.ToString(), ping = p.Ping });
+                }
                 s.isListening = nm != null && nm.IsListening;
                 s.role = nm == null || !nm.IsListening ? "off" : nm.IsHost ? "host" : nm.IsServer ? "server" : "client";
                 if (s.isListening) { s.localClientId = nm.LocalClientId; s.isConnectedClient = nm.IsConnectedClient; s.disconnectReason = nm.DisconnectReason; }
@@ -539,7 +636,11 @@ namespace NisitSimulator.DevTools
                 foreach (var av in FindObjectsByType<NisitSimulator.Net.NetworkAvatar>())
                 {
                     var r = av.GetComponentInChildren<Renderer>();
-                    s.avatars.Add(new AvatarInfo { name = av.DisplayName, owner = av.OwnerClientId, isOwner = av.IsOwner, netId = av.NetworkObjectId, pos = av.transform.position, visible = r != null && r.enabled });
+                    s.avatars.Add(new AvatarInfo { name = av.DisplayName, owner = av.OwnerClientId, isOwner = av.IsOwner, netId = av.NetworkObjectId, pos = av.transform.position, visible = r != null && r.enabled,
+                        partyPlayerId = av.TeamPlayerId, partySlot = av.TeamSlot, partyEnergy = av.TeamSummary.EnergyPercent,
+                        partyStatus = av.TeamSummary.Status.ToString(), partyReady = av.TeamSummary.Ready, partyMapPosition = av.TeamSummary.MapPosition,
+                        partyPings = av.TeamPingCount, pingExpiresAt = av.TeamPingCount > 0 ? av.TeamPingAt(0).ExpiresAt : 0,
+                        pingSequence = av.TeamPingCount > 0 ? av.TeamPingAt(0).Sequence : 0 });
                 }
                 s.networkObjects = FindObjectsByType<NetworkObject>().Length;
                 s.playerObjects = FindObjectsByType<NisitSimulator.Stats.PlayerStats>().Length;
@@ -582,7 +683,12 @@ namespace NisitSimulator.DevTools
             }
             catch (Exception e) { s.recentErrors.Add("state: " + e.Message); }
             s.recentErrors.AddRange(recentErrors);
-            try { File.WriteAllText(StatePath, JsonUtility.ToJson(s, true), Encoding.UTF8); } catch { }
+            try
+            {
+                File.WriteAllText(StatePath, JsonUtility.ToJson(s, true), Encoding.UTF8);
+                File.AppendAllText(Path.Combine(Dir, Id + ".states.jsonl"), JsonUtility.ToJson(s) + "\n", Encoding.UTF8);
+            }
+            catch { }
         }
 
         // ---------- helpers ----------

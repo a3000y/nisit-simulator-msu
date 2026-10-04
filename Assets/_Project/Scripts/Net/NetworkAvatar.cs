@@ -11,7 +11,7 @@ namespace NisitSimulator.Net
     //   • เจ้าของ (IsOwner): ลอกท่าจาก "Player" ในฉาก (SP เดิม) → broadcast · ซ่อนตัวเอง (เห็น Player จริงแทน)
     //   • ไม่ใช่เจ้าของ: มองเห็น เดินตามค่า sync + เล่นท่าเดิน (Speed) + หันตาม
     //   ออกแบบให้ "เสริมทับ" SP ไม่แตะระบบเดิม — วางโดย Nisit -> Setup Multiplayer (MP-1)
-    public class NetworkAvatar : NetworkBehaviour
+    public partial class NetworkAvatar : NetworkBehaviour
     {
         [Tooltip("ความไวในการ interpolate ของฝั่ง remote")]
         public float lerp = 12f;
@@ -53,6 +53,7 @@ namespace NisitSimulator.Net
         };
 
         Transform localPlayer;   // owner: อ้างอิง Player ในฉาก
+        public Vector3 ReplicatedPosition => netPos.Value;
         Animator anim;
         Transform nameTag;       // remote: ป้ายชื่อลอยหัว
         Camera cam;
@@ -61,8 +62,9 @@ namespace NisitSimulator.Net
 
         public override void OnNetworkSpawn()
         {
+            ConfigurePuppet();
             // สลับโมเดลตามที่ผู้เล่นเลือก (เฉพาะตัวที่มองเห็น = remote) ก่อน cache Animator
-            if (!IsOwner && netModel.Value >= 0) anim = CharacterCatalog.Apply(transform, netModel.Value);
+            if (!IsOwner && netModel.Value >= 0) anim = CharacterCatalog.ApplyPuppet(transform, netModel.Value, ReferenceScale);
 
             if (anim == null) anim = GetComponentInChildren<Animator>();
             if (anim != null) anim.applyRootMotion = false;   // กันหุ่นไถล/ลอย (ตำแหน่งมาจาก sync ไม่ใช่ root motion)
@@ -148,13 +150,7 @@ namespace NisitSimulator.Net
             if (IsOwner)
             {
                 if (localPlayer == null) CacheLocalPlayer();
-                if (localPlayer != null)
-                {
-                    netPos.Value = localPlayer.position;
-                    netYaw.Value = localPlayer.eulerAngles.y;
-                    var a = localPlayer.GetComponentInChildren<Animator>();
-                    if (a != null) netSpeed.Value = a.GetFloat("Speed");
-                }
+                // Publish feet and visual geometry in LateUpdate, after Player movement/animation.
                 // อีโมทสั่งจาก EmoteWheel (กดค้าง B เลือก) ผ่าน DoEmote()
             }
             else
@@ -240,7 +236,7 @@ namespace NisitSimulator.Net
         void OnModelChanged(int prev, int cur)
         {
             if (IsOwner) return;   // ตัวเราเปลี่ยนที่ Player จริง (PlayerModelSwapper) ไม่ใช่ avatar
-            anim = CharacterCatalog.Apply(transform, cur);
+            anim = CharacterCatalog.ApplyPuppet(transform, cur, ReferenceScale);
             if (anim == null) anim = GetComponentInChildren<Animator>();
             if (anim != null) anim.applyRootMotion = false;
             ApplyColor(gameObject, netColor.Value);   // ทาสีโมเดลใหม่

@@ -157,7 +157,9 @@ namespace NisitSimulator.Interaction
             var sync = NisitSimulator.Net.WorldTimeSync.Instance;
             var dorm = DormSpawnPoint.Main;
             if (sync != null && sync.IsMultiplayerSession && dorm != null)
-                return dorm.GetSlot(PlayerSpawnSystem.NetworkSlotIndex());
+                return st.extraWakePoints != null && st.extraWakePoints.Length > 0
+                    ? st.GetWakePoint(PlayerSpawnSystem.NetworkSlotIndex())
+                    : dorm.GetSlot(PlayerSpawnSystem.NetworkSlotIndex());
             return st.WakePoint;
         }
 

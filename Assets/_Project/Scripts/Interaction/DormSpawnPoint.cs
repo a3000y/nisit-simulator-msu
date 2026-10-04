@@ -7,6 +7,9 @@ namespace NisitSimulator.Interaction
     //   ทิศ forward ของ Transform = ทิศที่ตัวละครหันตอนเกิด (หันไปทางเดิน/ประตูออก)
     public class DormSpawnPoint : MonoBehaviour
     {
+        [Tooltip("ใช้ interior วาร์ปสำหรับหอเดิม; ปิดสำหรับ Dorm_Building ที่เดินเข้าได้")]
+        public bool usesWarpInterior = true;
+
         [Tooltip("รหัสห้องพัก (เก็บลงเซฟ เผื่อมีหลายห้อง)")]
         public string roomId = "dorm_1";
 

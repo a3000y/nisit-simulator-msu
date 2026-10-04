@@ -11,8 +11,8 @@ namespace NisitSimulator.UI
     public class PastelTheme : MonoBehaviour
     {
         // สีการ์ดพาสเทล + สีตัวอักษรเข้ม (ลาเวนเดอร์อ่อน อบอุ่น + อินดิโก้เข้ม อ่านง่าย)
-        static readonly Color CardCol = new Color(0.955f, 0.93f, 0.985f);   // ลาเวนเดอร์-ครีม
-        static readonly Color TextDark = new Color(0.30f, 0.25f, 0.46f);    // อินดิโก้เข้มนุ่ม
+        public static readonly Color CardCol = new Color(0.955f, 0.93f, 0.985f);   // ลาเวนเดอร์-ครีม
+        public static readonly Color TextDark = new Color(0.30f, 0.25f, 0.46f);    // อินดิโก้เข้มนุ่ม
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void Boot()

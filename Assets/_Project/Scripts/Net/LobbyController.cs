@@ -4,81 +4,65 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using NisitSimulator.SaveLoad;
+using NisitSimulator.Systems;
 
 namespace NisitSimulator.Net
 {
-    // ควบคุมฉากล็อบบี้เล่นหลายคน — Host/Join แล้วแต่งตัว+แชท+เห็นรายชื่อ · โฮสต์กด "เริ่มเกม" → ทุกคนเข้าพร้อมกัน
-    //   ต้องเปิด NetworkConfig.EnableSceneManagement ที่ NetworkManager (M38 ตั้งให้)
-    //   UI สร้างโดย Editor tool (Nisit -> Build Lobby)
     public class LobbyController : MonoBehaviour
     {
-        public Button startButton;   // โฮสต์เท่านั้น
-        public Button backButton;
-        public TMP_Text hintText;
-        public TMP_Text playerListText;
-        public GameObject connectGroup;    // แสดงตอนยังไม่เชื่อมต่อ (สร้าง/เข้าห้อง)
-        public GameObject customizeGroup;  // แสดงตอนเข้าห้องแล้ว (แต่งตัว)
+        // Retain serialized references so the original lobby and character selector stay compatible.
+        public Button startButton, backButton;
+        public TMP_Text hintText, playerListText;
+        public GameObject connectGroup, customizeGroup;
         public string gameplayScene = "01_Gameplay";
-
+        public static LobbyController Instance { get; private set; }
+        public LobbyView View { get; private set; }
+        LobbyConnection connection;
+        float nextSubmit;
+        bool desiredReady;
+        string previousLook;
+        string localPlayerId;
         void Start()
         {
-            if (startButton) startButton.onClick.AddListener(StartGame);
-            if (backButton) backButton.onClick.AddListener(BackToMenu);
-            // เข้าเกมแบบใหม่ (ไม่โหลดเซฟ) เมื่อเริ่มจากล็อบบี้
-            GameSession.PendingLoad = false;
-            GameSession.IsContinue = false;
+            Instance = this; GameSession.PendingLoad = false; GameSession.IsContinue = false;
+            connection = LobbyConnection.EnsureExists(gameObject);
+            Cursor.visible = true; Cursor.lockState = CursorLockMode.None;
+            var oldChat = GetComponent<ChatUI>(); if (oldChat != null) oldChat.enabled = false;
+            View = LobbyView.Create(this, connection);
+            var oldCanvas = GetComponent<Canvas>(); if (oldCanvas != null) oldCanvas.enabled = false;
         }
-
         void Update()
         {
-            var nm = NetworkManager.Singleton;
-            // "เข้าห้องแล้ว" = Host หรือ Client ที่เชื่อมต่อสำเร็จจริง (ระหว่างกำลังต่อ ยังโชว์หน้าสร้าง/เข้าห้อง + สถานะ "กำลังเชื่อมต่อ")
-            bool connected = nm != null && (nm.IsHost || nm.IsServer || nm.IsConnectedClient);
-            bool isHost = nm != null && nm.IsHost;
-
-            // 2 ขั้น: ยังไม่ต่อ = โชว์สร้าง/เข้าห้อง · ต่อแล้ว = โชว์แต่งตัว
-            if (connectGroup && connectGroup.activeSelf == connected) connectGroup.SetActive(!connected);
-            if (customizeGroup && customizeGroup.activeSelf != connected) customizeGroup.SetActive(connected);
-
-            if (startButton && startButton.gameObject.activeSelf != (connected && isHost))
-                startButton.gameObject.SetActive(connected && isHost);
-
-            if (hintText != null)
-            {
-                int n = connected ? nm.ConnectedClientsList.Count : 0;
-                hintText.text = !connected
-                    ? "สร้างห้อง (Host) หรือใส่ IP/โค้ดแล้วเข้าห้อง (Join)"
-                    : (isHost ? $"มีผู้เล่น {n} คน · รอเพื่อนเข้าครบแล้วกด \"เริ่มเกม\""
-                              : "เข้าห้องแล้ว · รอโฮสต์กดเริ่มเกม...");
-            }
-
-            if (playerListText != null)
-            {
-                if (!connected) { playerListText.text = "ยังไม่มีผู้เล่นในห้อง"; return; }
-                var sb = new System.Text.StringBuilder("ผู้เล่นในห้อง:\n");
-                foreach (var cl in nm.ConnectedClientsList)
-                {
-                    var av = cl.PlayerObject != null ? cl.PlayerObject.GetComponent<NetworkAvatar>() : null;
-                    string nm2 = av != null ? av.DisplayName : ("ผู้เล่น " + (cl.ClientId + 1));
-                    sb.AppendLine("• " + nm2);
-                }
-                playerListText.text = sb.ToString();
-            }
+            var state = LobbyState.Instance; var nm = NetworkManager.Singleton;
+            if (state == null || nm == null || !state.IsSpawned || !connection.Connected || Time.unscaledTime < nextSubmit) return;
+            nextSubmit = Time.unscaledTime + 0.5f;
+            if (!state.Find(nm.LocalClientId, out var mine)) return;
+            CaptureIntent(mine);
+            string accessories = CharacterAccessories.Pack(GameSession.PlayerAccessories);
+            bool ready = nm.IsHost || desiredReady;
+            string name = LobbyRules.LimitName(GameSession.PlayerName, "ผู้เล่น " + (mine.SlotIndex + 1));
+            if (mine.Ready != ready || mine.Name.ToString() != name || mine.Model != GameSession.PlayerModel || mine.Color != GameSession.PlayerColor || mine.Accessories.ToString() != accessories)
+                state.SubmitLocal(ready);
         }
-
-        void StartGame()
+        public void ToggleReady()
         {
-            var nm = NetworkManager.Singleton;
-            if (nm == null || !nm.IsHost) return;
-            // NGO โหลดฉากให้ทุกคนพร้อมกัน (server-authoritative)
-            nm.SceneManager.LoadScene(gameplayScene, LoadSceneMode.Single);
+            var state = LobbyState.Instance; var nm = NetworkManager.Singleton;
+            if (state == null || nm == null || nm.IsHost || !state.Find(nm.LocalClientId, out var mine)) return;
+            CaptureIntent(mine);
+            desiredReady = !mine.Ready; state.SubmitLocal(desiredReady);
         }
-
-        void BackToMenu()
+        void CaptureIntent(LobbyPlayer mine)
         {
-            var nm = NetworkManager.Singleton;
-            if (nm != null && (nm.IsHost || nm.IsClient || nm.IsServer)) { WorldTimeSync.ExpectDisconnect = true; nm.Shutdown(); }
-            SceneManager.LoadScene(GameSession.MenuScene);
+            string look = GameSession.PlayerName + "/" + GameSession.PlayerModel + "/" + GameSession.PlayerColor + "/" + CharacterAccessories.Pack(GameSession.PlayerAccessories);
+            if (localPlayerId != mine.PlayerId.ToString() || previousLook != look) desiredReady = false;
+            localPlayerId = mine.PlayerId.ToString(); previousLook = look;
         }
+        public void Customize()
+        { desiredReady = false; if (LobbyState.Instance != null) LobbyState.Instance.SubmitLocal(false); if (View != null) View.ShowCustomize(); }
+        public void StartGame() { if (LobbyState.Instance != null) LobbyState.Instance.StartGame(); }
+        public void BackToMenu()
+        { if (connection != null) connection.Leave(); else SceneManager.LoadScene(GameSession.MenuScene); }
+        void OnDestroy()
+        { if (Instance == this) Instance = null; if (View != null) Destroy(View.gameObject); }
     }
 }

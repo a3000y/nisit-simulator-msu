@@ -16,6 +16,61 @@ namespace NisitSimulator.Tests
     //   แยกไฟล์ autosave โหมดหลายคน · สลับโมเดล avatar โดยไม่ทำลาย NetworkObject
     public class MultiplayerTests
     {
+        [Test] public void Doors_Dorm53InitiallyClosed()
+        {
+            var authority = new DoorToggleAuthority(53);
+            for (int i = 0; i < 53; i++) Assert.IsFalse(DoorToggleAuthority.Open(authority.Low, authority.High, i));
+        }
+        [Test] public void Doors_HostTogglesAcrossBothMaskWords()
+        {
+            var authority = new DoorToggleAuthority(108);
+            Assert.IsTrue(authority.TryToggle(true, true, true, 0, 1, 107, 0, 1.6f, 1, 30, out _));
+            Assert.IsTrue(DoorToggleAuthority.Open(authority.Low, authority.High, 107));
+            Assert.IsTrue(authority.TryToggle(true, true, true, 0, 2, 107, 0, 1.6f, 2, 60, out _));
+            Assert.IsFalse(DoorToggleAuthority.Open(authority.Low, authority.High, 107));
+            Assert.AreEqual(0UL, authority.Low); Assert.AreEqual(0UL, authority.High);
+        }
+        [Test] public void Doors_ForgedDistantInvalidAndNonServerRequestsRejected()
+        {
+            var authority = new DoorToggleAuthority(108);
+            Assert.IsFalse(authority.TryToggle(true, true, true, 1, 1, 0, 10000, 1.6f, 1, 1, out var reason));
+            Assert.AreEqual("out-of-range", reason);
+            Assert.IsFalse(authority.TryToggle(true, true, true, 1, 2, 108, 0, 1.6f, 2, 2, out _));
+            Assert.IsFalse(authority.TryToggle(false, true, true, 1, 3, 0, 0, 1.6f, 3, 3, out _));
+            Assert.IsFalse(authority.TryToggle(true, false, true, 1, 4, 0, 0, 1.6f, 4, 4, out _));
+            Assert.IsFalse(authority.TryToggle(true, true, false, 1, 5, 0, 0, 1.6f, 5, 5, out _));
+            Assert.IsFalse(authority.TryToggle(true, true, true, 1, 6, 0, float.NaN, 1.6f, 6, 6, out _));
+            Assert.AreEqual(0UL, authority.Low); Assert.AreEqual(0UL, authority.High);
+        }
+        [Test] public void Doors_SimultaneousAndTenRapidPressesToggleOnce()
+        {
+            var authority = new DoorToggleAuthority(108); int accepted = 0;
+            for (uint seq = 1; seq <= 10; seq++)
+                if (authority.TryToggle(true, true, true, seq % 2, seq, 1, 0, 1.6f, 1, 30, out _)) accepted++;
+            Assert.AreEqual(1, accepted);
+            Assert.IsTrue(DoorToggleAuthority.Open(authority.Low, authority.High, 1));
+            Assert.IsFalse(authority.TryToggle(true, true, true, 1, 9, 1, 0, 1.6f, 2, 60, out var reason));
+            Assert.AreEqual("replayed", reason);
+        }
+        [Test] public void Doors_Complete108OpenCloseAndNewMatchResets()
+        {
+            var authority = new DoorToggleAuthority(108);
+            for (int i = 0; i < 108; i++)
+                Assert.IsTrue(authority.TryToggle(true, true, true, 0, (uint)i + 1, i, 0, 1.6f, 1, 30, out _));
+            for (int i = 0; i < 108; i++) Assert.IsTrue(DoorToggleAuthority.Open(authority.Low, authority.High, i));
+            for (int i = 0; i < 108; i++)
+                Assert.IsTrue(authority.TryToggle(true, true, true, 0, (uint)i + 109, i, 0, 1.6f, 2, 60, out _));
+            Assert.AreEqual(0UL, authority.Low); Assert.AreEqual(0UL, authority.High);
+            var nextMatch = new DoorToggleAuthority(108);
+            Assert.AreEqual(0UL, nextMatch.Low); Assert.AreEqual(0UL, nextMatch.High);
+        }
+        [Test] public void Doors_CatalogFingerprintChangesWhenDoorPathChanges()
+        {
+            Assert.AreEqual(DoorToggleAuthority.Fingerprint(new[] { "Dorm_Building/A", "GE_Building/B" }),
+                DoorToggleAuthority.Fingerprint(new[] { "Dorm_Building/A", "GE_Building/B" }));
+            Assert.AreNotEqual(DoorToggleAuthority.Fingerprint(new[] { "Dorm_Building/A" }),
+                DoorToggleAuthority.Fingerprint(new[] { "Dorm_Building/B" }));
+        }
         GameObject go;
         GameClock clock;
 
@@ -181,6 +236,74 @@ namespace NisitSimulator.Tests
                 Assert.IsNotNull(anim);
                 Assert.AreNotSame(root.transform, anim.transform);
                 Assert.IsTrue(anim.transform.IsChildOf(root.transform));
+            }
+            finally { Object.DestroyImmediate(root); }
+        }
+
+        [Test]
+        public void AvatarFeet_UsesControllerCenterHeightAndParentScale()
+        {
+            var parent = new GameObject("ScaledParent");
+            try
+            {
+                parent.transform.position = new Vector3(20, 3, 10);
+                parent.transform.localScale = new Vector3(2, 3, 4);
+                var player = new GameObject("Player"); player.transform.SetParent(parent.transform, false);
+                player.transform.localPosition = new Vector3(1, 2, 3);
+                player.transform.localScale = Vector3.one * .66f;
+                var controller = player.AddComponent<CharacterController>();
+                controller.height = 2; controller.center = new Vector3(.2f, .4f, -.3f);
+                var expected = player.transform.TransformPoint(new Vector3(.2f, -.6f, -.3f));
+                Assert.That(Vector3.Distance(expected, AvatarGeometry.Feet(controller)), Is.LessThan(1e-5f));
+            }
+            finally { Object.DestroyImmediate(parent); }
+        }
+
+        [Test]
+        public void PuppetScale_ApplyLookAndRepeatedSwapCannotAccumulateScaleOrDestroyNetworkRoot()
+        {
+            var root = new GameObject("Puppet");
+            try
+            {
+                var network = root.AddComponent<Unity.Netcode.NetworkObject>();
+                new GameObject("NameTag").transform.SetParent(root.transform, false);
+                Vector3 reference = Vector3.one * .7341991f;
+                for (int repeat = 0; repeat < 3; repeat++)
+                {
+                    var animator = CharacterCatalog.ApplyPuppet(root.transform, repeat % CharacterCatalog.Load().Count, reference);
+                    Vector3 scale = animator.transform.localScale;
+                    for (int i = 0; i < 5; i++) CharacterCatalog.ApplyLook(animator.gameObject, i, NetworkAvatar.Palette);
+                    Assert.AreEqual(scale, animator.transform.localScale);
+                    Assert.That(Vector3.Distance(reference, animator.transform.lossyScale), Is.LessThan(1e-5f));
+                    Assert.AreEqual(Vector3.one, root.transform.localScale);
+                    Assert.NotNull(network); Assert.NotNull(root.transform.Find("NameTag"));
+                }
+            }
+            finally { Object.DestroyImmediate(root); }
+        }
+
+        [TestCase(0)] [TestCase(1)] [TestCase(2)] [TestCase(3)] [TestCase(4)]
+        [TestCase(5)] [TestCase(6)] [TestCase(7)] [TestCase(8)] [TestCase(9)]
+        [TestCase(10)] [TestCase(11)] [TestCase(12)] [TestCase(13)] [TestCase(14)] [TestCase(15)] [TestCase(16)]
+        public void CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(int index)
+        {
+            var catalog = CharacterCatalog.Load(); Assert.AreEqual(17, catalog.Count);
+            var root = new GameObject("Puppet");
+            try
+            {
+                var animator = CharacterCatalog.ApplyPuppet(root.transform, index, Vector3.one);
+                Assert.NotNull(animator);
+                Assert.IsFalse(animator.applyRootMotion);
+                Assert.AreSame(catalog.Model(index).GetComponentInChildren<Animator>().avatar, animator.avatar);
+                Assert.AreSame(catalog.ControllerFor(index), animator.runtimeAnimatorController);
+                Assert.IsTrue(animator.isHuman);
+                Assert.IsTrue(AvatarGeometry.NormalizeHeight(animator, 1.4f));
+                Assert.IsTrue(AvatarGeometry.VisualBounds(animator.transform, out var bounds));
+                Assert.AreEqual(1.4f, bounds.size.y, .002f);
+                Assert.AreEqual(root.transform.position.y, bounds.min.y, .002f);
+                Vector3 scale = animator.transform.localScale;
+                Assert.IsTrue(AvatarGeometry.NormalizeHeight(animator, 1.4f));
+                Assert.That(Vector3.Distance(scale, animator.transform.localScale), Is.LessThan(.002f));
             }
             finally { Object.DestroyImmediate(root); }
         }

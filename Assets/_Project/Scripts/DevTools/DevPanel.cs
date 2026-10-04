@@ -561,7 +561,7 @@ namespace NisitSimulator.DevTools
             if (B("คืนความเร็วเดิม", 140, can && DevTimeTools.SpeedMult != 1)) { bool ok = DevTimeTools.SetSpeed(1, out var m); Say(ok, m); }
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
-            if (B("วาร์ปไปจุดเกิดหอพัก", 0, can)) { bool ok = DevTimeTools.WarpToDorm(out var m); Say(ok, m); }
+            if (B("วาร์ปไปโถง Dorm_Building", 0, can)) { bool ok = DevTimeTools.WarpToDorm(out var m); Say(ok, m); }
             if (B("ทดสอบนอนจนถึง 07:00", 0, can && !SleepController.IsSleeping)) { bool ok = DevTimeTools.TestSleep(out var m); Say(ok, m); if (ok) Close(); }
             GUILayout.EndHorizontal();
             GUILayout.Label("ตั้งเวลา = เส้นทางเดียวกับโหลดเซฟ (ไม่ยิงเหตุการณ์ข้ามวัน) · แสงอัปเดตทันที · ทดสอบนอน = ขั้นตอนนอนจริง (ข้ามวันได้ครั้งเดียว บันทึกลงโปรไฟล์ทดสอบ)", sSmall);

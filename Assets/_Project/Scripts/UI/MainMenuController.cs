@@ -146,10 +146,11 @@ namespace NisitSimulator.UI
         }
 
         // เริ่มใหม่ — เปิดหน้าเลือกคณะก่อน (ถ้ามี) ไม่งั้นเริ่มเลย
+        // เริ่มใหม่ — ไม่มีหน้าเลือกคณะแล้ว: กำหนดเป็นคณะ IT (index 0) แล้วเริ่มเลย
         public void NewGame()
         {
-            if (facultyPanel != null) { Show(facultyPanel); return; }
-            StartNewGame();
+            if (facultyPanel != null) facultyPanel.SetActive(false);
+            ChooseFaculty(0);   // 0 = เทคโนโลยีสารสนเทศ (IT) ตาม FacultyCatalog.Names
         }
 
         // เลือกคณะแล้วเริ่มเกม (เรียกจากปุ่มเลือกคณะ)

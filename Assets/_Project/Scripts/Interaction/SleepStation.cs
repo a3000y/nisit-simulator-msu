@@ -16,6 +16,16 @@ namespace NisitSimulator.Interaction
         [Tooltip("จุดยืนข้างเตียงตอนตื่น (ว่าง = DormSpawnPoint)")]
         public Transform wakePoint;
 
+        [Tooltip("จุดตื่นข้างเตียงสำหรับ Multiplayer ตามช่อง 0–3")]
+        public Transform[] extraWakePoints = new Transform[0];
+
+        public Transform GetWakePoint(int slot)
+        {
+            if (extraWakePoints == null || extraWakePoints.Length == 0) return WakePoint;
+            var point = extraWakePoints[Mathf.Max(0, slot) % extraWakePoints.Length];
+            return point != null ? point : WakePoint;
+        }
+
         [Header("ฟื้นฟูเมื่อตื่น (ค่าเดิมของเกม)")]
         public float energyRestore = 999f;       // เต็ม
         public float healthRestore = 12f;

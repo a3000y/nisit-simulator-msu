@@ -180,8 +180,41 @@ namespace NisitSimulator.Systems
                 oldAnim.enabled = false;
                 Kill(oldAnim);
             }
-            else if (oldModel != null) { oldModel.gameObject.SetActive(false); Destroy(oldModel.gameObject); }
+            else if (oldModel != null) { oldModel.gameObject.SetActive(false); Kill(oldModel.gameObject); }
             return newAnim;
+        }
+
+        // Multiplayer visual only: never inherit the placeholder's scale/pivot or multiply last outfit's scale.
+        // Owner supplies the actual Player model's WORLD scale, including Player's 0.66 root scale.
+        public static Animator ApplyPuppet(Transform root, int index, Vector3 worldScale)
+        {
+            if (root == null) return null;
+            var cat = Load(); var prefab = cat != null ? cat.Model(index) : null;
+            if (prefab == null) return root.GetComponentInChildren<Animator>();
+            var old = root.GetComponentInChildren<Animator>();
+            root.localScale = Vector3.one;
+            var model = Instantiate(prefab, root);
+            model.name = prefab.name;
+            model.transform.localPosition = Vector3.zero;
+            model.transform.localRotation = Quaternion.identity;
+            NisitSimulator.Net.AvatarGeometry.SetWorldScale(model.transform, worldScale);
+            var animator = model.GetComponentInChildren<Animator>();
+            var source = prefab.GetComponentInChildren<Animator>();
+            if (animator != null)
+            {
+                if (source != null) animator.avatar = source.avatar;
+                animator.runtimeAnimatorController = cat.ControllerFor(index);
+                NisitSimulator.Net.AvatarGeometry.PreparePuppet(animator);
+            }
+            if (old != null && old.transform == root)
+            {
+                var children = new System.Collections.Generic.List<GameObject>();
+                foreach (Transform child in root) if (child != model.transform && child.name != "NameTag") children.Add(child.gameObject);
+                foreach (var child in children) { child.SetActive(false); Kill(child); }
+                old.enabled = false; Kill(old);
+            }
+            else if (old != null) { old.gameObject.SetActive(false); Kill(old.gameObject); }
+            return animator;
         }
 
         static void Kill(Object o) { if (Application.isPlaying) Destroy(o); else DestroyImmediate(o); }

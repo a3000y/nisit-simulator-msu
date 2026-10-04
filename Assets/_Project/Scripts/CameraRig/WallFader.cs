@@ -51,6 +51,8 @@ namespace NisitSimulator.CameraRig
         }
 
         private readonly Dictionary<Renderer, FadeEntry> _entries = new Dictionary<Renderer, FadeEntry>();
+        // renderer ที่มี WallFader ตัวอื่นจัดการอยู่ — ถ้าสองตัวแย่งกัน ตัวหนึ่งจะจำ "วัสดุต้นฉบับ" เป็นสำเนาที่ถูกทำลายไปแล้ว => สีชมพู
+        private static readonly HashSet<Renderer> s_claimed = new HashSet<Renderer>();
         private readonly List<Renderer> _hitBuffer = new List<Renderer>();
         private readonly List<Renderer> _finished = new List<Renderer>();
         private float _timer;
@@ -135,9 +137,11 @@ namespace NisitSimulator.CameraRig
                 var rend = _hitBuffer[i];
                 if (!_entries.TryGetValue(rend, out var entry))
                 {
+                    if (s_claimed.Contains(rend)) continue;
                     entry = CreateEntry(rend);
                     if (entry == null) continue;
                     _entries[rend] = entry;
+                    s_claimed.Add(rend);
                 }
                 entry.Blocking = true;
             }
@@ -166,6 +170,7 @@ namespace NisitSimulator.CameraRig
             {
                 if (_entries.TryGetValue(_finished[i], out var e)) Restore(e);
                 _entries.Remove(_finished[i]);
+                s_claimed.Remove(_finished[i]);
             }
         }
 
@@ -178,12 +183,50 @@ namespace NisitSimulator.CameraRig
             for (int i = 0; i < shared.Length; i++)
             {
                 if (shared[i] == null) { inst[i] = null; continue; }
-                inst[i] = new Material(shared[i]);
-                MakeTransparent(inst[i]);
+                inst[i] = CreateFadeMaterial(shared[i]);
             }
 
             rend.materials = inst;
             return new FadeEntry { Renderer = rend, Original = shared, Instances = inst, Alpha = 1f };
+        }
+
+        // Shader Graph ของ Synty (Synty/Generic_Basic, Generic_Standard) สลับเป็น Transparent ตอนรันไม่ได้
+        // ผลคือวัตถุกลายเป็นสีชมพู/หายไปตอนจาง จึงใช้ URP/Lit แทนเฉพาะสำเนาที่ใช้ตอนจาง
+        private static Shader _urpLit;
+        private static Material CreateFadeMaterial(Material src)
+        {
+            var shader = src.shader;
+            bool needsSwap = shader != null && shader.name.StartsWith("Synty/");
+            if (needsSwap && _urpLit == null) _urpLit = Shader.Find("Universal Render Pipeline/Lit");
+
+            Material m;
+            if (!needsSwap || _urpLit == null)
+            {
+                m = new Material(src);
+            }
+            else
+            {
+                m = new Material(_urpLit) { name = src.name + " (Fade)" };
+                string albedo = src.HasProperty("_Albedo_Map") ? "_Albedo_Map" : (src.HasProperty("_BaseMap") ? "_BaseMap" : (src.HasProperty("_MainTex") ? "_MainTex" : null));
+                if (albedo != null)
+                {
+                    m.SetTexture("_BaseMap", src.GetTexture(albedo));
+                    m.SetTextureScale("_BaseMap", src.GetTextureScale(albedo));
+                    m.SetTextureOffset("_BaseMap", src.GetTextureOffset(albedo));
+                }
+                if (src.HasProperty(BaseColorId)) m.SetColor(BaseColorId, src.GetColor(BaseColorId));
+                else if (src.HasProperty(ColorId)) m.SetColor(BaseColorId, src.GetColor(ColorId));
+                string normal = src.HasProperty("_Normal_Map") ? "_Normal_Map" : (src.HasProperty("_BumpMap") ? "_BumpMap" : null);
+                if (normal != null && src.GetTexture(normal) != null)
+                {
+                    m.SetTexture("_BumpMap", src.GetTexture(normal));
+                    m.EnableKeyword("_NORMALMAP");
+                }
+                if (src.HasProperty("_Smoothness")) m.SetFloat("_Smoothness", src.GetFloat("_Smoothness"));
+                if (src.HasProperty("_Metallic")) m.SetFloat("_Metallic", src.GetFloat("_Metallic"));
+            }
+            MakeTransparent(m);
+            return m;
         }
 
         // สลับวัสดุให้รองรับความโปร่งใส (ทำกับสำเนาเท่านั้น)
@@ -227,7 +270,7 @@ namespace NisitSimulator.CameraRig
 
         void OnDisable()
         {
-            foreach (var e in _entries.Values) Restore(e);
+            foreach (var kv in _entries) { Restore(kv.Value); s_claimed.Remove(kv.Key); }
             _entries.Clear();
         }
     }

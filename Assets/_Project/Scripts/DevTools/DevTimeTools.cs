@@ -178,7 +178,7 @@ namespace NisitSimulator.DevTools
             if (pl == null) { msg = "ไม่พบผู้เล่น"; return false; }
             if (BlockedByExam(out msg)) return false;
             if (!NisitSimulator.SaveLoad.PlayerSpawnSystem.SpawnAtDorm(pl, 0)) { msg = "ไม่พบ DormSpawnPoint ในฉาก"; return false; }
-            msg = "วาร์ปไปจุดเกิดหอพัก (DormSpawnPoint) — ออกทางประตูห้องได้จริง";
+            msg = "วาร์ปไปโถง Dorm_Building (DormSpawnPoint) — อยู่ในโลกภายนอก";
             return true;
         }
 

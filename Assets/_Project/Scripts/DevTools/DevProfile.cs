@@ -57,6 +57,7 @@ namespace NisitSimulator.DevTools
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Boot()
         {
+            if (MPTestProfile.Enabled) { MPTestProfile.Enforce(); return; }
             Active = false;
             SaveSystem.DevGuard = false;
             SaveSystem.DevPathOverride = null;
@@ -88,6 +89,7 @@ namespace NisitSimulator.DevTools
         // ออกจากฉากเล่นเกมไปเมนู/ล็อบบี้ระหว่างทดสอบ → ออกจากโหมดทดสอบอัตโนมัติ (ไม่ให้เมนู \"เล่นต่อ\" เห็นเซฟทดสอบ)
         static void OnSceneLoaded(Scene s, LoadSceneMode mode)
         {
+            if (MPTestProfile.Enabled) { MPTestProfile.Enforce(); return; }
             if (mode != LoadSceneMode.Single) return;
             if (!Active)
             {
@@ -111,6 +113,7 @@ namespace NisitSimulator.DevTools
         // ---------- เข้าโหมดทดสอบ (คัดลอกข้อมูลเกมปัจจุบัน → โปรไฟล์ Dev) ----------
         public static bool Enter(out string msg)
         {
+            if (MPTestProfile.Enabled) { msg = "กำลังใช้โปรไฟล์ -mptest แยกอยู่แล้ว"; return false; }
             if (Active) { msg = "อยู่ในโปรไฟล์ทดสอบแล้ว"; return true; }
             if (InNetworkSession) { msg = "ใช้โปรไฟล์ทดสอบไม่ได้ระหว่างเล่นหลายคน — ออกจากห้อง Multiplayer ก่อน (เกมนี้ไม่มีห้อง Dev ที่ Host ตรวจสอบสิทธิ์ได้)"; return false; }
             if (!InGameplayScene) { msg = "เข้าโหมดทดสอบได้เฉพาะในฉากเล่นเกม (" + GameSession.GameplayScene + ")"; return false; }
@@ -218,6 +221,7 @@ namespace NisitSimulator.DevTools
         // ---------- ออกจากโหมดทดสอบ: โหลดโปรไฟล์เดิมกลับ ----------
         public static bool Exit(out string msg)
         {
+            if (MPTestProfile.Enabled) { msg = "โปรไฟล์ -mptest ต้องคง guard จนปิดแอป"; return false; }
             if (!Active) { msg = "ไม่ได้อยู่ในโปรไฟล์ทดสอบ"; return false; }
             if (!File.Exists(ReturnSnapshotPath)) { msg = "ไม่พบสำเนาสถานะเดิม — ยกเลิกการออก (เซฟจริงยังไม่ถูกแตะ)"; return false; }
             Active = false;

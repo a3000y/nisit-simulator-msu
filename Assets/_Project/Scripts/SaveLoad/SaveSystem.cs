@@ -29,8 +29,13 @@ namespace NisitSimulator.SaveLoad
         //   DevGuard = true      → กำลังอยู่ในโหมดทดสอบ: ห้ามเขียน/ลบไฟล์เซฟช่องจริงทุกกรณี (autosave/ออกเกม/จบเกม)
         //   DevPathOverride      → อ่าน+เขียนเซฟทดสอบแทนช่องจริง
         //   DevReadOverride      → อ่านอย่างเดียวจากไฟล์นี้ (ใช้ตอนออกจากโหมดทดสอบ: คืนสถานะเดิมจากสำเนา) · ล้างเองเมื่อมีการเซฟจริงครั้งถัดไป
-        public static bool DevGuard;
-        public static string DevPathOverride;
+        static bool devGuard;
+        public static bool DevGuard
+        {
+            get => devGuard || NisitSimulator.DevTools.MPTestProfile.Enabled;
+            set => devGuard = value;
+        }
+        public static string DevPathOverride = NisitSimulator.DevTools.MPTestProfile.SavePath;
         public static string DevReadOverride;
         public static int DevBlockedRealWrites;   // จำนวนครั้งที่ระบบพยายามเขียน/ลบเซฟจริงระหว่างทดสอบ (ถูกกันไว้)
         public static string RealSlotPath(int slot) => PathFor(slot);
@@ -38,6 +43,9 @@ namespace NisitSimulator.SaveLoad
         static bool IsRealSlotPath(string p)
         {
             string full = Path.GetFullPath(p);
+            string name = Path.GetFileName(full);
+            if (name.StartsWith("nisit_save_", System.StringComparison.OrdinalIgnoreCase) &&
+                name.EndsWith(".json", System.StringComparison.OrdinalIgnoreCase)) return true;
             for (int s = 0; s <= 2; s++) if (string.Equals(full, Path.GetFullPath(PathFor(s)), System.StringComparison.OrdinalIgnoreCase)) return true;
             return false;
         }

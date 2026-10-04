@@ -84,6 +84,7 @@ namespace NisitSimulator.Interaction
             p.rotation = rot;
             if (cc != null) cc.enabled = true;
             Physics.SyncTransforms();
+            NisitSimulator.Net.NetworkAvatar.NotifyLocalTeleport(p);
             NisitSimulator.CameraRig.IsometricCameraRig.SnapAll();
         }
     }

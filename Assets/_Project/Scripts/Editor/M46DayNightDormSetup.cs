@@ -17,7 +17,7 @@ namespace NisitSimulator.EditorTools
     // ใช้: เมนู Nisit -> Setup Day-Night + Dorm Spawn (M46)
     public static class M46DayNightDormSetup
     {
-        const string DormInterior = "Spawn_หอพัก";
+
 
         [MenuItem("Nisit/Setup Day-Night + Dorm Spawn (M46)", false, 60)]
         public static void SetupMenu()
@@ -88,87 +88,7 @@ namespace NisitSimulator.EditorTools
                 }
             log.Add($"ไฟถนน: {lamps} ต้น (สร้างแสงใหม่ {lampsNew})");
 
-            // ---------- 3) จุดเกิดหอพัก ----------
-            var interiors = GameObject.Find("Interiors");
-            var dormSpawnRef = interiors != null ? interiors.transform.Find(DormInterior) : null;
-            if (dormSpawnRef == null) { log.Add("❌ ไม่พบ Interiors/" + DormInterior + " (ห้องหอพัก) — รัน Build Interiors ก่อน"); return string.Join("\n", log); }
-            var room = dormSpawnRef.position;   // จุดกลางห้องฝั่งประตู (1316.8, y, -3.56)
-
-            var root = GameObject.Find("DormSpawn");
-            if (root == null) { root = new GameObject("DormSpawn"); Undo.RegisterCreatedObjectUndo(root, "M46"); }
-
-            // เตียงในห้องหอพัก (เรียงซ้าย→ขวา)
-            var beds = new List<Transform>();
-            foreach (Transform c in interiors.transform)
-                if (c.name.StartsWith("bed") && Mathf.Abs(c.position.x - room.x) < 12f && Mathf.Abs(c.position.z - room.z) < 12f) beds.Add(c);
-            beds.Sort((a, b) => a.position.x.CompareTo(b.position.x));
-
-            var sp = Child(root.transform, "DormSpawnPoint");
-            var dsp = sp.GetComponent<DormSpawnPoint>() ?? sp.gameObject.AddComponent<DormSpawnPoint>();
-            dsp.interiorName = DormInterior;
-            dsp.roomId = "dorm_1";
-
-            // ข้างเตียง (ฝั่งทางเดิน) หันไปทางประตูห้อง (ทิศใต้ = yaw 180)
-            Vector3 SideOfBed(Transform bed)
-            {
-                var bb = BoundsOf(bed);
-                float side = bed.position.x < room.x ? bb.max.x + 0.95f : bb.min.x - 0.95f;   // ด้านที่หันเข้ากลางห้อง
-                return new Vector3(side, room.y - 0.13f, bb.center.z - 0.2f);
-            }
-            if (beds.Count > 0) sp.position = SideOfBed(beds[0]);
-            else sp.position = room + new Vector3(0f, -0.13f, 1.0f);
-            sp.rotation = Quaternion.Euler(0f, 180f, 0f);
-
-            var slots = new List<Transform>();
-            if (beds.Count > 1) { var s1 = Child(root.transform, "DormSpawnSlot_2"); s1.position = SideOfBed(beds[1]); s1.rotation = Quaternion.Euler(0f, 180f, 0f); slots.Add(s1); }
-            var s2 = Child(root.transform, "DormSpawnSlot_3"); s2.position = room + new Vector3(-1.2f, -0.13f, 1.4f); s2.rotation = Quaternion.Euler(0f, 180f, 0f); slots.Add(s2);
-            var s3 = Child(root.transform, "DormSpawnSlot_4"); s3.position = room + new Vector3(1.2f, -0.13f, 1.4f); s3.rotation = Quaternion.Euler(0f, 180f, 0f); slots.Add(s3);
-            dsp.extraSlots = slots.ToArray();
-
-            // จุดออกหน้าประตูหอพักด้านนอก
-            BuildingDoor dormDoor = null;
-            foreach (var d in Object.FindObjectsByType<BuildingDoor>(FindObjectsSortMode.None))
-                if (d.interiorSpawn != null && d.interiorSpawn.name == DormInterior) dormDoor = d;
-            if (dormDoor != null)
-            {
-                var ex = Child(root.transform, "DormExteriorExit");
-                ex.position = dormDoor.transform.position + dormDoor.transform.forward * 1.2f;
-                ex.rotation = Quaternion.Euler(0f, dormDoor.transform.eulerAngles.y, 0f);
-                dsp.exteriorExit = ex;
-            }
-            else log.Add("⚠ ไม่พบประตูหอพักด้านนอก (BuildingDoor ของ " + DormInterior + ")");
-
-            // ตรวจว่าจุดเกิดไม่อยู่ในกำแพง/เฟอร์นิเจอร์ และมีพื้นรองรับ
-            foreach (var t in new List<Transform> { sp }.Concat(slots))
-                log.Add($"{t.name} {t.position.ToString("F2")}: {CheckPoint(t.position)}");
-            if (dsp.exteriorExit != null) log.Add($"DormExteriorExit {dsp.exteriorExit.position.ToString("F2")}: {CheckPoint(dsp.exteriorExit.position)}");
-            EditorUtility.SetDirty(dsp);
-
-            // ---------- 4) เตียงนอน ----------
-            int layer = LayerMask.NameToLayer("Interactable");
-            var sleepRoot = Child(root.transform, "SleepSpots");
-            for (int i = sleepRoot.childCount - 1; i >= 0; i--) Undo.DestroyObjectImmediate(sleepRoot.GetChild(i).gameObject);
-            var oldGlobal = GameObject.Find("SleepSpots");   // ของเดิมจาก Nisit/Setup Sleep (ถ้าเคยรัน) — กันเตียงซ้อน 2 จุด
-            if (oldGlobal != null && oldGlobal.transform.parent == null) { Undo.DestroyObjectImmediate(oldGlobal); log.Add("ลบ SleepSpots เดิม (แทนด้วย DormSpawn/SleepSpots)"); }
-            float unit = 1.3f;
-            var player = GameObject.Find("Player");
-            if (player != null) { var cc = player.GetComponent<CharacterController>(); if (cc != null) unit = cc.height * Mathf.Abs(player.transform.lossyScale.y); }
-            for (int i = 0; i < beds.Count; i++)
-            {
-                var wb = BoundsOf(beds[i]);
-                var m = new GameObject("SleepSpot_" + (i + 1));
-                Undo.RegisterCreatedObjectUndo(m, "M46");
-                m.transform.SetParent(sleepRoot, false);
-                m.transform.position = new Vector3(wb.center.x, room.y - 0.13f, wb.center.z);
-                if (layer >= 0) m.layer = layer;
-                var col = m.AddComponent<BoxCollider>();
-                col.isTrigger = true;
-                col.center = new Vector3(0f, wb.extents.y, 0f);
-                col.size = wb.size + Vector3.one * (0.5f * unit);
-                var st = m.AddComponent<SleepStation>();
-                st.wakePoint = i == 0 ? sp : (i - 1 < slots.Count ? slots[i - 1] : sp);
-            }
-            log.Add($"เตียงนอนในหอพัก: {beds.Count} เตียง");
+            log.Add(SetupDormBuilding(GameObject.Find("Dorm_Building")?.transform));
 
             // ---------- 5) เวลาเริ่มเกมใหม่ ----------
             var clock = Object.FindFirstObjectByType<GameClock>();
@@ -178,6 +98,99 @@ namespace NisitSimulator.EditorTools
             return string.Join("\n", log);
         }
 
+        // Local markers follow the building, including after a generator rebuild.
+        public static string SetupDormBuilding(Transform building)
+        {
+            if (building == null) return "❌ ไม่พบ Dorm_Building — ไม่ย้ายกลับหอเดิม";
+            DormBuildingGenerator.EnsureEntranceDoors(building);
+            var root = building.Find("DormSpawn");
+            if (root == null)
+            {
+                var existing = GameObject.Find("DormSpawn");
+                root = existing != null && existing.scene == building.gameObject.scene
+                    ? existing.transform : Child(building, "DormSpawn");
+            }
+            Undo.SetTransformParent(root, building, "M46 dorm spawn");
+            root.localPosition = Vector3.zero;
+            root.localRotation = Quaternion.identity;
+            root.localScale = Vector3.one;
+            var sp = Child(root, "DormSpawnPoint");
+            var dsp = sp.GetComponent<DormSpawnPoint>() ?? sp.gameObject.AddComponent<DormSpawnPoint>();
+            dsp.usesWarpInterior = false;
+            dsp.interiorName = "";
+            dsp.exteriorExit = null;
+            dsp.roomId = "dorm_building_101";
+            // At scale .75: spacing >=1.5375m, >=1.29m beyond the front leaf sweep.
+            var points = new[] { new Vector3(-1.2f, 0.3f, 2.8f), new Vector3(0.85f, 0.3f, 2.8f),
+                                 new Vector3(-1.2f, 0.3f, 5f), new Vector3(0.85f, 0.3f, 5f) };
+            var slots = new Transform[3];
+            for (int i = 0; i < 4; i++)
+            {
+                var point = i == 0 ? sp : Child(root, "DormSpawnSlot_" + (i + 1));
+                point.localPosition = points[i];
+                point.localRotation = Quaternion.identity; // face +Z toward the central corridor
+                if (i > 0) slots[i - 1] = point;
+            }
+            dsp.extraSlots = slots;
+            var unusedExit = root.Find("DormExteriorExit");
+            if (unusedExit != null) Undo.DestroyObjectImmediate(unusedExit.gameObject);
+
+            var sleepRoot = Child(root, "SleepSpots");
+            for (int i = sleepRoot.childCount - 1; i >= 0; i--) Undo.DestroyObjectImmediate(sleepRoot.GetChild(i).gameObject);
+            var oldGlobal = GameObject.Find("SleepSpots");
+            if (oldGlobal != null && oldGlobal.transform.parent == null) Undo.DestroyObjectImmediate(oldGlobal);
+            int layer = LayerMask.NameToLayer("Interactable");
+            var wakes = new Transform[4];
+            var stations = new List<SleepStation>();
+            for (int i = 0; i < 4; i++)
+            {
+                var room = building.Find("Floor_1/Rooms/Room_10" + (i + 1));
+                var bed = room != null ? room.Find("Furniture/Bed_A") : null;
+                if (bed == null) continue;
+                var wake = Child(sleepRoot, "Wake_10" + (i + 1));
+                wake.position = room.TransformPoint(new Vector3(0f, 0f, 4.2f));
+                wake.rotation = room.rotation * Quaternion.Euler(0f, 180f, 0f);
+                wakes[i] = wake;
+                var spot = Child(sleepRoot, "SleepSpot_10" + (i + 1));
+                spot.SetPositionAndRotation(bed.position, bed.rotation);
+                if (layer >= 0) spot.gameObject.layer = layer;
+                var bb = BoundsOf(bed);
+                var col = spot.gameObject.AddComponent<BoxCollider>();
+                col.isTrigger = true;
+                col.center = spot.InverseTransformPoint(bb.center);
+                // Bed local sizes; collider is only for interaction, furniture stays solid.
+                col.size = new Vector3(1.6f, 1.2f, 2.5f);
+                var st = spot.gameObject.AddComponent<SleepStation>();
+                st.wakePoint = wake;
+                stations.Add(st);
+            }
+            if (stations.Count != 4) throw new System.InvalidOperationException("Dorm_Building: ไม่พบเตียงชั้น 1 ครบ 4 ห้อง");
+            foreach (var st in stations)
+            {
+                // All stations use the same client-slot mapping, so different beds cannot overlap in MP.
+                st.extraWakePoints = wakes;
+                EditorUtility.SetDirty(st);
+            }
+            foreach (var door in building.GetComponentsInChildren<NisitSimulator.GEBuilding.GEDoor>(true))
+            {
+                Undo.RecordObject(door, "M46 closed dorm doors");
+                door.startOpen = false;
+                if (door.hinge != null) door.hinge.localRotation = Quaternion.identity;
+                EditorUtility.SetDirty(door);
+                PrefabUtility.RecordPrefabInstancePropertyModifications(door);
+            }
+            EditorUtility.SetDirty(dsp);
+            Physics.SyncTransforms();
+            var report = new List<string>();
+            for (int i = 0; i < 4; i++)
+            {
+                var point = dsp.GetSlot(i);
+                report.Add(point.name + " " + point.position.ToString("F2") + ": " + CheckPoint(point.position));
+            }
+            report.Add("จุดนอน DM_Bed ห้อง 101–104: " + stations.Count + " · outside · ประตูเริ่มปิด");
+            EditorSceneManager.MarkSceneDirty(building.gameObject.scene);
+            return string.Join("\n", report);
+        }
         static Transform Child(Transform parent, string name)
         {
             var t = parent.Find(name);
@@ -213,3 +226,4 @@ namespace NisitSimulator.EditorTools
     }
 }
 #endif
+

@@ -134,6 +134,16 @@ namespace NisitSimulator.SaveLoad
             var pos = GroundSnap(p, point.position);
             var rot = Quaternion.Euler(0f, point.eulerAngles.y, 0f);
 
+            // Walk-in buildings belong to the outdoor world, including bed wake points.
+            if (dorm != null && !dorm.usesWarpInterior)
+            {
+                if (InteriorManager.Instance != null)
+                    InteriorManager.Instance.RestoreState(false, "", Vector3.zero, Quaternion.identity);
+                InteriorManager.Teleport(p.transform, pos, rot);
+                if (DayNightCycle.Instance != null) DayNightCycle.Instance.ApplyNow();
+                return;
+            }
+
             Vector3 exitPos; Quaternion exitRot;
             if (dorm != null && dorm.exteriorExit != null) { exitPos = GroundSnap(p, dorm.exteriorExit.position); exitRot = Quaternion.Euler(0f, dorm.exteriorExit.eulerAngles.y, 0f); }
             else
@@ -236,7 +246,7 @@ namespace NisitSimulator.SaveLoad
         static void ExteriorOf(BuildingDoor door, out Vector3 pos, out Quaternion rot)
         {
             var dorm = DormSpawnPoint.Main;
-            if (dorm != null && dorm.exteriorExit != null && door.interiorSpawn != null && door.interiorSpawn.name == dorm.interiorName)
+            if (dorm != null && dorm.usesWarpInterior && dorm.exteriorExit != null && door.interiorSpawn != null && door.interiorSpawn.name == dorm.interiorName)
             {
                 pos = dorm.exteriorExit.position; rot = Quaternion.Euler(0f, dorm.exteriorExit.eulerAngles.y, 0f);
             }
@@ -253,6 +263,8 @@ namespace NisitSimulator.SaveLoad
             if (nm == null || !nm.IsClient || !nm.IsConnectedClient) return 0;
             var dorm = DormSpawnPoint.Main;
             int n = dorm != null ? dorm.SlotCount : 1;
+            var lobby = NisitSimulator.Net.LobbyState.Instance;
+            if (lobby != null && lobby.IsSpawned && lobby.Find(nm.LocalClientId, out var member)) return member.SlotIndex % Mathf.Max(1, n);
             var ids = new System.Collections.Generic.List<ulong>();
             foreach (var no in Object.FindObjectsByType<Unity.Netcode.NetworkObject>(FindObjectsSortMode.None))
                 if (no.IsPlayerObject && !ids.Contains(no.OwnerClientId)) ids.Add(no.OwnerClientId);

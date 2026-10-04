@@ -249,6 +249,7 @@ namespace NisitSimulator.Net
         void SendStatus(int count, int total)
         {
             if (SleepController.Instance != null) SleepController.Instance.UpdateWaiting(count, total);
+            if (nm == null || !nm.IsListening || nm.CustomMessagingManager == null) return;
             using (var w = new FastBufferWriter(8, Allocator.Temp))
             {
                 w.WriteValueSafe(count);
