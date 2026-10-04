@@ -84,7 +84,7 @@ namespace NisitSimulator.Interaction
         // ---------- เริ่ม ----------
         public void RequestSleep(SleepStation st, GameObject who, bool skipConfirm)
         {
-            if (state != SleepState.Idle || st == null || who == null) return;   // กำลังยืนยัน/นอนอยู่ → เมิน (กันซ้ำ)
+            if (state != SleepState.Idle || st == null || who == null || !st.CanUseAssignedBed) return;   // กำลังยืนยัน/นอนอยู่ → เมิน (กันซ้ำ)
             if (!CanSleepNow(who, out var why)) { HUDController.Toast(why); return; }
             station = st; sleeper = who;
             if (skipConfirm) { state = SleepState.Confirming; prevTimeScale = 1f; Lock(); Confirm(); return; }
@@ -154,6 +154,7 @@ namespace NisitSimulator.Interaction
         // จุดตื่น: เล่นคนเดียว = จุดข้างเตียงเดิม · Multiplayer = ช่องหอพักของผู้เล่นคนนี้ (เดิมทุกคนตื่นที่จุดเดียวกัน → ตัวละครซ้อนกัน)
         static Transform WakePointFor(SleepStation st)
         {
+            if (st.useBedWakePoint) return st.WakePoint;
             var sync = NisitSimulator.Net.WorldTimeSync.Instance;
             var dorm = DormSpawnPoint.Main;
             if (sync != null && sync.IsMultiplayerSession && dorm != null)

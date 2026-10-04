@@ -20,7 +20,10 @@ namespace NisitSimulator.Academics
         public int endMinute = 660;
         [Tooltip("ชื่อตึกให้ตรงกับ Spawn_<ชื่อ> ในฉาก เช่น อาคารเรียน / คณะ IT / อาคารบริหาร")]
         public string building = "คณะ IT";
+        [Tooltip("ชื่อห้องที่แสดง (ข้อมูลเดิม) — ห้องจริงใช้ roomId")]
         public string room = "";
+        [Tooltip("รหัสห้องใน ClassroomCatalog (เช่น IT-201) — เข้าเรียนนับเฉพาะใน ClassroomZone ที่ตรงกัน · ว่าง = ใช้การเช็กตึกแบบเดิม")]
+        public string roomId = "";
 
         public ClassSession() { }
         public ClassSession(int day, int startHour, int endHour, string building, string room)
@@ -28,13 +31,17 @@ namespace NisitSimulator.Academics
             this.day = day; startMinute = startHour * 60; endMinute = endHour * 60;
             this.building = building; this.room = room;
         }
+        public ClassSession(int day, int startHour, int endHour, string building, string room, string roomId)
+            : this(day, startHour, endHour, building, room) { this.roomId = roomId ?? ""; }
+
+        public bool HasRoom => !string.IsNullOrEmpty(roomId);
 
         public float Hours => Mathf.Max(0, endMinute - startMinute) / 60f;
         public int MaxTicks => Mathf.Max(1, Mathf.CeilToInt(Hours - 0.001f));   // จุดเรียนให้ผลทุก 60 นาทีเกม
         public bool Overlaps(ClassSession o) =>
             o != null && day == o.day && startMinute < o.endMinute && o.startMinute < endMinute;
         public string TimeText => $"{startMinute / 60:00}:{startMinute % 60:00}–{endMinute / 60:00}:{endMinute % 60:00}";
-        public string ShortText => $"ว.{day} {TimeText} {building}";
+        public string ShortText => $"ว.{day} {TimeText} {(HasRoom ? roomId : building)}";
     }
 
     [Serializable]

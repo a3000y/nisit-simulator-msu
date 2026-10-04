@@ -208,6 +208,10 @@ namespace NisitSimulator.DevTools
             var nm = NetworkManager.Singleton;
             switch (cmd)
             {
+                case "bed-prompt": return OwnBedInteract(false);
+                case "bed-interact": return OwnBedInteract(true);
+                case "room-continue": return TestRoomContinue(a.Length == 0 ? "valid" : a[0]);
+                case "room-walk": StartCoroutine(RoomWalk(a.Length > 0 && a[0] == "back")); return "CC route started";
                 case "lobby-ready":
                     if (NisitSimulator.Net.LobbyController.Instance != null) NisitSimulator.Net.LobbyController.Instance.ToggleReady();
                     return "ready toggle requested";
@@ -581,6 +585,7 @@ namespace NisitSimulator.DevTools
         [Serializable]
         class State
         {
+            public RoomTestInfo room;
             public bool devGuard, mptest, doorsReady;
             public int guardFrames, guardViolations, doorCount, doorsClosed, doorAccepted, doorRejected;
             public uint doorRevision;
@@ -618,6 +623,7 @@ namespace NisitSimulator.DevTools
             {
                 var nm = NetworkManager.Singleton;
                 FillDoorState(s);
+                FillRoomState(s);
                 var lobby = NisitSimulator.Net.LobbyState.Instance;
                 s.lobbyNotice = NisitSimulator.Net.LobbyNotice.LastNotice;
                 var connection = NisitSimulator.Net.LobbyConnection.Instance;

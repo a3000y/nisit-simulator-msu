@@ -58,6 +58,8 @@ namespace NisitSimulator.EditorTools
             var oldPosition = old != null ? old.transform.position : Vector3.zero;
             var oldRotation = old != null ? old.transform.rotation : Quaternion.identity;
             var oldScale = old != null ? old.transform.localScale : Vector3.one;
+            var oldSpawn = old != null ? old.GetComponentInChildren<NisitSimulator.Interaction.DormSpawnPoint>() : null;
+            var roomSettings = oldSpawn != null ? oldSpawn.CopyRoomSettings() : NisitSimulator.Interaction.DormRoomSlot.Defaults();
             if (old != null) Object.DestroyImmediate(old);
             var root = new GameObject("Dorm_Building").transform;
             root.SetParent(oldParent, false);
@@ -75,7 +77,7 @@ namespace NisitSimulator.EditorTools
             foreach (var t in root.GetComponentsInChildren<Transform>(true))
                 if (t.GetComponentInParent<GEDoor>() == null) t.gameObject.isStatic = true;
 
-            M46DayNightDormSetup.SetupDormBuilding(root);
+            M46DayNightDormSetup.SetupDormBuilding(root, roomSettings);
 
             return $"Dorm_Building built: colliders={root.GetComponentsInChildren<Collider>().Length} lights={root.GetComponentsInChildren<Light>().Length} doors={root.GetComponentsInChildren<GEDoor>().Length} rooms={Floors * 8}";
         }

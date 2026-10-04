@@ -56,6 +56,7 @@ namespace NisitSimulator.Systems
 
         // ภารกิจเดินไปทำ (A)
         private Choice objective;
+        public bool HasObjective => objective != null;   // มีภารกิจ GoTo ค้าง (ระบบนำทางห้องเรียนจะไม่ทับแถบภารกิจ)
         private Vector3 objectiveTarget;
         private GameObject beacon;
 

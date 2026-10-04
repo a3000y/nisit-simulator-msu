@@ -6,37 +6,48 @@ namespace NisitSimulator.Academics
     // ค่าเริ่มต้นของหลักสูตรวิทยาการคอมพิวเตอร์ (สมมติ) 4 ปี 8 ภาค 120 หน่วยกิต
     //   ใช้สร้าง asset ใน Resources (Editor tool) และเป็นค่าสำรองถ้าไม่มี asset
     //
-    // ตารางเรียน (ภาคละ 3 วัน · คาบละ 2 ชม. · วิชาละ 2 คาบ/ภาค):
+    // ตารางเรียน (ปฏิทินรุ่น 2: ภาคละ 10 วัน · คาบละ 2 ชม. · วิชาละ 4 ครั้ง/ภาค):
+    //   วันที่ 1–4 เรียน · 5 สอบกลางภาค · 6–9 เรียน (ตารางเดียวกับ 1–4) · 10 สอบปลายภาค
     //   P1 09-11  P2 11-13  P3 13-15  P4 15-17  (ภาคค่ำสำหรับเรียนซ้ำ: 18-20, 20-22)
-    //   ภาคที่มี 6 วิชา ใช้ช่อง c1..c6 ครบ 12 คาบพอดี ไม่มีวิชาไหนชนกัน
+    //   ช่อง c1..c6 ใช้ 12 จาก 16 คาบของวันที่ 1–4 ไม่ทับกัน · เว้นว่างวันละ 1 คาบ (ว.1 15-17, ว.2 15-17, ว.3 09-11, ว.4 15-17)
     //   ปี 3 มี 4 วิชาบังคับ (c1..c4) → c5/c6 เว้นไว้เป็นช่องวิชาเลือก EA/EB
-    //   ปี 4 ฝึกงาน (เช้า) กับโครงงาน 1 (บ่าย) แยกเวลากัน และไม่ชนช่องวิชาเลือก
+    //   ปี 4 ฝึกงาน (เช้า) กับโครงงาน (บ่าย) อยู่วันที่ 1/3 (+6/8) ไม่ชนช่องวิชาเลือก (วันที่ 2/4)
     public static class CsCurriculumDefaults
     {
         const string Hall = "อาคารเรียน";
         const string IT = "คณะ IT";
         const string Office = "อาคารบริหาร";
-        const string HallRoom = "ห้องบรรยายรวม";
-        const string LabRoom = "ห้องปฏิบัติการคอมพิวเตอร์";
         const string OfficeRoom = "สำนักงานฝึกงาน/สหกิจ";
 
-        // ช่องเวลา (วัน, เริ่ม, จบ) ×2 คาบ
+        // ช่องเวลาครึ่งแรกของภาค (วัน, เริ่ม, จบ) ×2 คาบ — ครึ่งหลังซ้ำ +HalfOffset วัน (วิชาละ 4 ครั้ง)
+        public const int HalfOffset = 5;
         static readonly int[][] Slot =
         {
-            new[] { 1,  9, 11,  2, 13, 15 },   // c1
-            new[] { 1, 11, 13,  2, 15, 17 },   // c2
-            new[] { 1, 13, 15,  3,  9, 11 },   // c3
-            new[] { 1, 15, 17,  3, 11, 13 },   // c4
-            new[] { 2,  9, 11,  3, 13, 15 },   // c5 / EA
-            new[] { 2, 11, 13,  3, 15, 17 },   // c6 / EB
+            new[] { 1,  9, 11,  3, 11, 13 },   // c1
+            new[] { 1, 11, 13,  3, 13, 15 },   // c2
+            new[] { 1, 13, 15,  3, 15, 17 },   // c3
+            new[] { 2,  9, 11,  4,  9, 11 },   // c4
+            new[] { 2, 11, 13,  4, 11, 13 },   // c5 / EA
+            new[] { 2, 13, 15,  4, 13, 15 },   // c6 / EB
         };
-        // ภาคค่ำ (เรียนซ้ำ/เก็บตก) 3 ช่องที่ไม่ชนกันเอง
+        // ภาคค่ำ (เรียนซ้ำ/เก็บตก) 4 ช่องที่ไม่ชนกันเอง (ช่องละราว 9 วิชา)
         static readonly int[][] Evening =
         {
-            new[] { 1, 18, 20,  2, 18, 20 },
-            new[] { 1, 20, 22,  3, 18, 20 },
-            new[] { 2, 20, 22,  3, 20, 22 },
+            new[] { 1, 18, 20,  3, 18, 20 },
+            new[] { 2, 18, 20,  4, 18, 20 },
+            new[] { 1, 20, 22,  3, 20, 22 },
+            new[] { 2, 20, 22,  4, 20, 22 },
         };
+
+        // คาบคู่หนึ่งในครึ่งแรก → 4 คาบทั้งภาค (ครึ่งแรก + ซ้ำครึ่งหลัง) เรียงตามวัน
+        static List<ClassSession> FourMeetings(int dA, int sA, int eA, int dB, int sB, int eB, System.Func<int, int, int, ClassSession> make)
+        {
+            return new List<ClassSession>
+            {
+                make(dA, sA, eA), make(dB, sB, eB),
+                make(dA + HalfOffset, sA, eA), make(dB + HalfOffset, sB, eB),
+            };
+        }
 
         public static CurriculumDefinition Create()
         {
@@ -114,17 +125,17 @@ namespace NisitSimulator.Academics
             // ---- ปี 4 ภาค 1 (9) — ฝึกงานช่วงเช้า / โครงงาน 1 ช่วงบ่าย ----
             var intern = C("CS401", "การฝึกงานทางวิทยาการคอมพิวเตอร์", 6, CourseCategory.Internship, 4, 1, -1, Office, "CS301", "CS308");
             intern.minEarnedCredits = 90;
-            intern.sessions = new List<ClassSession> { new ClassSession(1, 9, 13, Office, OfficeRoom), new ClassSession(3, 9, 13, Office, OfficeRoom) };
+            intern.sessions = FourMeetings(1, 9, 13, 3, 9, 13, (d, a, b) => S(d, a, b, Office, "CS401"));
             list.Add(intern);
             var p1 = C("CS402", "โครงงานวิทยาการคอมพิวเตอร์ 1", 3, CourseCategory.Project, 4, 1, -1, IT, "CS307");
-            p1.sessions = new List<ClassSession> { new ClassSession(1, 13, 15, IT, LabRoom), new ClassSession(2, 13, 15, IT, LabRoom) };
+            p1.sessions = FourMeetings(1, 13, 15, 3, 13, 15, (d, a, b) => S(d, a, b, IT, "CS402"));
             list.Add(p1);
             // ---- ปี 4 ภาค 2 (9) ----
             var p2 = C("CS403", "โครงงานวิทยาการคอมพิวเตอร์ 2", 6, CourseCategory.Project, 4, 2, -1, IT, "CS402");
-            p2.sessions = new List<ClassSession> { new ClassSession(1, 13, 17, IT, LabRoom), new ClassSession(2, 13, 17, IT, LabRoom) };
+            p2.sessions = FourMeetings(1, 13, 17, 3, 13, 17, (d, a, b) => S(d, a, b, IT, "CS403"));
             list.Add(p2);
             var sem = C("CS404", "สัมมนาและการเตรียมความพร้อมสู่อาชีพ", 3, CourseCategory.Core, 4, 2, -1, Hall, "CS401");
-            sem.sessions = new List<ClassSession> { new ClassSession(1, 9, 11, Hall, HallRoom), new ClassSession(3, 9, 11, Hall, HallRoom) };
+            sem.sessions = FourMeetings(1, 9, 11, 3, 9, 11, (d, a, b) => S(d, a, b, Hall, "CS404"));
             list.Add(sem);
 
             // ---- วิชาเลือกเฉพาะทาง (EA = ช่อง c5, EB = ช่อง c6) ----
@@ -137,24 +148,93 @@ namespace NisitSimulator.Academics
             list.Add(C("EL307", "การออกแบบและพัฒนาเกมขั้นสูง", 3, CourseCategory.Elective, 0, 0, 5, IT, "EL301"));
             list.Add(C("EL308", "การออกแบบและพัฒนาระบบความเป็นจริงเสมือน", 3, CourseCategory.Elective, 0, 0, 4, IT, "EL302"));
 
-            // ตอนเรียนซ้ำ (ภาคค่ำ) — วนช่อง 3 แบบตามลำดับวิชาบังคับ
+            // ตอนเรียนซ้ำ (ภาคค่ำ) — วนช่อง 4 แบบตามลำดับวิชาบังคับ (วิชาละ 4 ครั้ง/ภาค เหมือนตอนปกติ)
+            //   วิชาในช่องเดียวกันเรียนพร้อมกัน → ต้องคนละห้อง: ใช้ห้องเดิมของวิชาก่อน ถ้าไม่ว่างหยิบห้องว่างประเภทเดียวกันห้องถัดไป
+            //   (ช่องค่ำ 4 ช่องไม่ทับกันเอง และไม่ทับคาบกลางวัน → ห้องหนึ่งใช้ได้ช่องละหนึ่งวิชา)
+            var usedByLane = new List<HashSet<string>>();
+            for (int k = 0; k < Evening.Length; k++) usedByLane.Add(new HashSet<string>());
             int lane = 0;
             foreach (var d in list)
             {
                 if (!d.IsRequired) continue;
-                var e = Evening[lane % Evening.Length];
-                string room = RoomFor(d.sessions[0].building);
-                d.retakeSessions = new List<ClassSession>
-                {
-                    new ClassSession(e[0], e[1], e[2], d.sessions[0].building, room + " (ภาคค่ำ)"),
-                    new ClassSession(e[3], e[4], e[5], d.sessions[0].building, room + " (ภาคค่ำ)"),
-                };
+                int li = lane % Evening.Length;
+                var e = Evening[li];
+                string roomId = PickEveningRoom(d, usedByLane[li]);
+                string building = d.sessions[0].building;
+                string room = DisplayRoom(roomId) + " (ภาคค่ำ)";
+                d.retakeSessions = FourMeetings(e[0], e[1], e[2], e[3], e[4], e[5], (dd, a, b) => new ClassSession(dd, a, b, building, room, roomId));
                 lane++;
             }
             c.courses = list;
         }
 
-        static string RoomFor(string building) => building == Hall ? HallRoom : building == Office ? OfficeRoom : LabRoom;
+        // ===== ห้องเรียนตอนปกติ (รหัสวิชา → ห้อง) =====
+        //   ช่อง c1..c6 ไม่ทับกันเลย → ห้องหนึ่งรับได้ช่องละหนึ่งวิชา (ใช้ร่วมกันคนละเวลา) · ตรวจชนตามภาค (1/2) — วิชาเลือกเปิดทั้งสองภาค
+        //   เขียนโปรแกรม → แล็บคอม · ทฤษฎี → ห้องบรรยาย (CS: ตึก IT / GE+MA: ตึก GE) · สัมมนา → ห้องสัมมนา · ฝึกงาน → อาคารบริหาร
+        public static readonly Dictionary<string, string> RegularRoom = new Dictionary<string, string>
+        {
+            // ภาค 1
+            { "GE101", "GE-101" }, { "GE102", "GE-101" }, { "GE103", "GE-101" }, { "MA201", "GE-101" }, { "MA101", "GE-101" }, { "GE201", "GE-102" },
+            { "CS201", "IT-201" }, { "CS202", "IT-201" }, { "CS203", "IT-201" }, { "CS102", "IT-201" }, { "CS303", "IT-202" }, { "CS402", "IT-203" },
+            { "CS301", "IT-301" }, { "CS302", "IT-301" }, { "CS304", "IT-301" }, { "CS101", "IT-101" }, { "CS204", "IT-102" },
+            { "CS401", ClassroomDefaults.AdminOffice },
+            // ภาค 2
+            { "GE104", "GE-101" }, { "GE105", "GE-101" }, { "GE106", "GE-101" }, { "CS308", "GE-101" }, { "MA102", "GE-101" }, { "GE202", "GE-102" },
+            { "CS305", "IT-201" }, { "CS306", "IT-201" }, { "CS103", "IT-201" }, { "CS208", "IT-202" }, { "CS403", "IT-203" },
+            { "CS205", "IT-301" }, { "CS206", "IT-301" }, { "CS207", "IT-301" }, { "CS307", "IT-302" }, { "CS104", "IT-101" }, { "CS209", "IT-102" },
+            { "CS404", "IT-405" },
+            // วิชาเลือก (ช่อง c5/c6 ทั้งสองภาค)
+            { "EL301", "IT-202" }, { "EL302", "IT-202" }, { "EL303", "IT-203" }, { "EL304", "IT-203" },
+            { "EL305", "IT-204" }, { "EL306", "IT-204" }, { "EL308", "IT-205" }, { "EL307", "IT-205" },
+        };
+
+        public static ClassroomType TypeOfRoom(string roomId)
+        {
+            if (roomId == ClassroomDefaults.AdminOffice) return ClassroomType.Office;
+            if (System.Array.IndexOf(ClassroomDefaults.ITLabs, roomId) >= 0) return ClassroomType.ComputerLab;
+            if (System.Array.IndexOf(ClassroomDefaults.ITSeminars, roomId) >= 0) return ClassroomType.Seminar;
+            return ClassroomType.Lecture;
+        }
+
+        static string DisplayRoom(string roomId)
+        {
+            switch (TypeOfRoom(roomId))
+            {
+                case ClassroomType.ComputerLab: return "แล็บคอม " + roomId;
+                case ClassroomType.Seminar: return "ห้องสัมมนา " + roomId;
+                case ClassroomType.Office: return OfficeRoom;
+                default: return "ห้องบรรยาย " + roomId;
+            }
+        }
+
+        // คาบเรียนพร้อมห้องของวิชา (ใช้กับตารางพิเศษปี 4)
+        static ClassSession S(int day, int sh, int eh, string building, string code)
+        {
+            string rid = RegularRoom.TryGetValue(code, out var r) ? r : "";
+            return new ClassSession(day, sh, eh, building, DisplayRoom(rid), rid);
+        }
+
+        // ห้องภาคค่ำ: ห้องเดิมก่อน → ห้องประเภทเดียวกัน → ห้องบรรยายสำรอง (ตึก IT → GE → สัมมนา)
+        static string PickEveningRoom(CourseDefinition d, HashSet<string> used)
+        {
+            string home = RegularRoom.TryGetValue(d.code, out var r) ? r : "";
+            var cand = new List<string>();
+            if (!string.IsNullOrEmpty(home)) cand.Add(home);
+            switch (TypeOfRoom(home))
+            {
+                case ClassroomType.ComputerLab: cand.AddRange(ClassroomDefaults.ITLabs); break;
+                case ClassroomType.Office: cand.Add(ClassroomDefaults.AdminOffice); break;
+                case ClassroomType.Seminar: cand.AddRange(ClassroomDefaults.ITSeminars); cand.AddRange(ClassroomDefaults.ITLectures); break;
+                default:
+                    if (home.StartsWith("GE-")) { cand.AddRange(ClassroomDefaults.GELectures); cand.AddRange(ClassroomDefaults.ITLectures); }
+                    else { cand.AddRange(ClassroomDefaults.ITLectures); cand.AddRange(ClassroomDefaults.GELectures); }
+                    cand.AddRange(ClassroomDefaults.ITSeminars);
+                    break;
+            }
+            foreach (var id in cand) if (used.Add(id)) return id;
+            Debug.LogError($"[Curriculum] ห้องภาคค่ำไม่พอสำหรับ {d.code} — ใช้ {home} (จะถูกรายงานว่าห้องชน)");
+            return home;
+        }
 
         static CourseDefinition C(string code, string title, int credits, CourseCategory cat, int year, int sem, int slot, string building, params string[] prereq)
         {
@@ -167,12 +247,7 @@ namespace NisitSimulator.Academics
             if (slot >= 0)
             {
                 var s = Slot[slot];
-                string room = RoomFor(building);
-                d.sessions = new List<ClassSession>
-                {
-                    new ClassSession(s[0], s[1], s[2], building, room),
-                    new ClassSession(s[3], s[4], s[5], building, room),
-                };
+                d.sessions = FourMeetings(s[0], s[1], s[2], s[3], s[4], s[5], (dd, a, b) => S(dd, a, b, building, code));
             }
             return d;
         }

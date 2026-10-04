@@ -1,0 +1,50 @@
+{
+  "SP": {
+    "samples": 158,
+    "guardFrames": 1713,
+    "guardAlwaysTrue": true,
+    "guardViolations": 0,
+    "onlyTestSaveOverride": true,
+    "errors": []
+  },
+  "SPW": {
+    "samples": 91,
+    "guardFrames": 1080,
+    "guardAlwaysTrue": true,
+    "guardViolations": 0,
+    "onlyTestSaveOverride": true,
+    "errors": []
+  },
+  "H": {
+    "samples": 356,
+    "guardFrames": 4838,
+    "guardAlwaysTrue": true,
+    "guardViolations": 0,
+    "onlyTestSaveOverride": true,
+    "errors": []
+  },
+  "C1": {
+    "samples": 344,
+    "guardFrames": 4705,
+    "guardAlwaysTrue": true,
+    "guardViolations": 0,
+    "onlyTestSaveOverride": true,
+    "errors": []
+  },
+  "C2": {
+    "samples": 354,
+    "guardFrames": 4789,
+    "guardAlwaysTrue": true,
+    "guardViolations": 0,
+    "onlyTestSaveOverride": true,
+    "errors": []
+  },
+  "C3": {
+    "samples": 348,
+    "guardFrames": 4791,
+    "guardAlwaysTrue": true,
+    "guardViolations": 0,
+    "onlyTestSaveOverride": true,
+    "errors": []
+  }
+}

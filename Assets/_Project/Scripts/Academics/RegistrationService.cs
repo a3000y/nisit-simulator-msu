@@ -37,7 +37,73 @@ namespace NisitSimulator.Academics
         public bool capped;               // ชั่วโมงของคาบนี้ครบแล้ว
         public string wrongBuildingCode;  // มีคาบอยู่แต่ผิดตึก
         public string wrongBuildingTarget;
+        public string wrongRoomCode;      // มีคาบอยู่แต่ผิดห้อง/อยู่นอกห้องเรียน (โหมดห้องเรียน)
+        public string wrongRoomTarget;    // roomId ของคาบ
+        public int sessionIndex = -1;     // ลำดับคาบของวิชาที่นับ (ใช้กับคีย์ "วัน:ลำดับ")
+        public float quality;             // คุณภาพที่นับจริงหลังปรับด้วยเหตุการณ์
         public Enrollment selfStudy;      // นับเป็นอ่านทบทวนให้วิชานี้
+    }
+
+    // ปัญหาข้อมูลห้องเรียน (ห้องชน / ไม่มีห้อง / ห้องไม่มีอยู่จริง) — ตรรกะล้วน ใช้ทั้ง Editor และตอนรัน
+    public class RoomIssue
+    {
+        public enum Kind { Conflict, MissingRoom, UnknownRoom }
+        public Kind kind;
+        public string codeA, codeB;
+        public bool retakeA, retakeB;
+        public int indexA, indexB;
+        public string roomId;
+        public int day, startA, endA, startB, endB;
+
+        static string T(int a, int b) => $"{a / 60:00}:{a % 60:00}–{b / 60:00}:{b % 60:00}";
+        static string Sec(bool retake, int idx) => (retake ? "ภาคค่ำ" : "ปกติ") + " คาบ " + (idx + 1);
+        public override string ToString()
+        {
+            switch (kind)
+            {
+                case Kind.Conflict:
+                    return $"ห้องชน {roomId} วันที่ {day}: {codeA} ({Sec(retakeA, indexA)} {T(startA, endA)}) ทับ {codeB} ({Sec(retakeB, indexB)} {T(startB, endB)})";
+                case Kind.MissingRoom:
+                    return $"{codeA} ({Sec(retakeA, indexA)} วันที่ {day} {T(startA, endA)}): ไม่มี roomId";
+                default:
+                    return $"{codeA} ({Sec(retakeA, indexA)} วันที่ {day} {T(startA, endA)}): ไม่พบห้อง {roomId} ใน ClassroomCatalog";
+            }
+        }
+    }
+
+    // ===== รายงานผลตอนจบเทอม (ตรรกะล้วน — TermResultUI แสดงผล) =====
+    public class TermReportRow
+    {
+        public string code, title;
+        public int credits, attempt;
+        public float attendance;                 // 0..1 (เข้าเรียน + อ่านทบทวนชดเชย)
+        public float midterm = -1f, final = -1f; // 0..1 · -1 = ไม่มีคะแนน
+        public bool missedMidterm, missedFinal;
+        public float bonusMid, bonusFinal;       // คะแนนพิเศษจากเหตุการณ์ในคาบ
+        public float score;                      // 0..100
+        public string letter;
+        public float point;
+        public bool passed;
+        public bool retakeSection;
+    }
+
+    public class TermReport
+    {
+        public int serial, calendarYear, semIndex, planSemester, classYear;
+        public bool isExtra;
+        public List<TermReportRow> rows = new List<TermReportRow>();
+        public float termGpa, cumulativeGpa;
+        public bool hasGpa;
+        public int creditsAttempted, creditsEarnedTerm, creditsEarnedTotal, graduationCredits;
+        public bool promoted;
+        public int newClassYear;
+        public int promotionShortfall;           // > 0 = จบภาค 2 แล้วไม่เลื่อนชั้น ขาดอีกกี่หน่วยกิต
+        public bool probation;                   // GPA สะสมต่ำกว่าเกณฑ์
+        public float minGpa;
+        public bool graduated, exhausted;
+        public List<string> retakeCodes = new List<string>();   // ตก → ต้องลงซ้ำ (ภาคค่ำ)
+        public string nextStep = "";
+        public bool Empty => rows.Count == 0;
     }
 
     public class GraduationStatus
@@ -54,10 +120,34 @@ namespace NisitSimulator.Academics
         public int CreditCapOverride;   // > 0 = ใช้แทนค่าในหลักสูตร (ตั้งจาก Inspector ของ CourseRegistrar)
 
         public RegistrationService(CurriculumDefinition curriculum, AcademicRecord record)
+            : this(curriculum, record, null) { }
+
+        // catalog != null → ตรวจห้องชน/ห้องไม่มีอยู่จริงตอนสร้าง: วิชาที่ข้อมูลห้องเสีย log error และลงทะเบียนไม่ได้ (เกมไม่พัง)
+        public RegistrationService(CurriculumDefinition curriculum, AcademicRecord record, ClassroomCatalog catalog)
         {
             Curriculum = curriculum;
             Record = record ?? new AcademicRecord();
+            Catalog = catalog;
+            if (catalog != null && curriculum != null)
+            {
+                RoomIssues = FindRoomConflicts(curriculum, catalog, requireRooms: false);
+                foreach (var i in RoomIssues)
+                {
+                    Debug.LogError("[Registration] ข้อมูลห้องเรียนผิด — " + i + " → ปิดการลงทะเบียนวิชาที่เกี่ยวข้อง");
+                    if (i.codeA != null) BlockedCodes.Add(i.codeA);
+                    if (i.codeB != null) BlockedCodes.Add(i.codeB);
+                }
+            }
         }
+
+        public readonly ClassroomCatalog Catalog;
+        public readonly List<RoomIssue> RoomIssues = new List<RoomIssue>();
+        public readonly HashSet<string> BlockedCodes = new HashSet<string>();   // วิชาที่ข้อมูลห้องชน/ผิด → ห้ามลง
+
+        // ปรับคุณภาพชั่วโมงเรียนก่อนบันทึก (เหตุการณ์ระหว่างเรียน) — (รหัสวิชา, q) → q ใหม่ · null = ไม่ปรับ
+        public System.Func<string, float, float> QualityModifier;
+
+        public const float ClassBonusCap = 0.10f;   // คะแนนพิเศษจากเหตุการณ์ระหว่างเรียน สูงสุดต่อการสอบหนึ่งครั้ง
 
         public int CreditCap => CreditCapOverride > 0 ? CreditCapOverride : Curriculum.creditCapPerTerm;
         public TermState Term => Record.Current;
@@ -336,6 +426,7 @@ namespace NisitSimulator.Academics
             if (t != null && (t.selected.Contains(oc.def.code) || IsEnrolledThisTerm(oc.def.code)))
                 return CourseStatus.Selected;
             if (!PrerequisitesMet(oc.def, out reason)) return CourseStatus.MissingPrerequisite;
+            if (BlockedCodes.Contains(oc.def.code)) { reason = BlockedReason(oc.def.code); return CourseStatus.MissingPrerequisite; }
             // ลงได้ แต่บอกล่วงหน้าถ้าชน/เต็ม
             string conflict = ConflictWithSelected(oc);
             if (conflict != null) reason = $"ชนเวลากับ {conflict}";
@@ -386,12 +477,15 @@ namespace NisitSimulator.Academics
             if (t.selected.Contains(code)) { reason = $"เลือก {code} ไว้แล้ว (ห้ามเลือกรหัสซ้ำ)"; return false; }
             if (IsPassed(code)) { reason = $"{code} ผ่านแล้ว ลงซ้ำไม่ได้"; return false; }
             if (!PrerequisitesMet(oc.def, out var pr)) { reason = $"{code}: {pr}"; return false; }
+            if (BlockedCodes.Contains(code)) { reason = BlockedReason(code); return false; }
             string conflict = ConflictWithSelected(oc);
             if (conflict != null) { reason = $"{code} ชนเวลากับ {conflict}"; return false; }
             int after = SelectedCredits() + oc.def.credits;
             if (after > CreditCap) { reason = $"เกินเพดาน {CreditCap} หน่วยกิต (เลือกแล้ว {SelectedCredits()} + {oc.def.credits} = {after})"; return false; }
             return true;
         }
+
+        static string BlockedReason(string code) => $"{code}: ข้อมูลห้องเรียนชน/ไม่ถูกต้อง — ปิดการลงทะเบียนวิชานี้ชั่วคราว (แจ้งผู้พัฒนา)";
 
         public bool Add(string code, out string reason)
         {
@@ -428,6 +522,7 @@ namespace NisitSimulator.Academics
                 if (oc == null) { reason = $"{code} ไม่เปิดในภาคนี้"; return false; }
                 if (IsPassed(code)) { reason = $"{code} ผ่านแล้ว"; return false; }
                 if (!PrerequisitesMet(oc.def, out var pr)) { reason = $"{code}: {pr}"; return false; }
+                if (BlockedCodes.Contains(code)) { reason = BlockedReason(code); return false; }
                 offered.Add(oc);
             }
             for (int i = 0; i < offered.Count; i++)
@@ -528,6 +623,11 @@ namespace NisitSimulator.Academics
 
         // จุดเรียนให้ผลหนึ่งครั้ง (ทุก 60 นาทีเกม) — quality = สัดส่วนความรู้ที่ได้จริงหลังหักความเครียด (0..1)
         public StudyTickResult RecordStudyTick(int semDay, float tickEndMinute, string building, float quality)
+            => RecordStudyTick(semDay, tickEndMinute, building, null, quality, false);
+
+        // roomMode = true (เล่นคนเดียว): คาบที่มี roomId นับเฉพาะเมื่อ roomId ของที่นั่งตรงกัน (null = นอกห้องเรียน = ไม่นับ)
+        //   คาบที่ไม่มี roomId (หลักสูตรเก่า) ใช้การเช็กตึกแบบเดิม · roomMode = false = พฤติกรรมเดิมทุกประการ (multiplayer)
+        public StudyTickResult RecordStudyTick(int semDay, float tickEndMinute, string building, string roomId, float quality, bool roomMode)
         {
             var res = new StudyTickResult();
             var t = Term;
@@ -543,7 +643,11 @@ namespace NisitSimulator.Academics
                     var s = ss[i];
                     if (s.day != semDay) continue;
                     if (!(tickEndMinute > s.startMinute && from < s.endMinute)) continue;   // ช่วงนั่งเรียนทับคาบ
-                    if (!string.IsNullOrEmpty(building) && s.building != building)
+                    if (roomMode && s.HasRoom)
+                    {
+                        if (roomId != s.roomId) { res.wrongRoomCode = e.code; res.wrongRoomTarget = s.roomId; continue; }
+                    }
+                    else if (!string.IsNullOrEmpty(building) && s.building != building)
                     {
                         res.wrongBuildingCode = e.code; res.wrongBuildingTarget = s.building;
                         continue;
@@ -551,15 +655,17 @@ namespace NisitSimulator.Academics
                     string key = semDay + ":" + i;
                     int ticks = e.TicksFor(key);
                     if (ticks >= s.MaxTicks) { res.capped = true; continue; }
+                    float q = QualityModifier != null ? Mathf.Clamp01(QualityModifier(e.code, quality)) : quality;
                     e.AddTick(key);
-                    e.progress += quality;
+                    e.progress += q;
                     res.attended = e; res.session = s; res.tickNo = ticks + 1; res.tickMax = s.MaxTicks;
+                    res.sessionIndex = i; res.quality = q;
                     return res;
                 }
             }
 
             // นอกคาบ = อ่านทบทวน → ชดเชยให้วิชาที่ตามหลังที่สุด (มีเพดาน)
-            if (res.wrongBuildingCode == null && quality > 0f)
+            if (res.wrongBuildingCode == null && res.wrongRoomCode == null && quality > 0f)
             {
                 Enrollment worst = null; float worstRatio = 2f;
                 foreach (var e in CurrentEnrollments())
@@ -590,7 +696,7 @@ namespace NisitSimulator.Academics
             {
                 if (e.graded) continue;
                 if (onlyCodes != null && (!onlyCodes.Contains(e.code) || HasExamScore(e, final))) continue;
-                float s = ExamScore(e, quizFraction, bonus, semDay);   // สูตรเดิม (ย้ายไปเป็นเมธอดให้มินิเกมใช้ร่วม)
+                float s = ExamScore(e, quizFraction, bonus, semDay, final);   // สูตรเดิม (ย้ายไปเป็นเมธอดให้มินิเกมใช้ร่วม)
                 if (final) { e.final = s; e.missedFinal = false; } else { e.midterm = s; e.missedMidterm = false; }
                 sum += s; n++;
             }
@@ -620,15 +726,64 @@ namespace NisitSimulator.Academics
         public static bool HasExamScore(Enrollment e, bool final) => e != null && (final ? e.final >= 0f : e.midterm >= 0f);
 
         // สูตรคะแนนสอบเดิม: ตอบถูก × examQuizWeight + ความพร้อม (การเข้าเรียนรายวิชา) × ส่วนที่เหลือ + โบนัส
+        //   + คะแนนพิเศษจากเหตุการณ์ระหว่างเรียนของรอบนั้น (ค่าเริ่มต้น 0 → สูตรเดิมทุกประการ)
         public float ExamScore(Enrollment e, float quizFraction, float bonus, int semDay) =>
-            Mathf.Clamp01(Curriculum.examQuizWeight * quizFraction + (1f - Curriculum.examQuizWeight) * StudyRatio(e, semDay) + bonus);
+            ExamScore(e, quizFraction, bonus, semDay, NextExamIsFinal(e));
+
+        public float ExamScore(Enrollment e, float quizFraction, float bonus, int semDay, bool final) =>
+            Mathf.Clamp01(Curriculum.examQuizWeight * quizFraction + (1f - Curriculum.examQuizWeight) * StudyRatio(e, semDay) + bonus + ClassBonus(e, final));
+
+        public static float ClassBonus(Enrollment e, bool final) =>
+            e == null ? 0f : Mathf.Clamp(final ? e.classBonusFinal : e.classBonusMid, 0f, ClassBonusCap);
+
+        // การสอบครั้งถัดไปของวิชานี้เป็นปลายภาคไหม (มีคะแนนกลางภาคแล้ว = ปลายภาค)
+        public static bool NextExamIsFinal(Enrollment e) => e != null && e.midterm >= 0f;
+
+        // เพิ่มคะแนนพิเศษ (มีเพดาน ClassBonusCap) — คืนค่าที่เพิ่มได้จริง
+        public static float AddClassBonus(Enrollment e, bool final, float amount)
+        {
+            if (e == null || e.graded || amount <= 0f) return 0f;
+            float cur = final ? e.classBonusFinal : e.classBonusMid;
+            float next = Mathf.Min(ClassBonusCap, cur + amount);
+            float added = Mathf.Max(0f, next - cur);
+            if (final) e.classBonusFinal = next; else e.classBonusMid = next;
+            return added;
+        }
+
+        // หาคาบของวิชาที่กำลังเรียน ณ เวลานั้น — คืนลำดับคาบ (-1 = ไม่มี)
+        public int SessionIndexAt(Enrollment e, int semDay, float minute)
+        {
+            var ss = SessionsFor(e);
+            for (int i = 0; i < ss.Count; i++)
+                if (ss[i].day == semDay && minute >= ss[i].startMinute && minute < ss[i].endMinute) return i;
+            return -1;
+        }
+
+        public static string MeetingKey(int semDay, int sessionIndex) => semDay + ":" + sessionIndex;
+
+        // เลิกเรียนกะทันหัน (ไฟดับ/คอมค้าง): นับชั่วโมงที่เหลือของคาบนั้นให้เต็ม — คืนจำนวนชั่วโมงที่เพิ่ม
+        public int CreditRemainingMeeting(Enrollment e, int semDay, int sessionIndex, float quality)
+        {
+            if (e == null || e.graded) return 0;
+            var ss = SessionsFor(e);
+            if (sessionIndex < 0 || sessionIndex >= ss.Count) return 0;
+            string key = MeetingKey(semDay, sessionIndex);
+            int added = 0;
+            while (e.TicksFor(key) < ss[sessionIndex].MaxTicks)
+            {
+                e.AddTick(key);
+                e.progress += Mathf.Clamp01(quality);
+                added++;
+            }
+            return added;
+        }
 
         // บันทึกผลสอบ "หนึ่งวิชา" ด้วยสูตรเดิม — คืน -1 ถ้าบันทึกไม่ได้ (ไม่ได้ลง/ประกาศเกรดแล้ว/มีคะแนนรอบนี้แล้ว = กันบันทึกซ้ำ)
         public float RecordCourseExam(string code, bool final, float quizFraction, float bonus, int semDay)
         {
             var e = CurrentEnrollment(code);
             if (e == null || e.graded || HasExamScore(e, final)) return -1f;
-            float s = ExamScore(e, quizFraction, bonus, semDay);
+            float s = ExamScore(e, quizFraction, bonus, semDay, final);
             if (final) { e.final = s; e.missedFinal = false; } else { e.midterm = s; e.missedMidterm = false; }
             return s;
         }
@@ -685,6 +840,113 @@ namespace NisitSimulator.Academics
             st.eligible = st.reasons.Count == 0;
             return st;
         }
+
+        // ============================================================
+        // รายงานผลตอนจบเทอม — สร้างจากข้อมูลในเรกคอร์ดของภาคนั้น (ใช้ได้ทั้งตอนปิดภาคและตอนโหลดเซฟที่ยังไม่ได้ดู)
+        // ============================================================
+        public TermReport BuildTermReport(TermCloseResult r, float minGpa)
+        {
+            if (r == null || r.term == null) return new TermReport();
+            var rep = BuildTermReport(r.term.serial, minGpa, r.promoted, r.exhausted, r.term.isExtra);
+            rep.planSemester = r.term.planSemester; rep.classYear = r.term.classYear; rep.calendarYear = r.term.calendarYear; rep.semIndex = r.term.semIndex;
+            rep.graduated = r.graduated;
+            return rep;
+        }
+
+        public TermReport BuildTermReport(int serial, float minGpa, bool promoted, bool exhausted, bool isExtra)
+        {
+            var rep = new TermReport { serial = serial, minGpa = minGpa, promoted = promoted, exhausted = exhausted, isExtra = isExtra };
+            foreach (var e in Record.enrollments)
+            {
+                if (e.termSerial != serial || e.transfer || !e.graded) continue;
+                var d = Curriculum.Get(e.code);
+                int cr = d != null ? d.credits : 0;
+                rep.rows.Add(new TermReportRow
+                {
+                    code = e.code, title = d != null ? d.title : e.code, credits = cr, attempt = e.attempt,
+                    attendance = StudyRatio(e), midterm = e.midterm, final = e.final,
+                    missedMidterm = e.missedMidterm, missedFinal = e.missedFinal,
+                    bonusMid = ClassBonus(e, false), bonusFinal = ClassBonus(e, true),
+                    score = e.score, letter = e.letter, point = e.point, passed = e.passed, retakeSection = e.retakeSection,
+                });
+                rep.creditsAttempted += cr;
+                if (e.passed) rep.creditsEarnedTerm += cr;
+                else if (d != null && d.IsRequired && !IsPassed(e.code)) rep.retakeCodes.Add(e.code);
+                rep.calendarYear = e.calendarYear; rep.semIndex = e.semIndex; rep.classYear = e.classYear;
+                rep.planSemester = e.semIndex + 1;
+            }
+            rep.termGpa = TermGpa(serial);
+            rep.hasGpa = HasGpa;
+            rep.cumulativeGpa = Gpa();
+            rep.creditsEarnedTotal = EarnedCredits();
+            rep.graduationCredits = Curriculum.GraduationCredits;
+            rep.newClassYear = Record.classYear;
+            rep.graduated = Record.graduated;
+            rep.probation = rep.hasGpa && rep.cumulativeGpa + 1e-4f < minGpa && !rep.graduated;
+            if (!promoted && !isExtra && rep.planSemester == 2 && rep.classYear < 4)
+                rep.promotionShortfall = Mathf.Max(0, Curriculum.PromotionThreshold(rep.classYear) - rep.creditsEarnedTotal);
+
+            if (rep.graduated) rep.nextStep = "ครบเงื่อนไขจบการศึกษา — ยินดีด้วย!";
+            else if (exhausted) rep.nextStep = $"เรียนครบ {Curriculum.maxRegularTerms} ภาคแล้วยังไม่จบ — พ้นสภาพนิสิต";
+            else
+            {
+                string next = rep.planSemester == 1
+                    ? "ภาคปลายเปิดลงทะเบียนวันที่ 1 ของภาค (ภายในวันนั้นเท่านั้น)"
+                    : "ต่อด้วยปิดภาคฤดูร้อน — ลงทะเบียนภาคต้นปีการศึกษาถัดไปวันที่ 1 ของภาค";
+                if (rep.retakeCodes.Count > 0) next = $"ลงเรียนซ้ำ {string.Join(", ", rep.retakeCodes)} (ตอนภาคค่ำ เปิดทุกภาค) · " + next;
+                rep.nextStep = next;
+            }
+            return rep;
+        }
+
+        // ============================================================
+        // ตรวจห้องเรียน (ตรรกะล้วน) — ห้องเดียวกัน + วันเดียวกัน + เวลาทับ (start < otherEnd && otherStart < end) = ชน
+        //   นับเฉพาะคาบที่เปิดในภาคเดียวกันได้: ตอนปกติ = ภาคตามแผน (วิชาเลือกเปิดทั้งสองภาค) · ตอนเรียนซ้ำภาคค่ำ = ทุกภาค
+        //   requireRooms = true → คาบที่ไม่มี roomId เป็นปัญหาด้วย · catalog != null → roomId ที่ไม่มีใน catalog เป็นปัญหา
+        // ============================================================
+        public static List<RoomIssue> FindRoomConflicts(CurriculumDefinition c, ClassroomCatalog catalog, bool requireRooms)
+        {
+            var issues = new List<RoomIssue>();
+            if (c == null || c.courses == null) return issues;
+            var all = new List<(CourseDefinition def, bool retake, int idx, ClassSession s, int semMask)>();
+            foreach (var d in c.courses)
+            {
+                if (d == null) continue;
+                int planMask = d.planSemester == 1 ? 1 : d.planSemester == 2 ? 2 : 3;
+                if (d.sessions != null) for (int i = 0; i < d.sessions.Count; i++) all.Add((d, false, i, d.sessions[i], planMask));
+                if (d.retakeSessions != null) for (int i = 0; i < d.retakeSessions.Count; i++) all.Add((d, true, i, d.retakeSessions[i], 3));
+            }
+            foreach (var a in all)
+            {
+                if (a.s == null) continue;
+                if (!a.s.HasRoom)
+                {
+                    if (requireRooms) issues.Add(new RoomIssue { kind = RoomIssue.Kind.MissingRoom, codeA = a.def.code, retakeA = a.retake, indexA = a.idx, day = a.s.day, startA = a.s.startMinute, endA = a.s.endMinute });
+                }
+                else if (catalog != null && !catalog.Exists(a.s.roomId))
+                    issues.Add(new RoomIssue { kind = RoomIssue.Kind.UnknownRoom, codeA = a.def.code, retakeA = a.retake, indexA = a.idx, roomId = a.s.roomId, day = a.s.day, startA = a.s.startMinute, endA = a.s.endMinute });
+            }
+            for (int i = 0; i < all.Count; i++)
+                for (int j = i + 1; j < all.Count; j++)
+                {
+                    var a = all[i]; var b = all[j];
+                    if (a.s == null || b.s == null || !a.s.HasRoom || a.s.roomId != b.s.roomId) continue;
+                    if (a.def == b.def && a.retake == b.retake) continue;   // คาบของตอนเดียวกันเอง (เรียนคนละเวลาอยู่แล้ว)
+                    if ((a.semMask & b.semMask) == 0) continue;            // คนละภาค ไม่มีทางเปิดพร้อมกัน
+                    if (!SessionsOverlap(a.s, b.s)) continue;
+                    issues.Add(new RoomIssue
+                    {
+                        kind = RoomIssue.Kind.Conflict, roomId = a.s.roomId, day = a.s.day,
+                        codeA = a.def.code, retakeA = a.retake, indexA = a.idx, startA = a.s.startMinute, endA = a.s.endMinute,
+                        codeB = b.def.code, retakeB = b.retake, indexB = b.idx, startB = b.s.startMinute, endB = b.s.endMinute,
+                    });
+                }
+            return issues;
+        }
+
+        // ห้องเดียวกันไม่สน — เฉพาะวัน/เวลา (ชนตรงขอบพอดีไม่นับว่าชน)
+        public static bool SessionsOverlap(ClassSession a, ClassSession b) =>
+            a != null && b != null && a.day == b.day && a.startMinute < b.endMinute && b.startMinute < a.endMinute;
 
         // ============================================================
         // ย้ายเซฟเก่า: ภาคที่เรียนผ่านมาแล้วตามแผน → เทียบโอน (ได้หน่วยกิต ไม่คิด GPA)

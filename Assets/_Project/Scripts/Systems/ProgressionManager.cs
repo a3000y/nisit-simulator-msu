@@ -11,11 +11,13 @@ namespace NisitSimulator.Systems
     public class ProgressionManager : MonoBehaviour
     {
         [Header("ตั้งค่าปีการศึกษา")]
-        public int daysPerYear = 8;   // ภาคต้น 3 + ภาคปลาย 3 + ฤดูร้อน 2 (ต้องตรงกับ AcademicCalendar.TermDays)
+        [Tooltip("ตั้งอัตโนมัติจาก AcademicCalendar.TotalDays ตอนเริ่ม (ภาคต้น 10 + ภาคปลาย 10 + ฤดูร้อน 3 = 23) — ค่าในฉากไม่มีผล")]
+        public int daysPerYear = 23;
         // เป้าความรู้สะสมของแต่ละปี (เพิ่มขึ้นเรื่อยๆ ตามเอกสาร 1.3.4.1)
         // บาลานซ์ใหม่: ต้องการเพิ่มปีละ 400/450/500/550 ≈ 50%→70% ของการเรียนเต็มที่ (~790/ปี)
         // ปีหลัง ๆ จึงเหลือเวลาไปทำงาน/เที่ยวน้อยลงจริง ตามเอกสาร 1.3.4.1
-        public float[] knowledgeTargets = { 400f, 850f, 1350f, 1900f };
+        // ปฏิทินรุ่น 2 ปีละ 23 วัน (เดิม 8) → คูณ 23/8 = {1150, 2450, 3900, 5450} (ใช้กับคณะที่ไม่ใช้หลักสูตรลงทะเบียน)
+        public float[] knowledgeTargets = { 1150f, 2450f, 3900f, 5450f };
 
         [Header("เกณฑ์เกรดเฉลี่ย (รีไทร์)")]
         public float minGpa = 2.00f;
@@ -55,6 +57,16 @@ namespace NisitSimulator.Systems
         private GameClock clock;
         private ExamController exam;
         private int lastGlobalDay;
+
+void Awake()
+        {
+            // จำนวนวันต่อปีมาจากปฏิทินเสมอ — กันค่าในฉาก/ตัวสร้างเก่า (M7SeasonBuilder ตั้ง 12) คลาดกับ AcademicCalendar
+            if (daysPerYear != AcademicCalendar.TotalDays)
+            {
+                Debug.Log($"[Progression] daysPerYear {daysPerYear} → {AcademicCalendar.TotalDays} (ตาม AcademicCalendar)");
+                daysPerYear = AcademicCalendar.TotalDays;
+            }
+        }
 
 void Start()
         {

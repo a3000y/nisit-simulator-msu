@@ -213,8 +213,8 @@ namespace NisitSimulator.DevTools
             new Def { id = "S1", title = "ปี 1 ภาคเรียน 1 เริ่มใหม่", description = "ประวัติว่าง เปิดช่วงลงทะเบียนภาค 1/1 วันแรก 08:00", build = FreshY1S1 },
             new Def { id = "S2", title = "ขาดวิชาบังคับก่อน", description = "ภาค 1/1 ตก CS102 → ภาค 1/2 ลง CS103 ไม่ได้ (ต้องผ่าน CS102)", build = MissingPrereq },
             new Def { id = "S3", title = "หน่วยกิตเกินเพดาน", description = "ตก GE101 · ภาค 1/2 เลือกแผนครบ 18 หน่วยกิตแล้ว → ลองเพิ่ม GE101 จะเกินเพดาน", build = OverCap },
-            new Def { id = "S4", title = "ตารางเรียนชนกัน", description = "ตก GE101 + CS101 (ตอนเรียนซ้ำเวลาเดียวกัน) · เลือก GE101 ไว้ → ลองเพิ่ม CS101 จะชนเวลา", build = TimeConflict },
-            new Def { id = "S5", title = "พร้อมเข้าสอบ", description = "ภาค 1/1 ลงทะเบียนครบ เข้าเรียนวัน 1 + เช้าวัน 2 · วันสอบกลางภาค 12:00", build = ReadyForExam },
+            new Def { id = "S4", title = "ตารางเรียนชนกัน", description = "ตก GE101 + CS102 (ตอนเรียนซ้ำเวลาเดียวกัน) · เลือก GE101 ไว้ → ลองเพิ่ม CS102 จะชนเวลา", build = TimeConflict },
+            new Def { id = "S5", title = "พร้อมเข้าสอบ", description = "ภาค 1/1 ลงทะเบียนครบ เข้าเรียนวัน 1–4 ครบ · วันสอบกลางภาค (วันที่ 5) 12:00", build = ReadyForExam },
             new Def { id = "S6", title = "สอบตกและพร้อมลงเรียนซ้ำ", description = "ภาค 1/1 ได้ F วิชา CS101 → ภาค 1/2 เปิดลงทะเบียน CS101 เป็นวิชาค้าง (ตอนเรียนซ้ำภาคค่ำ)", build = FailedRetake },
             new Def { id = "S7", title = "เรียนครบตามแผนจนพร้อมจบ", description = "ผ่านทุกภาคถึง 4/1 + วิชาเลือก 2 วิชา · ภาค 4/2 เรียน/สอบครบแล้ว วันสอบปลายภาค 20:00 — ข้ามไปวันถัดไป (จำลองเวลา) = ประกาศผลและจบการศึกษา", build = ReadyToGraduate },
             new Def { id = "S8", title = "หน่วยกิตถึงเกณฑ์แต่ขาดวิชาบังคับ", description = "ตก CS404 แต่มีวิชาเลือก 3 วิชา → หน่วยกิตสะสม ≥ 120 แต่ยังจบไม่ได้ · อยู่ภาคเรียนเพิ่มเติม", build = CreditsButMissingRequired },
@@ -299,14 +299,15 @@ namespace NisitSimulator.DevTools
         static DevScenarioResult TimeConflict(CurriculumDefinition c, int cap)
         {
             var b = New(c, cap);
-            b.Quality = (code, att, y) => code == "GE101" || code == "CS101" ? 0.2f : 0.75f;
+            // ปฏิทินรุ่น 2: ภาคค่ำ 4 ช่อง — GE101 (วิชาบังคับลำดับ 0) กับ CS102 (ลำดับ 4) อยู่ช่องเดียวกัน
+            b.Quality = (code, att, y) => code == "GE101" || code == "CS102" ? 0.2f : 0.75f;
             b.AdvanceToTerm(1, 2);
             var r = Result(All[3], b, 1, 8 * 60);
             if (r.skipped) return r;
             b.Svc.Add("GE101", out _);
-            bool can = b.Svc.CanAdd("CS101", out var why);
-            r.hint = "เลือก GE101 ไว้แล้ว → ลองเพิ่ม CS101";
-            return Check(r, !can && why != null && why.Contains("ชนเวลา"), "CS101 ถูกปฏิเสธเพราะชนเวลากับ GE101", can ? "ลงได้" : why);
+            bool can = b.Svc.CanAdd("CS102", out var why);
+            r.hint = "เลือก GE101 ไว้แล้ว → ลองเพิ่ม CS102";
+            return Check(r, !can && why != null && why.Contains("ชนเวลา"), "CS102 ถูกปฏิเสธเพราะชนเวลากับ GE101", can ? "ลงได้" : why);
         }
 
         static DevScenarioResult ReadyForExam(CurriculumDefinition c, int cap)
@@ -318,7 +319,7 @@ namespace NisitSimulator.DevTools
             {
                 foreach (var rj in b.RegisterDefault()) b.Log.Add("ลงไม่ได้: " + rj);
                 b.Confirm();
-                b.Attend(1, 2, 12 * 60);
+                b.Attend(1, ExamController.MidtermDay(0) - 1);   // ปฏิทินรุ่น 2: เรียนวันที่ 1–4 ก่อนสอบกลางภาควันที่ 5
             }
             int mid = ExamController.MidtermDay(0);
             var r = Result(All[4], b, mid, 12 * 60);

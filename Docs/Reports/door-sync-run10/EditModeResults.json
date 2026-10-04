@@ -1,0 +1,1537 @@
+{
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "error": null,
+    "data": {
+      "job_id": "99d7a74923624ff39287743ecf24bccc",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791090771271,
+      "finished_unix_ms": 1791090776447,
+      "last_update_unix_ms": 1791090776447,
+      "progress": {
+        "completed": 166,
+        "total": 166,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791090776268,
+        "last_finished_test_full_name": "NisitSimulator.Tests.PartyPhaseOneTests.Summary_QuantizationSuppressesSubHalfUnitPositionNoise",
+        "last_finished_unix_ms": 1791090776269,
+        "stuck_suspected": false,
+        "editor_is_focused": true,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 166,
+          "passed": 166,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 2.1395449,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "SharedCharacterPageCannotStartSinglePlayerOrWriteSaveSlot",
+            "fullName": "LobbyCharacterUITests.SharedCharacterPageCannotStartSinglePlayerOrWriteSaveSlot",
+            "state": "Passed",
+            "durationSeconds": 0.1806247,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SharedCharacterPageHasCompleteControlsAndOwnPreview",
+            "fullName": "LobbyCharacterUITests.SharedCharacterPageHasCompleteControlsAndOwnPreview",
+            "state": "Passed",
+            "durationSeconds": 0.007905,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AddressFormat(\"x7a 9b2\",Relay,\"X7A9B2\")",
+            "fullName": "LobbyUITests.AddressFormat(\"x7a 9b2\",Relay,\"X7A9B2\")",
+            "state": "Passed",
+            "durationSeconds": 0.0037995,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AddressFormat(\"127.0.0.1\",Lan,\"127.0.0.1\")",
+            "fullName": "LobbyUITests.AddressFormat(\"127.0.0.1\",Lan,\"127.0.0.1\")",
+            "state": "Passed",
+            "durationSeconds": 0.0010816,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AddressFormat(\"192.168.1.12\",Lan,\"192.168.1.12\")",
+            "fullName": "LobbyUITests.AddressFormat(\"192.168.1.12\",Lan,\"192.168.1.12\")",
+            "state": "Passed",
+            "durationSeconds": 0.0002068,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AddressFormat(\"X7O9B2\",Invalid,\"\")",
+            "fullName": "LobbyUITests.AddressFormat(\"X7O9B2\",Invalid,\"\")",
+            "state": "Passed",
+            "durationSeconds": 0.0001581,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AddressFormat(\"X7I9B2\",Invalid,\"\")",
+            "fullName": "LobbyUITests.AddressFormat(\"X7I9B2\",Invalid,\"\")",
+            "state": "Passed",
+            "durationSeconds": 0.0001542,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AddressFormat(\"X709B2\",Invalid,\"\")",
+            "fullName": "LobbyUITests.AddressFormat(\"X709B2\",Invalid,\"\")",
+            "state": "Passed",
+            "durationSeconds": 0.0001435,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AddressFormat(\"X719B2\",Invalid,\"\")",
+            "fullName": "LobbyUITests.AddressFormat(\"X719B2\",Invalid,\"\")",
+            "state": "Passed",
+            "durationSeconds": 0.0001674,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AddressFormat(\"192.168.300.1\",Invalid,\"\")",
+            "fullName": "LobbyUITests.AddressFormat(\"192.168.300.1\",Invalid,\"\")",
+            "state": "Passed",
+            "durationSeconds": 0.00015,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AddressFormat(\"192.168.1.1:7777\",Invalid,\"\")",
+            "fullName": "LobbyUITests.AddressFormat(\"192.168.1.1:7777\",Invalid,\"\")",
+            "state": "Passed",
+            "durationSeconds": 0.0001497,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AddressFormat(\"0.0.0.0\",Invalid,\"\")",
+            "fullName": "LobbyUITests.AddressFormat(\"0.0.0.0\",Invalid,\"\")",
+            "state": "Passed",
+            "durationSeconds": 0.0001566,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AddressFormat(\"ABC\",Invalid,\"\")",
+            "fullName": "LobbyUITests.AddressFormat(\"ABC\",Invalid,\"\")",
+            "state": "Passed",
+            "durationSeconds": 0.0001447,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FirstRejectionKeepsReasonDespiteLaterTransportMessage",
+            "fullName": "LobbyUITests.FirstRejectionKeepsReasonDespiteLaterTransportMessage",
+            "state": "Passed",
+            "durationSeconds": 0.0005886,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "GappedConnectionsReuseFreeSlotWithoutMovingOthers",
+            "fullName": "LobbyUITests.GappedConnectionsReuseFreeSlotWithoutMovingOthers",
+            "state": "Passed",
+            "durationSeconds": 0.0082807,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "HostOnlyNetworkValueContainsNoSecret",
+            "fullName": "LobbyUITests.HostOnlyNetworkValueContainsNoSecret",
+            "state": "Passed",
+            "durationSeconds": 0.0003352,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LanFilterAndPriority(\"26.1.2.3\",\"Ethernet\",-1)",
+            "fullName": "LobbyUITests.LanFilterAndPriority(\"26.1.2.3\",\"Ethernet\",-1)",
+            "state": "Passed",
+            "durationSeconds": 0.0009818,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LanFilterAndPriority(\"25.1.2.3\",\"Ethernet\",-1)",
+            "fullName": "LobbyUITests.LanFilterAndPriority(\"25.1.2.3\",\"Ethernet\",-1)",
+            "state": "Passed",
+            "durationSeconds": 0.0000975,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LanFilterAndPriority(\"169.254.1.2\",\"Ethernet\",-1)",
+            "fullName": "LobbyUITests.LanFilterAndPriority(\"169.254.1.2\",\"Ethernet\",-1)",
+            "state": "Passed",
+            "durationSeconds": 0.0000851,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LanFilterAndPriority(\"192.168.1.2\",\"Hamachi\",-1)",
+            "fullName": "LobbyUITests.LanFilterAndPriority(\"192.168.1.2\",\"Hamachi\",-1)",
+            "state": "Passed",
+            "durationSeconds": 0.0000815,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LanFilterAndPriority(\"192.168.1.2\",\"ZeroTier\",-1)",
+            "fullName": "LobbyUITests.LanFilterAndPriority(\"192.168.1.2\",\"ZeroTier\",-1)",
+            "state": "Passed",
+            "durationSeconds": 0.0000818,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LanFilterAndPriority(\"192.168.1.2\",\"VirtualBox\",-1)",
+            "fullName": "LobbyUITests.LanFilterAndPriority(\"192.168.1.2\",\"VirtualBox\",-1)",
+            "state": "Passed",
+            "durationSeconds": 0.0000822,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LanFilterAndPriority(\"172.16.1.2\",\"vEthernet\",-1)",
+            "fullName": "LobbyUITests.LanFilterAndPriority(\"172.16.1.2\",\"vEthernet\",-1)",
+            "state": "Passed",
+            "durationSeconds": 0.0000845,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LanFilterAndPriority(\"192.168.1.2\",\"Wi-Fi\",0)",
+            "fullName": "LobbyUITests.LanFilterAndPriority(\"192.168.1.2\",\"Wi-Fi\",0)",
+            "state": "Passed",
+            "durationSeconds": 0.0000803,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LanFilterAndPriority(\"10.0.0.2\",\"Ethernet\",1)",
+            "fullName": "LobbyUITests.LanFilterAndPriority(\"10.0.0.2\",\"Ethernet\",1)",
+            "state": "Passed",
+            "durationSeconds": 0.0000856,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LanFilterAndPriority(\"172.31.1.2\",\"Ethernet\",2)",
+            "fullName": "LobbyUITests.LanFilterAndPriority(\"172.31.1.2\",\"Ethernet\",2)",
+            "state": "Passed",
+            "durationSeconds": 0.0000828,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LanFilterAndPriority(\"172.32.1.2\",\"Ethernet\",-1)",
+            "fullName": "LobbyUITests.LanFilterAndPriority(\"172.32.1.2\",\"Ethernet\",-1)",
+            "state": "Passed",
+            "durationSeconds": 0.0000744,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "StartRequiresTwoReadyPlayersAndLobbyPhase",
+            "fullName": "LobbyUITests.StartRequiresTwoReadyPlayersAndLobbyPhase",
+            "state": "Passed",
+            "durationSeconds": 0.0027354,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "StructuredReasonHasThaiText(\"ROOM_FULL\",\"เข้าห้องไม่ได้: ห้องเต็มแล้ว\")",
+            "fullName": "LobbyUITests.StructuredReasonHasThaiText(\"ROOM_FULL\",\"เข้าห้องไม่ได้: ห้องเต็มแล้ว\")",
+            "state": "Passed",
+            "durationSeconds": 0.0011838,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "StructuredReasonHasThaiText(\"GAME_STARTED\",\"เกมในห้องนี้เริ่มไปแล้ว ยังเข้าร่วมไม่ได้\")",
+            "fullName": "LobbyUITests.StructuredReasonHasThaiText(\"GAME_STARTED\",\"เกมในห้องนี้เริ่มไปแล้ว ยังเข้าร่วมไม่ได้\")",
+            "state": "Passed",
+            "durationSeconds": 0.0000841,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "StructuredReasonHasThaiText(\"HOST_CLOSED\",\"โฮสต์ปิดห้องแล้ว\")",
+            "fullName": "LobbyUITests.StructuredReasonHasThaiText(\"HOST_CLOSED\",\"โฮสต์ปิดห้องแล้ว\")",
+            "state": "Passed",
+            "durationSeconds": 0.0000645,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "StructuredReasonHasThaiText(\"KICKED\",\"คุณถูกนำออกจากห้อง\")",
+            "fullName": "LobbyUITests.StructuredReasonHasThaiText(\"KICKED\",\"คุณถูกนำออกจากห้อง\")",
+            "state": "Passed",
+            "durationSeconds": 0.0000846,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ThaiNameLimitAndFixedStringCapacity",
+            "fullName": "LobbyUITests.ThaiNameLimitAndFixedStringCapacity",
+            "state": "Passed",
+            "durationSeconds": 0.0037926,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "UpdatesRejectReplayForgedSenderAndDisconnectedPlayer",
+            "fullName": "LobbyUITests.UpdatesRejectReplayForgedSenderAndDisconnectedPlayer",
+            "state": "Passed",
+            "durationSeconds": 0.0064254,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Attendance_ChecksBuilding_And_CapsTicks",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.Attendance_ChecksBuilding_And_CapsTicks",
+            "state": "Passed",
+            "durationSeconds": 0.031555,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Blocked_When_Over_CreditCap",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.Blocked_When_Over_CreditCap",
+            "state": "Passed",
+            "durationSeconds": 0.0150605,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Blocked_When_Prerequisite_Missing",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.Blocked_When_Prerequisite_Missing",
+            "state": "Passed",
+            "durationSeconds": 0.0020867,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Blocked_When_TimeConflict",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.Blocked_When_TimeConflict",
+            "state": "Passed",
+            "durationSeconds": 0.0016716,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CloseTerm_IsIdempotent",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.CloseTerm_IsIdempotent",
+            "state": "Passed",
+            "durationSeconds": 0.0027243,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Confirm_Twice_DoesNotDuplicate",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.Confirm_Twice_DoesNotDuplicate",
+            "state": "Passed",
+            "durationSeconds": 0.0014277,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Curriculum_IsValid_And_Totals120",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.Curriculum_IsValid_And_Totals120",
+            "state": "Passed",
+            "durationSeconds": 0.0045995,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Deadline_AutoConfirms_Or_Closes",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.Deadline_AutoConfirms_Or_Closes",
+            "state": "Passed",
+            "durationSeconds": 0.0021222,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Elective_Chain_EL301_Then_EL307",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.Elective_Chain_EL301_Then_EL307",
+            "state": "Passed",
+            "durationSeconds": 0.009906,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "EnoughCredits_But_MissingRequired_DoesNotGraduate",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.EnoughCredits_But_MissingRequired_DoesNotGraduate",
+            "state": "Passed",
+            "durationSeconds": 0.0016034,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ExtraTerm_Opens_When_Year4_Done_But_NotGraduated",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.ExtraTerm_Opens_When_Year4_Done_But_NotGraduated",
+            "state": "Passed",
+            "durationSeconds": 0.0110261,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Fail_Retake_Pass_CreditsCountedOnce",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.Fail_Retake_Pass_CreditsCountedOnce",
+            "state": "Passed",
+            "durationSeconds": 0.0044244,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FullPlan_8Terms_Gives120_And_Graduates",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.FullPlan_8Terms_Gives120_And_Graduates",
+            "state": "Passed",
+            "durationSeconds": 0.0125684,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Gpa_IsCreditWeighted_UsingLatestAttempt",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.Gpa_IsCreditWeighted_UsingLatestAttempt",
+            "state": "Passed",
+            "durationSeconds": 0.001094,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Gpa_NoGrades_IsZero_NoDivideByZero",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.Gpa_NoGrades_IsZero_NoDivideByZero",
+            "state": "Passed",
+            "durationSeconds": 0.0006286,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "HeldBack_When_CreditsBelow24",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.HeldBack_When_CreditsBelow24",
+            "state": "Passed",
+            "durationSeconds": 0.0025428,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LowGpa_DoesNotGraduate",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.LowGpa_DoesNotGraduate",
+            "state": "Passed",
+            "durationSeconds": 0.0014013,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "OldSave_WithoutAcademicFields_Loads_And_Migrates",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.OldSave_WithoutAcademicFields_Loads_And_Migrates",
+            "state": "Passed",
+            "durationSeconds": 0.0051604,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SaveLoad_RoundTrip_KeepsState",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.SaveLoad_RoundTrip_KeepsState",
+            "state": "Passed",
+            "durationSeconds": 0.0051245,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SummerBreak_HasNoCourses_ButExplains",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.SummerBreak_HasNoCourses_ButExplains",
+            "state": "Passed",
+            "durationSeconds": 0.0007138,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Year1_Register_Succeeds_And_AppearsInSchedule",
+            "fullName": "NisitSimulator.Tests.CourseRegistrationTests.Year1_Register_Succeeds_And_AppearsInSchedule",
+            "state": "Passed",
+            "durationSeconds": 0.0027586,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Midnight_2359_RollsToNextDayOnce",
+            "fullName": "NisitSimulator.Tests.DayNightTests.Midnight_2359_RollsToNextDayOnce",
+            "state": "Passed",
+            "durationSeconds": 0.0027343,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NetworkFollower_DoesNotCrossMidnightAlone_ThenFollowsHost",
+            "fullName": "NisitSimulator.Tests.DayNightTests.NetworkFollower_DoesNotCrossMidnightAlone_ThenFollowsHost",
+            "state": "Passed",
+            "durationSeconds": 0.0010423,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "OldSave_HasNoTransformFlag",
+            "fullName": "NisitSimulator.Tests.DayNightTests.OldSave_HasNoTransformFlag",
+            "state": "Passed",
+            "durationSeconds": 0.0005393,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Phase_DefaultRanges(4.99f,Night)",
+            "fullName": "NisitSimulator.Tests.DayNightTests.Phase_DefaultRanges(4.99f,Night)",
+            "state": "Passed",
+            "durationSeconds": 0.0013767,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Phase_DefaultRanges(5.0f,Dawn)",
+            "fullName": "NisitSimulator.Tests.DayNightTests.Phase_DefaultRanges(5.0f,Dawn)",
+            "state": "Passed",
+            "durationSeconds": 0.0003801,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Phase_DefaultRanges(6.5f,Dawn)",
+            "fullName": "NisitSimulator.Tests.DayNightTests.Phase_DefaultRanges(6.5f,Dawn)",
+            "state": "Passed",
+            "durationSeconds": 0.0003225,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Phase_DefaultRanges(7.0f,Day)",
+            "fullName": "NisitSimulator.Tests.DayNightTests.Phase_DefaultRanges(7.0f,Day)",
+            "state": "Passed",
+            "durationSeconds": 0.0003067,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Phase_DefaultRanges(12.0f,Day)",
+            "fullName": "NisitSimulator.Tests.DayNightTests.Phase_DefaultRanges(12.0f,Day)",
+            "state": "Passed",
+            "durationSeconds": 0.0003151,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Phase_DefaultRanges(17.0f,Dusk)",
+            "fullName": "NisitSimulator.Tests.DayNightTests.Phase_DefaultRanges(17.0f,Dusk)",
+            "state": "Passed",
+            "durationSeconds": 0.000306,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Phase_DefaultRanges(18.99f,Dusk)",
+            "fullName": "NisitSimulator.Tests.DayNightTests.Phase_DefaultRanges(18.99f,Dusk)",
+            "state": "Passed",
+            "durationSeconds": 0.0002649,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Phase_DefaultRanges(19.0f,Night)",
+            "fullName": "NisitSimulator.Tests.DayNightTests.Phase_DefaultRanges(19.0f,Night)",
+            "state": "Passed",
+            "durationSeconds": 0.0002855,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Phase_DefaultRanges(0.0f,Night)",
+            "fullName": "NisitSimulator.Tests.DayNightTests.Phase_DefaultRanges(0.0f,Night)",
+            "state": "Passed",
+            "durationSeconds": 0.0002906,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SkipToNextMorning_FiresDayChangeOnce",
+            "fullName": "NisitSimulator.Tests.DayNightTests.SkipToNextMorning_FiresDayChangeOnce",
+            "state": "Passed",
+            "durationSeconds": 0.0014176,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "StreetLights_OnAtNight_OffAtDay",
+            "fullName": "NisitSimulator.Tests.DayNightTests.StreetLights_OnAtNight_OffAtDay",
+            "state": "Passed",
+            "durationSeconds": 0.0006388,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Wake_0100_SameDay_2200_NextDay",
+            "fullName": "NisitSimulator.Tests.DayNightTests.Wake_0100_SameDay_2200_NextDay",
+            "state": "Passed",
+            "durationSeconds": 0.0004355,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Builder_Refuses_History_That_Would_Retire_On_Gpa",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Builder_Refuses_History_That_Would_Retire_On_Gpa",
+            "state": "Passed",
+            "durationSeconds": 0.012599,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CustomHistory_ForcedFail_BlocksDependentCourse",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.CustomHistory_ForcedFail_BlocksDependentCourse",
+            "state": "Passed",
+            "durationSeconds": 0.0043841,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "DevProfile_Guard_NeverWritesOrDeletesRealSlot",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.DevProfile_Guard_NeverWritesOrDeletesRealSlot",
+            "state": "Passed",
+            "durationSeconds": 0.0416268,
+            "message": null,
+            "stackTrace": null,
+            "output": "[Save] บันทึกเกมแล้วที่: C:/Users/Pakwan/AppData/LocalLow/Mahasarakham University/Nisit Simulator\\dev_test\\unit_test_dev_save.json\r\n[Save][DEV] กันเขียนเซฟจริงระหว่างทดสอบ: nisit_save_2.json\r\n[Save][DEV] กันลบเซฟจริงระหว่างทดสอบ: nisit_save_2.json\r\n[Save][DEV] กันลบเซฟจริงระหว่างทดสอบ: nisit_save_2.json\r\n"
+          },
+          {
+            "name": "DevReadOverride_ReadsSnapshot_UntilNextRealSave",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.DevReadOverride_ReadsSnapshot_UntilNextRealSave",
+            "state": "Passed",
+            "durationSeconds": 0.0152349,
+            "message": null,
+            "stackTrace": null,
+            "output": "[Save][DEV] กันเขียนเซฟจริงระหว่างทดสอบ: nisit_save_2.json\r\n"
+          },
+          {
+            "name": "Preview_SameSeed_SameSet_TypeFilter_Count_Time_Hints",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Preview_SameSeed_SameSet_TypeFilter_Count_Time_Hints",
+            "state": "Passed",
+            "durationSeconds": 0.0550754,
+            "message": null,
+            "stackTrace": null,
+            "output": "[ExamBank] ไม่พบ Resources/ExamBanks/ExamBankDatabase — ใช้คลังข้อสอบค่าเริ่มต้นจากโค้ด (กด Nisit ▸ Build Exam Minigame Banks เพื่อสร้าง asset ที่แก้ใน Inspector ได้)\r\n"
+          },
+          {
+            "name": "Preview_Session_IsNotPersisted_And_GradesWithRealLogic",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Preview_Session_IsNotPersisted_And_GradesWithRealLogic",
+            "state": "Passed",
+            "durationSeconds": 0.00473,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S1\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S1\")",
+            "state": "Passed",
+            "durationSeconds": 0.0024726,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S2\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S2\")",
+            "state": "Passed",
+            "durationSeconds": 0.0024031,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S3\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S3\")",
+            "state": "Passed",
+            "durationSeconds": 0.0032492,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S4\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S4\")",
+            "state": "Passed",
+            "durationSeconds": 0.0026204,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S5\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S5\")",
+            "state": "Passed",
+            "durationSeconds": 0.0040636,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S6\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S6\")",
+            "state": "Passed",
+            "durationSeconds": 0.0019118,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S7\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S7\")",
+            "state": "Passed",
+            "durationSeconds": 0.0147751,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S8\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S8\")",
+            "state": "Passed",
+            "durationSeconds": 0.0116914,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S9\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_BuildsWithRealRules_AndMeetsItsCondition(\"S9\")",
+            "state": "Passed",
+            "durationSeconds": 0.0111465,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_HistoryIsConsistent_NotFlags(\"S1\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_HistoryIsConsistent_NotFlags(\"S1\")",
+            "state": "Passed",
+            "durationSeconds": 0.0038955,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_HistoryIsConsistent_NotFlags(\"S2\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_HistoryIsConsistent_NotFlags(\"S2\")",
+            "state": "Passed",
+            "durationSeconds": 0.0020717,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_HistoryIsConsistent_NotFlags(\"S3\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_HistoryIsConsistent_NotFlags(\"S3\")",
+            "state": "Passed",
+            "durationSeconds": 0.0024405,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_HistoryIsConsistent_NotFlags(\"S4\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_HistoryIsConsistent_NotFlags(\"S4\")",
+            "state": "Passed",
+            "durationSeconds": 0.0019663,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_HistoryIsConsistent_NotFlags(\"S5\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_HistoryIsConsistent_NotFlags(\"S5\")",
+            "state": "Passed",
+            "durationSeconds": 0.0014813,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_HistoryIsConsistent_NotFlags(\"S6\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_HistoryIsConsistent_NotFlags(\"S6\")",
+            "state": "Passed",
+            "durationSeconds": 0.0018089,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_HistoryIsConsistent_NotFlags(\"S7\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_HistoryIsConsistent_NotFlags(\"S7\")",
+            "state": "Passed",
+            "durationSeconds": 0.0145125,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_HistoryIsConsistent_NotFlags(\"S8\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_HistoryIsConsistent_NotFlags(\"S8\")",
+            "state": "Passed",
+            "durationSeconds": 0.012795,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_HistoryIsConsistent_NotFlags(\"S9\")",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_HistoryIsConsistent_NotFlags(\"S9\")",
+            "state": "Passed",
+            "durationSeconds": 0.0140328,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scenario_S6_Retake_ThenPass_CreditsCountedOnce",
+            "fullName": "NisitSimulator.Tests.DevToolsTests.Scenario_S6_Retake_ThenPass_CreditsCountedOnce",
+            "state": "Passed",
+            "durationSeconds": 0.0034044,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Answers_Kept_When_Changing_Question",
+            "fullName": "NisitSimulator.Tests.ExamMinigameTests.Answers_Kept_When_Changing_Question",
+            "state": "Passed",
+            "durationSeconds": 0.0065867,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Banks_Valid_MappedToRealCourses_AtLeast10Each",
+            "fullName": "NisitSimulator.Tests.ExamMinigameTests.Banks_Valid_MappedToRealCourses_AtLeast10Each",
+            "state": "Passed",
+            "durationSeconds": 0.014076,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CreateSession_Defaults_5Questions_180s_NoDuplicates",
+            "fullName": "NisitSimulator.Tests.ExamMinigameTests.CreateSession_Defaults_5Questions_180s_NoDuplicates",
+            "state": "Passed",
+            "durationSeconds": 0.007271,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FindError_Correct_And_Wrong",
+            "fullName": "NisitSimulator.Tests.ExamMinigameTests.FindError_Correct_And_Wrong",
+            "state": "Passed",
+            "durationSeconds": 0.0127812,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Hint_UsedOncePerQuestion_RespectsAllowance_NoPenalty",
+            "fullName": "NisitSimulator.Tests.ExamMinigameTests.Hint_UsedOncePerQuestion_RespectsAllowance_NoPenalty",
+            "state": "Passed",
+            "durationSeconds": 0.0244597,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "HintAllowance_Thresholds",
+            "fullName": "NisitSimulator.Tests.ExamMinigameTests.HintAllowance_Thresholds",
+            "state": "Passed",
+            "durationSeconds": 0.0049159,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LegacySubset_RecordsOnlyGivenCourses",
+            "fullName": "NisitSimulator.Tests.ExamMinigameTests.LegacySubset_RecordsOnlyGivenCourses",
+            "state": "Passed",
+            "durationSeconds": 0.0073313,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Matching_PartialCredit_PerPair",
+            "fullName": "NisitSimulator.Tests.ExamMinigameTests.Matching_PartialCredit_PerPair",
+            "state": "Passed",
+            "durationSeconds": 0.0103048,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "MultipleChoice_Score_Independent_Of_Shuffle",
+            "fullName": "NisitSimulator.Tests.ExamMinigameTests.MultipleChoice_Score_Independent_Of_Shuffle",
+            "state": "Passed",
+            "durationSeconds": 0.0783444,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "OldSave_Without_ExamSession_Loads",
+            "fullName": "NisitSimulator.Tests.ExamMinigameTests.OldSave_Without_ExamSession_Loads",
+            "state": "Passed",
+            "durationSeconds": 0.0033987,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Ordering_Full_Alternate_Partial_Empty",
+            "fullName": "NisitSimulator.Tests.ExamMinigameTests.Ordering_Full_Alternate_Partial_Empty",
+            "state": "Passed",
+            "durationSeconds": 0.0090632,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RecordCourseExam_OnlyOnce_SameFormulaAsLegacy",
+            "fullName": "NisitSimulator.Tests.ExamMinigameTests.RecordCourseExam_OnlyOnce_SameFormulaAsLegacy",
+            "state": "Passed",
+            "durationSeconds": 0.0056273,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SaveLoad_Json_RoundTrip_KeepsQuestionsOrderAnswersTimeHints",
+            "fullName": "NisitSimulator.Tests.ExamMinigameTests.SaveLoad_Json_RoundTrip_KeepsQuestionsOrderAnswersTimeHints",
+            "state": "Passed",
+            "durationSeconds": 0.0075071,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Submit_Idempotent_And_Score100",
+            "fullName": "NisitSimulator.Tests.ExamMinigameTests.Submit_Idempotent_And_Score100",
+            "state": "Passed",
+            "durationSeconds": 0.0047618,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "EnergyActivity_RejectedWhenExhaustedOrInsufficient",
+            "fullName": "NisitSimulator.Tests.ExhaustionTests.EnergyActivity_RejectedWhenExhaustedOrInsufficient",
+            "state": "Passed",
+            "durationSeconds": 0.0072994,
+            "message": null,
+            "stackTrace": null,
+            "output": "[Exhaustion] หมดแรง (พลังงาน 0)\r\n[Exhaustion] หายหมดแรง (พลังงาน 20)\r\n[Exhaustion] หมดแรง (พลังงาน 0)\r\n"
+          },
+          {
+            "name": "EnergyZero_EntersExhausted_Once_NoCriticalState",
+            "fullName": "NisitSimulator.Tests.ExhaustionTests.EnergyZero_EntersExhausted_Once_NoCriticalState",
+            "state": "Passed",
+            "durationSeconds": 0.0016951,
+            "message": null,
+            "stackTrace": null,
+            "output": "[Exhaustion] หมดแรง (พลังงาน 0)\r\n"
+          },
+          {
+            "name": "HealthZero_StillFiresCriticalState",
+            "fullName": "NisitSimulator.Tests.ExhaustionTests.HealthZero_StillFiresCriticalState",
+            "state": "Passed",
+            "durationSeconds": 0.0005407,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Hysteresis_ExitOnlyAtThreshold",
+            "fullName": "NisitSimulator.Tests.ExhaustionTests.Hysteresis_ExitOnlyAtThreshold",
+            "state": "Passed",
+            "durationSeconds": 0.0040688,
+            "message": null,
+            "stackTrace": null,
+            "output": "[Exhaustion] หมดแรง (พลังงาน 0)\r\n[Exhaustion] หายหมดแรง (พลังงาน 15)\r\n[Exhaustion] หมดแรง (พลังงาน 0)\r\n"
+          },
+          {
+            "name": "LoadState_ClampsEnergy",
+            "fullName": "NisitSimulator.Tests.ExhaustionTests.LoadState_ClampsEnergy",
+            "state": "Passed",
+            "durationSeconds": 0.0035763,
+            "message": null,
+            "stackTrace": null,
+            "output": "[Exhaustion] หมดแรง (พลังงาน 0)\r\n[Exhaustion] หายหมดแรง (พลังงาน 100)\r\n"
+          },
+          {
+            "name": "MovementFlags_FollowState_NotCumulative",
+            "fullName": "NisitSimulator.Tests.ExhaustionTests.MovementFlags_FollowState_NotCumulative",
+            "state": "Passed",
+            "durationSeconds": 0.0029968,
+            "message": null,
+            "stackTrace": null,
+            "output": "[Exhaustion] หมดแรง (พลังงาน 0)\r\n[Exhaustion] หายหมดแรง (พลังงาน 50)\r\n"
+          },
+          {
+            "name": "NotResting_ByDefault_And_RestRequiresExhausted",
+            "fullName": "NisitSimulator.Tests.ExhaustionTests.NotResting_ByDefault_And_RestRequiresExhausted",
+            "state": "Passed",
+            "durationSeconds": 0.0011313,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RestoreFromSave_Cases",
+            "fullName": "NisitSimulator.Tests.ExhaustionTests.RestoreFromSave_Cases",
+            "state": "Passed",
+            "durationSeconds": 0.0039629,
+            "message": null,
+            "stackTrace": null,
+            "output": "[Exhaustion] หมดแรง (พลังงาน 0)\r\n[Exhaustion] หมดแรง (พลังงาน 10)\r\n"
+          },
+          {
+            "name": "Rules_Recover_And_Thresholds",
+            "fullName": "NisitSimulator.Tests.ExhaustionTests.Rules_Recover_And_Thresholds",
+            "state": "Passed",
+            "durationSeconds": 0.0007433,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SaveData_ExhaustedFlag_RoundTrip_And_OldSaveDefault",
+            "fullName": "NisitSimulator.Tests.ExhaustionTests.SaveData_ExhaustedFlag_RoundTrip_And_OldSaveDefault",
+            "state": "Passed",
+            "durationSeconds": 0.000666,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ApplyModel_RigOnRoot_KeepsRoot",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.ApplyModel_RigOnRoot_KeepsRoot",
+            "state": "Passed",
+            "durationSeconds": 0.8929448,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Approval_GameInProgress_RejectedClearly",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.Approval_GameInProgress_RejectedClearly",
+            "state": "Passed",
+            "durationSeconds": 0.000903,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Approval_RoomFull_RejectedWithReason",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.Approval_RoomFull_RejectedWithReason",
+            "state": "Passed",
+            "durationSeconds": 0.0007464,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AvatarFeet_UsesControllerCenterHeightAndParentScale",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.AvatarFeet_UsesControllerCenterHeightAndParentScale",
+            "state": "Passed",
+            "durationSeconds": 0.004435,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(0)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(0)",
+            "state": "Passed",
+            "durationSeconds": 0.0218454,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(1)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(1)",
+            "state": "Passed",
+            "durationSeconds": 0.0030264,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(2)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(2)",
+            "state": "Passed",
+            "durationSeconds": 0.0029717,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(3)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(3)",
+            "state": "Passed",
+            "durationSeconds": 0.0030652,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(4)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(4)",
+            "state": "Passed",
+            "durationSeconds": 0.0029802,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(5)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(5)",
+            "state": "Passed",
+            "durationSeconds": 0.0023842,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(6)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(6)",
+            "state": "Passed",
+            "durationSeconds": 0.0028046,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(7)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(7)",
+            "state": "Passed",
+            "durationSeconds": 0.0032149,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(8)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(8)",
+            "state": "Passed",
+            "durationSeconds": 0.0047045,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(9)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(9)",
+            "state": "Passed",
+            "durationSeconds": 0.0046065,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(10)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(10)",
+            "state": "Passed",
+            "durationSeconds": 0.0037173,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(11)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(11)",
+            "state": "Passed",
+            "durationSeconds": 0.0041043,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(12)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(12)",
+            "state": "Passed",
+            "durationSeconds": 0.003085,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(13)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(13)",
+            "state": "Passed",
+            "durationSeconds": 0.0032133,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(14)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(14)",
+            "state": "Passed",
+            "durationSeconds": 0.0029238,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(15)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(15)",
+            "state": "Passed",
+            "durationSeconds": 0.0072122,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(16)",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.CatalogPuppet_EveryOutfitHasCorrectAvatarNoRootMotionAndEqualNormalizedHeight(16)",
+            "state": "Passed",
+            "durationSeconds": 0.0059407,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Client_FirstSync_NoDayEvent_ThenOneEventPerDay",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.Client_FirstSync_NoDayEvent_ThenOneEventPerDay",
+            "state": "Passed",
+            "durationSeconds": 0.0009199,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "DisconnectReason_ReadableForPlayers",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.DisconnectReason_ReadableForPlayers",
+            "state": "Passed",
+            "durationSeconds": 0.0010343,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Doors_CatalogFingerprintChangesWhenDoorPathChanges",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.Doors_CatalogFingerprintChangesWhenDoorPathChanges",
+            "state": "Passed",
+            "durationSeconds": 0.0021117,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Doors_Complete108OpenCloseAndNewMatchResets",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.Doors_Complete108OpenCloseAndNewMatchResets",
+            "state": "Passed",
+            "durationSeconds": 0.0093629,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Doors_Dorm53InitiallyClosed",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.Doors_Dorm53InitiallyClosed",
+            "state": "Passed",
+            "durationSeconds": 0.0005035,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Doors_ForgedDistantInvalidAndNonServerRequestsRejected",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.Doors_ForgedDistantInvalidAndNonServerRequestsRejected",
+            "state": "Passed",
+            "durationSeconds": 0.0005672,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Doors_HostTogglesAcrossBothMaskWords",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.Doors_HostTogglesAcrossBothMaskWords",
+            "state": "Passed",
+            "durationSeconds": 0.000481,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Doors_SimultaneousAndTenRapidPressesToggleOnce",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.Doors_SimultaneousAndTenRapidPressesToggleOnce",
+            "state": "Passed",
+            "durationSeconds": 0.000456,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "DormSlot_UniquePerPlayer_EvenWithGappedClientIds",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.DormSlot_UniquePerPlayer_EvenWithGappedClientIds",
+            "state": "Passed",
+            "durationSeconds": 0.0072915,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Host_GameEnded_ClockStops",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.Host_GameEnded_ClockStops",
+            "state": "Passed",
+            "durationSeconds": 0.001234,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Host_PauseOrModal_DoesNotFreezeWorld",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.Host_PauseOrModal_DoesNotFreezeWorld",
+            "state": "Passed",
+            "durationSeconds": 0.0007607,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "MultiplayerGame_SavesToSeparateFile_NotRealSlot",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.MultiplayerGame_SavesToSeparateFile_NotRealSlot",
+            "state": "Passed",
+            "durationSeconds": 0.002652,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PuppetScale_ApplyLookAndRepeatedSwapCannotAccumulateScaleOrDestroyNetworkRoot",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.PuppetScale_ApplyLookAndRepeatedSwapCannotAccumulateScaleOrDestroyNetworkRoot",
+            "state": "Passed",
+            "durationSeconds": 0.0152897,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SinglePlayer_PausedOrSuspended_ClockStops",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.SinglePlayer_PausedOrSuspended_ClockStops",
+            "state": "Passed",
+            "durationSeconds": 0.000638,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Trade_ClientDisconnect_ClearsPending",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.Trade_ClientDisconnect_ClearsPending",
+            "state": "Passed",
+            "durationSeconds": 0.0054453,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Trade_ResultOnlyFromRealReceiver_AndOnlyOnce",
+            "fullName": "NisitSimulator.Tests.MultiplayerTests.Trade_ResultOnlyFromRealReceiver_AndOnlyOnce",
+            "state": "Passed",
+            "durationSeconds": 0.0008489,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Cooldown_DropsSpamAndConsumesRejectedSequence",
+            "fullName": "NisitSimulator.Tests.PartyPhaseOneTests.Cooldown_DropsSpamAndConsumesRejectedSequence",
+            "state": "Passed",
+            "durationSeconds": 0.0010743,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Disconnect_RetainsOtherSlots_AndNeverReusesPlayerIdentity",
+            "fullName": "NisitSimulator.Tests.PartyPhaseOneTests.Disconnect_RetainsOtherSlots_AndNeverReusesPlayerIdentity",
+            "state": "Passed",
+            "durationSeconds": 0.018184,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "DisconnectedAndSinglePlayerRequests_AreRejected",
+            "fullName": "NisitSimulator.Tests.PartyPhaseOneTests.DisconnectedAndSinglePlayerRequests_AreRejected",
+            "state": "Passed",
+            "durationSeconds": 0.0003687,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ForgedSender_CannotPlacePingOrConsumeOwnersSequence",
+            "fullName": "NisitSimulator.Tests.PartyPhaseOneTests.ForgedSender_CannotPlacePingOrConsumeOwnersSequence",
+            "state": "Passed",
+            "durationSeconds": 0.0002167,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Membership_IsIdempotent_AndSupportsGappedConnections",
+            "fullName": "NisitSimulator.Tests.PartyPhaseOneTests.Membership_IsIdempotent_AndSupportsGappedConnections",
+            "state": "Passed",
+            "durationSeconds": 0.001598,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PingCoordinates_RejectInvalidAndOutsideCampus",
+            "fullName": "NisitSimulator.Tests.PartyPhaseOneTests.PingCoordinates_RejectInvalidAndOutsideCampus",
+            "state": "Passed",
+            "durationSeconds": 0.0005165,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PingExpiry_UsesHostTimeAndExactTenSeconds",
+            "fullName": "NisitSimulator.Tests.PartyPhaseOneTests.PingExpiry_UsesHostTimeAndExactTenSeconds",
+            "state": "Passed",
+            "durationSeconds": 0.0002366,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Replay_IsRejectedEvenAfterPingExpires",
+            "fullName": "NisitSimulator.Tests.PartyPhaseOneTests.Replay_IsRejectedEvenAfterPingExpires",
+            "state": "Passed",
+            "durationSeconds": 0.0002655,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Summary_ClampsEnergyAndPreservesConcurrentStatuses",
+            "fullName": "NisitSimulator.Tests.PartyPhaseOneTests.Summary_ClampsEnergyAndPreservesConcurrentStatuses",
+            "state": "Passed",
+            "durationSeconds": 0.0012458,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Summary_QuantizationSuppressesSubHalfUnitPositionNoise",
+            "fullName": "NisitSimulator.Tests.PartyPhaseOneTests.Summary_QuantizationSuppressesSubHalfUnitPositionNoise",
+            "state": "Passed",
+            "durationSeconds": 0.0008001,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    },
+    "hint": null
+  }
+}

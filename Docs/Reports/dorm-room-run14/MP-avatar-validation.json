@@ -1,0 +1,43 @@
+{
+  "H": {
+    "owners": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "maxXZError": 0.0,
+    "maxFloorHeightError": 0.07999898493289948
+  },
+  "C1": {
+    "owners": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "maxXZError": 0.0,
+    "maxFloorHeightError": 0.07999910414218903
+  },
+  "C2": {
+    "owners": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "maxXZError": 0.0,
+    "maxFloorHeightError": 0.07999898493289948
+  },
+  "C3": {
+    "owners": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "maxXZError": 0.0,
+    "maxFloorHeightError": 0.07999898493289948
+  },
+  "passed": true
+}

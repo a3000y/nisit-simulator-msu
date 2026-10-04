@@ -50,7 +50,7 @@ namespace NisitSimulator.Stats
             // ผูกการลดสถานะกับ "เวลาในเกม" ไม่ใช่เวลาจริง
             // เดิมใช้ Time.deltaTime ตรง ๆ พอเร่งนาฬิกาสมดุลจะพังทันที
             // เช่น เร่ง 3 เท่า ความหิวจะมาช้าลง 3 เท่าเมื่อเทียบกับเวลาในเกม กินข้าววันละมื้อก็ไม่หิว
-            float speed = clock != null ? clock.gameMinutesPerRealSecond : 1f;
+            float speed = clock != null ? clock.EffectiveMinutesPerSecond : 1f;   // รวมตัวคูณเร่งเวลาตอนเข้าเรียน
             Tick(Time.deltaTime * speed);
         }
 

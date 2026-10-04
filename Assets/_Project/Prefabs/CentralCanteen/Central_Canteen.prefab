@@ -43774,7 +43774,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8185591686992426158}
-  - component: {fileID: 4389613114895732509}
   m_Layer: 0
   m_Name: Roof_Trusses
   m_TagString: Untagged
@@ -44128,29 +44127,6 @@ Transform:
   - {fileID: 4866262378467946204}
   m_Father: {fileID: 1210581158727675268}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4389613114895732509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8182047152122090130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e5e864800aa96b44ab9cba9d0f6daa4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NisitSimulator.CameraRig.WallFader
-  target: {fileID: 0}
-  targetHeightOffset: 1.2
-  additionalObstructions: []
-  obstructionMask:
-    serializedVersion: 2
-    m_Bits: 1
-  castRadius: 0.45
-  endPadding: 0.6
-  checkInterval: 0.1
-  fadedAlpha: 0.25
-  fadeSpeed: 8
 --- !u!1 &8210822698890377889
 GameObject:
   m_ObjectHideFlags: 0

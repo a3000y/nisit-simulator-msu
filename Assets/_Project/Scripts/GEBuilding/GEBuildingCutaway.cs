@@ -24,6 +24,13 @@ namespace NisitSimulator.GEBuilding
         public float floorLookAhead = 0.4f;
         public float checkInterval = 0.15f;
 
+        [Tooltip("หอพัก: ซ่อนผนังและต้นไม้ที่บังกล้องขณะอยู่ในห้องที่มีช่องเกิด (Collider ยังอยู่)")]
+        public bool hideAssignedRoomObstructions;
+        public int HiddenRoomWallCount => roomWalls.Count;
+        readonly Dictionary<Renderer, ShadowCastingMode> roomWalls = new Dictionary<Renderer, ShadowCastingMode>();
+        readonly List<Renderer> roomOccluders = new List<Renderer>();
+        bool roomOccludersCached;
+
         struct Entry { public Renderer r; public float localMinY; public ShadowCastingMode original; }
         private readonly List<Entry> entries = new List<Entry>();
         private int currentCut = int.MinValue;
@@ -82,7 +89,8 @@ namespace NisitSimulator.GEBuilding
         {
             int floor = PlayerFloor();
             int cut = floor < 0 ? int.MaxValue : floor;
-            if (cut == currentCut) return;
+            if (cut == currentCut) { RefreshRoomWalls(); return; }
+            RestoreRoomWalls();
             currentCut = cut;
             float cutY = cut == int.MaxValue ? float.MaxValue : firstFloorY + (cut + 1) * floorHeight - slabThickness - 0.05f;
             for (int i = 0; i < entries.Count; i++)
@@ -91,12 +99,67 @@ namespace NisitSimulator.GEBuilding
                 if (e.r == null) continue;
                 e.r.shadowCastingMode = e.localMinY >= cutY ? ShadowCastingMode.ShadowsOnly : e.original;
             }
+            RefreshRoomWalls();
+        }
+
+        void RestoreRoomWalls()
+        {
+            foreach (var pair in roomWalls) if (pair.Key != null) pair.Key.shadowCastingMode = pair.Value;
+            roomWalls.Clear();
+        }
+
+        void RefreshRoomWalls()
+        {
+            RestoreRoomWalls();
+            if (!hideAssignedRoomObstructions || player == null) return;
+            var dorm = GetComponentInChildren<NisitSimulator.Interaction.DormSpawnPoint>();
+            if (dorm == null || dorm.roomSlots == null) return;
+            bool inRoom = false;
+            foreach (var slot in dorm.roomSlots)
+            {
+                if (slot.room == null) continue;
+                var pos = slot.room.InverseTransformPoint(player.position);
+                if (Mathf.Abs(pos.x) < 1.8f && pos.z > 0f && pos.z < 6.5f && pos.y > -0.1f && pos.y < floorHeight)
+                { inRoom = true; break; }
+            }
+            var camera = Camera.main;
+            if (!inRoom || camera == null) return;
+            var cc = player.GetComponent<CharacterController>();
+            var aim = cc != null ? cc.bounds.center : player.position + Vector3.up * 0.6f;
+            var delta = aim - camera.transform.position;
+            if (!roomOccludersCached)
+            {
+                roomOccludersCached = true;
+                foreach (var renderer in GetComponentsInChildren<Renderer>(true))
+                {
+                    if (renderer.GetComponentInParent<GEDoor>() != null) continue;
+                    for (var part = renderer.transform; part != null && part != transform; part = part.parent)
+                        if (part.name.StartsWith("Wall_")) { roomOccluders.Add(renderer); break; }
+                }
+                // Decorative tree meshes may have no canopy collider. Check their render bounds,
+                // limited to this building's campus zone; never change their collision or materials.
+                if (transform.parent != null)
+                    foreach (var renderer in transform.parent.GetComponentsInChildren<Renderer>(true))
+                        if (!renderer.transform.IsChildOf(transform) && renderer.name.StartsWith("SM_Env_Tree_"))
+                            roomOccluders.Add(renderer);
+            }
+            var ray = new Ray(camera.transform.position, delta.normalized);
+            foreach (var renderer in roomOccluders)
+            {
+                if (renderer == null || !renderer.enabled || !renderer.gameObject.activeInHierarchy ||
+                    renderer.shadowCastingMode == ShadowCastingMode.ShadowsOnly) continue;
+                var bounds = renderer.bounds; bounds.Expand(0.5f);
+                if (!bounds.IntersectRay(ray, out float distance) || distance >= delta.magnitude - 0.15f) continue;
+                roomWalls.Add(renderer, renderer.shadowCastingMode);
+                renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+            }
         }
 
         void OnDisable()
         {
             for (int i = 0; i < entries.Count; i++)
                 if (entries[i].r != null) entries[i].r.shadowCastingMode = entries[i].original;
+            RestoreRoomWalls();
             currentCut = int.MinValue;
         }
     }

@@ -83,16 +83,36 @@ namespace NisitSimulator.SaveLoad
             Debug.Log($"[Save] บันทึกเกมแล้วที่: {SavePath}");
         }
 
+        public static string LastLoadIssue { get; private set; } = "";
+
         public static SaveData Load()
         {
+            LastLoadIssue = "";
             string rp = ReadPath;
             if (!File.Exists(rp))
             {
                 Debug.Log("[Save] ไม่พบไฟล์เซฟ — เริ่มเกมใหม่");
                 return null;
             }
-            string json = File.ReadAllText(rp);
-            return JsonUtility.FromJson<SaveData>(json);
+            try
+            {
+                string json = File.ReadAllText(rp);
+                var data = JsonUtility.FromJson<SaveData>(json);
+                if (data == null) LastLoadIssue = "unreadable_save";
+                return data;
+            }
+            catch (System.ArgumentException)
+            {
+                LastLoadIssue = "unreadable_save";
+                Debug.LogWarning("[Save] JSON เซฟอ่านไม่ได้ — ใช้สถานะเริ่มต้นและจุดเกิดหอใหม่ (ไม่ลบเซฟ)");
+                return null;
+            }
+            catch (IOException)
+            {
+                LastLoadIssue = "unreadable_save";
+                Debug.LogWarning("[Save] อ่านไฟล์เซฟไม่สำเร็จ — ใช้จุดเกิดหอใหม่ (ไม่ลบเซฟ)");
+                return null;
+            }
         }
 
         public static bool HasSave() => File.Exists(ReadPath);

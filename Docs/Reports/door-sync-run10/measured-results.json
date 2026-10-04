@@ -1,0 +1,163 @@
+{
+  "build": {
+    "result": "Succeeded",
+    "errors": 0,
+    "warnings": 231,
+    "bytes": 1077310933,
+    "seconds": 63.071151799999996
+  },
+  "inventoryCounts": {
+    "Dorm_Building": 53,
+    "GE_Building": 18,
+    "IT_Building": 37
+  },
+  "guard": {
+    "H": {
+      "snapshots": 2428,
+      "invalidGuardSnapshots": 0,
+      "maximumFrameCounter": 35610,
+      "malformedLines": 0,
+      "maximumSnapshotGapSeconds": 2.349
+    },
+    "C1": {
+      "snapshots": 2540,
+      "invalidGuardSnapshots": 0,
+      "maximumFrameCounter": 37302,
+      "malformedLines": 0,
+      "maximumSnapshotGapSeconds": 1.893
+    },
+    "C2": {
+      "snapshots": 2259,
+      "invalidGuardSnapshots": 0,
+      "maximumFrameCounter": 33168,
+      "malformedLines": 0,
+      "maximumSnapshotGapSeconds": 2.058
+    },
+    "SP": {
+      "snapshots": 1475,
+      "invalidGuardSnapshots": 0,
+      "maximumFrameCounter": 21605,
+      "malformedLines": 0,
+      "maximumSnapshotGapSeconds": 1.957
+    }
+  },
+  "latencies": [
+    {
+      "case": "Host เปิดบานซ้าย",
+      "id": 1,
+      "requestUtc": "2026-10-04T05:17:45.7775798Z",
+      "instances": {
+        "H": {
+          "seconds": 0.413731,
+          "settledUtc": "2026-10-04T05:17:46.191310+00:00",
+          "passed": true
+        },
+        "C1": {
+          "seconds": 0.427246,
+          "settledUtc": "2026-10-04T05:17:46.204825+00:00",
+          "passed": true
+        },
+        "C2": {
+          "seconds": 0.430245,
+          "settledUtc": "2026-10-04T05:17:46.207824+00:00",
+          "passed": true
+        }
+      }
+    },
+    {
+      "case": "Client C1 เปิดบานขวา / Host พักเกม",
+      "id": 2,
+      "requestUtc": "2026-10-04T05:18:12.4945994Z",
+      "instances": {
+        "H": {
+          "seconds": 0.379025,
+          "settledUtc": "2026-10-04T05:18:12.873624+00:00",
+          "passed": true
+        },
+        "C1": {
+          "seconds": 0.400587,
+          "settledUtc": "2026-10-04T05:18:12.895186+00:00",
+          "passed": true
+        },
+        "C2": {
+          "seconds": 0.418191,
+          "settledUtc": "2026-10-04T05:18:12.912790+00:00",
+          "passed": true
+        }
+      }
+    }
+  ],
+  "simultaneous": {
+    "serverTick": 17167,
+    "serverFrame": 17017,
+    "acceptedUtc": "2026-10-04T05:22:33.4084425Z",
+    "coalescedUtc": "2026-10-04T05:22:33.4104437Z"
+  },
+  "sleepPreserved": true,
+  "crash": {
+    "target": "C2",
+    "pid": 21036,
+    "openingScheduledEpoch": 1791091894794,
+    "killedUtc": "2026-10-04T05:31:34.9782669+00:00",
+    "killedEpoch": 1791091894978,
+    "processIdentityVerified": true
+  },
+  "crashHostAcceptedUtc": "2026-10-04T05:31:34.8141513Z",
+  "crashHostSettledUtc": "2026-10-04T05:31:35.189011+00:00",
+  "errors": {
+    "H": [],
+    "C1": [
+      "12:30:18.343 [C1] [client cid=2] UNITY Exception: PlayerPrefsException: Could not store preference value | NisitSimulator.Systems.AchievementManager.SaveToPrefs () (at C:/Users/Pakwan/Downloads/My project/My project/Assets/_Project/Scripts/Systems/AchievementManager.cs:186)"
+    ],
+    "C2": [
+      "12:30:16.522 [C2] [client cid=3] UNITY Exception: PlayerPrefsException: Could not store preference value | NisitSimulator.Systems.AchievementManager.SaveToPrefs () (at C:/Users/Pakwan/Downloads/My project/My project/Assets/_Project/Scripts/Systems/AchievementManager.cs:186)"
+    ],
+    "SP": []
+  },
+  "saveVerification": {
+    "beforeCount": 4,
+    "afterCount": 4,
+    "unchanged": true,
+    "differences": [],
+    "allTestProcessesExited": true
+  },
+  "physicsFailures": {
+    "H": [
+      {
+        "id": 71,
+        "path": "IT_Building/Exterior/SideExit/Door_SideExit",
+        "open": true,
+        "side": -0.1134,
+        "detected": true,
+        "grounded": true,
+        "passed": false,
+        "line": "12:24:49.208 [H] [host cid=0] DOOR probe id=71 key=IT_Building/Exterior/SideExit/Door_SideExit expectedOpen=True measuredOpen=True side=-0.1134 detected=True grounded=True passed=False"
+      }
+    ],
+    "C1": [
+      {
+        "id": 71,
+        "path": "IT_Building/Exterior/SideExit/Door_SideExit",
+        "open": false,
+        "side": 2.0269,
+        "detected": true,
+        "grounded": true,
+        "passed": false,
+        "line": "12:19:59.512 [C1] [client cid=2] DOOR probe id=71 key=IT_Building/Exterior/SideExit/Door_SideExit expectedOpen=False measuredOpen=False side=2.0269 detected=True grounded=True passed=False"
+      }
+    ],
+    "C2": [],
+    "SP": [
+      {
+        "id": 71,
+        "path": "IT_Building/Exterior/SideExit/Door_SideExit",
+        "open": true,
+        "side": -0.1134,
+        "detected": true,
+        "grounded": true,
+        "passed": false,
+        "line": "12:31:58.945 [SP] [off cid=-] DOOR probe id=71 key=IT_Building/Exterior/SideExit/Door_SideExit expectedOpen=True measuredOpen=True side=-0.1134 detected=True grounded=True passed=False"
+      }
+    ]
+  }
+}

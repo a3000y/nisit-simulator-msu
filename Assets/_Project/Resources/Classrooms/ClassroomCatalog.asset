@@ -1,0 +1,232 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: ClassroomCatalog
+  m_EditorClassIdentifier: Assembly-CSharp:NisitSimulator.Academics:ClassroomCatalog
+  rooms:
+  - roomId: IT-101
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 1
+    type: 0
+    capacity: 8
+  - roomId: IT-102
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-102"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 1
+    type: 0
+    capacity: 8
+  - roomId: IT-103
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-103"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 1
+    type: 0
+    capacity: 8
+  - roomId: IT-105
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-105"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 1
+    type: 0
+    capacity: 8
+  - roomId: IT-106
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-106"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 1
+    type: 0
+    capacity: 8
+  - roomId: IT-301
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 3
+    type: 0
+    capacity: 8
+  - roomId: IT-302
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-302"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 3
+    type: 0
+    capacity: 8
+  - roomId: IT-306
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-306"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 3
+    type: 0
+    capacity: 8
+  - roomId: IT-201
+    displayName: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21\u0E1E\u0E34\u0E27\u0E40\u0E15\u0E2D\u0E23\u0E4C
+      IT-201"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 2
+    type: 1
+    capacity: 11
+  - roomId: IT-202
+    displayName: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21\u0E1E\u0E34\u0E27\u0E40\u0E15\u0E2D\u0E23\u0E4C
+      IT-202"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 2
+    type: 1
+    capacity: 11
+  - roomId: IT-203
+    displayName: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21\u0E1E\u0E34\u0E27\u0E40\u0E15\u0E2D\u0E23\u0E4C
+      IT-203"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 2
+    type: 1
+    capacity: 11
+  - roomId: IT-204
+    displayName: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21\u0E1E\u0E34\u0E27\u0E40\u0E15\u0E2D\u0E23\u0E4C
+      IT-204"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 2
+    type: 1
+    capacity: 11
+  - roomId: IT-205
+    displayName: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21\u0E1E\u0E34\u0E27\u0E40\u0E15\u0E2D\u0E23\u0E4C
+      IT-205"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 2
+    type: 1
+    capacity: 11
+  - roomId: IT-206
+    displayName: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21\u0E1E\u0E34\u0E27\u0E40\u0E15\u0E2D\u0E23\u0E4C
+      IT-206"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 2
+    type: 1
+    capacity: 11
+  - roomId: IT-207
+    displayName: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21\u0E1E\u0E34\u0E27\u0E40\u0E15\u0E2D\u0E23\u0E4C
+      IT-207"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 2
+    type: 1
+    capacity: 11
+  - roomId: IT-405
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E2A\u0E31\u0E21\u0E21\u0E19\u0E32 IT-405"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 4
+    type: 2
+    capacity: 15
+  - roomId: IT-407
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E2A\u0E31\u0E21\u0E21\u0E19\u0E32 IT-407"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23 IT"
+    legacyBuilding: "\u0E04\u0E13\u0E30 IT"
+    floor: 4
+    type: 2
+    capacity: 15
+  - roomId: GE-101
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E40\u0E23\u0E35\u0E22\u0E19 GE-101"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19 GE"
+    legacyBuilding: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
+    floor: 1
+    type: 0
+    capacity: 16
+  - roomId: GE-102
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E40\u0E23\u0E35\u0E22\u0E19 GE-102"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19 GE"
+    legacyBuilding: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
+    floor: 1
+    type: 0
+    capacity: 16
+  - roomId: GE-103
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E40\u0E23\u0E35\u0E22\u0E19 GE-103"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19 GE"
+    legacyBuilding: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
+    floor: 1
+    type: 0
+    capacity: 16
+  - roomId: GE-104
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E40\u0E23\u0E35\u0E22\u0E19 GE-104"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19 GE"
+    legacyBuilding: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
+    floor: 1
+    type: 0
+    capacity: 16
+  - roomId: GE-201
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E40\u0E23\u0E35\u0E22\u0E19 GE-201"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19 GE"
+    legacyBuilding: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
+    floor: 2
+    type: 0
+    capacity: 16
+  - roomId: GE-202
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E40\u0E23\u0E35\u0E22\u0E19 GE-202"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19 GE"
+    legacyBuilding: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
+    floor: 2
+    type: 0
+    capacity: 16
+  - roomId: GE-203
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E40\u0E23\u0E35\u0E22\u0E19 GE-203"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19 GE"
+    legacyBuilding: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
+    floor: 2
+    type: 0
+    capacity: 16
+  - roomId: GE-204
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E40\u0E23\u0E35\u0E22\u0E19 GE-204"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19 GE"
+    legacyBuilding: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
+    floor: 2
+    type: 0
+    capacity: 16
+  - roomId: GE-301
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E40\u0E23\u0E35\u0E22\u0E19 GE-301"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19 GE"
+    legacyBuilding: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
+    floor: 3
+    type: 0
+    capacity: 16
+  - roomId: GE-302
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E40\u0E23\u0E35\u0E22\u0E19 GE-302"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19 GE"
+    legacyBuilding: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
+    floor: 3
+    type: 0
+    capacity: 16
+  - roomId: GE-303
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E40\u0E23\u0E35\u0E22\u0E19 GE-303"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19 GE"
+    legacyBuilding: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
+    floor: 3
+    type: 0
+    capacity: 16
+  - roomId: GE-304
+    displayName: "\u0E2B\u0E49\u0E2D\u0E07\u0E40\u0E23\u0E35\u0E22\u0E19 GE-304"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19 GE"
+    legacyBuilding: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
+    floor: 3
+    type: 0
+    capacity: 16
+  - roomId: ADM-101
+    displayName: "\u0E2A\u0E33\u0E19\u0E31\u0E01\u0E07\u0E32\u0E19\u0E1D\u0E36\u0E01\u0E07\u0E32\u0E19/\u0E2A\u0E2B\u0E01\u0E34\u0E08"
+    building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E1A\u0E23\u0E34\u0E2B\u0E32\u0E23"
+    legacyBuilding: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E1A\u0E23\u0E34\u0E2B\u0E32\u0E23"
+    floor: 1
+    type: 3
+    capacity: 4

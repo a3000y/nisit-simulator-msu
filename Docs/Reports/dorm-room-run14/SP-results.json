@@ -1,0 +1,139 @@
+[
+  {
+    "case": "SP spawn",
+    "status": "✅",
+    "detail": {
+      "slot": 0,
+      "cutFloor": 0,
+      "hiddenWalls": 1,
+      "stationCount": 4,
+      "roomVisibilityEnabled": true,
+      "playerViewport": {
+        "x": 0.4999990463256836,
+        "y": 0.4999997615814209,
+        "z": 11.999985694885254
+      },
+      "cameraPosition": {
+        "x": -71.02510070800781,
+        "y": 8.678449630737305,
+        "z": 122.60157775878906
+      },
+      "visualCenter": {
+        "x": -64.53057861328125,
+        "y": 1.003899097442627,
+        "z": 129.08340454101562
+      },
+      "visualViewport": {
+        "x": 0.5004205703735352,
+        "y": 0.5015795230865479,
+        "z": 11.962059020996094
+      },
+      "cameraTarget": "Player",
+      "roomId": "dorm_building_101",
+      "bed": "Room_101/Bed_A",
+      "spawn": "DormRoomSpawn_1",
+      "wake": "DormBedWake_1",
+      "prompt": "ยังไม่ถึงเวลานอน (หลัง 18:00 น.)",
+      "spawnPos": {
+        "x": -64.5250015258789,
+        "y": 0.22500000894069672,
+        "z": 129.1016845703125
+      },
+      "wakePos": {
+        "x": -64.5250015258789,
+        "y": 0.22500000894069672,
+        "z": 129.1016845703125
+      },
+      "roomLocalPlayer": {
+        "x": -0.599997878074646,
+        "y": 0.9866660237312317,
+        "z": 3.9999938011169434
+      },
+      "insideInterior": false,
+      "interiorLighting": false,
+      "grounded": true,
+      "capsuleClear": true,
+      "wakeDistance": 0.0,
+      "capsuleRadius": 0.32999998331069946
+    }
+  },
+  {
+    "case": "SP bed HUD/confirmation",
+    "status": "✅",
+    "detail": "กด E เพื่อนอน (ตื่น 07:00 น.)"
+  },
+  {
+    "case": "SP sleep day/money/energy/wake",
+    "status": "✅",
+    "detail": {
+      "clock": "D2 07:00",
+      "money": 160,
+      "energy": 99.99942016601562,
+      "completedSleeps": 1
+    }
+  },
+  {
+    "case": "Continue room preserves non-spawn position",
+    "status": "✅",
+    "detail": {
+      "before": {
+        "x": -64.78939819335938,
+        "y": 0.9649996757507324,
+        "z": 129.1016845703125
+      },
+      "after": {
+        "x": -64.78939819335938,
+        "y": 0.9649995565414429,
+        "z": 129.1016845703125
+      }
+    }
+  },
+  {
+    "case": "Walk room to street",
+    "status": "❌",
+    "detail": {
+      "x": -58.4501953125,
+      "y": 0.7399999499320984,
+      "z": 125.65031433105469
+    }
+  },
+  {
+    "case": "Walk street back to room",
+    "status": "❌",
+    "detail": {
+      "x": -64.52445220947266,
+      "y": 0.9649999737739563,
+      "z": 129.369140625
+    }
+  },
+  {
+    "case": "Continue legacy",
+    "status": "✅",
+    "detail": {
+      "reason": "migrated_legacy_dorm",
+      "clock": "D2 07:20",
+      "money": 160,
+      "errors": []
+    }
+  },
+  {
+    "case": "Continue invalid",
+    "status": "✅",
+    "detail": {
+      "reason": "fallback_dorm: อยู่นอกแผนที่",
+      "clock": "D2 07:30",
+      "money": 160,
+      "errors": []
+    }
+  },
+  {
+    "case": "Continue corrupt",
+    "status": "✅",
+    "detail": {
+      "reason": "fallback_dorm: unreadable_save",
+      "clock": "D1 07:10",
+      "money": 0,
+      "errors": []
+    }
+  }
+]

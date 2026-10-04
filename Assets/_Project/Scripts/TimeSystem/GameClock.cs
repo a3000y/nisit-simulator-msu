@@ -9,8 +9,9 @@ namespace NisitSimulator.TimeSystem
     public class GameClock : MonoBehaviour
     {
         [Header("ความเร็วเวลา")]
-        [Tooltip("เวลาจริง 1 วินาที = กี่นาทีในเกม (3 = หนึ่งวันตื่นถึงเข้านอนราว 5 นาทีจริง) ค่านี้คูณกับ StatDecay ด้วย สมดุลจึงไม่เพี้ยน")]
-        public float gameMinutesPerRealSecond = 3f;
+        [Tooltip("เวลาจริง 1 วินาที = กี่นาทีในเกม (1.2 = ครบ 24 ชม. เกมใน 20 นาทีจริง · ตื่น 07:00 ถึงเที่ยงคืนราว 14 นาที) ค่านี้คูณกับ StatDecay ด้วย สมดุลจึงไม่เพี้ยน")]
+        public float gameMinutesPerRealSecond = DefaultMinutesPerRealSecond;
+        public const float DefaultMinutesPerRealSecond = 1.2f;   // 1440 นาทีเกม / 1200 วินาทีจริง
 
         [Header("เวลาเริ่มต้น")]
         public int startHour = 7;    // เริ่มเกมใหม่ 07:00 ที่หอพัก (ค่าในฉากเป็นตัวกำหนดจริง)
@@ -34,6 +35,15 @@ namespace NisitSimulator.TimeSystem
         public static bool NetworkFollower;
         public static bool NetworkAuthoritative;
 
+        // ===== เร่งเวลาตอนเข้าเรียน (ClassWarpController ตั้ง — เล่นคนเดียวเท่านั้น) =====
+        //   1 = ปกติ · ทุกระบบที่ผูกกับเวลาเกม (นาฬิกา, StatDecay, ActivitySpot) ใช้ EffectiveMinutesPerSecond → สมดุลต่อนาทีเกมเท่าเดิม
+        //   "เร่ง" ไม่ใช่ "ข้าม": ทุกอย่างยังเดินทีละเฟรม tick ทุก 60 นาทีนับเหมือนเดิม
+        public static float WarpMultiplier = 1f;
+        public float EffectiveMinutesPerSecond => gameMinutesPerRealSecond * Mathf.Max(1f, WarpMultiplier);
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void ResetStatics() { WarpMultiplier = 1f; }
+
         private int lastMinute = -1;
         private int currentDay;
 
@@ -43,6 +53,7 @@ namespace NisitSimulator.TimeSystem
         // ทำให้ DayInYear เริ่มที่ 2 ตั้งแต่เปิดเกม เท่ากับหายไปหนึ่งวันทุกปี
         void Awake()
         {
+            WarpMultiplier = 1f;   // ฉากใหม่/โหลดเซฟ → เริ่มที่ความเร็วปกติเสมอ
             currentDay = startDay;
             totalGameMinutes = startHour * 60f;
         }
@@ -52,6 +63,8 @@ namespace NisitSimulator.TimeSystem
             OnDayChanged?.Invoke(currentDay);
         }
 
+        void OnDestroy() { WarpMultiplier = 1f; }
+
         void Update()
         {
             // เดินเวลาเฉพาะตอนเกมยังดำเนินอยู่ (หยุดเมื่อ pause/จบเกม)
@@ -60,7 +73,7 @@ namespace NisitSimulator.TimeSystem
             var gm = GameManager.Instance;
             float dt = WorldDeltaSeconds(gm != null, gm != null ? gm.State : GameState.Playing, Suspended, NetworkAuthoritative,
                                          Time.timeScale, Time.deltaTime, Time.unscaledDeltaTime, Time.maximumDeltaTime);
-            if (dt > 0f) Step(dt * gameMinutesPerRealSecond);
+            if (dt > 0f) Step(dt * EffectiveMinutesPerSecond);
         }
 
         // วินาทีจริงที่นาฬิกาเครื่องนี้ควรเดินในเฟรมนี้ (0 = หยุด) — ฟังก์ชันล้วน ทดสอบได้

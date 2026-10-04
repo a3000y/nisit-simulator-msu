@@ -66,6 +66,8 @@ namespace NisitSimulator.Interaction
         {
             // หลักสูตรลงทะเบียน: เข้าเรียนได้เฉพาะช่วงคาบของวิชาที่ลงทะเบียนไว้
             var reg = NisitSimulator.Academics.CourseRegistrar.Instance;
+            // เล่นคนเดียว: ตู้เข้าเรียนพาไปห้องของคาบปัจจุบัน + นั่งให้ (เร่งเวลาจนเลิกคาบ) แทนการเรียนทันที 2.5 วินาที
+            if (reg != null && reg.IsActive && NisitSimulator.Academics.ClassroomNavigator.TryRedirectStation(interactor)) return;
             if (reg != null && reg.IsActive && !reg.TryGetOngoingSession(out _, out _))
             {
                 HUDController.Toast("ตอนนี้ไม่มีคาบของวิชาที่คุณลงทะเบียน (ดูตารางเรียนในโทรศัพท์)");

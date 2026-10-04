@@ -41,6 +41,33 @@ namespace NisitSimulator.Interaction
 
         public string GetPrompt() => _seated ? "กด E เพื่อลุกขึ้น" : $"กด E เพื่อ{activityName}";
 
+        // ===== สำหรับระบบห้องเรียน/เร่งเวลา (ClassWarpController) =====
+        public bool IsSeated => _seated;
+        public GameObject Occupant => _who;
+        public bool IsStudySpot => IsOverTime;           // ที่นั่งที่ให้ความรู้ตามเวลา (โต๊ะเรียน)
+        public float AccumulatedMinutes => _accum;
+
+        // ลุกจากที่นั่งโดยระบบ (จบคาบ/ไฟดับ/หมดแรง ฯลฯ) — ชั่วโมงที่ยังไม่ครบไม่นับ
+        public void ForceStand(string toast = null)
+        {
+            if (!_seated) return;
+            var a = _who != null ? _who.GetComponent<PlayerActivity>() : null;
+            if (a != null) a.Stand();
+            if (!string.IsNullOrEmpty(toast)) HUDController.Toast(toast);
+            StopSitting();
+        }
+
+        // จบคาบพอดีแต่ตัวสะสมขาดไปเศษนาที (ลำดับ Update/ทศนิยม) → ให้ผลชั่วโมงสุดท้าย · คืน true ถ้าให้ผล
+        public bool TryGrantPendingTick(float toleranceMinutes)
+        {
+            if (!_seated || !IsOverTime || _who == null) return false;
+            _accum += ElapsedGameMinutes();   // เก็บเวลาที่เดินไปในเฟรมนี้ก่อน (ถ้า Update ของที่นั่งยังไม่ทำงาน)
+            if (_accum + toleranceMinutes < rewardEveryGameMinutes) return false;
+            _accum = 0f;
+            ApplyEffect(_who);
+            return true;
+        }
+
         public void Interact(GameObject interactor)
         {
             var act = interactor.GetComponent<PlayerActivity>();
@@ -65,6 +92,8 @@ namespace NisitSimulator.Interaction
                 _seated = true;
                 _who = interactor;
                 _accum = 0f;
+                _lastAbsMinute = _clock != null ? _clock.Day * 1440f + _clock.TotalMinutes : -1f;   // นับจากเวลาที่นั่งลง
+                NisitSimulator.Academics.ClassWarpController.NotifySeated(this, interactor);
 
                 if (IsOverTime)
                     HUDController.Toast($"เริ่ม{activityName}... นั่งค้างไว้เพื่อสะสม EXP");
@@ -103,8 +132,7 @@ namespace NisitSimulator.Interaction
                 return;
             }
 
-            float speed = _clock != null ? _clock.gameMinutesPerRealSecond : 1f;
-            _accum += Time.deltaTime * speed;
+            _accum += ElapsedGameMinutes();
 
             while (_accum >= rewardEveryGameMinutes)
             {
@@ -123,12 +151,31 @@ namespace NisitSimulator.Interaction
             }
         }
 
+        // นาทีเกมที่ผ่านไปตั้งแต่เรียกครั้งก่อน
+        //   เล่นคนเดียว: อ่านจากนาฬิกาเกมโดยตรง → ตรงกับเวลาเกมเสมอแม้ตัวคูณเร่งเวลาเปลี่ยนกลางเฟรม (tick ทุก 60 นาทีไม่คลาด)
+        //   multiplayer: สูตรเดิม (deltaTime × ความเร็วนาฬิกา)
+        private float _lastAbsMinute = -1f;
+        private float ElapsedGameMinutes()
+        {
+            if (_clock == null || !NisitSimulator.Academics.ClassroomRules.IsSinglePlayer)
+                return Time.deltaTime * (_clock != null ? _clock.EffectiveMinutesPerSecond : 1f);
+            float now = _clock.Day * 1440f + _clock.TotalMinutes;
+            float d = _lastAbsMinute < 0f ? 0f : now - _lastAbsMinute;
+            _lastAbsMinute = now;
+            if (d < 0f || d > 180f) d = 0f;   // ย้อนเวลา/กระโดดเวลา (โหลด, Dev) ไม่นับ
+            return d;
+        }
+
         private void StopSitting()
         {
+            bool was = _seated;
             _seated = false;
             _who = null;
             _accum = 0f;
+            if (was) NisitSimulator.Academics.ClassWarpController.NotifyStood(this);
         }
+
+        void OnDisable() { if (_seated) StopSitting(); }
 
         private void ApplyEffect(GameObject who)
         {

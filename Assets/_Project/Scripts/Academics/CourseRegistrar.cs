@@ -87,13 +87,31 @@ namespace NisitSimulator.Academics
             if (IsActive) SyncTerm(prog != null ? prog.DayInYear : 1, announce: true);
         }
 
+        float MinGpa => prog != null ? prog.minGpa : (curriculum != null ? curriculum.minGraduationGpa : 2f);
+
+        // ผู้เล่นกดตกลงในหน้าผลเทอม
+        public void MarkReportSeen(int serial)
+        {
+            if (Record == null) return;
+            if (serial > Record.lastReportedSerial) Record.lastReportedSerial = serial;
+            if (Record.pendingReportSerial <= Record.lastReportedSerial) Record.pendingReportSerial = 0;
+        }
+
         void Setup(AcademicRecord rec)
         {
             IsActive = curriculum != null && curriculum.AppliesToFaculty(GameSession.SelectedFacultyIndex);
-            Service = new RegistrationService(curriculum, rec) { CreditCapOverride = creditCapOverride };
+            // ส่ง ClassroomCatalog → ตรวจห้องชน/ห้องไม่มีจริงตอนเริ่ม (วิชาที่ข้อมูลเสียจะลงทะเบียนไม่ได้ ไม่ทำให้เกมพัง)
+            Service = new RegistrationService(curriculum, rec, ClassroomCatalog.LoadDefault())
+            {
+                CreditCapOverride = creditCapOverride,
+                QualityModifier = ClassEventSystem.ModifyQuality,   // ผลเหตุการณ์ระหว่างเรียนต่อคุณภาพชั่วโมงถัดไป
+            };
             initialized = true;
             ending = false;
             if (IsActive && prog != null) prog.SetClassYear(rec.classYear);
+            // โหลดเซฟที่ยังไม่ได้กดตกลงหน้าผลเทอม → แสดงอีกครั้ง
+            if (IsActive && rec.HasPendingReport)
+                TermResultUI.Queue(Service.BuildTermReport(rec.pendingReportSerial, MinGpa, rec.pendingReportPromoted, rec.pendingReportExhausted, rec.pendingReportExtra));
             OnChanged?.Invoke();
         }
 
@@ -172,7 +190,13 @@ namespace NisitSimulator.Academics
             if (r.graded.Count > 0)
             {
                 int pass = 0; foreach (var e in r.graded) if (e.passed) pass++;
-                HUDController.Toast($"ประกาศผลภาค: ผ่าน {pass}/{r.graded.Count} วิชา · GPA ภาค {r.termGpa:0.00} · สะสม {Service.Gpa():0.00} · {Service.EarnedCredits()} หน่วยกิต");
+                HUDController.Toast($"ประกาศผลภาค: ผ่าน {pass}/{r.graded.Count} วิชา · GPA ภาค {r.termGpa:0.00}");
+                // หน้าแสดงผลตอนจบเทอม (ขึ้นหลังสรุปวัน · ครั้งเดียวต่อเทอม · ปิดเกมก่อนกดตกลง → โหลดแล้วขึ้นอีก)
+                Record.pendingReportSerial = r.term.serial;
+                Record.pendingReportPromoted = r.promoted;
+                Record.pendingReportExhausted = r.exhausted;
+                Record.pendingReportExtra = r.term.isExtra;
+                TermResultUI.Queue(Service.BuildTermReport(r, MinGpa));
             }
             if (r.promoted) StartCoroutine(DelayedToast($"เลื่อนเป็นชั้นปี {r.newClassYear}! (หน่วยกิตสะสม {Service.EarnedCredits()})", 2.6f));
             else if (r.term.planSemester == 2 && !r.term.isExtra && r.term.classYear < 4)
@@ -201,6 +225,8 @@ namespace NisitSimulator.Academics
         IEnumerator EndAfter(EndReason reason, string msg)
         {
             yield return new WaitForSecondsRealtime(0.8f);
+            // รอให้ผู้เล่นอ่านผลเทอมก่อนขึ้นหน้าจบเกม (หน้าสรุปวัน → ผลเทอม → จบ)
+            while (TermResultUI.Busy || DaySummaryUI.IsShowing) yield return null;
             HUDController.Toast(msg);
             yield return new WaitForSecondsRealtime(graduationDelay);
             GameManager.Instance?.EndGame(reason);
@@ -239,7 +265,11 @@ namespace NisitSimulator.Academics
             float q = baseK > 0f ? gained / baseK : 0f;
             float minute = clock != null ? clock.TotalMinutes : 0f;
             string building = BuildingOf(spot);
-            var r = Service.RecordStudyTick(SemDay, minute, building, q);
+            // เล่นคนเดียว: นับตามห้อง (ClassroomZone ของที่นั่งต้องตรงกับ roomId ของคาบ) · multiplayer: เช็กตึกแบบเดิม
+            // TODO(multiplayer): host validation ของห้อง/ชั่วโมงเรียนก่อนเปิดการนับตามห้องในโหมดหลายคน
+            bool roomMode = ClassroomRules.IsSinglePlayer;
+            string roomId = roomMode ? NisitSimulator.Interaction.ClassroomZone.RoomOfSpot(spot) : null;
+            var r = Service.RecordStudyTick(SemDay, minute, building, roomId, q, roomMode);
             OnChanged?.Invoke();
             if (r.attended != null)
             {
@@ -250,6 +280,7 @@ namespace NisitSimulator.Academics
                 }
                 return $"\nเข้าเรียน {r.attended.code} ชั่วโมงที่ {r.tickNo}/{r.tickMax} ({Mathf.RoundToInt(Service.StudyRatio(r.attended) * 100)}% ของวิชา)";
             }
+            if (r.wrongRoomCode != null) return $"\nคาบ {r.wrongRoomCode} เรียนที่ {RoomText(r.wrongRoomTarget)} (ที่นี่ไม่นับเข้าเรียน)";
             if (r.wrongBuildingCode != null) return $"\nคาบ {r.wrongBuildingCode} เรียนที่ {r.wrongBuildingTarget} (ที่นี่ไม่นับเข้าเรียน)";
             if (r.capped) return "\nคาบนี้นับชั่วโมงเรียนครบแล้ว";
             if (r.selfStudy != null) return $"\nอ่านทบทวน → ชดเชย {r.selfStudy.code}";
@@ -260,6 +291,9 @@ namespace NisitSimulator.Academics
         public string BuildingOf(Transform spot)
         {
             if (spotBuilding.TryGetValue(spot, out var b)) return b;
+            // ที่นั่งในห้องเรียนจริง (ตึกเดินเข้าได้) → ใช้ชื่อตึกแบบเดิมของห้อง (multiplayer ยังเช็กตึกเหมือนเดิม)
+            var zone = NisitSimulator.Interaction.ClassroomZone.ZoneOfSpot(spot);
+            if (zone != null && !string.IsNullOrEmpty(zone.legacyBuilding)) { spotBuilding[spot] = zone.legacyBuilding; return zone.legacyBuilding; }
             string best = null; float bd = 20f;
             var root = GameObject.Find("Interiors");
             if (root != null)
@@ -276,15 +310,59 @@ namespace NisitSimulator.Academics
 
         // คาบที่กำลังเรียนอยู่ ณ ตอนนี้ (ใช้โชว์ในโทรศัพท์/ClassStation)
         public bool TryGetOngoingSession(out Enrollment enrollment, out ClassSession session)
+            => TryGetOngoingSession(out enrollment, out session, out _);
+
+        public bool TryGetOngoingSession(out Enrollment enrollment, out ClassSession session, out int sessionIndex)
         {
-            enrollment = null; session = null;
+            enrollment = null; session = null; sessionIndex = -1;
             if (!IsActive || Service == null) return false;
             float m = clock != null ? clock.TotalMinutes : 0f;
             int d = SemDay;
             foreach (var e in Service.CurrentEnrollments())
-                foreach (var s in Service.SessionsFor(e))
-                    if (s.day == d && m >= s.startMinute && m < s.endMinute) { enrollment = e; session = s; return true; }
+            {
+                var ss = Service.SessionsFor(e);
+                for (int i = 0; i < ss.Count; i++)
+                {
+                    var s = ss[i];
+                    if (s.day == d && m >= s.startMinute && m < s.endMinute) { enrollment = e; session = s; sessionIndex = i; return true; }
+                }
+            }
             return false;
+        }
+
+        // คาบที่กำลังเรียนหรือคาบถัดไป (วันนี้ก่อน แล้ววันถัดไปของภาค) — ใช้กับปุ่มนำทาง/ตู้เข้าเรียน
+        public bool TryGetNextSession(out Enrollment enrollment, out ClassSession session, out int day)
+        {
+            enrollment = null; session = null; day = 0;
+            if (!IsActive || Service == null) return false;
+            float m = clock != null ? clock.TotalMinutes : 0f;
+            int today = SemDay;
+            float best = float.MaxValue;
+            foreach (var e in Service.CurrentEnrollments())
+            {
+                if (e.graded) continue;
+                foreach (var s in Service.SessionsFor(e))
+                {
+                    if (s.day < today || (s.day == today && m >= s.endMinute)) continue;
+                    float key = (s.day - today) * 1440f + s.startMinute;
+                    if (key < best) { best = key; enrollment = e; session = s; day = s.day; }
+                }
+            }
+            return session != null;
+        }
+
+        // "อาคาร IT · ชั้น 2 · IT-202" (ไม่มีห้องในทะเบียน = ชื่อตึกเดิม)
+        public static string RoomText(ClassSession s)
+        {
+            if (s == null) return "";
+            if (!s.HasRoom) return string.IsNullOrEmpty(s.room) ? s.building : $"{s.building} · {s.room}";
+            return RoomText(s.roomId);
+        }
+
+        public static string RoomText(string roomId)
+        {
+            var c = ClassroomCatalog.LoadDefault().Get(roomId);
+            return c != null ? c.LocationText : roomId;
         }
 
         // ---------- สอบ (เรียกจาก ExamController) ----------

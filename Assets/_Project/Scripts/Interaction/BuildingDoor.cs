@@ -14,6 +14,8 @@ namespace NisitSimulator.Interaction
 
         public void Interact(GameObject interactor)
         {
+            // เล่นคนเดียว + มีคาบของตึกนี้ → พาไปห้องของคาบ (ตู้เข้าเรียน/ประตูวาร์ป) · ไม่มีคาบ/multiplayer = แบบเดิม
+            if (NisitSimulator.Academics.ClassroomNavigator.TryRedirectDoor(this, interactor)) return;
             if (InteriorManager.Instance != null && interiorSpawn != null)
                 InteriorManager.Instance.Enter(interiorSpawn);
             else

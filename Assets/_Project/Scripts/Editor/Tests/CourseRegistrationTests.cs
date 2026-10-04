@@ -92,7 +92,7 @@ namespace NisitSimulator.Tests
             Assert.IsTrue(svc.Confirm(out var msg), msg);
             var ens = svc.CurrentEnrollments();
             Assert.AreEqual(6, ens.Count);
-            foreach (var e in ens) Assert.AreEqual(2, svc.SessionsFor(e).Count, e.code);
+            foreach (var e in ens) Assert.AreEqual(4, svc.SessionsFor(e).Count, e.code);   // ปฏิทินรุ่น 2: วิชาละ 4 ครั้ง/ภาค
             Assert.IsTrue(svc.HasActiveEnrollments);
             Assert.IsFalse(svc.Remove("GE101", out _));             // ล็อกหลังยืนยัน
         }
@@ -115,11 +115,11 @@ namespace NisitSimulator.Tests
         [Test]
         public void Blocked_When_TimeConflict()
         {
-            // ตก GE101 และ CS101 (ตอนเรียนซ้ำภาคค่ำช่องเดียวกัน) → ลงพร้อมกันไม่ได้
-            PlayTerm(1, 0, Plan(1, 1), c => c != "GE101" && c != "CS101", 0f);
+            // ตก GE101 และ CS102 (ตอนเรียนซ้ำภาคค่ำช่องเดียวกัน — ภาคค่ำ 4 ช่อง วิชาบังคับลำดับ 0 กับ 4) → ลงพร้อมกันไม่ได้
+            PlayTerm(1, 0, Plan(1, 1), c => c != "GE101" && c != "CS102", 0f);
             svc.OpenTerm(1, 1);
             Assert.IsTrue(svc.Add("GE101", out var r), r);
-            Assert.IsFalse(svc.Add("CS101", out var why));
+            Assert.IsFalse(svc.Add("CS102", out var why));
             StringAssert.Contains("ชนเวลา", why);
         }
 
@@ -398,7 +398,10 @@ namespace NisitSimulator.Tests
             Assert.IsFalse(d.hasAcademicRecord);
             Assert.AreEqual(2, d.gradePoints.Count);                  // ความคืบหน้าเดิมยังอยู่
 
-            int sem = AcademicCalendar.SemesterIndex(d.dayInYear);   // วันที่ 5 = ภาคปลาย
+            // ปฏิทินรุ่น 2: เซฟเก่า (ปีละ 8 วัน) แปลงวันก่อน — วันที่ 5 เดิม = ภาคปลายวันที่ 2 (สอบกลางภาค) → วันที่ 15 (ภาคปลายวันที่ 5)
+            Assert.IsTrue(CalendarMigration.Upgrade(d));
+            Assert.AreEqual(15, d.dayInYear);
+            int sem = AcademicCalendar.SemesterIndex(d.dayInYear);   // ภาคปลาย
             Assert.AreEqual(1, sem);
             var rec = RegistrationService.MigrateLegacy(cur, d.currentYear, sem);
             var s2 = new RegistrationService(cur, rec);

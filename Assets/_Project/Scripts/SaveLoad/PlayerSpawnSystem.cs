@@ -24,6 +24,21 @@ namespace NisitSimulator.SaveLoad
 
         public static GameObject Player => GameObject.Find("Player");
 
+        public static int AssignedSlotIndex { get; private set; }
+        public static string AssignedRoomId => DormSpawnPoint.Main != null
+            ? DormSpawnPoint.Main.RoomIdFor(AssignedSlotIndex) : DefaultRoomId;
+
+        static int ResolveRoomSlot(SaveData loaded)
+        {
+            var nm = Unity.Netcode.NetworkManager.Singleton;
+            if (nm != null && nm.IsListening) return NetworkSlotIndex();
+            var dorm = DormSpawnPoint.Main;
+            if (dorm != null && loaded != null && dorm.roomSlots != null)
+                for (int i = 0; i < dorm.roomSlots.Length; i++)
+                    if (dorm.roomSlots[i].roomId == loaded.dormRoomId) return i;
+            return 0;
+        }
+
         // ---------- เซฟ ----------
         public static void CollectSave(SaveData d)
         {
@@ -48,8 +63,7 @@ namespace NisitSimulator.SaveLoad
             }
             else { d.insideInterior = false; d.interiorName = ""; }
 
-            var dorm = DormSpawnPoint.Main;
-            d.dormRoomId = dorm != null ? dorm.roomId : DefaultRoomId;
+            d.dormRoomId = AssignedRoomId;
         }
 
         // ---------- เข้าฉาก ----------
@@ -58,22 +72,46 @@ namespace NisitSimulator.SaveLoad
             var p = Player;
             if (p == null) { LastSpawnReason = "ไม่พบ Player"; return; }
 
+            AssignedSlotIndex = ResolveRoomSlot(loaded);
             string why = "";
-            if (loaded != null && TryRestoreFromSave(p, loaded, out why))
+            if (loaded != null && IsLegacyDormSave(loaded))
+            {
+                SpawnAtDorm(p, AssignedSlotIndex);
+                LastSpawnReason = "migrated_legacy_dorm";
+                Debug.Log("[Spawn] ย้ายเซฟหอพักเดิมไปห้อง " + AssignedRoomId);
+            }
+            else if (loaded != null && TryRestoreFromSave(p, loaded, out why))
             {
                 LastSpawnReason = "restored";
                 Debug.Log($"[Spawn] เล่นต่อ: คืนตำแหน่งจากเซฟ {p.transform.position} (ในอาคาร={InteriorManager.Instance != null && InteriorManager.Instance.IsInside})");
             }
             else
             {
-                int slot = NetworkSlotIndex();
+                int slot = AssignedSlotIndex;
                 SpawnAtDorm(p, slot);
-                if (loaded == null) { LastSpawnReason = "new_game_dorm_slot" + slot; Debug.Log($"[Spawn] เกมใหม่: เกิดที่หอพัก (ช่อง {slot}) {p.transform.position}"); }
+                if (loaded == null) { LastSpawnReason = string.IsNullOrEmpty(SaveSystem.LastLoadIssue) ? "new_game_dorm_slot" + slot : "fallback_dorm: " + SaveSystem.LastLoadIssue; Debug.Log($"[Spawn] เกมใหม่: เกิดที่หอพัก (ช่อง {slot}) {p.transform.position}"); }
                 else { LastSpawnReason = "fallback_dorm: " + why; Debug.LogWarning($"[Spawn] ตำแหน่งในเซฟใช้ไม่ได้ ({why}) → ใช้จุดเกิดหอพักแทน (ความคืบหน้าอื่นคืนครบ)"); }
             }
 
             if (DayNightCycle.Instance != null) DayNightCycle.Instance.ApplyNow();
+            RefreshBuildingCutaway();
             IsometricCameraRig.SnapAll();
+        }
+
+        // Only legacy warp dorm saves migrate; other interiors retain their original behavior.
+        public static bool IsLegacyDormSave(SaveData data)
+        {
+            if (data == null) return false;
+            if (data.insideInterior && (data.interiorName == "Spawn_หอพัก" || data.interiorName == "หอพัก")) return true;
+            if (data.hasPlayerTransform && !data.insideInterior) return false;
+            var door = FindDoorForInterior(new Vector3(data.posX, data.posY, data.posZ), data.interiorName);
+            return door != null && door.name == "Door_หอพัก";
+        }
+
+        static void RefreshBuildingCutaway()
+        {
+            foreach (var cut in Object.FindObjectsByType<NisitSimulator.GEBuilding.GEBuildingCutaway>(FindObjectsSortMode.None))
+                cut.Refresh();
         }
 
         // ---------- คืนตำแหน่งจากเซฟ ----------
@@ -122,7 +160,8 @@ namespace NisitSimulator.SaveLoad
             if (p == null) return false;
             var dorm = DormSpawnPoint.Main;
             if (dorm == null) { Debug.LogWarning("[Spawn] ไม่พบ DormSpawnPoint ในฉาก — ตัวละครอยู่ตำแหน่งเดิมของฉาก"); return false; }
-            PlaceInDorm(p, dorm.GetSlot(slot), dorm);
+            AssignedSlotIndex = Mathf.Max(0, slot) % Mathf.Max(1, dorm.SlotCount);
+            PlaceInDorm(p, dorm.GetSlot(AssignedSlotIndex), dorm);
             return true;
         }
 
@@ -141,6 +180,7 @@ namespace NisitSimulator.SaveLoad
                     InteriorManager.Instance.RestoreState(false, "", Vector3.zero, Quaternion.identity);
                 InteriorManager.Teleport(p.transform, pos, rot);
                 if (DayNightCycle.Instance != null) DayNightCycle.Instance.ApplyNow();
+                RefreshBuildingCutaway();
                 return;
             }
 

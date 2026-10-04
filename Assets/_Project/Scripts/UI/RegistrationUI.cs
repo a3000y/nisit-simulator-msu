@@ -55,6 +55,7 @@ namespace NisitSimulator.UI
         RectTransform listContent, selContent;
         ScrollRect listScroll, textScroll;
         Button confirmBtn; TMP_Text confirmLabel;
+        Button navBtn;
         readonly List<Button> tabBtns = new List<Button>();
         string lastMessage; Color lastMessageColor;
 
@@ -175,6 +176,7 @@ namespace NisitSimulator.UI
             }
             regPage.SetActive(t == 0);
             textPage.SetActive(t != 0);
+            if (navBtn != null) navBtn.gameObject.SetActive(t == 1 && Usable && ClassroomRules.IsSinglePlayer);
             RefreshSummary();
             if (t == 0) RefreshRegister(); else { RefreshTextPage(); textScroll.verticalNormalizedPosition = 1f; }
         }
@@ -296,7 +298,7 @@ namespace NisitSimulator.UI
             if (oc.retakeSection) sb.Append(" · ตอนเรียนซ้ำ (ภาคค่ำ)");
             sb.Append('\n');
             var parts = new List<string>();
-            foreach (var s in oc.Sessions) parts.Add($"ว.{s.day} {s.TimeText} {s.building}");
+            foreach (var s in oc.Sessions) parts.Add($"ว.{s.day} {s.TimeText} {(s.HasRoom ? s.roomId : s.building)}");
             sb.Append(string.Join("  |  ", parts)).Append('\n');
             sb.Append("วิชาบังคับก่อน: ").Append(d.prerequisites.Count > 0 ? string.Join(", ", d.prerequisites) : "—");
             if (d.minEarnedCredits > 0) sb.Append($" + หน่วยกิตสะสม ≥ {d.minEarnedCredits}");
@@ -370,6 +372,15 @@ namespace NisitSimulator.UI
             if (!Usable) return;
             bool ok = Svc.Remove(code, out var msg);
             Feedback(ok, msg);
+        }
+
+        // นำทางไปห้องของคาบถัดไป แล้วปิดโทรศัพท์ให้เดินได้ทันที
+        public void DoNavigate()
+        {
+            string msg = ClassroomNavigator.NavigateToNextClass();
+            HUDController.Toast(msg);
+            Close();
+            if (phone != null && phone.IsOpen) phone.Toggle();
         }
 
         public void DoConfirm()
@@ -451,8 +462,9 @@ namespace NisitSimulator.UI
             {
                 sb.Append($"<b>วันที่ {d} ของภาค</b>");
                 if (d == today) sb.Append("  <color=#8A5CD6>(วันนี้)</color>");
-                if (d == 2) sb.Append("  <size=85%><color=#D14D5C>สอบกลางภาค</color></size>");
-                if (d == days) sb.Append("  <size=85%><color=#D14D5C>สอบปลายภาค</color></size>");
+                // วันสอบตามปฏิทิน (กลางภาค = ครึ่งภาค, ปลายภาค = วันสุดท้าย) — ไม่เขียนตายตัว
+                if (AcademicCalendar.HasMidterm(t.semIndex) && d == ExamController.MidtermDay(t.semIndex)) sb.Append("  <size=85%><color=#D14D5C>สอบกลางภาค</color></size>");
+                if (d == ExamController.FinalDay(t.semIndex)) sb.Append("  <size=85%><color=#D14D5C>สอบปลายภาค</color></size>");
                 sb.Append('\n');
                 var dayItems = items.FindAll(p => p.Value.day == d);
                 dayItems.Sort((a, b) => a.Value.startMinute.CompareTo(b.Value.startMinute));
@@ -471,7 +483,7 @@ namespace NisitSimulator.UI
                         else if (past) mark = "  <color=#D14D5C>ขาดเรียน</color>";
                     }
                     sb.Append($"   {p.Value.TimeText}   <b>{p.Key.code}</b> {(def != null ? def.title : "")}\n");
-                    sb.Append($"   <size=85%><color=#7A7394>@ {p.Value.building} · {p.Value.room}</color></size>{mark}\n");
+                    sb.Append($"   <size=85%><color=#7A7394>@ {CourseRegistrar.RoomText(p.Value)}</color></size>{mark}\n");
                 }
                 sb.Append('\n');
             }
@@ -488,7 +500,9 @@ namespace NisitSimulator.UI
                     sb.Append($"   <b>{e.code}</b>  เรียน {Mathf.RoundToInt(svc.StudyRatio(e) * 100)}% · กลางภาค {mid} · ปลายภาค {fin} · คาดการณ์ {proj:0} ({g.letter})" +
                               (e.attempt > 1 ? $"  <color=#E0843A>[เรียนครั้งที่ {e.attempt}]</color>" : "") + "\n");
                 }
-                sb.Append("\n<size=85%><color=#7A7394>เข้าเรียน = นั่งโต๊ะเรียนในตึกที่กำหนดระหว่างเวลาคาบ (นับทุก 1 ชม. เกม) · อ่านหนังสือนอกคาบช่วยชดเชยได้บางส่วน · สอบที่ห้องสอบคณะ</color></size>");
+                sb.Append(ClassroomRules.IsSinglePlayer
+                    ? "\n<size=85%><color=#7A7394>เข้าเรียน = นั่งโต๊ะเรียนในห้องที่กำหนด (อาคาร · ชั้น · เลขห้อง) ระหว่างเวลาคาบ — เวลาจะเร่งจนเลิกคาบ (นับทุก 1 ชม. เกม) · ตู้เข้าเรียนในโถงพาไปห้องให้ · อ่านหนังสือนอกคาบช่วยชดเชยได้บางส่วน · สอบที่ห้องสอบคณะ</color></size>"
+                    : "\n<size=85%><color=#7A7394>เข้าเรียน = นั่งโต๊ะเรียนในตึกที่กำหนดระหว่างเวลาคาบ (นับทุก 1 ชม. เกม) · อ่านหนังสือนอกคาบช่วยชดเชยได้บางส่วน · สอบที่ห้องสอบคณะ</color></size>");
             }
             return sb.ToString();
         }
@@ -619,6 +633,12 @@ namespace NisitSimulator.UI
             Fill((RectTransform)textScroll.transform);
             pageText = Text(tc, "", 20, Ink, TextAlignmentOptions.TopLeft);
             pageText.lineSpacing = 6f;
+
+            // ปุ่มนำทางไปห้องคาบถัดไป (แท็บตารางเรียน · เล่นคนเดียว)
+            navBtn = Btn(card.transform, "นำทางไปห้องคาบถัดไป", Ok, Color.white, 20);
+            Stretch((RectTransform)navBtn.transform, new Vector2(1, 1), new Vector2(1, 1), new Vector2(-420, -204), new Vector2(-24, -150));
+            navBtn.onClick.AddListener(DoNavigate);
+            navBtn.gameObject.SetActive(false);
 
             root.SetActive(false);
         }

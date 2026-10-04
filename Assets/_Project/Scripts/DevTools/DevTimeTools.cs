@@ -177,8 +177,8 @@ namespace NisitSimulator.DevTools
             var pl = Player;
             if (pl == null) { msg = "ไม่พบผู้เล่น"; return false; }
             if (BlockedByExam(out msg)) return false;
-            if (!NisitSimulator.SaveLoad.PlayerSpawnSystem.SpawnAtDorm(pl, 0)) { msg = "ไม่พบ DormSpawnPoint ในฉาก"; return false; }
-            msg = "วาร์ปไปโถง Dorm_Building (DormSpawnPoint) — อยู่ในโลกภายนอก";
+            if (!NisitSimulator.SaveLoad.PlayerSpawnSystem.SpawnAtDorm(pl, NisitSimulator.SaveLoad.PlayerSpawnSystem.AssignedSlotIndex)) { msg = "ไม่พบ DormSpawnPoint ในฉาก"; return false; }
+            msg = "วาร์ปไปห้องพักของตัวเองใน Dorm_Building — อยู่ในโลกภายนอก";
             return true;
         }
 
@@ -186,7 +186,7 @@ namespace NisitSimulator.DevTools
         public static bool TestSleep(out string msg)
         {
             var pl = Player;
-            var st = UnityEngine.Object.FindFirstObjectByType<SleepStation>();
+            var st = DormSpawnPoint.Main?.StationFor(NisitSimulator.SaveLoad.PlayerSpawnSystem.AssignedSlotIndex) ?? UnityEngine.Object.FindFirstObjectByType<SleepStation>();
             if (pl == null || st == null) { msg = "ไม่พบผู้เล่น/เตียง (SleepStation)"; return false; }
             if (BlockedByExam(out msg)) return false;
             var c = Clock;

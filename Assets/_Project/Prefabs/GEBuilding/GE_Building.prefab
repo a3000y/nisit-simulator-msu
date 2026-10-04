@@ -68394,6 +68394,7 @@ MonoBehaviour:
   slabThickness: 0.25
   floorLookAhead: 0.4
   checkInterval: 0.15
+  hideAssignedRoomObstructions: 0
 --- !u!114 &1837238870142864996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124549,6 +124550,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 3125942310456357059, guid: 90b854200469b864fb994ff162348e8e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.164
+      objectReference: {fileID: 0}
     - target: {fileID: 3168050442179104195, guid: 90b854200469b864fb994ff162348e8e, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -124708,6 +124713,10 @@ PrefabInstance:
     - target: {fileID: 4799137620045390867, guid: 90b854200469b864fb994ff162348e8e, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4827434101137626299, guid: 90b854200469b864fb994ff162348e8e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.282
       objectReference: {fileID: 0}
     - target: {fileID: 4847475423694791130, guid: 90b854200469b864fb994ff162348e8e, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -124980,6 +124989,14 @@ PrefabInstance:
     - target: {fileID: 6893868971124812083, guid: 90b854200469b864fb994ff162348e8e, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 6929355919195986822, guid: 90b854200469b864fb994ff162348e8e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.129
+      objectReference: {fileID: 0}
+    - target: {fileID: 6929355919195986822, guid: 90b854200469b864fb994ff162348e8e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.065
       objectReference: {fileID: 0}
     - target: {fileID: 6933393217200008826, guid: 90b854200469b864fb994ff162348e8e, type: 3}
       propertyPath: m_StaticEditorFlags

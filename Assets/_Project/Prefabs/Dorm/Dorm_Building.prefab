@@ -33,47 +33,7 @@ Transform:
   - {fileID: 2114233142}
   - {fileID: 1917746349}
   - {fileID: 1299530240}
-  - {fileID: 1228455896}
   m_Father: {fileID: 7382465710986991449}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1228455895
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1228455896}
-  m_Layer: 0
-  m_Name: SleepSpots
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1228455896
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1228455895}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 431360677673126279}
-  - {fileID: 6521991583758890348}
-  - {fileID: 6723328653755044370}
-  - {fileID: 6488817734197704392}
-  - {fileID: 1162760215608860987}
-  - {fileID: 6093516675485052401}
-  - {fileID: 270726302676603015}
-  - {fileID: 66697558208347489}
-  m_Father: {fileID: 617106603}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1232786052
 GameObject:
@@ -100,8 +60,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1232786052}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.2, y: 0.3, z: 2.8}
+  m_LocalRotation: {x: -0, y: -0.00000008742278, z: -0, w: -1}
+  m_LocalPosition: {x: -8.700001, y: 0.3, z: 2.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -124,9 +84,46 @@ MonoBehaviour:
   interiorName: 
   exteriorExit: {fileID: 0}
   extraSlots:
-  - {fileID: 2114233142}
-  - {fileID: 1917746349}
-  - {fileID: 1299530240}
+  - {fileID: 4009280368518921906}
+  - {fileID: 2092295088986030928}
+  - {fileID: 7236162577977917606}
+  roomSlots:
+  - roomPath: Floor_1/Rooms/Room_101
+    bedPath: Furniture/Bed_A
+    roomId: dorm_building_101
+    roomLocalPoint: {x: -0.6, y: 0, z: 4}
+    room: {fileID: 5470621799252040057}
+    bed: {fileID: 728407884935460480}
+    spawnPoint: {fileID: 2772226363979814063}
+    wakePoint: {fileID: 1480206490082335207}
+    station: {fileID: 309754589044643080}
+  - roomPath: Floor_1/Rooms/Room_101
+    bedPath: Furniture/Bed_B
+    roomId: dorm_building_101
+    roomLocalPoint: {x: 0.6, y: 0, z: 4}
+    room: {fileID: 5470621799252040057}
+    bed: {fileID: 8749847538146301310}
+    spawnPoint: {fileID: 4009280368518921906}
+    wakePoint: {fileID: 5432332970813489214}
+    station: {fileID: 3177373826821932614}
+  - roomPath: Floor_1/Rooms/Room_102
+    bedPath: Furniture/Bed_A
+    roomId: dorm_building_102
+    roomLocalPoint: {x: -0.6, y: 0, z: 4}
+    room: {fileID: 7261386878570859218}
+    bed: {fileID: 2681328922039215403}
+    spawnPoint: {fileID: 2092295088986030928}
+    wakePoint: {fileID: 7655461009621381934}
+    station: {fileID: 4444375753035545844}
+  - roomPath: Floor_1/Rooms/Room_102
+    bedPath: Furniture/Bed_B
+    roomId: dorm_building_102
+    roomLocalPoint: {x: 0.6, y: 0, z: 4}
+    room: {fileID: 7261386878570859218}
+    bed: {fileID: 6215986270720640725}
+    spawnPoint: {fileID: 7236162577977917606}
+    wakePoint: {fileID: 3670127071711314859}
+    station: {fileID: 6958922737885672296}
 --- !u!1 &1299530239
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,8 +148,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1299530239}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.85, y: 0.3, z: 5}
+  m_LocalRotation: {x: -0, y: -0.00000008742278, z: -0, w: -1}
+  m_LocalPosition: {x: -6.1000004, y: 0.3, z: 2.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -182,8 +179,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1917746348}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.2, y: 0.3, z: 5}
+  m_LocalRotation: {x: -0, y: -0.00000008742278, z: -0, w: -1}
+  m_LocalPosition: {x: -4.9000006, y: 0.3, z: 2.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -213,8 +210,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2114233141}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.85, y: 0.3, z: 2.8}
+  m_LocalRotation: {x: -0, y: -0.00000008742278, z: -0, w: -1}
+  m_LocalPosition: {x: -9.900001, y: 0.3, z: 2.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7646,6 +7643,83 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1085449036886919098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4094395090700632086}
+  - component: {fileID: 6529280181635217349}
+  - component: {fileID: 6958922737885672296}
+  m_Layer: 8
+  m_Name: SleepInteract
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4094395090700632086
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1085449036886919098}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6215986270720640725}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6529280181635217349
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1085449036886919098}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.6, y: 1.2, z: 2.5}
+  m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &6958922737885672296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1085449036886919098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559fc2bc2c50dd2438ab2b85a83fbf0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NisitSimulator.Interaction.SleepStation
+  useBedWakePoint: 1
+  assignedDormSlot: 3
+  sleepFromHour: 18
+  wakeHour: 7
+  wakePoint: {fileID: 3670127071711314859}
+  extraWakePoints: []
+  energyRestore: 999
+  healthRestore: 12
+  hungerChange: -25
+  satisfactionChange: 5
+  stressChange: -35
 --- !u!1 &1086232927401908365
 GameObject:
   m_ObjectHideFlags: 0
@@ -12472,6 +12546,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1613626630039605942
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7236162577977917606}
+  m_Layer: 0
+  m_Name: DormRoomSpawn_4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7236162577977917606
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1613626630039605942}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  m_LocalPosition: {x: 0.6, y: 0, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7261386878570859218}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1625262563402264277
 GameObject:
   m_ObjectHideFlags: 0
@@ -15556,37 +15661,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &1940400884656366686
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 270726302676603015}
-  m_Layer: 0
-  m_Name: Wake_104
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &270726302676603015
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1940400884656366686}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.00000008742278, z: -0, w: -1}
-  m_LocalPosition: {x: 9.3, y: 0.3, z: 2.4}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1228455896}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1941915909797488698
 GameObject:
   m_ObjectHideFlags: 0
@@ -18623,6 +18697,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2306766856348006550
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2092295088986030928}
+  m_Layer: 0
+  m_Name: DormRoomSpawn_3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2092295088986030928
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2306766856348006550}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  m_LocalPosition: {x: -0.6, y: 0, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7261386878570859218}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2307855966475817872
 GameObject:
   m_ObjectHideFlags: 0
@@ -19200,6 +19305,7 @@ MonoBehaviour:
   slabThickness: 0.2
   floorLookAhead: 0.35
   checkInterval: 0.15
+  hideAssignedRoomObstructions: 1
 --- !u!114 &6382565063632742182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24371,6 +24477,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &3014075996928434371
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5432332970813489214}
+  m_Layer: 0
+  m_Name: DormBedWake_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5432332970813489214
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3014075996928434371}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
+  m_LocalPosition: {x: 0.6, y: 0, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5470621799252040057}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3027335524035936278
 GameObject:
   m_ObjectHideFlags: 0
@@ -24550,6 +24687,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &3050498357152374039
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1480206490082335207}
+  m_Layer: 0
+  m_Name: DormBedWake_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1480206490082335207
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3050498357152374039}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
+  m_LocalPosition: {x: -0.5999998, y: 0, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5470621799252040057}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3057173008489415267
 GameObject:
   m_ObjectHideFlags: 0
@@ -27321,6 +27489,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &3281718828854848582
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3670127071711314859}
+  m_Layer: 0
+  m_Name: DormBedWake_4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3670127071711314859
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3281718828854848582}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
+  m_LocalPosition: {x: 0.6, y: 0, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7261386878570859218}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3284919669703273183
 GameObject:
   m_ObjectHideFlags: 0
@@ -32958,85 +33157,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &4142350931199093852
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 66697558208347489}
-  - component: {fileID: 3851812476776725108}
-  - component: {fileID: 6094097606052603258}
-  m_Layer: 8
-  m_Name: SleepSpot_104
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &66697558208347489
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4142350931199093852}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
-  m_LocalPosition: {x: 10.63, y: 0.3, z: 1.1300001}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1228455896}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &3851812476776725108
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4142350931199093852}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.6, y: 1.2, z: 2.5}
-  m_Center: {x: 0.00000095280006, y: 0.47499996, z: 0.00999999}
---- !u!114 &6094097606052603258
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4142350931199093852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 559fc2bc2c50dd2438ab2b85a83fbf0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NisitSimulator.Interaction.SleepStation
-  sleepFromHour: 18
-  wakeHour: 7
-  wakePoint: {fileID: 270726302676603015}
-  extraWakePoints:
-  - {fileID: 431360677673126279}
-  - {fileID: 6723328653755044370}
-  - {fileID: 1162760215608860987}
-  - {fileID: 270726302676603015}
-  energyRestore: 999
-  healthRestore: 12
-  hungerChange: -25
-  satisfactionChange: 5
-  stressChange: -35
 --- !u!1 &4165300115465497737
 GameObject:
   m_ObjectHideFlags: 0
@@ -38078,6 +38198,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &4717743695738393710
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2772226363979814063}
+  m_Layer: 0
+  m_Name: DormRoomSpawn_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2772226363979814063
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4717743695738393710}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  m_LocalPosition: {x: -0.6, y: 0, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5470621799252040057}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4726946049675412661
 GameObject:
   m_ObjectHideFlags: 0
@@ -44067,6 +44218,83 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &5484088156312183164
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2880423514482624803}
+  - component: {fileID: 5246689495603402216}
+  - component: {fileID: 4444375753035545844}
+  m_Layer: 8
+  m_Name: SleepInteract
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2880423514482624803
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5484088156312183164}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2681328922039215403}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5246689495603402216
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5484088156312183164}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.6, y: 1.2, z: 2.5}
+  m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &4444375753035545844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5484088156312183164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559fc2bc2c50dd2438ab2b85a83fbf0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NisitSimulator.Interaction.SleepStation
+  useBedWakePoint: 1
+  assignedDormSlot: 2
+  sleepFromHour: 18
+  wakeHour: 7
+  wakePoint: {fileID: 7655461009621381934}
+  extraWakePoints: []
+  energyRestore: 999
+  healthRestore: 12
+  hungerChange: -25
+  satisfactionChange: 5
+  stressChange: -35
 --- !u!1 &5486126085514308076
 GameObject:
   m_ObjectHideFlags: 0
@@ -46239,37 +46467,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &5823049428368935957
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6723328653755044370}
-  m_Layer: 0
-  m_Name: Wake_102
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6723328653755044370
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5823049428368935957}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.00000008742278, z: -0, w: -1}
-  m_LocalPosition: {x: -5.5000005, y: 0.3, z: 2.4}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1228455896}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5832205169500586273
 GameObject:
   m_ObjectHideFlags: 0
@@ -47572,37 +47769,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &6013200114894244647
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 431360677673126279}
-  m_Layer: 0
-  m_Name: Wake_101
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &431360677673126279
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6013200114894244647}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.00000008742278, z: -0, w: -1}
-  m_LocalPosition: {x: -9.3, y: 0.3, z: 2.4}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1228455896}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6013839339279567494
 GameObject:
   m_ObjectHideFlags: 0
@@ -48827,6 +48993,37 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 5785929163826367112}
   m_maskType: 0
+--- !u!1 &6135805631259983712
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4009280368518921906}
+  m_Layer: 0
+  m_Name: DormRoomSpawn_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4009280368518921906
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6135805631259983712}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  m_LocalPosition: {x: 0.6, y: 0, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5470621799252040057}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6144049262736629807
 GameObject:
   m_ObjectHideFlags: 0
@@ -51110,6 +51307,83 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6391162081289152661
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8270050514274345381}
+  - component: {fileID: 2196922105851703641}
+  - component: {fileID: 3177373826821932614}
+  m_Layer: 8
+  m_Name: SleepInteract
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8270050514274345381
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6391162081289152661}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8749847538146301310}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2196922105851703641
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6391162081289152661}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.6, y: 1.2, z: 2.5}
+  m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &3177373826821932614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6391162081289152661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559fc2bc2c50dd2438ab2b85a83fbf0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NisitSimulator.Interaction.SleepStation
+  useBedWakePoint: 1
+  assignedDormSlot: 1
+  sleepFromHour: 18
+  wakeHour: 7
+  wakePoint: {fileID: 5432332970813489214}
+  extraWakePoints: []
+  energyRestore: 999
+  healthRestore: 12
+  hungerChange: -25
+  satisfactionChange: 5
+  stressChange: -35
 --- !u!1 &6393544937656835245
 GameObject:
   m_ObjectHideFlags: 0
@@ -53714,85 +53988,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &6818722035683921973
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6488817734197704392}
-  - component: {fileID: 4818445111517326874}
-  - component: {fileID: 346317939448174003}
-  m_Layer: 8
-  m_Name: SleepSpot_102
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6488817734197704392
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6818722035683921973}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
-  m_LocalPosition: {x: -4.1700006, y: 0.3, z: 1.1300001}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1228455896}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &4818445111517326874
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6818722035683921973}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.6, y: 1.2, z: 2.5}
-  m_Center: {x: -8.742269e-10, y: 0.47499996, z: 0.00999999}
---- !u!114 &346317939448174003
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6818722035683921973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 559fc2bc2c50dd2438ab2b85a83fbf0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NisitSimulator.Interaction.SleepStation
-  sleepFromHour: 18
-  wakeHour: 7
-  wakePoint: {fileID: 6723328653755044370}
-  extraWakePoints:
-  - {fileID: 431360677673126279}
-  - {fileID: 6723328653755044370}
-  - {fileID: 1162760215608860987}
-  - {fileID: 270726302676603015}
-  energyRestore: 999
-  healthRestore: 12
-  hungerChange: -25
-  satisfactionChange: 5
-  stressChange: -35
 --- !u!1 &6831517237701836836
 GameObject:
   m_ObjectHideFlags: 0
@@ -64144,85 +64339,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &8075892561746443625
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6521991583758890348}
-  - component: {fileID: 3520455911812050552}
-  - component: {fileID: 3031770245735047298}
-  m_Layer: 8
-  m_Name: SleepSpot_101
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6521991583758890348
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8075892561746443625}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
-  m_LocalPosition: {x: -7.9700007, y: 0.3, z: 1.1300001}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1228455896}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &3520455911812050552
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8075892561746443625}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.6, y: 1.2, z: 2.5}
-  m_Center: {x: -8.742269e-10, y: 0.47499996, z: 0.00999999}
---- !u!114 &3031770245735047298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8075892561746443625}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 559fc2bc2c50dd2438ab2b85a83fbf0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NisitSimulator.Interaction.SleepStation
-  sleepFromHour: 18
-  wakeHour: 7
-  wakePoint: {fileID: 431360677673126279}
-  extraWakePoints:
-  - {fileID: 431360677673126279}
-  - {fileID: 6723328653755044370}
-  - {fileID: 1162760215608860987}
-  - {fileID: 270726302676603015}
-  energyRestore: 999
-  healthRestore: 12
-  hungerChange: -25
-  satisfactionChange: 5
-  stressChange: -35
 --- !u!1 &8080799100110123076
 GameObject:
   m_ObjectHideFlags: 0
@@ -65252,6 +65368,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8229863168650321642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7655461009621381934}
+  m_Layer: 0
+  m_Name: DormBedWake_3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7655461009621381934
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8229863168650321642}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
+  m_LocalPosition: {x: -0.5999998, y: 0, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7261386878570859218}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8253982465990384098
 GameObject:
   m_ObjectHideFlags: 0
@@ -65364,6 +65511,83 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8254904211757607687
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5854883463008407510}
+  - component: {fileID: 4437827532482656262}
+  - component: {fileID: 309754589044643080}
+  m_Layer: 8
+  m_Name: SleepInteract
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5854883463008407510
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8254904211757607687}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 728407884935460480}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4437827532482656262
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8254904211757607687}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.6, y: 1.2, z: 2.5}
+  m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &309754589044643080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8254904211757607687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559fc2bc2c50dd2438ab2b85a83fbf0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NisitSimulator.Interaction.SleepStation
+  useBedWakePoint: 1
+  assignedDormSlot: 0
+  sleepFromHour: 18
+  wakeHour: 7
+  wakePoint: {fileID: 1480206490082335207}
+  extraWakePoints: []
+  energyRestore: 999
+  healthRestore: 12
+  hungerChange: -25
+  satisfactionChange: 5
+  stressChange: -35
 --- !u!1 &8261745058692766030
 GameObject:
   m_ObjectHideFlags: 0
@@ -66315,85 +66539,6 @@ Transform:
   - {fileID: 3222128054717985491}
   m_Father: {fileID: 5315663292476958833}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8397329583184536558
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6093516675485052401}
-  - component: {fileID: 1546160749398788305}
-  - component: {fileID: 3024223566987876516}
-  m_Layer: 8
-  m_Name: SleepSpot_103
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6093516675485052401
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8397329583184536558}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
-  m_LocalPosition: {x: 6.8299994, y: 0.3, z: 1.1300001}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1228455896}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1546160749398788305
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8397329583184536558}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.6, y: 1.2, z: 2.5}
-  m_Center: {x: -8.742269e-10, y: 0.47499996, z: 0.00999999}
---- !u!114 &3024223566987876516
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8397329583184536558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 559fc2bc2c50dd2438ab2b85a83fbf0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NisitSimulator.Interaction.SleepStation
-  sleepFromHour: 18
-  wakeHour: 7
-  wakePoint: {fileID: 1162760215608860987}
-  extraWakePoints:
-  - {fileID: 431360677673126279}
-  - {fileID: 6723328653755044370}
-  - {fileID: 1162760215608860987}
-  - {fileID: 270726302676603015}
-  energyRestore: 999
-  healthRestore: 12
-  hungerChange: -25
-  satisfactionChange: 5
-  stressChange: -35
 --- !u!1 &8417615213789017419
 GameObject:
   m_ObjectHideFlags: 0
@@ -67624,37 +67769,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &8519982654650071606
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1162760215608860987}
-  m_Layer: 0
-  m_Name: Wake_103
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1162760215608860987
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8519982654650071606}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.00000008742278, z: -0, w: -1}
-  m_LocalPosition: {x: 5.4999995, y: 0.3, z: 2.4}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1228455896}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8561640915695904641
 GameObject:
   m_ObjectHideFlags: 0
@@ -76935,9 +77049,37 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8131657000987170973, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2092295088986030928}
+    - targetCorrespondingSourceObject: {fileID: 8131657000987170973, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7655461009621381934}
+    - targetCorrespondingSourceObject: {fileID: 8131657000987170973, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7236162577977917606}
+    - targetCorrespondingSourceObject: {fileID: 8131657000987170973, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3670127071711314859}
+    - targetCorrespondingSourceObject: {fileID: 3542411387880765284, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2880423514482624803}
+    - targetCorrespondingSourceObject: {fileID: 4782625463837971610, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4094395090700632086}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+--- !u!4 &2681328922039215403 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3542411387880765284, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+  m_PrefabInstance: {fileID: 1449264151683568207}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6215986270720640725 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4782625463837971610, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+  m_PrefabInstance: {fileID: 1449264151683568207}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7261386878570859218 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8131657000987170973, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
@@ -80103,12 +80245,40 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8131657000987170973, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2772226363979814063}
+    - targetCorrespondingSourceObject: {fileID: 8131657000987170973, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1480206490082335207}
+    - targetCorrespondingSourceObject: {fileID: 8131657000987170973, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4009280368518921906}
+    - targetCorrespondingSourceObject: {fileID: 8131657000987170973, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5432332970813489214}
+    - targetCorrespondingSourceObject: {fileID: 3542411387880765284, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5854883463008407510}
+    - targetCorrespondingSourceObject: {fileID: 4782625463837971610, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8270050514274345381}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+--- !u!4 &728407884935460480 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3542411387880765284, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+  m_PrefabInstance: {fileID: 4265752718934901220}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5470621799252040057 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8131657000987170973, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
+  m_PrefabInstance: {fileID: 4265752718934901220}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8749847538146301310 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4782625463837971610, guid: 86931d5ccaf47d749b226e7a6bb40a5f, type: 3}
   m_PrefabInstance: {fileID: 4265752718934901220}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4418762270820392843

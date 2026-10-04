@@ -21,6 +21,7 @@ namespace NisitSimulator.SaveLoad
         public int currentYear = 1;    // ชั้นปี 1-4
         public int dayInYear = 1;      // วันในปีการศึกษาปัจจุบัน
         public int calendarYear = 0;   // ปีการศึกษาที่เล่นจริง (0 = เซฟเก่า → ใช้ currentYear)
+        public int calendarVersion = 0;   // รุ่นปฏิทินตอนเซฟ (0/1 = 3/3/2 ปีละ 8 วัน · 2 = 10/10/3) — เซฟเก่าแปลงวันด้วย CalendarMigration
         public int facultyIndex = 0;   // คณะที่เลือก (0=IT,1=บริหาร,2=วิทย์,3=นิเทศ)
         public float posX, posY, posZ; // ตำแหน่งตัวละคร
 
@@ -33,7 +34,7 @@ namespace NisitSimulator.SaveLoad
         public bool insideInterior;        // อยู่ในอาคาร (InteriorManager) ไหม
         public string interiorName = "";  // เช่น Spawn_หอพัก
         public float interiorReturnX, interiorReturnY, interiorReturnZ, interiorReturnRotY;   // จุดออกจากอาคาร
-        public string dormRoomId = "";     // ห้องพักของผู้เล่น (ตอนนี้มีห้องเดียว = "dorm_1" · เผื่อหลายห้อง)
+        public string dormRoomId = "";     // ห้องพักที่ผูกกับผู้เล่น เช่น dorm_building_101 / dorm_building_102
 
         // ไอเทมในกระเป๋า (เก็บเป็น itemId)
         public List<string> inventoryItemIds = new List<string>();

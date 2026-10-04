@@ -2,6 +2,7 @@
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using System.Collections.Generic;
 using NisitSimulator.Academics;
 
 namespace NisitSimulator.EditorTools
@@ -55,7 +56,31 @@ namespace NisitSimulator.EditorTools
             var c = AssetDatabase.LoadAssetAtPath<CurriculumDefinition>(AssetPath);
             if (c == null) { EditorUtility.DisplayDialog("Nisit Simulator", "ยังไม่มี asset — กด Build CS Curriculum ก่อน", "ตกลง"); return; }
             var errs = c.Validate();
-            if (errs.Count == 0) Debug.Log("<color=lime>[Nisit] หลักสูตรผ่านการตรวจ</color>");
+            // ห้องเรียน: ทุกคาบต้องมี roomId ที่มีอยู่จริง + ห้องเดียวกัน วันเดียวกัน เวลาทับ (ภาคเดียวกัน) ห้ามเด็ดขาด
+            var catalog = AssetDatabase.LoadAssetAtPath<ClassroomCatalog>(M47ClassroomBuilder.CatalogPath);
+            if (catalog == null)
+            {
+                Debug.LogWarning("[Curriculum] ยังไม่มี ClassroomCatalog.asset — ตรวจกับห้องค่าเริ่มต้นในโค้ด (รัน Nisit ▸ Classrooms ▸ Setup Classroom Zones)");
+                catalog = ClassroomDefaults.Create();
+            }
+            foreach (var e in catalog.Validate()) errs.Add("[ห้อง] " + e);
+            var issues = RegistrationService.FindRoomConflicts(c, catalog, requireRooms: true);
+            foreach (var i in issues) errs.Add("[ห้อง] " + i);
+            // ห้องที่หลักสูตรใช้ต้องมี ClassroomZone ในฉากที่เปิดอยู่ (ถ้าเปิด 01_Gameplay)
+            if (UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().path.EndsWith("01_Gameplay.unity"))
+            {
+                var zones = new HashSet<string>();
+                foreach (var z in Object.FindObjectsByType<NisitSimulator.Interaction.ClassroomZone>(FindObjectsInactive.Include, FindObjectsSortMode.None)) zones.Add(z.roomId);
+                var used = new HashSet<string>();
+                foreach (var d in c.courses)
+                {
+                    if (d == null) continue;
+                    foreach (var s in d.sessions) if (s.HasRoom) used.Add(s.roomId);
+                    foreach (var s in d.retakeSessions) if (s.HasRoom) used.Add(s.roomId);
+                }
+                foreach (var id in used) if (!zones.Contains(id)) errs.Add($"[ห้อง] {id}: ไม่มี ClassroomZone ในฉาก 01_Gameplay");
+            }
+            if (errs.Count == 0) Debug.Log($"<color=lime>[Nisit] หลักสูตรผ่านการตรวจ (รวมห้องเรียน: ไม่มีห้องชน · roomId มีอยู่จริงทุกคาบ)</color>");
             else foreach (var e in errs) Debug.LogError("[Curriculum] " + e);
         }
     }

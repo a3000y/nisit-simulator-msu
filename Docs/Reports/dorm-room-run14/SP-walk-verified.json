@@ -1,0 +1,28 @@
+{
+  "out": {
+    "status": "✅",
+    "time": "14:47:51.517",
+    "pos": {
+      "x": -58.44997787475586,
+      "y": 0.7399999499320984,
+      "z": 124.94056701660156
+    },
+    "wakeDistance": 7.363478183746338,
+    "grounded": true,
+    "capsuleClear": true,
+    "hiddenObstructions": 0
+  },
+  "back": {
+    "status": "✅",
+    "time": "14:48:06.844",
+    "pos": {
+      "x": -64.52423095703125,
+      "y": 0.9649999141693115,
+      "z": 129.19631958007812
+    },
+    "wakeDistance": 0.0946381464600563,
+    "grounded": true,
+    "capsuleClear": true,
+    "hiddenObstructions": 1
+  }
+}

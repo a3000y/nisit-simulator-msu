@@ -55,7 +55,7 @@ namespace NisitSimulator.EditorTools
             if (gm.GetComponent<ProgressionManager>() == null) gm.AddComponent<ProgressionManager>();
             // 3 นาทีเกมต่อ 1 วินาทีจริง — หนึ่งวันตื่นถึงเข้านอนราว 5 นาทีจริง เล่นจบ 4 ปีได้ในหนึ่งนั่ง
             // อย่าเปลี่ยนกลับเป็น 1 โดยไม่ปรับ StatDecay ด้วย เกมจะกลับไปยาว 19 ชั่วโมงต่อรอบ
-            gm.GetComponent<GameClock>().gameMinutesPerRealSecond = 3f;
+            gm.GetComponent<GameClock>().gameMinutesPerRealSecond = GameClock.DefaultMinutesPerRealSecond;   // 1 วันเกม = 20 นาทีจริง
 
             // ---- Canvas ----
             DestroyIfExists("HUD Canvas");

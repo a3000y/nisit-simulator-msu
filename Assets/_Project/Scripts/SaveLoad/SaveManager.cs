@@ -32,6 +32,7 @@ namespace NisitSimulator.SaveLoad
 
             var prog = Object.FindFirstObjectByType<ProgressionManager>();
             if (prog != null) { data.currentYear = prog.CurrentYear; data.dayInYear = prog.DayInYear; data.calendarYear = prog.CalendarYear; }
+            data.calendarVersion = AcademicCalendar.Version;
 
             // ระบบลงทะเบียนเรียน (ชั้นปี ภาค รายวิชา ความคืบหน้า ผลสอบ ประวัติเรียนซ้ำ)
             var registrar = NisitSimulator.Academics.CourseRegistrar.Instance;
@@ -101,7 +102,8 @@ namespace NisitSimulator.SaveLoad
             GameSession.PendingLoad = false;
 
             var data = SaveSystem.Load();
-            if (data == null) return null;
+            if (data == null) { GameSession.IsContinue = false; return null; }
+            CalendarMigration.Upgrade(data);   // เซฟปฏิทินเก่า (ปีละ 8 วัน) → แปลงวันก่อนทุกระบบอ่าน
 
             GameSession.SelectedFacultyIndex = data.facultyIndex;   // คืนคณะจากเซฟ (ไม่รีเซ็ตเป็น IT อีก)
 

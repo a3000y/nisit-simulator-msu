@@ -17,6 +17,7 @@ namespace NisitSimulator.Systems
         public const string Relax   = "relax";    // พักผ่อน/กิจกรรมคลายเครียด
         public const string Sleep   = "sleep";    // นอน
         public const string Exam    = "exam";     // สอบเสร็จ
+        public const string ClassEvent = "classEvent";   // เหตุการณ์สุ่มระหว่างเรียน (เลือกแล้ว)
 
         public static event Action<string> OnAction;
 

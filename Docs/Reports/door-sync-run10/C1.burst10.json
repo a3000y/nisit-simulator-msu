@@ -1,0 +1,2138 @@
+{
+  "devGuard": true,
+  "mptest": true,
+  "doorsReady": true,
+  "guardFrames": 12675,
+  "guardViolations": 0,
+  "doorCount": 108,
+  "doorsClosed": 108,
+  "doorAccepted": 0,
+  "doorRejected": 0,
+  "doorRevision": 6,
+  "doorCatalog": "15789267953489292206",
+  "doorLastDecision": "",
+  "doors": [
+    {
+      "id": 0,
+      "path": "Dorm_Building/Floor_1/Common/Laundry/Door",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -57.70000076293945,
+        "y": 0.22500000894069672,
+        "z": 133.6016845703125
+      }
+    },
+    {
+      "id": 1,
+      "path": "Dorm_Building/Floor_1/Common/Lobby/Door_Main_Left",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -58.900001525878906,
+        "y": 0.22500000894069672,
+        "z": 127.15167999267578
+      }
+    },
+    {
+      "id": 2,
+      "path": "Dorm_Building/Floor_1/Common/Lobby/Door_Main_Right",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -57.099998474121094,
+        "y": 0.22500000894069672,
+        "z": 127.15167999267578
+      }
+    },
+    {
+      "id": 3,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_101/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -64.9749984741211,
+        "y": 0.22500000894069672,
+        "z": 130.75167846679688
+      }
+    },
+    {
+      "id": 4,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_101/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -63.775001525878906,
+        "y": 0.22500000894069672,
+        "z": 132.1016845703125
+      }
+    },
+    {
+      "id": 5,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_102/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -62.125,
+        "y": 0.22500000894069672,
+        "z": 130.75167846679688
+      }
+    },
+    {
+      "id": 6,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_102/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -60.92499923706055,
+        "y": 0.22500000894069672,
+        "z": 132.1016845703125
+      }
+    },
+    {
+      "id": 7,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_103/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -53.875,
+        "y": 0.22500000894069672,
+        "z": 130.75167846679688
+      }
+    },
+    {
+      "id": 8,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_103/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -52.67499923706055,
+        "y": 0.22500000894069672,
+        "z": 132.1016845703125
+      }
+    },
+    {
+      "id": 9,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_104/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -51.025001525878906,
+        "y": 0.22500000894069672,
+        "z": 130.75167846679688
+      }
+    },
+    {
+      "id": 10,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_104/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -49.82500076293945,
+        "y": 0.22500000894069672,
+        "z": 132.1016845703125
+      }
+    },
+    {
+      "id": 11,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_105/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -64.9749984741211,
+        "y": 0.22500000894069672,
+        "z": 134.95167541503906
+      }
+    },
+    {
+      "id": 12,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_105/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -66.17500305175781,
+        "y": 0.22500000894069672,
+        "z": 133.6016845703125
+      }
+    },
+    {
+      "id": 13,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_106/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -62.125,
+        "y": 0.22500000894069672,
+        "z": 134.95167541503906
+      }
+    },
+    {
+      "id": 14,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_106/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -63.32500076293945,
+        "y": 0.22500000894069672,
+        "z": 133.6016845703125
+      }
+    },
+    {
+      "id": 15,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_107/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -53.875,
+        "y": 0.22500000894069672,
+        "z": 134.95167541503906
+      }
+    },
+    {
+      "id": 16,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_107/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -55.07500076293945,
+        "y": 0.22500000894069672,
+        "z": 133.6016845703125
+      }
+    },
+    {
+      "id": 17,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_108/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -51.025001525878906,
+        "y": 0.22500000894069672,
+        "z": 134.95167541503906
+      }
+    },
+    {
+      "id": 18,
+      "path": "Dorm_Building/Floor_1/Rooms/Room_108/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -52.224998474121094,
+        "y": 0.22500000894069672,
+        "z": 133.6016845703125
+      }
+    },
+    {
+      "id": 19,
+      "path": "Dorm_Building/Floor_2/Common/StudyRoom/Door",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -57.70000076293945,
+        "y": 2.625,
+        "z": 133.6016845703125
+      }
+    },
+    {
+      "id": 20,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_201/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -64.9749984741211,
+        "y": 2.625,
+        "z": 130.75167846679688
+      }
+    },
+    {
+      "id": 21,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_201/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -63.775001525878906,
+        "y": 2.625,
+        "z": 132.1016845703125
+      }
+    },
+    {
+      "id": 22,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_202/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -62.125,
+        "y": 2.625,
+        "z": 130.75167846679688
+      }
+    },
+    {
+      "id": 23,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_202/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -60.92499923706055,
+        "y": 2.625,
+        "z": 132.1016845703125
+      }
+    },
+    {
+      "id": 24,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_203/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -53.875,
+        "y": 2.625,
+        "z": 130.75167846679688
+      }
+    },
+    {
+      "id": 25,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_203/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -52.67499923706055,
+        "y": 2.625,
+        "z": 132.1016845703125
+      }
+    },
+    {
+      "id": 26,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_204/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -51.025001525878906,
+        "y": 2.625,
+        "z": 130.75167846679688
+      }
+    },
+    {
+      "id": 27,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_204/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -49.82500076293945,
+        "y": 2.625,
+        "z": 132.1016845703125
+      }
+    },
+    {
+      "id": 28,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_205/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -64.9749984741211,
+        "y": 2.625,
+        "z": 134.95167541503906
+      }
+    },
+    {
+      "id": 29,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_205/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -66.17500305175781,
+        "y": 2.625,
+        "z": 133.6016845703125
+      }
+    },
+    {
+      "id": 30,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_206/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -62.125,
+        "y": 2.625,
+        "z": 134.95167541503906
+      }
+    },
+    {
+      "id": 31,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_206/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -63.32500076293945,
+        "y": 2.625,
+        "z": 133.6016845703125
+      }
+    },
+    {
+      "id": 32,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_207/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -53.875,
+        "y": 2.625,
+        "z": 134.95167541503906
+      }
+    },
+    {
+      "id": 33,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_207/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -55.07500076293945,
+        "y": 2.625,
+        "z": 133.6016845703125
+      }
+    },
+    {
+      "id": 34,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_208/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -51.025001525878906,
+        "y": 2.625,
+        "z": 134.95167541503906
+      }
+    },
+    {
+      "id": 35,
+      "path": "Dorm_Building/Floor_2/Rooms/Room_208/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -52.224998474121094,
+        "y": 2.625,
+        "z": 133.6016845703125
+      }
+    },
+    {
+      "id": 36,
+      "path": "Dorm_Building/Floor_3/Common/StudyRoom/Door",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -57.70000076293945,
+        "y": 5.025000095367432,
+        "z": 133.6016845703125
+      }
+    },
+    {
+      "id": 37,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_301/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -64.9749984741211,
+        "y": 5.025000095367432,
+        "z": 130.75167846679688
+      }
+    },
+    {
+      "id": 38,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_301/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -63.775001525878906,
+        "y": 5.025000095367432,
+        "z": 132.1016845703125
+      }
+    },
+    {
+      "id": 39,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_302/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -62.125,
+        "y": 5.025000095367432,
+        "z": 130.75167846679688
+      }
+    },
+    {
+      "id": 40,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_302/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -60.92499923706055,
+        "y": 5.025000095367432,
+        "z": 132.1016845703125
+      }
+    },
+    {
+      "id": 41,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_303/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -53.875,
+        "y": 5.025000095367432,
+        "z": 130.75167846679688
+      }
+    },
+    {
+      "id": 42,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_303/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -52.67499923706055,
+        "y": 5.025000095367432,
+        "z": 132.1016845703125
+      }
+    },
+    {
+      "id": 43,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_304/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -51.025001525878906,
+        "y": 5.025000095367432,
+        "z": 130.75167846679688
+      }
+    },
+    {
+      "id": 44,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_304/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -49.82500076293945,
+        "y": 5.025000095367432,
+        "z": 132.1016845703125
+      }
+    },
+    {
+      "id": 45,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_305/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -64.9749984741211,
+        "y": 5.025000095367432,
+        "z": 134.95167541503906
+      }
+    },
+    {
+      "id": 46,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_305/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -66.17500305175781,
+        "y": 5.025000095367432,
+        "z": 133.6016845703125
+      }
+    },
+    {
+      "id": 47,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_306/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -62.125,
+        "y": 5.025000095367432,
+        "z": 134.95167541503906
+      }
+    },
+    {
+      "id": 48,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_306/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -63.32500076293945,
+        "y": 5.025000095367432,
+        "z": 133.6016845703125
+      }
+    },
+    {
+      "id": 49,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_307/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -53.875,
+        "y": 5.025000095367432,
+        "z": 134.95167541503906
+      }
+    },
+    {
+      "id": 50,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_307/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -55.07500076293945,
+        "y": 5.025000095367432,
+        "z": 133.6016845703125
+      }
+    },
+    {
+      "id": 51,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_308/Bathroom/Door_Bathroom",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -51.025001525878906,
+        "y": 5.025000095367432,
+        "z": 134.95167541503906
+      }
+    },
+    {
+      "id": 52,
+      "path": "Dorm_Building/Floor_3/Rooms/Room_308/Door_Entry",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": false,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": -52.224998474121094,
+        "y": 5.025000095367432,
+        "z": 133.6016845703125
+      }
+    },
+    {
+      "id": 53,
+      "path": "GE_Building/Floor_1/Classrooms/Room_GE101/Door_GE101",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 18.89999771118164,
+        "y": 0.3374999761581421,
+        "z": 38.08297348022461
+      }
+    },
+    {
+      "id": 54,
+      "path": "GE_Building/Floor_1/Classrooms/Room_GE102/Door_GE102",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 24.14999771118164,
+        "y": 0.3374999761581421,
+        "z": 38.08297348022461
+      }
+    },
+    {
+      "id": 55,
+      "path": "GE_Building/Floor_1/Classrooms/Room_GE103/Door_GE103",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 34.94999694824219,
+        "y": 0.3374999761581421,
+        "z": 38.08297348022461
+      }
+    },
+    {
+      "id": 56,
+      "path": "GE_Building/Floor_1/Classrooms/Room_GE104/Door_GE104",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 40.19999694824219,
+        "y": 0.3374999761581421,
+        "z": 38.08297348022461
+      }
+    },
+    {
+      "id": 57,
+      "path": "GE_Building/Floor_1/Restrooms/Restroom_Female/Door_Restroom_Female",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 32.474998474121094,
+        "y": 0.3374999761581421,
+        "z": 41.08297348022461
+      }
+    },
+    {
+      "id": 58,
+      "path": "GE_Building/Floor_1/Restrooms/Restroom_Male/Door_Restroom_Male",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 30.224998474121094,
+        "y": 0.3374999761581421,
+        "z": 41.08297348022461
+      }
+    },
+    {
+      "id": 59,
+      "path": "GE_Building/Floor_2/Classrooms/Room_GE201/Door_GE201",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 18.89999771118164,
+        "y": 3.0374999046325684,
+        "z": 38.08297348022461
+      }
+    },
+    {
+      "id": 60,
+      "path": "GE_Building/Floor_2/Classrooms/Room_GE202/Door_GE202",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 24.14999771118164,
+        "y": 3.0374999046325684,
+        "z": 38.08297348022461
+      }
+    },
+    {
+      "id": 61,
+      "path": "GE_Building/Floor_2/Classrooms/Room_GE203/Door_GE203",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 34.94999694824219,
+        "y": 3.0374999046325684,
+        "z": 38.08297348022461
+      }
+    },
+    {
+      "id": 62,
+      "path": "GE_Building/Floor_2/Classrooms/Room_GE204/Door_GE204",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 40.19999694824219,
+        "y": 3.0374999046325684,
+        "z": 38.08297348022461
+      }
+    },
+    {
+      "id": 63,
+      "path": "GE_Building/Floor_2/Restrooms/Restroom_Female/Door_Restroom_Female",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 32.474998474121094,
+        "y": 3.0374999046325684,
+        "z": 41.08297348022461
+      }
+    },
+    {
+      "id": 64,
+      "path": "GE_Building/Floor_2/Restrooms/Restroom_Male/Door_Restroom_Male",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 30.224998474121094,
+        "y": 3.0374999046325684,
+        "z": 41.08297348022461
+      }
+    },
+    {
+      "id": 65,
+      "path": "GE_Building/Floor_3/Classrooms/Room_GE301/Door_GE301",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 18.89999771118164,
+        "y": 5.737499713897705,
+        "z": 38.08297348022461
+      }
+    },
+    {
+      "id": 66,
+      "path": "GE_Building/Floor_3/Classrooms/Room_GE302/Door_GE302",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 24.14999771118164,
+        "y": 5.737499713897705,
+        "z": 38.08297348022461
+      }
+    },
+    {
+      "id": 67,
+      "path": "GE_Building/Floor_3/Classrooms/Room_GE303/Door_GE303",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 34.94999694824219,
+        "y": 5.737499713897705,
+        "z": 38.08297348022461
+      }
+    },
+    {
+      "id": 68,
+      "path": "GE_Building/Floor_3/Classrooms/Room_GE304/Door_GE304",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 40.19999694824219,
+        "y": 5.737499713897705,
+        "z": 38.08297348022461
+      }
+    },
+    {
+      "id": 69,
+      "path": "GE_Building/Floor_3/Restrooms/Restroom_Female/Door_Restroom_Female",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 32.474998474121094,
+        "y": 5.737499713897705,
+        "z": 41.08297348022461
+      }
+    },
+    {
+      "id": 70,
+      "path": "GE_Building/Floor_3/Restrooms/Restroom_Male/Door_Restroom_Male",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 30.224998474121094,
+        "y": 5.737499713897705,
+        "z": 41.08297348022461
+      }
+    },
+    {
+      "id": 71,
+      "path": "IT_Building/Exterior/SideExit/Door_SideExit",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 9.653711318969727,
+        "y": 0.9000000357627869,
+        "z": -59.63749694824219
+      }
+    },
+    {
+      "id": 72,
+      "path": "IT_Building/Floor_1/Restrooms/Restroom_Female/Door_Restroom_Female",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 20.641212463378906,
+        "y": 0.9000000357627869,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 73,
+      "path": "IT_Building/Floor_1/Restrooms/Restroom_Male/Door_Restroom_Male",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 22.891210556030273,
+        "y": 0.9000000357627869,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 74,
+      "path": "IT_Building/Floor_1/Rooms/Room_IT101/Door_IT101",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 36.466209411621094,
+        "y": 0.9000000357627869,
+        "z": -58.92500305175781
+      }
+    },
+    {
+      "id": 75,
+      "path": "IT_Building/Floor_1/Rooms/Room_IT102/Door_IT102",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 31.966211318969727,
+        "y": 0.9000000357627869,
+        "z": -58.92499923706055
+      }
+    },
+    {
+      "id": 76,
+      "path": "IT_Building/Floor_1/Rooms/Room_IT103/Door_IT103",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 18.466211318969727,
+        "y": 0.9000000357627869,
+        "z": -58.92499923706055
+      }
+    },
+    {
+      "id": 77,
+      "path": "IT_Building/Floor_1/Rooms/Room_IT104/Door_IT104",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 13.966211318969727,
+        "y": 0.9000000357627869,
+        "z": -58.92499923706055
+      }
+    },
+    {
+      "id": 78,
+      "path": "IT_Building/Floor_1/Rooms/Room_IT105/Door_IT105",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 32.341209411621094,
+        "y": 0.9000000357627869,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 79,
+      "path": "IT_Building/Floor_1/Rooms/Room_IT106/Door_IT106",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 27.841211318969727,
+        "y": 0.9000000357627869,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 80,
+      "path": "IT_Building/Floor_1/Rooms/Room_IT107/Door_IT107",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 14.341211318969727,
+        "y": 0.9000000357627869,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 81,
+      "path": "IT_Building/Floor_2/Restrooms/Restroom_Female/Door_Restroom_Female",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 20.641212463378906,
+        "y": 3.6000001430511475,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 82,
+      "path": "IT_Building/Floor_2/Restrooms/Restroom_Male/Door_Restroom_Male",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 22.891210556030273,
+        "y": 3.6000001430511475,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 83,
+      "path": "IT_Building/Floor_2/Rooms/Room_IT201/Door_IT201",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 36.466209411621094,
+        "y": 3.6000001430511475,
+        "z": -58.92500305175781
+      }
+    },
+    {
+      "id": 84,
+      "path": "IT_Building/Floor_2/Rooms/Room_IT202/Door_IT202",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 31.966211318969727,
+        "y": 3.6000001430511475,
+        "z": -58.92499923706055
+      }
+    },
+    {
+      "id": 85,
+      "path": "IT_Building/Floor_2/Rooms/Room_IT203/Door_IT203",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 18.466211318969727,
+        "y": 3.6000001430511475,
+        "z": -58.92499923706055
+      }
+    },
+    {
+      "id": 86,
+      "path": "IT_Building/Floor_2/Rooms/Room_IT204/Door_IT204",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 13.966211318969727,
+        "y": 3.6000001430511475,
+        "z": -58.92499923706055
+      }
+    },
+    {
+      "id": 87,
+      "path": "IT_Building/Floor_2/Rooms/Room_IT205/Door_IT205",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 32.341209411621094,
+        "y": 3.6000001430511475,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 88,
+      "path": "IT_Building/Floor_2/Rooms/Room_IT206/Door_IT206",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 27.841211318969727,
+        "y": 3.6000001430511475,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 89,
+      "path": "IT_Building/Floor_2/Rooms/Room_IT207/Door_IT207",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 14.341211318969727,
+        "y": 3.6000001430511475,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 90,
+      "path": "IT_Building/Floor_3/Restrooms/Restroom_Female/Door_Restroom_Female",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 20.641212463378906,
+        "y": 6.299999713897705,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 91,
+      "path": "IT_Building/Floor_3/Restrooms/Restroom_Male/Door_Restroom_Male",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 22.891210556030273,
+        "y": 6.299999713897705,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 92,
+      "path": "IT_Building/Floor_3/Rooms/Room_IT301/Door_IT301",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 36.466209411621094,
+        "y": 6.299999713897705,
+        "z": -58.92500305175781
+      }
+    },
+    {
+      "id": 93,
+      "path": "IT_Building/Floor_3/Rooms/Room_IT302/Door_IT302",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 31.966211318969727,
+        "y": 6.299999713897705,
+        "z": -58.92499923706055
+      }
+    },
+    {
+      "id": 94,
+      "path": "IT_Building/Floor_3/Rooms/Room_IT303/Door_IT303",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 18.466211318969727,
+        "y": 6.299999713897705,
+        "z": -58.92499923706055
+      }
+    },
+    {
+      "id": 95,
+      "path": "IT_Building/Floor_3/Rooms/Room_IT304/Door_IT304",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 13.966211318969727,
+        "y": 6.299999713897705,
+        "z": -58.92499923706055
+      }
+    },
+    {
+      "id": 96,
+      "path": "IT_Building/Floor_3/Rooms/Room_IT305/Door_IT305",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 32.341209411621094,
+        "y": 6.299999713897705,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 97,
+      "path": "IT_Building/Floor_3/Rooms/Room_IT306/Door_IT306",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 27.841211318969727,
+        "y": 6.299999713897705,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 98,
+      "path": "IT_Building/Floor_3/Rooms/Room_IT307/Door_IT307",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 14.341211318969727,
+        "y": 6.299999713897705,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 99,
+      "path": "IT_Building/Floor_4/Restrooms/Restroom_Female/Door_Restroom_Female",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 20.641212463378906,
+        "y": 9.0,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 100,
+      "path": "IT_Building/Floor_4/Restrooms/Restroom_Male/Door_Restroom_Male",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 22.891210556030273,
+        "y": 9.0,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 101,
+      "path": "IT_Building/Floor_4/Rooms/Room_IT401/Door_IT401",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 36.466209411621094,
+        "y": 9.0,
+        "z": -58.92500305175781
+      }
+    },
+    {
+      "id": 102,
+      "path": "IT_Building/Floor_4/Rooms/Room_IT402/Door_IT402",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 31.966211318969727,
+        "y": 9.0,
+        "z": -58.92499923706055
+      }
+    },
+    {
+      "id": 103,
+      "path": "IT_Building/Floor_4/Rooms/Room_IT403/Door_IT403",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 18.466211318969727,
+        "y": 9.0,
+        "z": -58.92499923706055
+      }
+    },
+    {
+      "id": 104,
+      "path": "IT_Building/Floor_4/Rooms/Room_IT404/Door_IT404",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 13.966211318969727,
+        "y": 9.0,
+        "z": -58.92499923706055
+      }
+    },
+    {
+      "id": 105,
+      "path": "IT_Building/Floor_4/Rooms/Room_IT405/Door_IT405",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 32.341209411621094,
+        "y": 9.0,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 106,
+      "path": "IT_Building/Floor_4/Rooms/Room_IT406/Door_IT406",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 27.841211318969727,
+        "y": 9.0,
+        "z": -61.32500076293945
+      }
+    },
+    {
+      "id": 107,
+      "path": "IT_Building/Floor_4/Rooms/Room_IT407/Door_IT407",
+      "open": false,
+      "authoritativeOpen": false,
+      "startOpen": true,
+      "angle": 0.0,
+      "targetAngle": 0.0,
+      "triggerEnabled": true,
+      "triggerIsTrigger": true,
+      "solidLeaf": true,
+      "layer": "Interactable",
+      "position": {
+        "x": 14.341211318969727,
+        "y": 9.0,
+        "z": -61.32500076293945
+      }
+    }
+  ],
+  "roomName": "ห้องของ DoorHost",
+  "lobbyPhase": "InGame",
+  "lobbyMessage": "",
+  "lobbyNotice": "",
+  "publicJoinCode": "",
+  "shareMode": "HostOnly",
+  "roomMax": 4,
+  "lobbyPlayers": [
+    {
+      "id": "49a4c103844d408d80f0db352a69e34d",
+      "name": "DoorHost",
+      "accessories": "",
+      "connection": 0,
+      "slot": 0,
+      "model": 0,
+      "color": 0,
+      "ping": 0,
+      "ready": true,
+      "host": true
+    },
+    {
+      "id": "aed535c7d26b4f3c94ddb3b7358e97cf",
+      "name": "DoorC1",
+      "accessories": "",
+      "connection": 2,
+      "slot": 2,
+      "model": 0,
+      "color": 0,
+      "ping": 34,
+      "ready": true,
+      "host": false
+    },
+    {
+      "id": "71fdc19af67b4bfda6dcda0a940b2949",
+      "name": "DoorC2",
+      "accessories": "",
+      "connection": 3,
+      "slot": 1,
+      "model": 0,
+      "color": 0,
+      "ping": 34,
+      "ready": true,
+      "host": false
+    }
+  ],
+  "id": "C1",
+  "time": "12:20:06.832",
+  "scene": "01_Gameplay",
+  "role": "client",
+  "gmState": "Playing",
+  "lastSpawn": "new_game_dorm_slot2",
+  "saveOverride": "C:/Users/Pakwan/Downloads/nisitsimo/MPTestRuns/run10\\C1_save.json",
+  "localClientId": 2,
+  "isConnectedClient": true,
+  "isListening": true,
+  "connectedIds": [],
+  "avatars": [
+    {
+      "name": "DoorHost",
+      "owner": 0,
+      "isOwner": false,
+      "netId": 1,
+      "pos": {
+        "x": -58.44999694824219,
+        "y": 0.2245163768529892,
+        "z": 126.6016845703125
+      },
+      "visible": true,
+      "partyPlayerId": "49a4c103844d408d80f0db352a69e34d",
+      "partyStatus": "Normal",
+      "partySlot": 0,
+      "partyEnergy": 100,
+      "partyPings": 0,
+      "partyReady": true,
+      "partyMapPosition": {
+        "x": -58.5,
+        "y": 1.0,
+        "z": 126.5
+      },
+      "pingExpiresAt": 0.0,
+      "pingSequence": 0
+    },
+    {
+      "name": "DoorC1",
+      "owner": 2,
+      "isOwner": true,
+      "netId": 4,
+      "pos": {
+        "x": 28.328712463378906,
+        "y": 0.9800001382827759,
+        "z": -61.75187683105469
+      },
+      "visible": false,
+      "partyPlayerId": "aed535c7d26b4f3c94ddb3b7358e97cf",
+      "partyStatus": "Indoors",
+      "partySlot": 2,
+      "partyEnergy": 38,
+      "partyPings": 0,
+      "partyReady": true,
+      "partyMapPosition": {
+        "x": 28.5,
+        "y": 1.5,
+        "z": -62.0
+      },
+      "pingExpiresAt": 0.0,
+      "pingSequence": 0
+    },
+    {
+      "name": "DoorC2",
+      "owner": 3,
+      "isOwner": false,
+      "netId": 5,
+      "pos": {
+        "x": 28.344545364379883,
+        "y": 0.9151246547698975,
+        "z": -61.75975799560547
+      },
+      "visible": true,
+      "partyPlayerId": "71fdc19af67b4bfda6dcda0a940b2949",
+      "partyStatus": "Indoors",
+      "partySlot": 1,
+      "partyEnergy": 38,
+      "partyPings": 0,
+      "partyReady": true,
+      "partyMapPosition": {
+        "x": 28.5,
+        "y": 1.5,
+        "z": -62.0
+      },
+      "pingExpiresAt": 0.0,
+      "pingSequence": 0
+    }
+  ],
+  "playerPos": {
+    "x": 28.328712463378906,
+    "y": 1.6400001049041748,
+    "z": -61.75187683105469
+  },
+  "playerYaw": 1.001791224553017e-05,
+  "money": 100,
+  "exp": 192,
+  "level": 2,
+  "energy": 37.544307708740234,
+  "health": 88.44071960449219,
+  "hunger": 0.0,
+  "stress": 5.091212272644043,
+  "satisfaction": 100.0,
+  "inventory": [],
+  "day": 1,
+  "minutes": 425.59149169921875,
+  "clock": "D1 07:05",
+  "timeScale": 1.0,
+  "clockFollower": true,
+  "clockAuthoritative": false,
+  "clockSuspended": false,
+  "mpSession": true,
+  "cameras": 1,
+  "audioListeners": 1,
+  "networkObjects": 4,
+  "playerObjects": 1,
+  "exhausted": false,
+  "restState": "Idle",
+  "exhaustEnterCount": 0,
+  "completedRests": 0,
+  "moveMult": 1.0,
+  "sleepState": "Idle",
+  "completedSleeps": 0,
+  "sleepLast": "",
+  "examRoomOpen": false,
+  "examInProgress": false,
+  "examRecordCount": 0,
+  "examRewardCount": 0,
+  "academic": "ชั้นปี 1 · ภาค 1 · <color=#E0664F>ยังไม่ลงทะเบียน!</color>\nหน่วยกิตสะสม 0/120",
+  "classYear": 1,
+  "gpa": 0.0,
+  "disconnectReason": "",
+  "recentErrors": [],
+  "pausePanel": false
+}

@@ -1,0 +1,23 @@
+{
+  "doorTableRows": 108,
+  "instanceMatrixRows": 324,
+  "initialPassed": 324,
+  "openPassed": 324,
+  "closePassed": 324,
+  "dormRows": 159,
+  "dormColliderFailures": 0,
+  "geometryFailures": [
+    {
+      "id": "71",
+      "instance": "H",
+      "closed_blocks_CC": "True",
+      "open_passes_CC": "False"
+    },
+    {
+      "id": "71",
+      "instance": "C1",
+      "closed_blocks_CC": "False",
+      "open_passes_CC": "True"
+    }
+  ]
+}

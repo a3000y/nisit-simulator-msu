@@ -28,6 +28,7 @@ namespace NisitSimulator.SaveLoad
             if (playerStats != null) NisitSimulator.Player.PlayerExhaustion.EnsureOn(playerStats.gameObject);
 
             // ===== ลำดับเข้าฉาก: คืนสถานะจากเซฟ → วางตัวละคร (ที่เดียว) → แสงตรงเวลา ก่อนเฟรมแรกถูกวาด =====
+            GameClock.WarpMultiplier = 1f;                 // โหลดเซฟ/เข้าฉากใหม่ → ความเร็วเวลาปกติเสมอ
             var loaded = SaveManager.ApplyIfPending();     // null = เกมใหม่ (เวลาเริ่มตาม GameClock.startHour = 07:00)
             PlayerSpawnSystem.ResolveInitialSpawn(loaded); // เกมใหม่/เซฟใช้ไม่ได้ → หอพัก · เล่นต่อ → ตำแหน่งเดิม
             SleepController.EnsureExists();                // นอนพักที่หอพัก (หน้ายืนยัน + เฟด)
@@ -35,6 +36,9 @@ namespace NisitSimulator.SaveLoad
             NisitSimulator.Net.PartyRuntime.EnsureExists(); // Phase 1: scene-local team HUD and map overlays
             RegistrationUI.EnsureExists();        // แอป "ลงทะเบียนเรียน" ในโทรศัพท์ (TAB)
             NisitSimulator.Academics.ExamMinigame.ExamMinigameController.EnsureExists();   // มินิเกมสอบรายวิชา (เปิดเฉพาะตอนสอบที่ห้องสอบ)
+            // ห้องเรียน: เร่งเวลาตอนเข้าเรียน + เหตุการณ์สุ่มระหว่างเรียน (ทำงานเฉพาะเล่นคนเดียว — ตรวจเองทุกเฟรม)
+            NisitSimulator.Academics.ClassWarpController.EnsureExists();
+            NisitSimulator.Academics.ClassEventSystem.EnsureExists();
 
             // สร้างระบบสถิติ/ความสำเร็จ + หน้ากด J (หลังโหลดเซฟ → baseline/คืนค่าถูกต้อง)
             _ = StatsTracker.Instance;

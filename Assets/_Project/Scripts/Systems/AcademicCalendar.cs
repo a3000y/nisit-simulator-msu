@@ -7,9 +7,12 @@ namespace NisitSimulator.Systems
     //   ภาคต้น(ฝน) 5 [มิ.ย.-ต.ค.] → ภาคปลาย(หนาว) 5 [พ.ย.-มี.ค.] → ภาคฤดูร้อน(ร้อน) 2 [เม.ย.-พ.ค.]
     public static class AcademicCalendar
     {
-        // บีบจาก 5/5/2 (12 วัน) เหลือ 3/3/2 (8 วัน) เพื่อให้เล่นจบ 4 ปีได้ในหนึ่งนั่ง
-        // ยังคงภาคต้น/ปลายไว้ 3 วัน จึงยังมีสอบกลางภาคทั้งสองภาค (HasMidterm ต้องการ >= 3)
-        static readonly int[]    TermDays  = { 3, 3, 2 };
+        // ปฏิทินรุ่น 2 (ยืดเวลาเล่น ~14 ชม./4 ปี): ภาคต้น 10 · ภาคปลาย 10 · ฤดูร้อน 3 = ปีละ 23 วัน
+        //   ภาคต้น/ปลาย: วันที่ 1–4 เรียน · 5 สอบกลางภาค · 6–9 เรียน · 10 สอบปลายภาค (ExamController.MidtermDay/FinalDay)
+        //   รุ่นก่อน (รุ่น 1) = 3/3/2 — เซฟเก่าแปลงวันด้วย CalendarMigration ตอนโหลด
+        public const int Version = 2;
+        public static readonly int[] LegacyTermDays = { 3, 3, 2 };
+        static readonly int[]    TermDays  = { 10, 10, 3 };
         static readonly string[] TermNames = { "ภาคต้น", "ภาคปลาย", "ภาคฤดูร้อน" };
         static readonly string[] Seasons   = { "ฤดูฝน", "ฤดูหนาว", "ฤดูร้อน" };
 
@@ -55,8 +58,16 @@ namespace NisitSimulator.Systems
 
         public static int SemesterLen(int sem) => TermDays[Mathf.Clamp(sem, 0, TermDays.Length - 1)];
 
-        // ภาคสั้น (< 3 วัน) ไม่มีสอบกลางภาค
-        public static bool HasMidterm(int sem) => SemesterLen(sem) >= 3;
+        // สอบกลางภาคมีเฉพาะภาคต้น/ภาคปลาย (ฤดูร้อนไม่มี แม้ยาว 3 วัน) และภาคต้องยาว >= 3 วัน
+        public static bool HasMidterm(int sem) => sem < 2 && SemesterLen(sem) >= 3;
+
+        // วันที่ sem/semDay → วันในปี (1..TotalDays)
+        public static int DayInYear(int sem, int semDay)
+        {
+            int d = 0;
+            for (int i = 0; i < Mathf.Clamp(sem, 0, TermDays.Length - 1); i++) d += TermDays[i];
+            return d + Mathf.Clamp(semDay, 1, SemesterLen(sem));
+        }
 
         // ชื่อเดือนของวันนี้ (1 วัน = 1 เดือนตามปีการศึกษา)
         // ชื่อเดือนของวันนี้ — กระจาย 12 เดือนให้ทั่วปี ไม่ว่าปีจะยาวกี่วัน

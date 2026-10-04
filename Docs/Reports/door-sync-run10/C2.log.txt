@@ -1,0 +1,966 @@
+﻿12:12:54.870 [C2] [off cid=-] agent ready · pid=21036 · save=C:/Users/Pakwan/Downloads/nisitsimo/MPTestRuns/run10\C2_save.json · name=Test-C2
+12:12:57.802 [C2] [off cid=-] > set GameSession.PlayerName DoorC2  =>  ok "DoorC2"
+12:12:58.117 [C2] [off cid=-] > call MainMenuController.MultiplayerGame  =>  null
+12:12:58.123 [C2] [off cid=-] > wait 8
+12:12:58.876 [C2] [off cid=-] hooked NetworkManager DontDestroyOnLoad
+12:13:06.328 [C2] [client cid=0] > call LobbyConnection.JoinAddress 127.0.0.1  =>  null
+12:13:06.329 [C2] [client cid=0] > wait 3
+12:13:06.722 [C2] [client cid=1] NET ClientConnected client=1
+12:13:06.725 [C2] [client cid=1] NET PeerConnected client=2
+12:13:09.342 [C2] [client cid=1] > lobby-ready  =>  ready toggle requested
+12:13:09.346 [C2] [client cid=1] > state  =>  state written
+12:13:40.867 [C2] [client cid=1] > mark CASE_REJOIN_LOBBY  =>  CASE_REJOIN_LOBBY
+12:13:40.903 [C2] [client cid=1] > call LobbyConnection.Leave false  =>  null
+12:13:40.904 [C2] [client cid=1] > wait 2
+12:13:41.130 [C2] [client cid=1] NET ClientDisconnected client=1 reason='[Disconnect Event][Client-1][TransportClientId-4294967296][TransportShutdown] NetworkConnectionManager was shutdown. The transport was shutdown.'
+12:13:41.155 [C2] [off cid=-] NET client stopped (wasHost=False) reason='[Disconnect Event][Client-1][TransportClientId-4294967296][TransportShutdown] NetworkConnectionManager was shutdown. The transport was shutdown.'
+12:13:42.960 [C2] [client cid=0] > call LobbyConnection.JoinAddress 127.0.0.1  =>  null
+12:13:42.960 [C2] [client cid=0] > wait 3
+12:13:43.102 [C2] [client cid=3] NET ClientConnected client=3
+12:13:45.969 [C2] [client cid=3] > lobby-ready  =>  ready toggle requested
+12:13:45.972 [C2] [client cid=3] > state  =>  state written
+12:14:04.641 [C2] [client cid=3] > wait 4
+12:14:08.694 [C2] [client cid=3] > set GameClock.gameMinutesPerRealSecond 0.01  =>  EXCEPTION TargetException: Non-static field requires a target
+12:14:08.699 [C2] [client cid=3] > state  =>  state written
+12:14:09.275 [C2] [client cid=3] UNITY Log: [DoorSync] bound count=108 catalog=15789267953489292206 ready=True utc=2026-10-04T05:14:09.2713404Z
+12:14:09.418 [C2] [client cid=3] UNITY Log: [Spawn] เกมใหม่: เกิดที่หอพัก (ช่อง 1) (-57.36, 0.98, 129.25)
+12:14:09.433 [C2] [client cid=3] UNITY Warning: The referenced script on this Behaviour (Game Object '<null>') is missing!
+12:14:09.435 [C2] [client cid=3] UNITY Warning: [ExamBank] ไม่พบ Resources/ExamBanks/ExamBankDatabase — ใช้คลังข้อสอบค่าเริ่มต้นจากโค้ด (กด Nisit ▸ Build Exam Minigame Banks เพื่อสร้าง asset ที่แก้ใน Inspector ได้)
+12:14:10.436 [C2] [client cid=3] UNITY Warning: The character with Unicode value \u25B8 was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:14:10.826 [C2] [client cid=3] UNITY Warning: The character with Unicode value \u25B8 was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:14:18.807 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:14:26.777 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:14:34.805 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:14:38.110 [C2] [client cid=3] > call TutorialController.Hide  =>  null
+12:14:38.145 [C2] [client cid=3] > call LevelSystem.ClosePicker  =>  null
+12:14:38.182 [C2] [client cid=3] > call DaySummaryUI.Close  =>  null
+12:14:38.207 [C2] [client cid=3] > call GameManager.StartGame  =>  null
+12:14:38.224 [C2] [client cid=3] > set Time.timeScale 1  =>  ok 1
+12:14:38.232 [C2] [client cid=3] > door-view  =>  front pair framed
+12:14:38.233 [C2] [client cid=3] > wait 1
+12:14:40.866 [C2] [client cid=3] > screenshot front_closed  =>  captured C:/Users/Pakwan/Downloads/nisitsimo/MPTestRuns/run10\C2_front_closed.png
+12:14:40.889 [C2] [client cid=3] > state  =>  state written
+12:14:44.202 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:14:52.223 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:14:55.198 [C2] [client cid=3] > mark CASE_COLLIDER_ALL_CLOSED  =>  CASE_COLLIDER_ALL_CLOSED
+12:14:55.216 [C2] [client cid=3] > door-probe Dorm_Building  =>  stable state collision probes started
+12:14:55.217 [C2] [client cid=3] > wait 56
+12:14:56.198 [C2] [client cid=3] DOOR probe id=0 key=Dorm_Building/Floor_1/Common/Laundry/Door expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:14:57.167 [C2] [client cid=3] DOOR probe id=1 key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Left expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:14:58.135 [C2] [client cid=3] DOOR probe id=2 key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Right expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:14:59.103 [C2] [client cid=3] DOOR probe id=3 key=Dorm_Building/Floor_1/Rooms/Room_101/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:00.069 [C2] [client cid=3] DOOR probe id=4 key=Dorm_Building/Floor_1/Rooms/Room_101/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:00.242 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:15:01.039 [C2] [client cid=3] DOOR probe id=5 key=Dorm_Building/Floor_1/Rooms/Room_102/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:02.008 [C2] [client cid=3] DOOR probe id=6 key=Dorm_Building/Floor_1/Rooms/Room_102/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:02.977 [C2] [client cid=3] DOOR probe id=7 key=Dorm_Building/Floor_1/Rooms/Room_103/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:03.945 [C2] [client cid=3] DOOR probe id=8 key=Dorm_Building/Floor_1/Rooms/Room_103/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:04.914 [C2] [client cid=3] DOOR probe id=9 key=Dorm_Building/Floor_1/Rooms/Room_104/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:05.884 [C2] [client cid=3] DOOR probe id=10 key=Dorm_Building/Floor_1/Rooms/Room_104/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:06.841 [C2] [client cid=3] DOOR probe id=11 key=Dorm_Building/Floor_1/Rooms/Room_105/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:07.810 [C2] [client cid=3] DOOR probe id=12 key=Dorm_Building/Floor_1/Rooms/Room_105/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:08.251 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:15:08.778 [C2] [client cid=3] DOOR probe id=13 key=Dorm_Building/Floor_1/Rooms/Room_106/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:09.749 [C2] [client cid=3] DOOR probe id=14 key=Dorm_Building/Floor_1/Rooms/Room_106/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:10.719 [C2] [client cid=3] DOOR probe id=15 key=Dorm_Building/Floor_1/Rooms/Room_107/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:11.687 [C2] [client cid=3] DOOR probe id=16 key=Dorm_Building/Floor_1/Rooms/Room_107/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:12.656 [C2] [client cid=3] DOOR probe id=17 key=Dorm_Building/Floor_1/Rooms/Room_108/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:13.624 [C2] [client cid=3] DOOR probe id=18 key=Dorm_Building/Floor_1/Rooms/Room_108/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:14.595 [C2] [client cid=3] DOOR probe id=19 key=Dorm_Building/Floor_2/Common/StudyRoom/Door expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:15.564 [C2] [client cid=3] DOOR probe id=20 key=Dorm_Building/Floor_2/Rooms/Room_201/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:16.257 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:15:16.518 [C2] [client cid=3] DOOR probe id=21 key=Dorm_Building/Floor_2/Rooms/Room_201/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:17.493 [C2] [client cid=3] DOOR probe id=22 key=Dorm_Building/Floor_2/Rooms/Room_202/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:18.464 [C2] [client cid=3] DOOR probe id=23 key=Dorm_Building/Floor_2/Rooms/Room_202/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:19.434 [C2] [client cid=3] DOOR probe id=24 key=Dorm_Building/Floor_2/Rooms/Room_203/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:20.401 [C2] [client cid=3] DOOR probe id=25 key=Dorm_Building/Floor_2/Rooms/Room_203/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:21.371 [C2] [client cid=3] DOOR probe id=26 key=Dorm_Building/Floor_2/Rooms/Room_204/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:22.341 [C2] [client cid=3] DOOR probe id=27 key=Dorm_Building/Floor_2/Rooms/Room_204/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:23.311 [C2] [client cid=3] DOOR probe id=28 key=Dorm_Building/Floor_2/Rooms/Room_205/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:24.279 [C2] [client cid=3] DOOR probe id=29 key=Dorm_Building/Floor_2/Rooms/Room_205/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:24.287 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:15:25.258 [C2] [client cid=3] DOOR probe id=30 key=Dorm_Building/Floor_2/Rooms/Room_206/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:26.227 [C2] [client cid=3] DOOR probe id=31 key=Dorm_Building/Floor_2/Rooms/Room_206/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:27.196 [C2] [client cid=3] DOOR probe id=32 key=Dorm_Building/Floor_2/Rooms/Room_207/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:28.164 [C2] [client cid=3] DOOR probe id=33 key=Dorm_Building/Floor_2/Rooms/Room_207/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:29.132 [C2] [client cid=3] DOOR probe id=34 key=Dorm_Building/Floor_2/Rooms/Room_208/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:30.101 [C2] [client cid=3] DOOR probe id=35 key=Dorm_Building/Floor_2/Rooms/Room_208/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:31.072 [C2] [client cid=3] DOOR probe id=36 key=Dorm_Building/Floor_3/Common/StudyRoom/Door expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:32.041 [C2] [client cid=3] DOOR probe id=37 key=Dorm_Building/Floor_3/Rooms/Room_301/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:32.313 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:15:33.009 [C2] [client cid=3] DOOR probe id=38 key=Dorm_Building/Floor_3/Rooms/Room_301/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:33.946 [C2] [client cid=3] DOOR probe id=39 key=Dorm_Building/Floor_3/Rooms/Room_302/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:34.916 [C2] [client cid=3] DOOR probe id=40 key=Dorm_Building/Floor_3/Rooms/Room_302/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:35.884 [C2] [client cid=3] DOOR probe id=41 key=Dorm_Building/Floor_3/Rooms/Room_303/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:36.853 [C2] [client cid=3] DOOR probe id=42 key=Dorm_Building/Floor_3/Rooms/Room_303/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:37.821 [C2] [client cid=3] DOOR probe id=43 key=Dorm_Building/Floor_3/Rooms/Room_304/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:38.790 [C2] [client cid=3] DOOR probe id=44 key=Dorm_Building/Floor_3/Rooms/Room_304/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:39.759 [C2] [client cid=3] DOOR probe id=45 key=Dorm_Building/Floor_3/Rooms/Room_305/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:40.333 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:15:40.728 [C2] [client cid=3] DOOR probe id=46 key=Dorm_Building/Floor_3/Rooms/Room_305/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:41.713 [C2] [client cid=3] DOOR probe id=47 key=Dorm_Building/Floor_3/Rooms/Room_306/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:42.673 [C2] [client cid=3] DOOR probe id=48 key=Dorm_Building/Floor_3/Rooms/Room_306/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:43.641 [C2] [client cid=3] DOOR probe id=49 key=Dorm_Building/Floor_3/Rooms/Room_307/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:44.610 [C2] [client cid=3] DOOR probe id=50 key=Dorm_Building/Floor_3/Rooms/Room_307/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:45.581 [C2] [client cid=3] DOOR probe id=51 key=Dorm_Building/Floor_3/Rooms/Room_308/Bathroom/Door_Bathroom expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:46.518 [C2] [client cid=3] DOOR probe id=52 key=Dorm_Building/Floor_3/Rooms/Room_308/Door_Entry expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:46.520 [C2] [client cid=3] DOOR probe complete building=Dorm_Building passed=53/53
+12:15:48.360 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:15:51.262 [C2] [client cid=3] > door-probe GE_Building  =>  stable state collision probes started
+12:15:51.263 [C2] [client cid=3] > wait 21
+12:15:52.237 [C2] [client cid=3] DOOR probe id=53 key=GE_Building/Floor_1/Classrooms/Room_GE101/Door_GE101 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:53.215 [C2] [client cid=3] DOOR probe id=54 key=GE_Building/Floor_1/Classrooms/Room_GE102/Door_GE102 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:54.183 [C2] [client cid=3] DOOR probe id=55 key=GE_Building/Floor_1/Classrooms/Room_GE103/Door_GE103 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:55.152 [C2] [client cid=3] DOOR probe id=56 key=GE_Building/Floor_1/Classrooms/Room_GE104/Door_GE104 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:56.122 [C2] [client cid=3] DOOR probe id=57 key=GE_Building/Floor_1/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:56.362 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:15:57.057 [C2] [client cid=3] DOOR probe id=58 key=GE_Building/Floor_1/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:58.025 [C2] [client cid=3] DOOR probe id=59 key=GE_Building/Floor_2/Classrooms/Room_GE201/Door_GE201 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:58.994 [C2] [client cid=3] DOOR probe id=60 key=GE_Building/Floor_2/Classrooms/Room_GE202/Door_GE202 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:15:59.963 [C2] [client cid=3] DOOR probe id=61 key=GE_Building/Floor_2/Classrooms/Room_GE203/Door_GE203 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:16:00.931 [C2] [client cid=3] DOOR probe id=62 key=GE_Building/Floor_2/Classrooms/Room_GE204/Door_GE204 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:16:01.900 [C2] [client cid=3] DOOR probe id=63 key=GE_Building/Floor_2/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:16:02.874 [C2] [client cid=3] DOOR probe id=64 key=GE_Building/Floor_2/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:16:03.843 [C2] [client cid=3] DOOR probe id=65 key=GE_Building/Floor_3/Classrooms/Room_GE301/Door_GE301 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:16:04.386 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:16:12.320 [C2] [client cid=3] > door-probe IT_Building  =>  stable state collision probes started
+12:16:12.321 [C2] [client cid=3] > wait 42
+12:16:54.351 [C2] [client cid=3] > state  =>  state written
+12:17:06.116 [C2] [client cid=3] > get DaySummaryUI.IsShowing  =>  False
+12:17:06.141 [C2] [client cid=3] > get EventManager.IsOpen  =>  False
+12:17:06.175 [C2] [client cid=3] > get LevelSystem.pickerOpen  =>  True
+12:17:06.207 [C2] [client cid=3] > call LevelSystem.ClosePicker  =>  null
+12:17:06.235 [C2] [client cid=3] > call DaySummaryUI.Close  =>  null
+12:17:06.259 [C2] [client cid=3] > call EventManager.Choose 0  =>  null
+12:17:06.280 [C2] [client cid=3] > set Time.timeScale 1  =>  ok 1
+12:17:06.294 [C2] [client cid=3] > state  =>  state written
+12:17:06.552 [C2] [client cid=3] DOOR probe id=66 key=GE_Building/Floor_3/Classrooms/Room_GE302/Door_GE302 expectedOpen=False measuredOpen=False side=-97.7930 detected=True grounded=True passed=True
+12:17:06.886 [C2] [client cid=3] DOOR probe id=71 key=IT_Building/Exterior/SideExit/Door_SideExit expectedOpen=False measuredOpen=False side=26.4357 detected=True grounded=True passed=False
+12:17:07.521 [C2] [client cid=3] DOOR probe id=67 key=GE_Building/Floor_3/Classrooms/Room_GE303/Door_GE303 expectedOpen=False measuredOpen=False side=-98.5780 detected=True grounded=True passed=True
+12:17:07.855 [C2] [client cid=3] DOOR probe id=72 key=IT_Building/Floor_1/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=False measuredOpen=False side=-98.5380 detected=True grounded=True passed=True
+12:17:08.491 [C2] [client cid=3] DOOR probe id=68 key=GE_Building/Floor_3/Classrooms/Room_GE304/Door_GE304 expectedOpen=False measuredOpen=False side=-98.5380 detected=True grounded=True passed=True
+12:17:08.824 [C2] [client cid=3] DOOR probe id=73 key=IT_Building/Floor_1/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=False measuredOpen=False side=-101.5780 detected=True grounded=True passed=True
+12:17:09.460 [C2] [client cid=3] DOOR probe id=69 key=GE_Building/Floor_3/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=False measuredOpen=False side=-99.1780 detected=True grounded=True passed=True
+12:17:09.794 [C2] [client cid=3] DOOR probe id=74 key=IT_Building/Floor_1/Rooms/Room_IT101/Door_IT101 expectedOpen=False measuredOpen=False side=-99.1380 detected=True grounded=True passed=True
+12:17:10.429 [C2] [client cid=3] DOOR probe id=70 key=GE_Building/Floor_3/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=False measuredOpen=False side=-99.1780 detected=True grounded=True passed=True
+12:17:10.430 [C2] [client cid=3] DOOR probe complete building=GE_Building passed=18/18
+12:17:10.763 [C2] [client cid=3] DOOR probe id=75 key=IT_Building/Floor_1/Rooms/Room_IT102/Door_IT102 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:11.733 [C2] [client cid=3] DOOR probe id=76 key=IT_Building/Floor_1/Rooms/Room_IT103/Door_IT103 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:12.703 [C2] [client cid=3] DOOR probe id=77 key=IT_Building/Floor_1/Rooms/Room_IT104/Door_IT104 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:13.672 [C2] [client cid=3] DOOR probe id=78 key=IT_Building/Floor_1/Rooms/Room_IT105/Door_IT105 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:14.642 [C2] [client cid=3] DOOR probe id=79 key=IT_Building/Floor_1/Rooms/Room_IT106/Door_IT106 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:15.610 [C2] [client cid=3] DOOR probe id=80 key=IT_Building/Floor_1/Rooms/Room_IT107/Door_IT107 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:16.039 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:17:16.583 [C2] [client cid=3] DOOR probe id=81 key=IT_Building/Floor_2/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:17.556 [C2] [client cid=3] DOOR probe id=82 key=IT_Building/Floor_2/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:18.524 [C2] [client cid=3] DOOR probe id=83 key=IT_Building/Floor_2/Rooms/Room_IT201/Door_IT201 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:19.492 [C2] [client cid=3] DOOR probe id=84 key=IT_Building/Floor_2/Rooms/Room_IT202/Door_IT202 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:20.461 [C2] [client cid=3] DOOR probe id=85 key=IT_Building/Floor_2/Rooms/Room_IT203/Door_IT203 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:21.431 [C2] [client cid=3] DOOR probe id=86 key=IT_Building/Floor_2/Rooms/Room_IT204/Door_IT204 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:22.401 [C2] [client cid=3] DOOR probe id=87 key=IT_Building/Floor_2/Rooms/Room_IT205/Door_IT205 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:23.338 [C2] [client cid=3] DOOR probe id=88 key=IT_Building/Floor_2/Rooms/Room_IT206/Door_IT206 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:24.062 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:17:24.307 [C2] [client cid=3] DOOR probe id=89 key=IT_Building/Floor_2/Rooms/Room_IT207/Door_IT207 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:25.279 [C2] [client cid=3] DOOR probe id=90 key=IT_Building/Floor_3/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:26.273 [C2] [client cid=3] DOOR probe id=91 key=IT_Building/Floor_3/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:27.242 [C2] [client cid=3] DOOR probe id=92 key=IT_Building/Floor_3/Rooms/Room_IT301/Door_IT301 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:28.210 [C2] [client cid=3] DOOR probe id=93 key=IT_Building/Floor_3/Rooms/Room_IT302/Door_IT302 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:29.179 [C2] [client cid=3] DOOR probe id=94 key=IT_Building/Floor_3/Rooms/Room_IT303/Door_IT303 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:30.149 [C2] [client cid=3] DOOR probe id=95 key=IT_Building/Floor_3/Rooms/Room_IT304/Door_IT304 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:31.116 [C2] [client cid=3] DOOR probe id=96 key=IT_Building/Floor_3/Rooms/Room_IT305/Door_IT305 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:32.087 [C2] [client cid=3] DOOR probe id=97 key=IT_Building/Floor_3/Rooms/Room_IT306/Door_IT306 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:33.057 [C2] [client cid=3] DOOR probe id=98 key=IT_Building/Floor_3/Rooms/Room_IT307/Door_IT307 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:34.027 [C2] [client cid=3] DOOR probe id=99 key=IT_Building/Floor_4/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:34.996 [C2] [client cid=3] DOOR probe id=100 key=IT_Building/Floor_4/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:35.965 [C2] [client cid=3] DOOR probe id=101 key=IT_Building/Floor_4/Rooms/Room_IT401/Door_IT401 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:36.621 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:17:36.934 [C2] [client cid=3] DOOR probe id=102 key=IT_Building/Floor_4/Rooms/Room_IT402/Door_IT402 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:37.904 [C2] [client cid=3] DOOR probe id=103 key=IT_Building/Floor_4/Rooms/Room_IT403/Door_IT403 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:38.874 [C2] [client cid=3] DOOR probe id=104 key=IT_Building/Floor_4/Rooms/Room_IT404/Door_IT404 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:39.843 [C2] [client cid=3] DOOR probe id=105 key=IT_Building/Floor_4/Rooms/Room_IT405/Door_IT405 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:40.813 [C2] [client cid=3] DOOR probe id=106 key=IT_Building/Floor_4/Rooms/Room_IT406/Door_IT406 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:41.782 [C2] [client cid=3] DOOR probe id=107 key=IT_Building/Floor_4/Rooms/Room_IT407/Door_IT407 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:17:41.783 [C2] [client cid=3] DOOR probe complete building=IT_Building passed=36/37
+12:17:44.816 [C2] [client cid=3] > set LevelSystem.enabled false  =>  ok False
+12:17:44.850 [C2] [client cid=3] > call LevelSystem.ClosePicker  =>  null
+12:17:44.877 [C2] [client cid=3] > set Time.timeScale 1  =>  ok 1
+12:17:45.838 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=2 high=0 ready=True utc=2026-10-04T05:17:45.8371033Z
+12:17:46.209 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Left open=True utc=2026-10-04T05:17:46.2078249Z
+12:17:49.135 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:17:57.157 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:18:05.174 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:18:12.543 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=6 high=0 ready=True utc=2026-10-04T05:18:12.5435379Z
+12:18:12.912 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Right open=True utc=2026-10-04T05:18:12.9127904Z
+12:18:23.875 [C2] [client cid=3] > call GameManager.ResumeGame  =>  null
+12:18:23.901 [C2] [client cid=3] > set Time.timeScale 1  =>  ok 1
+12:18:23.909 [C2] [client cid=3] > door-view  =>  front pair framed
+12:18:23.910 [C2] [client cid=3] > wait 1
+12:18:24.995 [C2] [client cid=3] > screenshot front_open  =>  captured C:/Users/Pakwan/Downloads/nisitsimo/MPTestRuns/run10\C2_front_open.png
+12:18:25.013 [C2] [client cid=3] > state  =>  state written
+12:18:56.730 [C2] [client cid=3] > door-approach 1  =>  Dorm_Building/Floor_1/Common/Lobby/Door_Main_Left at (-58.45, 0.27, 126.60)
+12:18:56.731 [C2] [client cid=3] > wait 1
+12:18:57.661 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=4 high=0 ready=True utc=2026-10-04T05:18:57.6604381Z
+12:18:57.777 [C2] [client cid=3] > state  =>  state written
+12:18:58.036 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Left open=False utc=2026-10-04T05:18:58.0359984Z
+12:18:59.672 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=0 ready=True utc=2026-10-04T05:18:59.6721347Z
+12:19:00.042 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Right open=False utc=2026-10-04T05:19:00.0413652Z
+12:19:05.056 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:19:13.074 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:19:14.950 [C2] [client cid=3] > mark CASE_SIMULTANEOUS  =>  CASE_SIMULTANEOUS
+12:19:14.955 [C2] [client cid=3] > door-at 1 1791091160458  =>  scheduled original Interact
+12:19:20.466 [C2] [client cid=3] UNITY Log: [DoorSync] request id=1 seq=1 utc=2026-10-04T05:19:20.4656971Z
+12:19:20.468 [C2] [client cid=3] DOOR scheduled id=1 original Interact Dorm_Building/Floor_1/Common/Lobby/Door_Main_Left utc=2026-10-04T05:19:20.4686903Z
+12:19:20.530 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=2 high=0 ready=True utc=2026-10-04T05:19:20.5297015Z
+12:19:20.899 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Left open=True utc=2026-10-04T05:19:20.8997816Z
+12:19:21.102 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:19:29.124 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:19:34.617 [C2] [client cid=3] > mark CASE_COLLIDER_CLOSED_REPEAT_VALID  =>  CASE_COLLIDER_CLOSED_REPEAT_VALID
+12:19:34.625 [C2] [client cid=3] > door-probe GE_Building  =>  stable state collision probes started
+12:19:34.625 [C2] [client cid=3] > wait 24
+12:19:35.488 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=0 ready=True utc=2026-10-04T05:19:35.4851282Z
+12:19:35.586 [C2] [client cid=3] DOOR probe id=53 key=GE_Building/Floor_1/Classrooms/Room_GE101/Door_GE101 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:35.855 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Left open=False utc=2026-10-04T05:19:35.8557449Z
+12:19:36.555 [C2] [client cid=3] DOOR probe id=54 key=GE_Building/Floor_1/Classrooms/Room_GE102/Door_GE102 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:37.146 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:19:37.524 [C2] [client cid=3] DOOR probe id=55 key=GE_Building/Floor_1/Classrooms/Room_GE103/Door_GE103 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:38.494 [C2] [client cid=3] DOOR probe id=56 key=GE_Building/Floor_1/Classrooms/Room_GE104/Door_GE104 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:39.430 [C2] [client cid=3] DOOR probe id=57 key=GE_Building/Floor_1/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:40.399 [C2] [client cid=3] DOOR probe id=58 key=GE_Building/Floor_1/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:41.367 [C2] [client cid=3] DOOR probe id=59 key=GE_Building/Floor_2/Classrooms/Room_GE201/Door_GE201 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:42.336 [C2] [client cid=3] DOOR probe id=60 key=GE_Building/Floor_2/Classrooms/Room_GE202/Door_GE202 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:43.309 [C2] [client cid=3] DOOR probe id=61 key=GE_Building/Floor_2/Classrooms/Room_GE203/Door_GE203 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:44.276 [C2] [client cid=3] DOOR probe id=62 key=GE_Building/Floor_2/Classrooms/Room_GE204/Door_GE204 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:45.170 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:19:45.246 [C2] [client cid=3] DOOR probe id=63 key=GE_Building/Floor_2/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:46.215 [C2] [client cid=3] DOOR probe id=64 key=GE_Building/Floor_2/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:47.184 [C2] [client cid=3] DOOR probe id=65 key=GE_Building/Floor_3/Classrooms/Room_GE301/Door_GE301 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:48.153 [C2] [client cid=3] DOOR probe id=66 key=GE_Building/Floor_3/Classrooms/Room_GE302/Door_GE302 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:49.123 [C2] [client cid=3] DOOR probe id=67 key=GE_Building/Floor_3/Classrooms/Room_GE303/Door_GE303 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:50.094 [C2] [client cid=3] DOOR probe id=68 key=GE_Building/Floor_3/Classrooms/Room_GE304/Door_GE304 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:51.039 [C2] [client cid=3] DOOR probe id=69 key=GE_Building/Floor_3/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:51.973 [C2] [client cid=3] DOOR probe id=70 key=GE_Building/Floor_3/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:19:51.976 [C2] [client cid=3] DOOR probe complete building=GE_Building passed=18/18
+12:19:54.718 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:19:58.664 [C2] [client cid=3] > door-probe IT_Building  =>  stable state collision probes started
+12:19:58.665 [C2] [client cid=3] > wait 44
+12:19:59.628 [C2] [client cid=3] DOOR probe id=71 key=IT_Building/Exterior/SideExit/Door_SideExit expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:00.596 [C2] [client cid=3] DOOR probe id=72 key=IT_Building/Floor_1/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:01.565 [C2] [client cid=3] DOOR probe id=73 key=IT_Building/Floor_1/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:02.504 [C2] [client cid=3] DOOR probe id=74 key=IT_Building/Floor_1/Rooms/Room_IT101/Door_IT101 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:02.748 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:20:03.474 [C2] [client cid=3] DOOR probe id=75 key=IT_Building/Floor_1/Rooms/Room_IT102/Door_IT102 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:04.444 [C2] [client cid=3] DOOR probe id=76 key=IT_Building/Floor_1/Rooms/Room_IT103/Door_IT103 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:05.418 [C2] [client cid=3] DOOR probe id=77 key=IT_Building/Floor_1/Rooms/Room_IT104/Door_IT104 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:06.392 [C2] [client cid=3] DOOR probe id=78 key=IT_Building/Floor_1/Rooms/Room_IT105/Door_IT105 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:07.362 [C2] [client cid=3] DOOR probe id=79 key=IT_Building/Floor_1/Rooms/Room_IT106/Door_IT106 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:07.796 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=1 high=0 ready=True utc=2026-10-04T05:20:07.7954757Z
+12:20:08.165 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Laundry/Door open=True utc=2026-10-04T05:20:08.1658782Z
+12:20:08.330 [C2] [client cid=3] DOOR probe id=80 key=IT_Building/Floor_1/Rooms/Room_IT107/Door_IT107 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:08.833 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=3 high=0 ready=True utc=2026-10-04T05:20:08.8332210Z
+12:20:09.202 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Left open=True utc=2026-10-04T05:20:09.2024451Z
+12:20:09.300 [C2] [client cid=3] DOOR probe id=81 key=IT_Building/Floor_2/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:09.904 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=7 high=0 ready=True utc=2026-10-04T05:20:09.9044850Z
+12:20:10.274 [C2] [client cid=3] DOOR probe id=82 key=IT_Building/Floor_2/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:10.277 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Right open=True utc=2026-10-04T05:20:10.2777787Z
+12:20:10.784 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:20:10.935 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=15 high=0 ready=True utc=2026-10-04T05:20:10.9347991Z
+12:20:11.271 [C2] [client cid=3] DOOR probe id=83 key=IT_Building/Floor_2/Rooms/Room_IT201/Door_IT201 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:11.314 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_101/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:11.3135976Z
+12:20:11.948 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=31 high=0 ready=True utc=2026-10-04T05:20:11.9487036Z
+12:20:12.249 [C2] [client cid=3] DOOR probe id=84 key=IT_Building/Floor_2/Rooms/Room_IT202/Door_IT202 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:12.320 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_101/Door_Entry open=True utc=2026-10-04T05:20:12.3190240Z
+12:20:12.984 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=63 high=0 ready=True utc=2026-10-04T05:20:12.9842076Z
+12:20:13.218 [C2] [client cid=3] DOOR probe id=85 key=IT_Building/Floor_2/Rooms/Room_IT203/Door_IT203 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:13.355 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_102/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:13.3541094Z
+12:20:14.021 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=127 high=0 ready=True utc=2026-10-04T05:20:14.0206141Z
+12:20:14.191 [C2] [client cid=3] DOOR probe id=86 key=IT_Building/Floor_2/Rooms/Room_IT204/Door_IT204 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:14.391 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_102/Door_Entry open=True utc=2026-10-04T05:20:14.3904206Z
+12:20:15.097 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=255 high=0 ready=True utc=2026-10-04T05:20:15.0961533Z
+12:20:15.163 [C2] [client cid=3] DOOR probe id=87 key=IT_Building/Floor_2/Rooms/Room_IT205/Door_IT205 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:15.466 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_103/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:15.4664132Z
+12:20:16.102 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=511 high=0 ready=True utc=2026-10-04T05:20:16.1028024Z
+12:20:16.107 [C2] [client cid=3] DOOR probe id=88 key=IT_Building/Floor_2/Rooms/Room_IT206/Door_IT206 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:16.450 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_103/Door_Entry open=True utc=2026-10-04T05:20:16.4496897Z
+12:20:17.079 [C2] [client cid=3] DOOR probe id=89 key=IT_Building/Floor_2/Rooms/Room_IT207/Door_IT207 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:17.147 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=1023 high=0 ready=True utc=2026-10-04T05:20:17.1463856Z
+12:20:17.491 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_104/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:17.4912488Z
+12:20:18.058 [C2] [client cid=3] DOOR probe id=90 key=IT_Building/Floor_3/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:18.191 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=2047 high=0 ready=True utc=2026-10-04T05:20:18.1903904Z
+12:20:18.561 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_104/Door_Entry open=True utc=2026-10-04T05:20:18.5610702Z
+12:20:18.766 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:20:19.030 [C2] [client cid=3] DOOR probe id=91 key=IT_Building/Floor_3/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:19.231 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=4095 high=0 ready=True utc=2026-10-04T05:20:19.2300543Z
+12:20:19.602 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_105/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:19.6017278Z
+12:20:20.006 [C2] [client cid=3] DOOR probe id=92 key=IT_Building/Floor_3/Rooms/Room_IT301/Door_IT301 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:20.273 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=8191 high=0 ready=True utc=2026-10-04T05:20:20.2725140Z
+12:20:20.643 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_105/Door_Entry open=True utc=2026-10-04T05:20:20.6433002Z
+12:20:20.976 [C2] [client cid=3] DOOR probe id=93 key=IT_Building/Floor_3/Rooms/Room_IT302/Door_IT302 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:21.344 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=16383 high=0 ready=True utc=2026-10-04T05:20:21.3433073Z
+12:20:21.714 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_106/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:21.7144330Z
+12:20:21.945 [C2] [client cid=3] DOOR probe id=94 key=IT_Building/Floor_3/Rooms/Room_IT303/Door_IT303 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:22.418 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=32767 high=0 ready=True utc=2026-10-04T05:20:22.4180910Z
+12:20:22.789 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_106/Door_Entry open=True utc=2026-10-04T05:20:22.7890050Z
+12:20:22.921 [C2] [client cid=3] DOOR probe id=95 key=IT_Building/Floor_3/Rooms/Room_IT304/Door_IT304 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:23.422 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=65535 high=0 ready=True utc=2026-10-04T05:20:23.4214346Z
+12:20:23.792 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_107/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:23.7914764Z
+12:20:23.889 [C2] [client cid=3] DOOR probe id=96 key=IT_Building/Floor_3/Rooms/Room_IT305/Door_IT305 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:24.457 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=131071 high=0 ready=True utc=2026-10-04T05:20:24.4566685Z
+12:20:24.828 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_107/Door_Entry open=True utc=2026-10-04T05:20:24.8285255Z
+12:20:24.857 [C2] [client cid=3] DOOR probe id=97 key=IT_Building/Floor_3/Rooms/Room_IT306/Door_IT306 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:25.533 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=262143 high=0 ready=True utc=2026-10-04T05:20:25.5323976Z
+12:20:25.832 [C2] [client cid=3] DOOR probe id=98 key=IT_Building/Floor_3/Rooms/Room_IT307/Door_IT307 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:25.903 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_108/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:25.9030319Z
+12:20:26.607 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=524287 high=0 ready=True utc=2026-10-04T05:20:26.6062982Z
+12:20:26.779 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:20:26.806 [C2] [client cid=3] DOOR probe id=99 key=IT_Building/Floor_4/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:26.975 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_108/Door_Entry open=True utc=2026-10-04T05:20:26.9751694Z
+12:20:27.642 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=1048575 high=0 ready=True utc=2026-10-04T05:20:27.6411643Z
+12:20:27.775 [C2] [client cid=3] DOOR probe id=100 key=IT_Building/Floor_4/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:28.012 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Common/StudyRoom/Door open=True utc=2026-10-04T05:20:28.0113041Z
+12:20:28.710 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=2097151 high=0 ready=True utc=2026-10-04T05:20:28.7107225Z
+12:20:28.744 [C2] [client cid=3] DOOR probe id=101 key=IT_Building/Floor_4/Rooms/Room_IT401/Door_IT401 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:29.062 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_201/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:29.0612754Z
+12:20:29.694 [C2] [client cid=3] DOOR probe id=102 key=IT_Building/Floor_4/Rooms/Room_IT402/Door_IT402 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:29.761 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=4194303 high=0 ready=True utc=2026-10-04T05:20:29.7605496Z
+12:20:30.130 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_201/Door_Entry open=True utc=2026-10-04T05:20:30.1302612Z
+12:20:30.661 [C2] [client cid=3] DOOR probe id=103 key=IT_Building/Floor_4/Rooms/Room_IT403/Door_IT403 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:30.829 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=8388607 high=0 ready=True utc=2026-10-04T05:20:30.8295885Z
+12:20:31.200 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_202/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:31.1990485Z
+12:20:31.632 [C2] [client cid=3] DOOR probe id=104 key=IT_Building/Floor_4/Rooms/Room_IT404/Door_IT404 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:31.865 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=16777215 high=0 ready=True utc=2026-10-04T05:20:31.8654537Z
+12:20:32.234 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_202/Door_Entry open=True utc=2026-10-04T05:20:32.2347611Z
+12:20:32.599 [C2] [client cid=3] DOOR probe id=105 key=IT_Building/Floor_4/Rooms/Room_IT405/Door_IT405 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:32.969 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=33554431 high=0 ready=True utc=2026-10-04T05:20:32.9681422Z
+12:20:33.338 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_203/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:33.3383832Z
+12:20:33.569 [C2] [client cid=3] DOOR probe id=106 key=IT_Building/Floor_4/Rooms/Room_IT406/Door_IT406 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:33.972 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=67108863 high=0 ready=True utc=2026-10-04T05:20:33.9715532Z
+12:20:34.341 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_203/Door_Entry open=True utc=2026-10-04T05:20:34.3410593Z
+12:20:34.544 [C2] [client cid=3] DOOR probe id=107 key=IT_Building/Floor_4/Rooms/Room_IT407/Door_IT407 expectedOpen=False measuredOpen=False side=-0.4269 detected=True grounded=True passed=True
+12:20:34.544 [C2] [client cid=3] DOOR probe complete building=IT_Building passed=37/37
+12:20:34.783 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:20:35.049 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=134217727 high=0 ready=True utc=2026-10-04T05:20:35.0499208Z
+12:20:35.438 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_204/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:35.4379728Z
+12:20:36.085 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=268435455 high=0 ready=True utc=2026-10-04T05:20:36.0842235Z
+12:20:36.458 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_204/Door_Entry open=True utc=2026-10-04T05:20:36.4571931Z
+12:20:37.153 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=536870911 high=0 ready=True utc=2026-10-04T05:20:37.1526227Z
+12:20:37.529 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_205/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:37.5289660Z
+12:20:38.158 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=1073741823 high=0 ready=True utc=2026-10-04T05:20:38.1574257Z
+12:20:38.530 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_205/Door_Entry open=True utc=2026-10-04T05:20:38.5300870Z
+12:20:39.161 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=2147483647 high=0 ready=True utc=2026-10-04T05:20:39.1602186Z
+12:20:39.532 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_206/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:39.5321009Z
+12:20:40.228 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=4294967295 high=0 ready=True utc=2026-10-04T05:20:40.2278539Z
+12:20:40.600 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_206/Door_Entry open=True utc=2026-10-04T05:20:40.6006942Z
+12:20:41.331 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=8589934591 high=0 ready=True utc=2026-10-04T05:20:41.3317363Z
+12:20:41.704 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_207/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:41.7037413Z
+12:20:42.402 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=17179869183 high=0 ready=True utc=2026-10-04T05:20:42.4010698Z
+12:20:42.690 [C2] [client cid=3] > state  =>  state written
+12:20:42.752 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_207/Door_Entry open=True utc=2026-10-04T05:20:42.7526383Z
+12:20:42.789 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:20:43.450 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=34359738367 high=0 ready=True utc=2026-10-04T05:20:43.4491467Z
+12:20:43.820 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_208/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:43.8205773Z
+12:20:44.518 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=68719476735 high=0 ready=True utc=2026-10-04T05:20:44.5180978Z
+12:20:44.889 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_208/Door_Entry open=True utc=2026-10-04T05:20:44.8886510Z
+12:20:45.553 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=137438953471 high=0 ready=True utc=2026-10-04T05:20:45.5520545Z
+12:20:45.922 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Common/StudyRoom/Door open=True utc=2026-10-04T05:20:45.9229772Z
+12:20:46.587 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=274877906943 high=0 ready=True utc=2026-10-04T05:20:46.5873427Z
+12:20:46.976 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_301/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:46.9761675Z
+12:20:47.657 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=549755813887 high=0 ready=True utc=2026-10-04T05:20:47.6568337Z
+12:20:48.033 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_301/Door_Entry open=True utc=2026-10-04T05:20:48.0337305Z
+12:20:48.694 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=1099511627775 high=0 ready=True utc=2026-10-04T05:20:48.6946482Z
+12:20:49.066 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_302/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:49.0666303Z
+12:20:49.762 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=2199023255551 high=0 ready=True utc=2026-10-04T05:20:49.7617740Z
+12:20:50.134 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_302/Door_Entry open=True utc=2026-10-04T05:20:50.1330902Z
+12:20:50.805 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:20:50.831 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=4398046511103 high=0 ready=True utc=2026-10-04T05:20:50.8304671Z
+12:20:51.202 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_303/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:51.2027471Z
+12:20:51.867 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=8796093022207 high=0 ready=True utc=2026-10-04T05:20:51.8667102Z
+12:20:52.240 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_303/Door_Entry open=True utc=2026-10-04T05:20:52.2406182Z
+12:20:52.936 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=17592186044415 high=0 ready=True utc=2026-10-04T05:20:52.9354243Z
+12:20:53.307 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_304/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:53.3072342Z
+12:20:53.980 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=35184372088831 high=0 ready=True utc=2026-10-04T05:20:53.9797363Z
+12:20:54.361 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_304/Door_Entry open=True utc=2026-10-04T05:20:54.3598446Z
+12:20:55.018 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=70368744177663 high=0 ready=True utc=2026-10-04T05:20:55.0184330Z
+12:20:55.389 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_305/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:55.3890777Z
+12:20:56.121 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=140737488355327 high=0 ready=True utc=2026-10-04T05:20:56.1210513Z
+12:20:56.511 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_305/Door_Entry open=True utc=2026-10-04T05:20:56.5102382Z
+12:20:57.156 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=281474976710655 high=0 ready=True utc=2026-10-04T05:20:57.1561218Z
+12:20:57.529 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_306/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:57.5287229Z
+12:20:58.225 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=562949953421311 high=0 ready=True utc=2026-10-04T05:20:58.2258063Z
+12:20:58.600 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_306/Door_Entry open=True utc=2026-10-04T05:20:58.6008105Z
+12:20:58.834 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:20:59.294 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=1125899906842623 high=0 ready=True utc=2026-10-04T05:20:59.2938885Z
+12:20:59.666 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_307/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:20:59.6662143Z
+12:21:00.329 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=2251799813685247 high=0 ready=True utc=2026-10-04T05:21:00.3294176Z
+12:21:00.700 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_307/Door_Entry open=True utc=2026-10-04T05:21:00.6999508Z
+12:21:01.364 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=4503599627370495 high=0 ready=True utc=2026-10-04T05:21:01.3645272Z
+12:21:01.735 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_308/Bathroom/Door_Bathroom open=True utc=2026-10-04T05:21:01.7353669Z
+12:21:02.432 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=9007199254740991 high=0 ready=True utc=2026-10-04T05:21:02.4324670Z
+12:21:02.807 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_308/Door_Entry open=True utc=2026-10-04T05:21:02.8074933Z
+12:21:06.853 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:21:07.815 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18014398509481983 high=0 ready=True utc=2026-10-04T05:21:07.8156146Z
+12:21:08.188 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_1/Classrooms/Room_GE101/Door_GE101 open=True utc=2026-10-04T05:21:08.1883670Z
+12:21:08.851 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=36028797018963967 high=0 ready=True utc=2026-10-04T05:21:08.8508381Z
+12:21:09.224 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_1/Classrooms/Room_GE102/Door_GE102 open=True utc=2026-10-04T05:21:09.2242648Z
+12:21:09.887 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=72057594037927935 high=0 ready=True utc=2026-10-04T05:21:09.8867190Z
+12:21:10.259 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_1/Classrooms/Room_GE103/Door_GE103 open=True utc=2026-10-04T05:21:10.2598475Z
+12:21:10.623 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=72057594037927935 high=128 ready=True utc=2026-10-04T05:21:10.6234866Z
+12:21:10.957 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=144115188075855871 high=128 ready=True utc=2026-10-04T05:21:10.9577748Z
+12:21:10.995 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Exterior/SideExit/Door_SideExit open=True utc=2026-10-04T05:21:10.9957803Z
+12:21:11.331 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_1/Classrooms/Room_GE104/Door_GE104 open=True utc=2026-10-04T05:21:11.3319092Z
+12:21:11.995 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=288230376151711743 high=128 ready=True utc=2026-10-04T05:21:11.9943658Z
+12:21:12.368 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_1/Restrooms/Restroom_Female/Door_Restroom_Female open=True utc=2026-10-04T05:21:12.3684619Z
+12:21:13.032 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=576460752303423487 high=128 ready=True utc=2026-10-04T05:21:13.0310914Z
+12:21:13.065 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=576460752303423487 high=0 ready=True utc=2026-10-04T05:21:13.0643546Z
+12:21:13.404 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_1/Restrooms/Restroom_Male/Door_Restroom_Male open=True utc=2026-10-04T05:21:13.4033864Z
+12:21:13.437 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Exterior/SideExit/Door_SideExit open=False utc=2026-10-04T05:21:13.4372631Z
+12:21:14.067 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=1152921504606846975 high=0 ready=True utc=2026-10-04T05:21:14.0672635Z
+12:21:14.439 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_2/Classrooms/Room_GE201/Door_GE201 open=True utc=2026-10-04T05:21:14.4399182Z
+12:21:15.137 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=2305843009213693951 high=0 ready=True utc=2026-10-04T05:21:15.1365064Z
+12:21:15.508 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_2/Classrooms/Room_GE202/Door_GE202 open=True utc=2026-10-04T05:21:15.5086499Z
+12:21:16.204 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=4611686018427387903 high=0 ready=True utc=2026-10-04T05:21:16.2039747Z
+12:21:16.577 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_2/Classrooms/Room_GE203/Door_GE203 open=True utc=2026-10-04T05:21:16.5768245Z
+12:21:17.240 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=9223372036854775807 high=0 ready=True utc=2026-10-04T05:21:17.2390970Z
+12:21:17.612 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_2/Classrooms/Room_GE204/Door_GE204 open=True utc=2026-10-04T05:21:17.6128355Z
+12:21:18.309 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=0 ready=True utc=2026-10-04T05:21:18.3082196Z
+12:21:18.676 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=128 ready=True utc=2026-10-04T05:21:18.6764363Z
+12:21:18.687 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_2/Restrooms/Restroom_Female/Door_Restroom_Female open=True utc=2026-10-04T05:21:18.6864389Z
+12:21:19.064 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Exterior/SideExit/Door_SideExit open=True utc=2026-10-04T05:21:19.0637885Z
+12:21:19.382 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=129 ready=True utc=2026-10-04T05:21:19.3810648Z
+12:21:19.753 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_2/Restrooms/Restroom_Male/Door_Restroom_Male open=True utc=2026-10-04T05:21:19.7530169Z
+12:21:20.449 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=131 ready=True utc=2026-10-04T05:21:20.4488616Z
+12:21:20.821 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_3/Classrooms/Room_GE301/Door_GE301 open=True utc=2026-10-04T05:21:20.8212904Z
+12:21:21.117 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=3 ready=True utc=2026-10-04T05:21:21.1160650Z
+12:21:21.490 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Exterior/SideExit/Door_SideExit open=False utc=2026-10-04T05:21:21.4894308Z
+12:21:21.517 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=7 ready=True utc=2026-10-04T05:21:21.5178994Z
+12:21:21.890 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_3/Classrooms/Room_GE302/Door_GE302 open=True utc=2026-10-04T05:21:21.8903866Z
+12:21:22.554 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=15 ready=True utc=2026-10-04T05:21:22.5531183Z
+12:21:22.925 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_3/Classrooms/Room_GE303/Door_GE303 open=True utc=2026-10-04T05:21:22.9242688Z
+12:21:23.589 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=31 ready=True utc=2026-10-04T05:21:23.5886002Z
+12:21:23.964 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_3/Classrooms/Room_GE304/Door_GE304 open=True utc=2026-10-04T05:21:23.9636671Z
+12:21:24.503 [C2] [client cid=3] > mark CASE_FORGED_DISTANT_RPC  =>  CASE_FORGED_DISTANT_RPC
+12:21:24.505 [C2] [client cid=3] > door-raw 2 99999  =>  real door RPC sent
+12:21:24.506 [C2] [client cid=3] > wait 1
+12:21:24.626 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=63 ready=True utc=2026-10-04T05:21:24.6258551Z
+12:21:24.998 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_3/Restrooms/Restroom_Female/Door_Restroom_Female open=True utc=2026-10-04T05:21:24.9981711Z
+12:21:25.547 [C2] [client cid=3] > state  =>  state written
+12:21:25.703 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=127 ready=True utc=2026-10-04T05:21:25.7026510Z
+12:21:26.088 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_3/Restrooms/Restroom_Male/Door_Restroom_Male open=True utc=2026-10-04T05:21:26.0885226Z
+12:21:31.850 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=255 ready=True utc=2026-10-04T05:21:31.8507799Z
+12:21:32.221 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Exterior/SideExit/Door_SideExit open=True utc=2026-10-04T05:21:32.2217172Z
+12:21:32.887 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=511 ready=True utc=2026-10-04T05:21:32.8860260Z
+12:21:33.261 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Restrooms/Restroom_Female/Door_Restroom_Female open=True utc=2026-10-04T05:21:33.2618318Z
+12:21:33.921 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=1023 ready=True utc=2026-10-04T05:21:33.9212596Z
+12:21:34.296 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Restrooms/Restroom_Male/Door_Restroom_Male open=True utc=2026-10-04T05:21:34.2961793Z
+12:21:34.994 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=2047 ready=True utc=2026-10-04T05:21:34.9932292Z
+12:21:35.369 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Rooms/Room_IT101/Door_IT101 open=True utc=2026-10-04T05:21:35.3684139Z
+12:21:36.063 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=4095 ready=True utc=2026-10-04T05:21:36.0638300Z
+12:21:36.441 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Rooms/Room_IT102/Door_IT102 open=True utc=2026-10-04T05:21:36.4407462Z
+12:21:37.105 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=8191 ready=True utc=2026-10-04T05:21:37.1059378Z
+12:21:37.480 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Rooms/Room_IT103/Door_IT103 open=True utc=2026-10-04T05:21:37.4794898Z
+12:21:37.944 [C2] [client cid=3] > mark CASE_SIMULTANEOUS_RETRY  =>  CASE_SIMULTANEOUS_RETRY
+12:21:37.945 [C2] [client cid=3] > door-approach 1  =>  Dorm_Building/Floor_1/Common/Lobby/Door_Main_Left at (-58.45, 0.27, 126.60)
+12:21:37.946 [C2] [client cid=3] > wait 1
+12:21:38.175 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=16383 ready=True utc=2026-10-04T05:21:38.1751731Z
+12:21:38.547 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Rooms/Room_IT104/Door_IT104 open=True utc=2026-10-04T05:21:38.5475237Z
+12:21:39.277 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=32767 ready=True utc=2026-10-04T05:21:39.2764662Z
+12:21:39.649 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Rooms/Room_IT105/Door_IT105 open=True utc=2026-10-04T05:21:39.6496851Z
+12:21:40.313 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=65535 ready=True utc=2026-10-04T05:21:40.3126953Z
+12:21:40.686 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Rooms/Room_IT106/Door_IT106 open=True utc=2026-10-04T05:21:40.6862432Z
+12:21:41.346 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=131071 ready=True utc=2026-10-04T05:21:41.3469640Z
+12:21:41.719 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Rooms/Room_IT107/Door_IT107 open=True utc=2026-10-04T05:21:41.7194551Z
+12:21:42.384 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=262143 ready=True utc=2026-10-04T05:21:42.3836263Z
+12:21:42.757 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Restrooms/Restroom_Female/Door_Restroom_Female open=True utc=2026-10-04T05:21:42.7577460Z
+12:21:43.455 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=524287 ready=True utc=2026-10-04T05:21:43.4541525Z
+12:21:43.826 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Restrooms/Restroom_Male/Door_Restroom_Male open=True utc=2026-10-04T05:21:43.8267716Z
+12:21:44.524 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=1048575 ready=True utc=2026-10-04T05:21:44.5245181Z
+12:21:44.896 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Rooms/Room_IT201/Door_IT201 open=True utc=2026-10-04T05:21:44.8964086Z
+12:21:45.560 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=2097151 ready=True utc=2026-10-04T05:21:45.5605000Z
+12:21:45.932 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Rooms/Room_IT202/Door_IT202 open=True utc=2026-10-04T05:21:45.9314208Z
+12:21:46.168 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:21:46.630 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=4194303 ready=True utc=2026-10-04T05:21:46.6293855Z
+12:21:47.003 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Rooms/Room_IT203/Door_IT203 open=True utc=2026-10-04T05:21:47.0036492Z
+12:21:47.668 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=8388607 ready=True utc=2026-10-04T05:21:47.6680989Z
+12:21:48.040 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Rooms/Room_IT204/Door_IT204 open=True utc=2026-10-04T05:21:48.0400069Z
+12:21:48.709 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=16777215 ready=True utc=2026-10-04T05:21:48.7092526Z
+12:21:49.082 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Rooms/Room_IT205/Door_IT205 open=True utc=2026-10-04T05:21:49.0825802Z
+12:21:49.778 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=33554431 ready=True utc=2026-10-04T05:21:49.7786128Z
+12:21:50.169 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Rooms/Room_IT206/Door_IT206 open=True utc=2026-10-04T05:21:50.1694562Z
+12:21:50.812 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=67108863 ready=True utc=2026-10-04T05:21:50.8129473Z
+12:21:51.185 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Rooms/Room_IT207/Door_IT207 open=True utc=2026-10-04T05:21:51.1841938Z
+12:21:51.850 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=134217727 ready=True utc=2026-10-04T05:21:51.8495781Z
+12:21:52.222 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Restrooms/Restroom_Female/Door_Restroom_Female open=True utc=2026-10-04T05:21:52.2228392Z
+12:21:52.887 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=268435455 ready=True utc=2026-10-04T05:21:52.8864717Z
+12:21:53.260 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Restrooms/Restroom_Male/Door_Restroom_Male open=True utc=2026-10-04T05:21:53.2598499Z
+12:21:53.956 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=536870911 ready=True utc=2026-10-04T05:21:53.9559800Z
+12:21:54.196 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:21:54.330 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Rooms/Room_IT301/Door_IT301 open=True utc=2026-10-04T05:21:54.3294398Z
+12:21:55.025 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=1073741823 ready=True utc=2026-10-04T05:21:55.0246801Z
+12:21:55.396 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Rooms/Room_IT302/Door_IT302 open=True utc=2026-10-04T05:21:55.3965738Z
+12:21:56.094 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=2147483647 ready=True utc=2026-10-04T05:21:56.0931650Z
+12:21:56.467 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Rooms/Room_IT303/Door_IT303 open=True utc=2026-10-04T05:21:56.4677131Z
+12:21:57.131 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=4294967295 ready=True utc=2026-10-04T05:21:57.1307488Z
+12:21:57.503 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Rooms/Room_IT304/Door_IT304 open=True utc=2026-10-04T05:21:57.5036416Z
+12:21:58.200 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=8589934591 ready=True utc=2026-10-04T05:21:58.1994877Z
+12:21:58.573 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Rooms/Room_IT305/Door_IT305 open=True utc=2026-10-04T05:21:58.5727724Z
+12:21:59.236 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=17179869183 ready=True utc=2026-10-04T05:21:59.2352693Z
+12:21:59.607 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Rooms/Room_IT306/Door_IT306 open=True utc=2026-10-04T05:21:59.6074284Z
+12:22:00.338 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=34359738367 ready=True utc=2026-10-04T05:22:00.3388778Z
+12:22:00.710 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Rooms/Room_IT307/Door_IT307 open=True utc=2026-10-04T05:22:00.7105542Z
+12:22:01.346 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=68719476735 ready=True utc=2026-10-04T05:22:01.3454528Z
+12:22:01.717 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Restrooms/Restroom_Female/Door_Restroom_Female open=True utc=2026-10-04T05:22:01.7174131Z
+12:22:02.223 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:22:02.381 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=137438953471 ready=True utc=2026-10-04T05:22:02.3808829Z
+12:22:02.756 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Restrooms/Restroom_Male/Door_Restroom_Male open=True utc=2026-10-04T05:22:02.7566430Z
+12:22:03.416 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=274877906943 ready=True utc=2026-10-04T05:22:03.4169454Z
+12:22:03.789 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Rooms/Room_IT401/Door_IT401 open=True utc=2026-10-04T05:22:03.7891281Z
+12:22:04.486 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=549755813887 ready=True utc=2026-10-04T05:22:04.4867876Z
+12:22:04.858 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Rooms/Room_IT402/Door_IT402 open=True utc=2026-10-04T05:22:04.8585385Z
+12:22:05.555 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=1099511627775 ready=True utc=2026-10-04T05:22:05.5556239Z
+12:22:05.925 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Rooms/Room_IT403/Door_IT403 open=True utc=2026-10-04T05:22:05.9256473Z
+12:22:06.591 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=2199023255551 ready=True utc=2026-10-04T05:22:06.5903117Z
+12:22:06.960 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Rooms/Room_IT404/Door_IT404 open=True utc=2026-10-04T05:22:06.9596112Z
+12:22:07.625 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=4398046511103 ready=True utc=2026-10-04T05:22:07.6256194Z
+12:22:07.996 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Rooms/Room_IT405/Door_IT405 open=True utc=2026-10-04T05:22:07.9957309Z
+12:22:08.695 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=8796093022207 ready=True utc=2026-10-04T05:22:08.6953532Z
+12:22:09.065 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Rooms/Room_IT406/Door_IT406 open=True utc=2026-10-04T05:22:09.0655053Z
+12:22:09.765 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=17592186044415 ready=True utc=2026-10-04T05:22:09.7645766Z
+12:22:10.135 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Rooms/Room_IT407/Door_IT407 open=True utc=2026-10-04T05:22:10.1349326Z
+12:22:10.240 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:22:18.275 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:22:26.295 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:22:28.599 [C2] [client cid=3] > door-at 1 1791091353367  =>  scheduled original Interact
+12:22:33.399 [C2] [client cid=3] UNITY Log: [DoorSync] request id=1 seq=2 utc=2026-10-04T05:22:33.3998647Z
+12:22:33.401 [C2] [client cid=3] DOOR scheduled id=1 original Interact Dorm_Building/Floor_1/Common/Lobby/Door_Main_Left utc=2026-10-04T05:22:33.4014178Z
+12:22:33.431 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551613 high=17592186044415 ready=True utc=2026-10-04T05:22:33.4304478Z
+12:22:33.816 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Left open=False utc=2026-10-04T05:22:33.8167077Z
+12:22:34.319 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:22:42.341 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:22:50.340 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:22:58.366 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:23:06.379 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:23:14.414 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:23:22.434 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:23:23.268 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551615 high=17592186044415 ready=True utc=2026-10-04T05:23:23.2685686Z
+12:23:23.637 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Left open=True utc=2026-10-04T05:23:23.6373905Z
+12:23:30.438 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:23:38.385 [C2] [client cid=3] > mark CASE_COLLIDER_ALL_OPEN  =>  CASE_COLLIDER_ALL_OPEN
+12:23:38.395 [C2] [client cid=3] > door-probe Dorm_Building  =>  stable state collision probes started
+12:23:38.396 [C2] [client cid=3] > wait 50
+12:23:38.455 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:23:38.952 [C2] [client cid=3] DOOR probe id=0 key=Dorm_Building/Floor_1/Common/Laundry/Door expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:39.518 [C2] [client cid=3] DOOR probe id=1 key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Left expectedOpen=True measuredOpen=True side=0.2100 detected=True grounded=True passed=True
+12:23:40.084 [C2] [client cid=3] DOOR probe id=2 key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Right expectedOpen=True measuredOpen=True side=0.2100 detected=True grounded=True passed=True
+12:23:40.654 [C2] [client cid=3] DOOR probe id=3 key=Dorm_Building/Floor_1/Rooms/Room_101/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:23:41.221 [C2] [client cid=3] DOOR probe id=4 key=Dorm_Building/Floor_1/Rooms/Room_101/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:41.789 [C2] [client cid=3] DOOR probe id=5 key=Dorm_Building/Floor_1/Rooms/Room_102/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:23:42.357 [C2] [client cid=3] DOOR probe id=6 key=Dorm_Building/Floor_1/Rooms/Room_102/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:42.924 [C2] [client cid=3] DOOR probe id=7 key=Dorm_Building/Floor_1/Rooms/Room_103/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:23:43.491 [C2] [client cid=3] DOOR probe id=8 key=Dorm_Building/Floor_1/Rooms/Room_103/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:44.059 [C2] [client cid=3] DOOR probe id=9 key=Dorm_Building/Floor_1/Rooms/Room_104/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:23:44.628 [C2] [client cid=3] DOOR probe id=10 key=Dorm_Building/Floor_1/Rooms/Room_104/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:45.194 [C2] [client cid=3] DOOR probe id=11 key=Dorm_Building/Floor_1/Rooms/Room_105/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:23:45.762 [C2] [client cid=3] DOOR probe id=12 key=Dorm_Building/Floor_1/Rooms/Room_105/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:46.330 [C2] [client cid=3] DOOR probe id=13 key=Dorm_Building/Floor_1/Rooms/Room_106/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:23:46.468 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:23:46.898 [C2] [client cid=3] DOOR probe id=14 key=Dorm_Building/Floor_1/Rooms/Room_106/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:47.466 [C2] [client cid=3] DOOR probe id=15 key=Dorm_Building/Floor_1/Rooms/Room_107/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:23:47.999 [C2] [client cid=3] DOOR probe id=16 key=Dorm_Building/Floor_1/Rooms/Room_107/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:48.567 [C2] [client cid=3] DOOR probe id=17 key=Dorm_Building/Floor_1/Rooms/Room_108/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:23:49.138 [C2] [client cid=3] DOOR probe id=18 key=Dorm_Building/Floor_1/Rooms/Room_108/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:49.311 [C2] [client cid=3] > call Player:PlayerStats.ChangeHunger 100  =>  null
+12:23:49.340 [C2] [client cid=3] > call Player:PlayerStats.ChangeEnergy 100  =>  null
+12:23:49.373 [C2] [client cid=3] > call Player:PlayerStats.ChangeHealth 100  =>  null
+12:23:49.395 [C2] [client cid=3] > state  =>  state written
+12:23:49.662 [C2] [client cid=3] DOOR probe id=19 key=Dorm_Building/Floor_2/Common/StudyRoom/Door expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:50.230 [C2] [client cid=3] DOOR probe id=20 key=Dorm_Building/Floor_2/Rooms/Room_201/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:23:50.797 [C2] [client cid=3] DOOR probe id=21 key=Dorm_Building/Floor_2/Rooms/Room_201/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:51.365 [C2] [client cid=3] DOOR probe id=22 key=Dorm_Building/Floor_2/Rooms/Room_202/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:23:51.934 [C2] [client cid=3] DOOR probe id=23 key=Dorm_Building/Floor_2/Rooms/Room_202/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:52.501 [C2] [client cid=3] DOOR probe id=24 key=Dorm_Building/Floor_2/Rooms/Room_203/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:23:53.035 [C2] [client cid=3] DOOR probe id=25 key=Dorm_Building/Floor_2/Rooms/Room_203/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:53.603 [C2] [client cid=3] DOOR probe id=26 key=Dorm_Building/Floor_2/Rooms/Room_204/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:23:54.171 [C2] [client cid=3] DOOR probe id=27 key=Dorm_Building/Floor_2/Rooms/Room_204/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:54.475 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:23:54.773 [C2] [client cid=3] DOOR probe id=28 key=Dorm_Building/Floor_2/Rooms/Room_205/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2377 detected=True grounded=True passed=True
+12:23:55.341 [C2] [client cid=3] DOOR probe id=29 key=Dorm_Building/Floor_2/Rooms/Room_205/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:55.942 [C2] [client cid=3] DOOR probe id=30 key=Dorm_Building/Floor_2/Rooms/Room_206/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2377 detected=True grounded=True passed=True
+12:23:56.509 [C2] [client cid=3] DOOR probe id=31 key=Dorm_Building/Floor_2/Rooms/Room_206/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:57.078 [C2] [client cid=3] DOOR probe id=32 key=Dorm_Building/Floor_2/Rooms/Room_207/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2377 detected=True grounded=True passed=True
+12:23:57.646 [C2] [client cid=3] DOOR probe id=33 key=Dorm_Building/Floor_2/Rooms/Room_207/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:58.248 [C2] [client cid=3] DOOR probe id=34 key=Dorm_Building/Floor_2/Rooms/Room_208/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2377 detected=True grounded=True passed=True
+12:23:58.816 [C2] [client cid=3] DOOR probe id=35 key=Dorm_Building/Floor_2/Rooms/Room_208/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:59.384 [C2] [client cid=3] DOOR probe id=36 key=Dorm_Building/Floor_3/Common/StudyRoom/Door expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:23:59.953 [C2] [client cid=3] DOOR probe id=37 key=Dorm_Building/Floor_3/Rooms/Room_301/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:24:00.521 [C2] [client cid=3] DOOR probe id=38 key=Dorm_Building/Floor_3/Rooms/Room_301/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:01.054 [C2] [client cid=3] DOOR probe id=39 key=Dorm_Building/Floor_3/Rooms/Room_302/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:24:01.623 [C2] [client cid=3] DOOR probe id=40 key=Dorm_Building/Floor_3/Rooms/Room_302/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:02.190 [C2] [client cid=3] DOOR probe id=41 key=Dorm_Building/Floor_3/Rooms/Room_303/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:24:02.494 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:24:02.757 [C2] [client cid=3] DOOR probe id=42 key=Dorm_Building/Floor_3/Rooms/Room_303/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:03.326 [C2] [client cid=3] DOOR probe id=43 key=Dorm_Building/Floor_3/Rooms/Room_304/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2037 detected=True grounded=True passed=True
+12:24:03.894 [C2] [client cid=3] DOOR probe id=44 key=Dorm_Building/Floor_3/Rooms/Room_304/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:04.495 [C2] [client cid=3] DOOR probe id=45 key=Dorm_Building/Floor_3/Rooms/Room_305/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2377 detected=True grounded=True passed=True
+12:24:05.063 [C2] [client cid=3] DOOR probe id=46 key=Dorm_Building/Floor_3/Rooms/Room_305/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:05.665 [C2] [client cid=3] DOOR probe id=47 key=Dorm_Building/Floor_3/Rooms/Room_306/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2377 detected=True grounded=True passed=True
+12:24:06.233 [C2] [client cid=3] DOOR probe id=48 key=Dorm_Building/Floor_3/Rooms/Room_306/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:06.812 [C2] [client cid=3] DOOR probe id=49 key=Dorm_Building/Floor_3/Rooms/Room_307/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2377 detected=True grounded=True passed=True
+12:24:07.381 [C2] [client cid=3] DOOR probe id=50 key=Dorm_Building/Floor_3/Rooms/Room_307/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:07.982 [C2] [client cid=3] DOOR probe id=51 key=Dorm_Building/Floor_3/Rooms/Room_308/Bathroom/Door_Bathroom expectedOpen=True measuredOpen=True side=0.2377 detected=True grounded=True passed=True
+12:24:08.550 [C2] [client cid=3] DOOR probe id=52 key=Dorm_Building/Floor_3/Rooms/Room_308/Door_Entry expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:08.552 [C2] [client cid=3] DOOR probe complete building=Dorm_Building passed=53/53
+12:24:10.523 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:24:18.541 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:24:26.558 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:24:28.435 [C2] [client cid=3] > door-probe GE_Building  =>  stable state collision probes started
+12:24:28.436 [C2] [client cid=3] > wait 20
+12:24:28.994 [C2] [client cid=3] DOOR probe id=53 key=GE_Building/Floor_1/Classrooms/Room_GE101/Door_GE101 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:29.563 [C2] [client cid=3] DOOR probe id=54 key=GE_Building/Floor_1/Classrooms/Room_GE102/Door_GE102 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:30.133 [C2] [client cid=3] DOOR probe id=55 key=GE_Building/Floor_1/Classrooms/Room_GE103/Door_GE103 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:30.700 [C2] [client cid=3] DOOR probe id=56 key=GE_Building/Floor_1/Classrooms/Room_GE104/Door_GE104 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:31.269 [C2] [client cid=3] DOOR probe id=57 key=GE_Building/Floor_1/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:31.838 [C2] [client cid=3] DOOR probe id=58 key=GE_Building/Floor_1/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:32.414 [C2] [client cid=3] DOOR probe id=59 key=GE_Building/Floor_2/Classrooms/Room_GE201/Door_GE201 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:32.981 [C2] [client cid=3] DOOR probe id=60 key=GE_Building/Floor_2/Classrooms/Room_GE202/Door_GE202 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:33.550 [C2] [client cid=3] DOOR probe id=61 key=GE_Building/Floor_2/Classrooms/Room_GE203/Door_GE203 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:34.119 [C2] [client cid=3] DOOR probe id=62 key=GE_Building/Floor_2/Classrooms/Room_GE204/Door_GE204 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:34.566 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:24:34.662 [C2] [client cid=3] DOOR probe id=63 key=GE_Building/Floor_2/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:35.233 [C2] [client cid=3] DOOR probe id=64 key=GE_Building/Floor_2/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:35.799 [C2] [client cid=3] DOOR probe id=65 key=GE_Building/Floor_3/Classrooms/Room_GE301/Door_GE301 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:36.367 [C2] [client cid=3] DOOR probe id=66 key=GE_Building/Floor_3/Classrooms/Room_GE302/Door_GE302 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:36.940 [C2] [client cid=3] DOOR probe id=67 key=GE_Building/Floor_3/Classrooms/Room_GE303/Door_GE303 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:37.504 [C2] [client cid=3] DOOR probe id=68 key=GE_Building/Floor_3/Classrooms/Room_GE304/Door_GE304 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:38.072 [C2] [client cid=3] DOOR probe id=69 key=GE_Building/Floor_3/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:38.640 [C2] [client cid=3] DOOR probe id=70 key=GE_Building/Floor_3/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:38.641 [C2] [client cid=3] DOOR probe complete building=GE_Building passed=18/18
+12:24:42.568 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:24:48.484 [C2] [client cid=3] > door-probe IT_Building  =>  stable state collision probes started
+12:24:48.485 [C2] [client cid=3] > wait 40
+12:24:49.007 [C2] [client cid=3] DOOR probe id=71 key=IT_Building/Exterior/SideExit/Door_SideExit expectedOpen=True measuredOpen=True side=0.2344 detected=True grounded=True passed=True
+12:24:49.575 [C2] [client cid=3] DOOR probe id=72 key=IT_Building/Floor_1/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:50.148 [C2] [client cid=3] DOOR probe id=73 key=IT_Building/Floor_1/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:50.585 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:24:50.715 [C2] [client cid=3] DOOR probe id=74 key=IT_Building/Floor_1/Rooms/Room_IT101/Door_IT101 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:51.252 [C2] [client cid=3] DOOR probe id=75 key=IT_Building/Floor_1/Rooms/Room_IT102/Door_IT102 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:51.819 [C2] [client cid=3] DOOR probe id=76 key=IT_Building/Floor_1/Rooms/Room_IT103/Door_IT103 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:52.387 [C2] [client cid=3] DOOR probe id=77 key=IT_Building/Floor_1/Rooms/Room_IT104/Door_IT104 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:52.954 [C2] [client cid=3] DOOR probe id=78 key=IT_Building/Floor_1/Rooms/Room_IT105/Door_IT105 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:53.526 [C2] [client cid=3] DOOR probe id=79 key=IT_Building/Floor_1/Rooms/Room_IT106/Door_IT106 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:54.097 [C2] [client cid=3] DOOR probe id=80 key=IT_Building/Floor_1/Rooms/Room_IT107/Door_IT107 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:54.669 [C2] [client cid=3] DOOR probe id=81 key=IT_Building/Floor_2/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:55.235 [C2] [client cid=3] DOOR probe id=82 key=IT_Building/Floor_2/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:55.804 [C2] [client cid=3] DOOR probe id=83 key=IT_Building/Floor_2/Rooms/Room_IT201/Door_IT201 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:56.371 [C2] [client cid=3] DOOR probe id=84 key=IT_Building/Floor_2/Rooms/Room_IT202/Door_IT202 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:56.938 [C2] [client cid=3] DOOR probe id=85 key=IT_Building/Floor_2/Rooms/Room_IT203/Door_IT203 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:57.513 [C2] [client cid=3] DOOR probe id=86 key=IT_Building/Floor_2/Rooms/Room_IT204/Door_IT204 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:58.077 [C2] [client cid=3] DOOR probe id=87 key=IT_Building/Floor_2/Rooms/Room_IT205/Door_IT205 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:58.616 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:24:58.647 [C2] [client cid=3] DOOR probe id=88 key=IT_Building/Floor_2/Rooms/Room_IT206/Door_IT206 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:59.216 [C2] [client cid=3] DOOR probe id=89 key=IT_Building/Floor_2/Rooms/Room_IT207/Door_IT207 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:24:59.783 [C2] [client cid=3] DOOR probe id=90 key=IT_Building/Floor_3/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:00.340 [C2] [client cid=3] DOOR probe id=91 key=IT_Building/Floor_3/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:00.909 [C2] [client cid=3] DOOR probe id=92 key=IT_Building/Floor_3/Rooms/Room_IT301/Door_IT301 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:01.479 [C2] [client cid=3] DOOR probe id=93 key=IT_Building/Floor_3/Rooms/Room_IT302/Door_IT302 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:02.047 [C2] [client cid=3] DOOR probe id=94 key=IT_Building/Floor_3/Rooms/Room_IT303/Door_IT303 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:02.614 [C2] [client cid=3] DOOR probe id=95 key=IT_Building/Floor_3/Rooms/Room_IT304/Door_IT304 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:03.181 [C2] [client cid=3] DOOR probe id=96 key=IT_Building/Floor_3/Rooms/Room_IT305/Door_IT305 expectedOpen=True measuredOpen=True side=0.2115 detected=True grounded=True passed=True
+12:25:03.749 [C2] [client cid=3] DOOR probe id=97 key=IT_Building/Floor_3/Rooms/Room_IT306/Door_IT306 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:04.317 [C2] [client cid=3] DOOR probe id=98 key=IT_Building/Floor_3/Rooms/Room_IT307/Door_IT307 expectedOpen=True measuredOpen=True side=0.2115 detected=True grounded=True passed=True
+12:25:04.885 [C2] [client cid=3] DOOR probe id=99 key=IT_Building/Floor_4/Restrooms/Restroom_Female/Door_Restroom_Female expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:05.454 [C2] [client cid=3] DOOR probe id=100 key=IT_Building/Floor_4/Restrooms/Restroom_Male/Door_Restroom_Male expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:06.023 [C2] [client cid=3] DOOR probe id=101 key=IT_Building/Floor_4/Rooms/Room_IT401/Door_IT401 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:06.591 [C2] [client cid=3] DOOR probe id=102 key=IT_Building/Floor_4/Rooms/Room_IT402/Door_IT402 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:06.629 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:25:07.158 [C2] [client cid=3] DOOR probe id=103 key=IT_Building/Floor_4/Rooms/Room_IT403/Door_IT403 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:07.727 [C2] [client cid=3] DOOR probe id=104 key=IT_Building/Floor_4/Rooms/Room_IT404/Door_IT404 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:08.294 [C2] [client cid=3] DOOR probe id=105 key=IT_Building/Floor_4/Rooms/Room_IT405/Door_IT405 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:08.829 [C2] [client cid=3] DOOR probe id=106 key=IT_Building/Floor_4/Rooms/Room_IT406/Door_IT406 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:09.397 [C2] [client cid=3] DOOR probe id=107 key=IT_Building/Floor_4/Rooms/Room_IT407/Door_IT407 expectedOpen=True measuredOpen=True side=0.2041 detected=True grounded=True passed=True
+12:25:09.398 [C2] [client cid=3] DOOR probe complete building=IT_Building passed=37/37
+12:25:14.644 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:25:22.664 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:25:28.534 [C2] [client cid=3] > state  =>  state written
+12:25:30.665 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:25:38.687 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:25:46.644 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551614 high=17592186044415 ready=True utc=2026-10-04T05:25:46.6441807Z
+12:25:46.713 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:25:47.013 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Laundry/Door open=False utc=2026-10-04T05:25:47.0132162Z
+12:25:47.679 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551612 high=17592186044415 ready=True utc=2026-10-04T05:25:47.6788749Z
+12:25:48.048 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Left open=False utc=2026-10-04T05:25:48.0484931Z
+12:25:48.715 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551608 high=17592186044415 ready=True utc=2026-10-04T05:25:48.7157279Z
+12:25:49.099 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Right open=False utc=2026-10-04T05:25:49.0994850Z
+12:25:49.784 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551600 high=17592186044415 ready=True utc=2026-10-04T05:25:49.7843553Z
+12:25:50.153 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_101/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:25:50.1531875Z
+12:25:50.852 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551584 high=17592186044415 ready=True utc=2026-10-04T05:25:50.8526765Z
+12:25:51.221 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_101/Door_Entry open=False utc=2026-10-04T05:25:51.2212008Z
+12:25:51.923 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551552 high=17592186044415 ready=True utc=2026-10-04T05:25:51.9221811Z
+12:25:52.291 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_102/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:25:52.2906790Z
+12:25:52.992 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551488 high=17592186044415 ready=True utc=2026-10-04T05:25:52.9921755Z
+12:25:53.360 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_102/Door_Entry open=False utc=2026-10-04T05:25:53.3603700Z
+12:25:54.059 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551360 high=17592186044415 ready=True utc=2026-10-04T05:25:54.0598963Z
+12:25:54.427 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_103/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:25:54.4279404Z
+12:25:54.742 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:25:55.107 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709551104 high=17592186044415 ready=True utc=2026-10-04T05:25:55.1063259Z
+12:25:55.475 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_103/Door_Entry open=False utc=2026-10-04T05:25:55.4742062Z
+12:25:56.208 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709550592 high=17592186044415 ready=True utc=2026-10-04T05:25:56.2077650Z
+12:25:56.577 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_104/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:25:56.5769604Z
+12:25:57.245 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709549568 high=17592186044415 ready=True utc=2026-10-04T05:25:57.2444943Z
+12:25:57.631 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_104/Door_Entry open=False utc=2026-10-04T05:25:57.6311926Z
+12:25:58.312 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709547520 high=17592186044415 ready=True utc=2026-10-04T05:25:58.3117365Z
+12:25:58.681 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_105/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:25:58.6817128Z
+12:25:59.381 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709543424 high=17592186044415 ready=True utc=2026-10-04T05:25:59.3801520Z
+12:25:59.749 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_105/Door_Entry open=False utc=2026-10-04T05:25:59.7493782Z
+12:26:00.417 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709535232 high=17592186044415 ready=True utc=2026-10-04T05:26:00.4161998Z
+12:26:00.784 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_106/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:00.7844690Z
+12:26:01.451 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709518848 high=17592186044415 ready=True utc=2026-10-04T05:26:01.4511438Z
+12:26:01.820 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_106/Door_Entry open=False utc=2026-10-04T05:26:01.8204554Z
+12:26:02.520 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709486080 high=17592186044415 ready=True utc=2026-10-04T05:26:02.5200190Z
+12:26:02.757 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:26:02.888 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_107/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:02.8882499Z
+12:26:03.589 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709420544 high=17592186044415 ready=True utc=2026-10-04T05:26:03.5889605Z
+12:26:03.957 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_107/Door_Entry open=False utc=2026-10-04T05:26:03.9574405Z
+12:26:04.625 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709289472 high=17592186044415 ready=True utc=2026-10-04T05:26:04.6242866Z
+12:26:04.993 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_108/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:04.9930787Z
+12:26:05.728 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073709027328 high=17592186044415 ready=True utc=2026-10-04T05:26:05.7277373Z
+12:26:06.095 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Rooms/Room_108/Door_Entry open=False utc=2026-10-04T05:26:06.0957194Z
+12:26:06.764 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073708503040 high=17592186044415 ready=True utc=2026-10-04T05:26:06.7632141Z
+12:26:07.153 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Common/StudyRoom/Door open=False utc=2026-10-04T05:26:07.1528656Z
+12:26:07.798 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073707454464 high=17592186044415 ready=True utc=2026-10-04T05:26:07.7983498Z
+12:26:08.167 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_201/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:08.1679607Z
+12:26:08.835 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073705357312 high=17592186044415 ready=True utc=2026-10-04T05:26:08.8342984Z
+12:26:09.204 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_201/Door_Entry open=False utc=2026-10-04T05:26:09.2036061Z
+12:26:09.904 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073701163008 high=17592186044415 ready=True utc=2026-10-04T05:26:09.9032336Z
+12:26:10.272 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_202/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:10.2715995Z
+12:26:10.777 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:26:10.974 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073692774400 high=17592186044415 ready=True utc=2026-10-04T05:26:10.9730744Z
+12:26:11.342 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_202/Door_Entry open=False utc=2026-10-04T05:26:11.3427127Z
+12:26:12.009 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073675997184 high=17592186044415 ready=True utc=2026-10-04T05:26:12.0081159Z
+12:26:12.377 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_203/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:12.3771975Z
+12:26:13.045 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073642442752 high=17592186044415 ready=True utc=2026-10-04T05:26:13.0458136Z
+12:26:13.414 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_203/Door_Entry open=False utc=2026-10-04T05:26:13.4139295Z
+12:26:14.117 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073575333888 high=17592186044415 ready=True utc=2026-10-04T05:26:14.1164243Z
+12:26:14.485 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_204/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:14.4847296Z
+12:26:15.152 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073441116160 high=17592186044415 ready=True utc=2026-10-04T05:26:15.1512143Z
+12:26:15.520 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_204/Door_Entry open=False utc=2026-10-04T05:26:15.5207589Z
+12:26:16.169 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744073172680704 high=17592186044415 ready=True utc=2026-10-04T05:26:16.1699389Z
+12:26:16.537 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_205/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:16.5379206Z
+12:26:17.172 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744072635809792 high=17592186044415 ready=True utc=2026-10-04T05:26:17.1711725Z
+12:26:17.539 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_205/Door_Entry open=False utc=2026-10-04T05:26:17.5398108Z
+12:26:18.274 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744071562067968 high=17592186044415 ready=True utc=2026-10-04T05:26:18.2742806Z
+12:26:18.643 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_206/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:18.6433135Z
+12:26:18.779 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:26:19.311 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744069414584320 high=17592186044415 ready=True utc=2026-10-04T05:26:19.3117230Z
+12:26:19.698 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_206/Door_Entry open=False utc=2026-10-04T05:26:19.6982685Z
+12:26:20.351 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744065119617024 high=17592186044415 ready=True utc=2026-10-04T05:26:20.3504872Z
+12:26:20.719 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_207/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:20.7187020Z
+12:26:21.422 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744056529682432 high=17592186044415 ready=True utc=2026-10-04T05:26:21.4200491Z
+12:26:21.814 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_207/Door_Entry open=False utc=2026-10-04T05:26:21.8140381Z
+12:26:22.479 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744039349813248 high=17592186044415 ready=True utc=2026-10-04T05:26:22.4798912Z
+12:26:22.848 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_208/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:22.8487360Z
+12:26:23.515 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446744004990074880 high=17592186044415 ready=True utc=2026-10-04T05:26:23.5157907Z
+12:26:23.860 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_2/Rooms/Room_208/Door_Entry open=False utc=2026-10-04T05:26:23.8605133Z
+12:26:24.595 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446743936270598144 high=17592186044415 ready=True utc=2026-10-04T05:26:24.5946705Z
+12:26:24.967 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Common/StudyRoom/Door open=False utc=2026-10-04T05:26:24.9676807Z
+12:26:25.633 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446743798831644672 high=17592186044415 ready=True utc=2026-10-04T05:26:25.6338821Z
+12:26:26.004 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_301/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:26.0049065Z
+12:26:26.671 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446743523953737728 high=17592186044415 ready=True utc=2026-10-04T05:26:26.6712747Z
+12:26:26.809 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:26:27.039 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_301/Door_Entry open=False utc=2026-10-04T05:26:27.0391837Z
+12:26:27.707 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446742974197923840 high=17592186044415 ready=True utc=2026-10-04T05:26:27.7077909Z
+12:26:28.076 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_302/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:28.0757693Z
+12:26:28.742 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446741874686296064 high=17592186044415 ready=True utc=2026-10-04T05:26:28.7422080Z
+12:26:29.110 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_302/Door_Entry open=False utc=2026-10-04T05:26:29.1096174Z
+12:26:29.845 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446739675663040512 high=17592186044415 ready=True utc=2026-10-04T05:26:29.8442638Z
+12:26:30.212 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_303/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:30.2124491Z
+12:26:30.880 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446735277616529408 high=17592186044415 ready=True utc=2026-10-04T05:26:30.8796848Z
+12:26:31.262 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_303/Door_Entry open=False utc=2026-10-04T05:26:31.2623821Z
+12:26:31.947 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446726481523507200 high=17592186044415 ready=True utc=2026-10-04T05:26:31.9478617Z
+12:26:32.321 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_304/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:32.3200256Z
+12:26:33.018 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446708889337462784 high=17592186044415 ready=True utc=2026-10-04T05:26:33.0176946Z
+12:26:33.386 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_304/Door_Entry open=False utc=2026-10-04T05:26:33.3858687Z
+12:26:34.086 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446673704965373952 high=17592186044415 ready=True utc=2026-10-04T05:26:34.0864762Z
+12:26:34.455 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_305/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:34.4557879Z
+12:26:34.824 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:26:35.122 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446603336221196288 high=17592186044415 ready=True utc=2026-10-04T05:26:35.1218294Z
+12:26:35.490 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_305/Door_Entry open=False utc=2026-10-04T05:26:35.4908241Z
+12:26:36.157 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446462598732840960 high=17592186044415 ready=True utc=2026-10-04T05:26:36.1569611Z
+12:26:36.526 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_306/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:36.5256785Z
+12:26:37.201 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18446181123756130304 high=17592186044415 ready=True utc=2026-10-04T05:26:37.2005669Z
+12:26:37.568 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_306/Door_Entry open=False utc=2026-10-04T05:26:37.5687595Z
+12:26:38.273 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18445618173802708992 high=17592186044415 ready=True utc=2026-10-04T05:26:38.2723217Z
+12:26:38.640 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_307/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:38.6403714Z
+12:26:39.373 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18444492273895866368 high=17592186044415 ready=True utc=2026-10-04T05:26:39.3727623Z
+12:26:39.742 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_307/Door_Entry open=False utc=2026-10-04T05:26:39.7417304Z
+12:26:40.376 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18442240474082181120 high=17592186044415 ready=True utc=2026-10-04T05:26:40.3757865Z
+12:26:40.745 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_308/Bathroom/Door_Bathroom open=False utc=2026-10-04T05:26:40.7456067Z
+12:26:41.445 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18437736874454810624 high=17592186044415 ready=True utc=2026-10-04T05:26:41.4453280Z
+12:26:41.814 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_3/Rooms/Room_308/Door_Entry open=False utc=2026-10-04T05:26:41.8146697Z
+12:26:42.854 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:26:46.658 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18428729675200069632 high=17592186044415 ready=True utc=2026-10-04T05:26:46.6573025Z
+12:26:47.025 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_1/Classrooms/Room_GE101/Door_GE101 open=False utc=2026-10-04T05:26:47.0257131Z
+12:26:47.693 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18410715276690587648 high=17592186044415 ready=True utc=2026-10-04T05:26:47.6925403Z
+12:26:48.061 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_1/Classrooms/Room_GE102/Door_GE102 open=False utc=2026-10-04T05:26:48.0613359Z
+12:26:48.763 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18374686479671623680 high=17592186044415 ready=True utc=2026-10-04T05:26:48.7627708Z
+12:26:49.132 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_1/Classrooms/Room_GE103/Door_GE103 open=False utc=2026-10-04T05:26:49.1326635Z
+12:26:49.807 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18302628885633695744 high=17592186044415 ready=True utc=2026-10-04T05:26:49.8066637Z
+12:26:50.175 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_1/Classrooms/Room_GE104/Door_GE104 open=False utc=2026-10-04T05:26:50.1747526Z
+12:26:50.875 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=18158513697557839872 high=17592186044415 ready=True utc=2026-10-04T05:26:50.8747413Z
+12:26:50.881 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:26:51.245 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_1/Restrooms/Restroom_Female/Door_Restroom_Female open=False utc=2026-10-04T05:26:51.2443044Z
+12:26:51.945 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=17870283321406128128 high=17592186044415 ready=True utc=2026-10-04T05:26:51.9456524Z
+12:26:52.330 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_1/Restrooms/Restroom_Male/Door_Restroom_Male open=False utc=2026-10-04T05:26:52.3294152Z
+12:26:53.014 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=17293822569102704640 high=17592186044415 ready=True utc=2026-10-04T05:26:53.0141570Z
+12:26:53.384 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_2/Classrooms/Room_GE201/Door_GE201 open=False utc=2026-10-04T05:26:53.3838030Z
+12:26:54.083 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=16140901064495857664 high=17592186044415 ready=True utc=2026-10-04T05:26:54.0827863Z
+12:26:54.451 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_2/Classrooms/Room_GE202/Door_GE202 open=False utc=2026-10-04T05:26:54.4517980Z
+12:26:55.110 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=13835058055282163712 high=17592186044415 ready=True utc=2026-10-04T05:26:55.1093873Z
+12:26:55.475 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_2/Classrooms/Room_GE203/Door_GE203 open=False utc=2026-10-04T05:26:55.4756540Z
+12:26:56.176 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=9223372036854775808 high=17592186044415 ready=True utc=2026-10-04T05:26:56.1768340Z
+12:26:56.546 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_2/Classrooms/Room_GE204/Door_GE204 open=False utc=2026-10-04T05:26:56.5456997Z
+12:26:57.214 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186044415 ready=True utc=2026-10-04T05:26:57.2138710Z
+12:26:57.583 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_2/Restrooms/Restroom_Female/Door_Restroom_Female open=False utc=2026-10-04T05:26:57.5821096Z
+12:26:58.252 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186044414 ready=True utc=2026-10-04T05:26:58.2516550Z
+12:26:58.618 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_2/Restrooms/Restroom_Male/Door_Restroom_Male open=False utc=2026-10-04T05:26:58.6189919Z
+12:26:58.888 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:26:59.320 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186044412 ready=True utc=2026-10-04T05:26:59.3204097Z
+12:26:59.688 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_3/Classrooms/Room_GE301/Door_GE301 open=False utc=2026-10-04T05:26:59.6888261Z
+12:27:00.357 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186044408 ready=True utc=2026-10-04T05:27:00.3563543Z
+12:27:00.726 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_3/Classrooms/Room_GE302/Door_GE302 open=False utc=2026-10-04T05:27:00.7261497Z
+12:27:01.425 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186044400 ready=True utc=2026-10-04T05:27:01.4254292Z
+12:27:01.794 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_3/Classrooms/Room_GE303/Door_GE303 open=False utc=2026-10-04T05:27:01.7945821Z
+12:27:02.461 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186044384 ready=True utc=2026-10-04T05:27:02.4603735Z
+12:27:02.830 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_3/Classrooms/Room_GE304/Door_GE304 open=False utc=2026-10-04T05:27:02.8292315Z
+12:27:03.496 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186044352 ready=True utc=2026-10-04T05:27:03.4969426Z
+12:27:03.879 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_3/Restrooms/Restroom_Female/Door_Restroom_Female open=False utc=2026-10-04T05:27:03.8796458Z
+12:27:04.564 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186044288 ready=True utc=2026-10-04T05:27:04.5649755Z
+12:27:04.935 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_3/Restrooms/Restroom_Male/Door_Restroom_Male open=False utc=2026-10-04T05:27:04.9350888Z
+12:27:06.906 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:27:10.679 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186044160 ready=True utc=2026-10-04T05:27:10.6781390Z
+12:27:11.031 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Exterior/SideExit/Door_SideExit open=False utc=2026-10-04T05:27:11.0319179Z
+12:27:11.731 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186043904 ready=True utc=2026-10-04T05:27:11.7312115Z
+12:27:12.099 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Restrooms/Restroom_Female/Door_Restroom_Female open=False utc=2026-10-04T05:27:12.0995736Z
+12:27:12.800 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186043392 ready=True utc=2026-10-04T05:27:12.8005129Z
+12:27:13.167 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Restrooms/Restroom_Male/Door_Restroom_Male open=False utc=2026-10-04T05:27:13.1676545Z
+12:27:13.835 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186042368 ready=True utc=2026-10-04T05:27:13.8347035Z
+12:27:14.204 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Rooms/Room_IT101/Door_IT101 open=False utc=2026-10-04T05:27:14.2038136Z
+12:27:14.871 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186040320 ready=True utc=2026-10-04T05:27:14.8711856Z
+12:27:14.906 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:27:15.241 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Rooms/Room_IT102/Door_IT102 open=False utc=2026-10-04T05:27:15.2417709Z
+12:27:15.944 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186036224 ready=True utc=2026-10-04T05:27:15.9430341Z
+12:27:16.311 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Rooms/Room_IT103/Door_IT103 open=False utc=2026-10-04T05:27:16.3116470Z
+12:27:17.040 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186028032 ready=True utc=2026-10-04T05:27:17.0395870Z
+12:27:17.407 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Rooms/Room_IT104/Door_IT104 open=False utc=2026-10-04T05:27:17.4073190Z
+12:27:18.076 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592186011648 ready=True utc=2026-10-04T05:27:18.0751396Z
+12:27:18.443 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Rooms/Room_IT105/Door_IT105 open=False utc=2026-10-04T05:27:18.4438358Z
+12:27:19.144 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592185978880 ready=True utc=2026-10-04T05:27:19.1439820Z
+12:27:19.515 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Rooms/Room_IT106/Door_IT106 open=False utc=2026-10-04T05:27:19.5152825Z
+12:27:20.180 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592185913344 ready=True utc=2026-10-04T05:27:20.1793821Z
+12:27:20.548 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Rooms/Room_IT107/Door_IT107 open=False utc=2026-10-04T05:27:20.5478109Z
+12:27:21.254 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592185782272 ready=True utc=2026-10-04T05:27:21.2535324Z
+12:27:21.621 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Restrooms/Restroom_Female/Door_Restroom_Female open=False utc=2026-10-04T05:27:21.6213050Z
+12:27:22.288 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592185520128 ready=True utc=2026-10-04T05:27:22.2880339Z
+12:27:22.657 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Restrooms/Restroom_Male/Door_Restroom_Male open=False utc=2026-10-04T05:27:22.6561522Z
+12:27:22.927 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:27:23.356 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592184995840 ready=True utc=2026-10-04T05:27:23.3569492Z
+12:27:23.725 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Rooms/Room_IT201/Door_IT201 open=False utc=2026-10-04T05:27:23.7258336Z
+12:27:24.392 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592183947264 ready=True utc=2026-10-04T05:27:24.3912775Z
+12:27:24.760 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Rooms/Room_IT202/Door_IT202 open=False utc=2026-10-04T05:27:24.7602133Z
+12:27:25.460 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592181850112 ready=True utc=2026-10-04T05:27:25.4602635Z
+12:27:25.828 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Rooms/Room_IT203/Door_IT203 open=False utc=2026-10-04T05:27:25.8283477Z
+12:27:26.563 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592177655808 ready=True utc=2026-10-04T05:27:26.5625353Z
+12:27:26.932 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Rooms/Room_IT204/Door_IT204 open=False utc=2026-10-04T05:27:26.9316635Z
+12:27:27.564 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592169267200 ready=True utc=2026-10-04T05:27:27.5639315Z
+12:27:27.933 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Rooms/Room_IT205/Door_IT205 open=False utc=2026-10-04T05:27:27.9321262Z
+12:27:28.632 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592152489984 ready=True utc=2026-10-04T05:27:28.6325927Z
+12:27:29.017 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Rooms/Room_IT206/Door_IT206 open=False utc=2026-10-04T05:27:29.0160256Z
+12:27:29.701 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592118935552 ready=True utc=2026-10-04T05:27:29.7017456Z
+12:27:30.070 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_2/Rooms/Room_IT207/Door_IT207 open=False utc=2026-10-04T05:27:30.0708125Z
+12:27:30.770 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17592051826688 ready=True utc=2026-10-04T05:27:30.7697432Z
+12:27:30.939 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:27:31.137 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Restrooms/Restroom_Female/Door_Restroom_Female open=False utc=2026-10-04T05:27:31.1376472Z
+12:27:31.805 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17591917608960 ready=True utc=2026-10-04T05:27:31.8044999Z
+12:27:32.173 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Restrooms/Restroom_Male/Door_Restroom_Male open=False utc=2026-10-04T05:27:32.1728056Z
+12:27:32.842 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17591649173504 ready=True utc=2026-10-04T05:27:32.8420007Z
+12:27:33.210 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Rooms/Room_IT301/Door_IT301 open=False utc=2026-10-04T05:27:33.2103472Z
+12:27:33.878 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17591112302592 ready=True utc=2026-10-04T05:27:33.8783152Z
+12:27:34.246 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Rooms/Room_IT302/Door_IT302 open=False utc=2026-10-04T05:27:34.2468156Z
+12:27:34.948 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17590038560768 ready=True utc=2026-10-04T05:27:34.9468217Z
+12:27:35.316 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Rooms/Room_IT303/Door_IT303 open=False utc=2026-10-04T05:27:35.3152418Z
+12:27:36.017 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17587891077120 ready=True utc=2026-10-04T05:27:36.0178441Z
+12:27:36.386 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Rooms/Room_IT304/Door_IT304 open=False utc=2026-10-04T05:27:36.3863128Z
+12:27:37.087 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17583596109824 ready=True utc=2026-10-04T05:27:37.0860672Z
+12:27:37.455 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Rooms/Room_IT305/Door_IT305 open=False utc=2026-10-04T05:27:37.4552632Z
+12:27:38.122 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17575006175232 ready=True utc=2026-10-04T05:27:38.1228682Z
+12:27:38.492 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Rooms/Room_IT306/Door_IT306 open=False utc=2026-10-04T05:27:38.4913257Z
+12:27:38.960 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:27:39.158 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17557826306048 ready=True utc=2026-10-04T05:27:39.1589142Z
+12:27:39.549 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_3/Rooms/Room_IT307/Door_IT307 open=False utc=2026-10-04T05:27:39.5495502Z
+12:27:40.196 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17523466567680 ready=True utc=2026-10-04T05:27:40.1964862Z
+12:27:40.565 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Restrooms/Restroom_Female/Door_Restroom_Female open=False utc=2026-10-04T05:27:40.5651514Z
+12:27:41.263 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17454747090944 ready=True utc=2026-10-04T05:27:41.2639887Z
+12:27:41.632 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Restrooms/Restroom_Male/Door_Restroom_Male open=False utc=2026-10-04T05:27:41.6319697Z
+12:27:42.334 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17317308137472 ready=True utc=2026-10-04T05:27:42.3333063Z
+12:27:42.702 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Rooms/Room_IT401/Door_IT401 open=False utc=2026-10-04T05:27:42.7022668Z
+12:27:43.372 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=17042430230528 ready=True utc=2026-10-04T05:27:43.3712836Z
+12:27:43.741 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Rooms/Room_IT402/Door_IT402 open=False utc=2026-10-04T05:27:43.7406004Z
+12:27:44.428 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=16492674416640 ready=True utc=2026-10-04T05:27:44.4274260Z
+12:27:44.796 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Rooms/Room_IT403/Door_IT403 open=False utc=2026-10-04T05:27:44.7963746Z
+12:27:45.464 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=15393162788864 ready=True utc=2026-10-04T05:27:45.4632040Z
+12:27:45.833 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Rooms/Room_IT404/Door_IT404 open=False utc=2026-10-04T05:27:45.8326017Z
+12:27:46.566 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=13194139533312 ready=True utc=2026-10-04T05:27:46.5664120Z
+12:27:46.935 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Rooms/Room_IT405/Door_IT405 open=False utc=2026-10-04T05:27:46.9348773Z
+12:27:46.970 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:27:47.637 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=8796093022208 ready=True utc=2026-10-04T05:27:47.6361431Z
+12:27:48.009 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Rooms/Room_IT406/Door_IT406 open=False utc=2026-10-04T05:27:48.0096721Z
+12:27:48.645 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=0 high=0 ready=True utc=2026-10-04T05:27:48.6444444Z
+12:27:49.014 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_4/Rooms/Room_IT407/Door_IT407 open=False utc=2026-10-04T05:27:49.0145027Z
+12:27:54.986 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:28:03.015 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:28:11.035 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:28:19.548 [C2] [client cid=3] > set Player:PlayerFallDamage.enabled false  =>  EXCEPTION Exception: type not found: PlayerFallDamage
+12:28:19.604 [C2] [client cid=3] > call Player:PlayerStats.ChangeHunger 100  =>  null
+12:28:19.654 [C2] [client cid=3] > call Player:PlayerStats.ChangeHealth 100  =>  null
+12:28:19.686 [C2] [client cid=3] > call Player:PlayerStats.ChangeEnergy 100  =>  null
+12:28:19.722 [C2] [client cid=3] > call GameManager.StartGame  =>  null
+12:28:19.754 [C2] [client cid=3] > call DaySummaryUI.Close  =>  null
+12:28:19.780 [C2] [client cid=3] > state  =>  state written
+12:28:19.886 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:28:27.849 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:28:35.871 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:28:39.714 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=4 high=0 ready=True utc=2026-10-04T05:28:39.7139145Z
+12:28:40.084 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Right open=True utc=2026-10-04T05:28:40.0839039Z
+12:28:41.755 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=9007199254740996 high=0 ready=True utc=2026-10-04T05:28:41.7557984Z
+12:28:42.127 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=GE_Building/Floor_1/Classrooms/Room_GE101/Door_GE101 open=True utc=2026-10-04T05:28:42.1262302Z
+12:28:43.825 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=9007199254740996 high=1024 ready=True utc=2026-10-04T05:28:43.8258674Z
+12:28:43.896 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:28:44.195 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=IT_Building/Floor_1/Rooms/Room_IT101/Door_IT101 open=True utc=2026-10-04T05:28:44.1952976Z
+12:28:51.921 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:28:59.940 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:29:07.969 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:29:15.974 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:29:16.005 [C2] [client cid=3] > mark CASE_SLEEP_NEXT_DAY  =>  CASE_SLEEP_NEXT_DAY
+12:29:16.037 [C2] [client cid=3] > call DaySummaryUI.Close  =>  null
+12:29:16.062 [C2] [client cid=3] > set Time.timeScale 1  =>  ok 1
+12:29:16.123 [C2] [client cid=3] > call SleepController.RequestSleep SleepStation Player true  =>  null
+12:29:16.124 [C2] [client cid=3] > wait 6
+12:29:16.282 [C2] [client cid=3] UNITY Log: [Save] บันทึกเกมแล้วที่: C:/Users/Pakwan/Downloads/nisitsimo/MPTestRuns/run10\C2_save.json
+12:29:17.092 [C2] [client cid=3] UNITY Log: [Save] บันทึกเกมแล้วที่: C:/Users/Pakwan/Downloads/nisitsimo/MPTestRuns/run10\C2_save.json
+12:29:22.205 [C2] [client cid=3] > state  =>  state written
+12:30:07.059 [C2] [client cid=3] > call DaySummaryUI.Close  =>  null
+12:30:07.084 [C2] [client cid=3] > set Time.timeScale 1  =>  ok 1
+12:30:07.103 [C2] [client cid=3] > state  =>  state written
+12:30:07.979 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=9007199254740992 high=1024 ready=True utc=2026-10-04T05:30:07.9781155Z
+12:30:08.322 [C2] [client cid=3] UNITY Log: [DoorSync] settled key=Dorm_Building/Floor_1/Common/Lobby/Door_Main_Right open=False utc=2026-10-04T05:30:08.3220060Z
+12:30:14.710 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:30:16.522 [C2] [client cid=3] UNITY Exception: PlayerPrefsException: Could not store preference value | NisitSimulator.Systems.AchievementManager.SaveToPrefs () (at C:/Users/Pakwan/Downloads/My project/My project/Assets/_Project/Scripts/Systems/AchievementManager.cs:186)
+12:30:22.740 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:30:30.761 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:30:38.782 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:30:46.804 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:30:54.824 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:31:02.825 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:31:10.839 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:31:18.853 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:31:26.856 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].
+12:31:34.849 [C2] [client cid=3] UNITY Log: [DoorSync] applied low=9007199254740996 high=1024 ready=True utc=2026-10-04T05:31:34.8481881Z
+12:31:34.888 [C2] [client cid=3] UNITY Warning: The character with Unicode value \U0001F91D was not found in the [NisitThai SDF] font asset or any potential fallbacks. It was replaced by Unicode character \u0020 in text object [ToastText].

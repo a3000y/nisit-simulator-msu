@@ -30,6 +30,12 @@ namespace NisitSimulator.Academics
         public bool missedMidterm;
         public bool missedFinal;
 
+        // คะแนนพิเศษจากเหตุการณ์ระหว่างเรียน (0..1 บวกเข้าคะแนนสอบรอบนั้น มีเพดาน) — เซฟเก่าไม่มี = 0
+        public float classBonusMid;
+        public float classBonusFinal;
+        // เหตุการณ์ระหว่างเรียนต่อคาบ "วัน:ลำดับคาบ=นาทีที่จะเกิด" (-1 = คาบนี้ไม่เกิด, done = เกิดไปแล้ว) — กันสุ่มซ้ำหลังลุก/โหลดเซฟ
+        public List<string> classEventKeys = new List<string>();
+
         // ผลการเรียน (ประกาศตอนจบภาค)
         public bool graded;
         public float score;
@@ -91,6 +97,15 @@ namespace NisitSimulator.Academics
         public bool hasCurrent;
         public TermState current = new TermState();
         public List<Enrollment> enrollments = new List<Enrollment>();
+
+        // ===== หน้าแสดงผลตอนจบเทอม (TermResultUI) — แสดงครั้งเดียวต่อเทอม =====
+        //   pending > lastReported = ยังไม่กดตกลง (ปิดเกมก่อน → โหลดแล้วแสดงอีกครั้ง) · เซฟเก่าไม่มี = 0 (ไม่แสดง)
+        public int pendingReportSerial;
+        public int lastReportedSerial;
+        public bool pendingReportPromoted;      // เลื่อนชั้นตอนปิดภาคนั้น
+        public bool pendingReportExhausted;     // พ้นสภาพ (เรียนเกินจำนวนภาค)
+        public bool pendingReportExtra;         // เป็นภาคเรียนเพิ่มเติม
+        public bool HasPendingReport => pendingReportSerial > 0 && pendingReportSerial > lastReportedSerial;
 
         public TermState Current => hasCurrent ? current : null;
     }

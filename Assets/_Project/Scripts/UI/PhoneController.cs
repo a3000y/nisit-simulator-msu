@@ -262,7 +262,7 @@ namespace NisitSimulator.UI
             if (reg == null || !reg.IsActive) return "";
             string s = "\n<size=85%>" + reg.ShortSummary() + "</size>";
             if (reg.TryGetOngoingSession(out var e, out var cs))
-                s += $"\n<color=#E0843A><b>ตอนนี้: {e.code} @ {cs.building} ({cs.TimeText})</b></color>";
+                s += $"\n<color=#E0843A><b>ตอนนี้: {e.code} @ {NisitSimulator.Academics.CourseRegistrar.RoomText(cs)} ({cs.TimeText})</b></color>";
             return s;
         }
 

@@ -1,0 +1,26 @@
+[
+  {
+    "path": "C:\\Users\\Pakwan\\Downloads\\My project\\My project\\Assets\\_Project\\Scenes\\01_Gameplay.unity",
+    "before": "7991FBB849BDDDEA19F80987F49761ED2407B107760261BA13A357ECAC48980D",
+    "after": "7991FBB849BDDDEA19F80987F49761ED2407B107760261BA13A357ECAC48980D",
+    "unchanged": true
+  },
+  {
+    "path": "C:\\Users\\Pakwan\\Downloads\\My project\\My project\\Assets\\_Project\\Scenes\\02_Lobby.unity",
+    "before": "400EE8654EF1EE3C41BF5BDCDF9588242BB45DA76831DD95F746EFEDC9C43A56",
+    "after": "400EE8654EF1EE3C41BF5BDCDF9588242BB45DA76831DD95F746EFEDC9C43A56",
+    "unchanged": true
+  },
+  {
+    "path": "C:\\Users\\Pakwan\\Downloads\\My project\\My project\\Assets\\_Project\\Prefabs\\Dorm\\DM_Door.prefab",
+    "before": "CCA56E78957981913ABC35C6C776476301884D686374C697A559EF72B1CC9E1A",
+    "after": "CCA56E78957981913ABC35C6C776476301884D686374C697A559EF72B1CC9E1A",
+    "unchanged": true
+  },
+  {
+    "path": "C:\\Users\\Pakwan\\Downloads\\My project\\My project\\Assets\\_Project\\Prefabs\\Dorm\\Dorm_Building.prefab",
+    "before": "63F75D2D7352AFD6F3117520D0C77287F96AB69EB0E5F5FD53DD202B52FD1725",
+    "after": "63F75D2D7352AFD6F3117520D0C77287F96AB69EB0E5F5FD53DD202B52FD1725",
+    "unchanged": true
+  }
+]

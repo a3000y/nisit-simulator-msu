@@ -5,6 +5,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using NisitSimulator.Interaction;
 using NisitSimulator.TimeSystem;
+using NisitSimulator.SaveLoad;
 
 namespace NisitSimulator.EditorTools
 {
@@ -99,102 +100,116 @@ namespace NisitSimulator.EditorTools
         }
 
         // Local markers follow the building, including after a generator rebuild.
-        public static string SetupDormBuilding(Transform building)
+        public static string SetupDormBuilding(Transform building, DormRoomSlot[] settings = null, bool validatePoints = true)
         {
             if (building == null) return "❌ ไม่พบ Dorm_Building — ไม่ย้ายกลับหอเดิม";
-            DormBuildingGenerator.EnsureEntranceDoors(building);
             var root = building.Find("DormSpawn");
-            if (root == null)
-            {
-                var existing = GameObject.Find("DormSpawn");
-                root = existing != null && existing.scene == building.gameObject.scene
-                    ? existing.transform : Child(building, "DormSpawn");
-            }
-            Undo.SetTransformParent(root, building, "M46 dorm spawn");
-            root.localPosition = Vector3.zero;
-            root.localRotation = Quaternion.identity;
-            root.localScale = Vector3.one;
+            if (root == null) root = Child(building, "DormSpawn");
             var sp = Child(root, "DormSpawnPoint");
-            var dsp = sp.GetComponent<DormSpawnPoint>() ?? sp.gameObject.AddComponent<DormSpawnPoint>();
-            dsp.usesWarpInterior = false;
-            dsp.interiorName = "";
-            dsp.exteriorExit = null;
-            dsp.roomId = "dorm_building_101";
-            // At scale .75: spacing >=1.5375m, >=1.29m beyond the front leaf sweep.
-            var points = new[] { new Vector3(-1.2f, 0.3f, 2.8f), new Vector3(0.85f, 0.3f, 2.8f),
-                                 new Vector3(-1.2f, 0.3f, 5f), new Vector3(0.85f, 0.3f, 5f) };
-            var slots = new Transform[3];
+            var dsp = sp.GetComponent<DormSpawnPoint>();
+            if (dsp == null) dsp = sp.gameObject.AddComponent<DormSpawnPoint>();
+            settings = settings ?? dsp.CopyRoomSettings();
+            if (settings.Length != 4) throw new System.InvalidOperationException("ต้องตั้งห้อง/เตียงครบ 4 ช่อง");
+            var rooms = new Transform[4]; var beds = new Transform[4];
+            var identities = new HashSet<string>();
             for (int i = 0; i < 4; i++)
             {
-                var point = i == 0 ? sp : Child(root, "DormSpawnSlot_" + (i + 1));
-                point.localPosition = points[i];
-                point.localRotation = Quaternion.identity; // face +Z toward the central corridor
-                if (i > 0) slots[i - 1] = point;
+                rooms[i] = building.Find(settings[i].roomPath);
+                beds[i] = rooms[i] != null ? rooms[i].Find(settings[i].bedPath) : null;
+                if (beds[i] == null || !identities.Add(settings[i].roomPath + "/" + settings[i].bedPath))
+                    throw new System.InvalidOperationException("ห้อง/เตียงช่อง " + i + " หายหรือซ้ำ");
             }
-            dsp.extraSlots = slots;
-            var unusedExit = root.Find("DormExteriorExit");
-            if (unusedExit != null) Undo.DestroyObjectImmediate(unusedExit.gameObject);
-
-            var sleepRoot = Child(root, "SleepSpots");
-            for (int i = sleepRoot.childCount - 1; i >= 0; i--) Undo.DestroyObjectImmediate(sleepRoot.GetChild(i).gameObject);
-            var oldGlobal = GameObject.Find("SleepSpots");
-            if (oldGlobal != null && oldGlobal.transform.parent == null) Undo.DestroyObjectImmediate(oldGlobal);
             int layer = LayerMask.NameToLayer("Interactable");
-            var wakes = new Transform[4];
-            var stations = new List<SleepStation>();
+            if (layer < 0) throw new System.InvalidOperationException("ไม่พบ Layer Interactable");
+            var cut = building.GetComponent<NisitSimulator.GEBuilding.GEBuildingCutaway>();
+            if (cut != null) { cut.hideAssignedRoomObstructions = true; EditorUtility.SetDirty(cut); PrefabUtility.RecordPrefabInstancePropertyModifications(cut); }
+            DormBuildingGenerator.EnsureEntranceDoors(building);
+            root.localPosition = Vector3.zero; root.localRotation = Quaternion.identity; root.localScale = Vector3.one;
+            dsp.usesWarpInterior = false; dsp.interiorName = ""; dsp.exteriorExit = null;
+            dsp.roomId = settings[0].roomId;
+            var oldSleep = root.Find("SleepSpots");
+            if (oldSleep != null) Undo.DestroyObjectImmediate(oldSleep.gameObject);
+            foreach (var station in building.GetComponentsInChildren<SleepStation>(true))
+                if (station.assignedDormSlot >= 0 && station.name == "SleepInteract" &&
+                    System.Array.IndexOf(beds, station.transform.parent) < 0) Undo.DestroyObjectImmediate(station.gameObject);
+
+            var player = GameObject.Find("Player");
+            var log = new List<string>();
             for (int i = 0; i < 4; i++)
             {
-                var room = building.Find("Floor_1/Rooms/Room_10" + (i + 1));
-                var bed = room != null ? room.Find("Furniture/Bed_A") : null;
-                if (bed == null) continue;
-                var wake = Child(sleepRoot, "Wake_10" + (i + 1));
-                wake.position = room.TransformPoint(new Vector3(0f, 0f, 4.2f));
-                wake.rotation = room.rotation * Quaternion.Euler(0f, 180f, 0f);
-                wakes[i] = wake;
-                var spot = Child(sleepRoot, "SleepSpot_10" + (i + 1));
-                spot.SetPositionAndRotation(bed.position, bed.rotation);
-                if (layer >= 0) spot.gameObject.layer = layer;
-                var bb = BoundsOf(bed);
-                var col = spot.gameObject.AddComponent<BoxCollider>();
-                col.isTrigger = true;
-                col.center = spot.InverseTransformPoint(bb.center);
-                // Bed local sizes; collider is only for interaction, furniture stays solid.
-                col.size = new Vector3(1.6f, 1.2f, 2.5f);
-                var st = spot.gameObject.AddComponent<SleepStation>();
-                st.wakePoint = wake;
-                stations.Add(st);
-            }
-            if (stations.Count != 4) throw new System.InvalidOperationException("Dorm_Building: ไม่พบเตียงชั้น 1 ครบ 4 ห้อง");
-            foreach (var st in stations)
-            {
-                // All stations use the same client-slot mapping, so different beds cannot overlap in MP.
-                st.extraWakePoints = wakes;
+                var room = rooms[i]; var bed = beds[i]; var cfg = settings[i];
+                var spawn = Child(room, "DormRoomSpawn_" + (i + 1));
+                spawn.localPosition = cfg.roomLocalPoint;
+                spawn.localRotation = Quaternion.Euler(0f, 180f, 0f);
+                if (validatePoints)
+                {
+                    Physics.SyncTransforms();
+                    var ground = PlayerSpawnSystem.GroundSnap(player, spawn.position);
+                    if (!PlayerSpawnSystem.FindGround(player, spawn.position + Vector3.up * 1.5f, 3f, out var hit) ||
+                        !hit.transform.IsChildOf(building) || hit.normal.y < 0.9f ||
+                        Mathf.Abs(hit.point.y - spawn.position.y) > 0.1f)
+                        throw new System.InvalidOperationException("ช่อง " + i + " ต้องอยู่บนพื้นห้อง ไม่ใช่เฟอร์นิเจอร์");
+                    spawn.position = hit.point;
+                    if (!HasCharacterClearance(player, ground)) throw new System.InvalidOperationException("ช่อง " + i + " ชนเฟอร์นิเจอร์");
+                }
+                var wake = Child(room, "DormBedWake_" + (i + 1));
+                wake.SetPositionAndRotation(spawn.position, spawn.rotation);
+                var spot = Child(bed, "SleepInteract");
+                spot.localPosition = Vector3.zero; spot.localRotation = Quaternion.identity; spot.localScale = Vector3.one;
+                spot.gameObject.layer = layer; spot.gameObject.isStatic = false;
+                var col = spot.GetComponent<BoxCollider>();
+                if (col == null) col = spot.gameObject.AddComponent<BoxCollider>();
+                col.isTrigger = true; col.center = new Vector3(0f, 0.5f, 0f); col.size = new Vector3(1.6f, 1.2f, 2.5f);
+                var st = spot.GetComponent<SleepStation>();
+                if (st == null) st = spot.gameObject.AddComponent<SleepStation>();
+                st.assignedDormSlot = i; st.useBedWakePoint = true; st.wakePoint = wake; st.extraWakePoints = new Transform[0];
+                cfg.room = room; cfg.bed = bed; cfg.spawnPoint = spawn; cfg.wakePoint = wake; cfg.station = st;
                 EditorUtility.SetDirty(st);
+                PrefabUtility.RecordPrefabInstancePropertyModifications(st);
+                log.Add("ช่อง " + i + " " + cfg.roomId + " / " + bed.name + " → " + spawn.position.ToString("F3"));
+                // Compatibility aliases keep existing scene references usable.
+                var alias = i == 0 ? sp : Child(root, "DormSpawnSlot_" + (i + 1));
+                alias.SetPositionAndRotation(spawn.position, spawn.rotation);
             }
+            dsp.roomSlots = settings;
+            dsp.extraSlots = new[] { settings[1].spawnPoint, settings[2].spawnPoint, settings[3].spawnPoint };
             foreach (var door in building.GetComponentsInChildren<NisitSimulator.GEBuilding.GEDoor>(true))
             {
-                Undo.RecordObject(door, "M46 closed dorm doors");
-                door.startOpen = false;
+                Undo.RecordObject(door, "M46 closed dorm doors"); door.startOpen = false;
                 if (door.hinge != null) door.hinge.localRotation = Quaternion.identity;
-                EditorUtility.SetDirty(door);
-                PrefabUtility.RecordPrefabInstancePropertyModifications(door);
+                EditorUtility.SetDirty(door); PrefabUtility.RecordPrefabInstancePropertyModifications(door);
             }
-            EditorUtility.SetDirty(dsp);
-            Physics.SyncTransforms();
-            var report = new List<string>();
-            for (int i = 0; i < 4; i++)
-            {
-                var point = dsp.GetSlot(i);
-                report.Add(point.name + " " + point.position.ToString("F2") + ": " + CheckPoint(point.position));
-            }
-            report.Add("จุดนอน DM_Bed ห้อง 101–104: " + stations.Count + " · outside · ประตูเริ่มปิด");
+            EditorUtility.SetDirty(dsp); PrefabUtility.RecordPrefabInstancePropertyModifications(dsp); Physics.SyncTransforms();
             EditorSceneManager.MarkSceneDirty(building.gameObject.scene);
-            return string.Join("\n", report);
+            return string.Join("\n", log) + "\nเตียงกดนอน 4 จุด · จุดตื่นเฉพาะเตียง · outside · ประตูเริ่มปิด";
+        }
+
+        public static bool HasCharacterClearance(GameObject player, Vector3 pivot)
+        {
+            var cc = player != null ? player.GetComponent<CharacterController>() : null;
+            if (cc == null) return false;
+            var scale = player.transform.lossyScale;
+            float radius = cc.radius * Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.z));
+            float half = Mathf.Max(0f, cc.height * Mathf.Abs(scale.y) * 0.5f - radius);
+            Vector3 center = pivot + Vector3.Scale(cc.center, scale);
+            foreach (var hit in Physics.OverlapCapsule(center + Vector3.up * half, center - Vector3.up * half,
+                radius, ~0, QueryTriggerInteraction.Ignore))
+                if (!hit.transform.IsChildOf(player.transform)) return false;
+            return true;
         }
         static Transform Child(Transform parent, string name)
         {
             var t = parent.Find(name);
-            if (t != null) return t;
+            if (t != null)
+            {
+                // Keep prefab file IDs stable, and remove old scene overrides left by earlier setup versions.
+                for (int i = parent.childCount - 1; i >= 0; i--)
+                {
+                    var other = parent.GetChild(i);
+                    if (other != t && other.name == name) Undo.DestroyObjectImmediate(other.gameObject);
+                }
+                return t;
+            }
             var go = new GameObject(name);
             Undo.RegisterCreatedObjectUndo(go, "M46");
             go.transform.SetParent(parent, false);

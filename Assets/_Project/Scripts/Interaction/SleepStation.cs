@@ -10,6 +10,12 @@ namespace NisitSimulator.Interaction
     //   ขั้นตอนการนอนทั้งหมดอยู่ที่ SleepController (กันกดซ้ำ/ข้ามหลายวัน/ฟื้นสถานะซ้ำ)
     public class SleepStation : MonoBehaviour, IInteractable
     {
+        [Tooltip("ใช้จุดตื่นของเตียงนี้โดยตรงแทนชุดจุดตื่นรวมเดิม")]
+        public bool useBedWakePoint;
+        [Tooltip("ช่องเจ้าของเตียง (-1 = เตียงทั่วไป); ไม่เปลี่ยนกติกาการนอนเดิม")]
+        public int assignedDormSlot = -1;
+        public bool CanUseAssignedBed => assignedDormSlot < 0 || assignedDormSlot == NisitSimulator.SaveLoad.PlayerSpawnSystem.AssignedSlotIndex;
+
         public int sleepFromHour = 18;   // นอนได้ตั้งแต่กี่โมง (เย็น)
         public int wakeHour = 7;         // ตื่นกี่โมง
 
@@ -45,12 +51,14 @@ namespace NisitSimulator.Interaction
 
         public string GetPrompt()
         {
+            if (!CanUseAssignedBed) return "เตียงของเพื่อนร่วมห้อง";
             if (SleepController.IsSleeping) return "";
             return IsSleepHour() ? $"กด E เพื่อนอน (ตื่น {wakeHour:00}:00 น.)" : $"ยังไม่ถึงเวลานอน (หลัง {sleepFromHour}:00 น.)";
         }
 
         public void Interact(GameObject interactor)
         {
+            if (!CanUseAssignedBed) { HUDController.Toast("ใช้เตียงของตัวเองเพื่อพักผ่อน"); return; }
             if (!IsSleepHour())
             {
                 HUDController.Toast($"ยังไม่ง่วง! นอนได้หลัง {sleepFromHour}:00 น.");
