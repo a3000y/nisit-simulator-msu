@@ -6,6 +6,7 @@ namespace NisitSimulator.Systems
     //   แยกออกมาเพื่อไม่ให้ระบบภารกิจต้องผูกกับสถานีทุกตัวโดยตรง
     public static class GameplayEvents
     {
+        public const string Register = "register";
         public const string Class   = "class";    // เข้าเรียนจบคาบ
         public const string Eat     = "eat";      // กินอาหาร (โรงอาหาร/ของกินในกระเป๋า)
         public const string Work    = "work";     // ทำงานพาร์ทไทม์จบกะ

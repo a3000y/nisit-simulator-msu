@@ -31,6 +31,23 @@ namespace NisitSimulator.UI
             Apply();
         }
 
+        // ข้อความบนพื้นเข้ม (หัวโทรศัพท์/ปุ่มซื้อ) ต้องคงสีอ่อนที่หน้าต่างตั้งไว้
+        static bool KeepLightText(TMP_Text text)
+        {
+            if (text.GetComponentInParent<Button>(true) != null) return true;
+            var phone = text.GetComponentInParent<PhoneController>(true);
+            if (phone != null && (text == phone.appTitle || text.text == "กด TAB เพื่อปิด")) return true;
+            for (var parent = text.transform.parent; parent != null; parent = parent.parent)
+            {
+                var image = parent.GetComponent<Image>();
+                if (image == null || image.color.a < 0.88f) continue;
+                var c = image.color;
+                float brightness = 0.2126f * c.r + 0.7152f * c.g + 0.0722f * c.b;
+                return brightness < 0.55f;
+            }
+            return false;
+        }
+
         void Apply()
         {
             // การ์ด: Image สีกรมท่าเข้ม + ทึบ → เปลี่ยนเป็นพาสเทลอ่อน (คงค่า alpha)
@@ -55,7 +72,7 @@ namespace NisitSimulator.UI
             // ตัวอักษร: สีขาว/เทาอ่อน (ไม่มีสีสัน) → เปลี่ยนเป็นเข้ม (คงสี accent เช่น ทอง/เขียวไว้)
             foreach (var t in Object.FindObjectsByType<TMP_Text>(FindObjectsInactive.Include, FindObjectsSortMode.None))
             {
-                if (t == null) continue;
+                if (t == null || KeepLightText(t)) continue;
                 var c = t.color;
                 float mn = Mathf.Min(c.r, Mathf.Min(c.g, c.b));
                 float mx = Mathf.Max(c.r, Mathf.Max(c.g, c.b));

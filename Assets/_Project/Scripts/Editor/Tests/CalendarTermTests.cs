@@ -21,27 +21,27 @@ namespace NisitSimulator.Tests
 
         // ---------- ปฏิทิน ----------
         [Test]
-        public void Calendar_23Days_TermsAndExamDays()
+        public void Calendar_31Days_TermsAndExamDays()
         {
-            Assert.AreEqual(23, AcademicCalendar.TotalDays);
-            Assert.AreEqual(10, AcademicCalendar.SemesterLen(0));
-            Assert.AreEqual(10, AcademicCalendar.SemesterLen(1));
+            Assert.AreEqual(31, AcademicCalendar.TotalDays);
+            Assert.AreEqual(14, AcademicCalendar.SemesterLen(0));
+            Assert.AreEqual(14, AcademicCalendar.SemesterLen(1));
             Assert.AreEqual(3, AcademicCalendar.SemesterLen(2));
-            for (int d = 1; d <= 23; d++)
+            for (int d = 1; d <= 31; d++)
             {
-                int sem = d <= 10 ? 0 : d <= 20 ? 1 : 2;
-                int sd = d <= 10 ? d : d <= 20 ? d - 10 : d - 20;
+                int sem = d <= 14 ? 0 : d <= 28 ? 1 : 2;
+                int sd = d <= 14 ? d : d <= 28 ? d - 14 : d - 28;
                 Assert.AreEqual(sem, AcademicCalendar.SemesterIndex(d), "วัน " + d);
                 Assert.AreEqual(sd, AcademicCalendar.SemesterDay(d), "วัน " + d);
                 Assert.AreEqual(d, AcademicCalendar.DayInYear(sem, sd));
             }
-            Assert.AreEqual(5, ExamController.MidtermDay(0)); Assert.AreEqual(10, ExamController.FinalDay(0));
-            Assert.AreEqual(5, ExamController.MidtermDay(1)); Assert.AreEqual(10, ExamController.FinalDay(1));
+            Assert.AreEqual(6, ExamController.MidtermDay(0)); Assert.AreEqual(13, ExamController.FinalDay(0));
+            Assert.AreEqual(6, ExamController.MidtermDay(1)); Assert.AreEqual(13, ExamController.FinalDay(1));
             Assert.IsTrue(AcademicCalendar.HasMidterm(0)); Assert.IsTrue(AcademicCalendar.HasMidterm(1));
             Assert.IsFalse(AcademicCalendar.HasMidterm(2), "ฤดูร้อนไม่มีสอบกลางภาค");
             // 12 เดือนกระจายทั้งปี
             Assert.AreEqual("มิถุนายน", AcademicCalendar.MonthName(1));
-            Assert.AreEqual("พฤษภาคม", AcademicCalendar.MonthName(23));
+            Assert.AreEqual("พฤษภาคม", AcademicCalendar.MonthName(31));
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace NisitSimulator.Tests
             {
                 Assert.AreEqual(4, d.sessions.Count, d.code + " ตอนปกติ 4 ครั้ง");
                 if (d.IsRequired) Assert.AreEqual(4, d.retakeSessions.Count, d.code + " ภาคค่ำ 4 ครั้ง");
-                foreach (var s in d.sessions) { Assert.AreNotEqual(mid, s.day); Assert.AreNotEqual(fin, s.day); Assert.That(s.day, Is.InRange(1, 9)); }
+                foreach (var s in d.sessions) { Assert.AreNotEqual(mid, s.day); Assert.AreNotEqual(fin, s.day); Assert.That(s.day, Is.InRange(2, 12)); }
                 foreach (var s in d.retakeSessions) { Assert.AreNotEqual(mid, s.day); Assert.AreNotEqual(fin, s.day); }
                 // 2 ครั้งก่อนสอบกลางภาค 2 ครั้งหลัง
                 Assert.AreEqual(2, d.sessions.FindAll(s => s.day < mid).Count, d.code);
@@ -76,7 +76,7 @@ namespace NisitSimulator.Tests
 
             // แผนภาคที่มี 6 วิชา: ทุกวันเรียนมีคาบว่างอย่างน้อย 1 คาบ (09–17)
             var plan = cur.PlanCourses(1, 1);
-            for (int day = 1; day <= 9; day++)
+            for (int day = 1; day <= 12; day++)
             {
                 if (day == mid) continue;
                 int used = 0;
@@ -93,7 +93,7 @@ namespace NisitSimulator.Tests
         [Test]
         public void Migration_MapsEveryLegacyDay()
         {
-            int[] expect = { 1, 5, 10, 11, 15, 20, 21, 23 };   // วันเดิม 1..8 → วันใหม่
+            int[] expect = { 1, 6, 13, 15, 20, 27, 29, 31 };   // วันเดิม 1..8 → วันใหม่
             for (int old = 1; old <= 8; old++)
                 Assert.AreEqual(expect[old - 1], CalendarMigration.MapLegacyDay(old), "วันเดิม " + old);
         }
@@ -110,12 +110,12 @@ namespace NisitSimulator.Tests
             var d = new SaveData { dayInYear = 5, hasAcademicRecord = true, academic = rec };
             Assert.AreEqual(0, d.calendarVersion);
             Assert.IsTrue(CalendarMigration.Upgrade(d));
-            Assert.AreEqual(15, d.dayInYear);
+            Assert.AreEqual(20, d.dayInYear);
             Assert.AreEqual(2.5f, e.progress); Assert.AreEqual(0.7f, e.midterm); Assert.AreEqual(0.03f, e.classBonusFinal);
             Assert.AreEqual(0, e.meetingKeys.Count); Assert.AreEqual(0, e.classEventKeys.Count);
             Assert.AreEqual(1, old.meetingKeys.Count, "ภาคที่ประกาศผลแล้วไม่แตะ");
             Assert.IsFalse(CalendarMigration.Upgrade(d), "แปลงครั้งเดียว");
-            Assert.AreEqual(15, d.dayInYear);
+            Assert.AreEqual(20, d.dayInYear);
             // เซฟใหม่ไม่ถูกแปลง
             var fresh = JsonUtility.FromJson<SaveData>(JsonUtility.ToJson(new SaveData { dayInYear = 7, calendarVersion = AcademicCalendar.Version }));
             Assert.IsFalse(CalendarMigration.Upgrade(fresh)); Assert.AreEqual(7, fresh.dayInYear);

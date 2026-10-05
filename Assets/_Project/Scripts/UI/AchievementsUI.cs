@@ -28,7 +28,7 @@ namespace NisitSimulator.UI
         {
             if (_i != null && _i != this) { Destroy(gameObject); return; }
             _i = this;
-            font = Object.FindFirstObjectByType<TMP_Text>()?.font;
+            font = GrowthUI.Font;
             Build();
         }
 
@@ -98,11 +98,11 @@ namespace NisitSimulator.UI
             foreach (var a in am.All)
             {
                 bool got = am.IsUnlocked(a.id);
-                string mark = got ? "<color=#7BE38B>[สำเร็จ]</color>" : "<color=#6B7386>[ล็อก]</color>";
-                string title = got ? a.title : $"<color=#9AA6BF>{a.title}</color>";
+                string mark = got ? "<color=#389966>[สำเร็จ]</color>" : "<color=#6B7386>[ล็อก]</color>";
+                string title = got ? a.title : $"<color=#615675>{a.title}</color>";
                 sb.AppendLine($"{mark} {title}");
                 string unl = CosmeticUnlocks.UnlocksText(a.id);
-                sb.AppendLine($"<size=68%><color=#8A93AB>{a.desc}  ·  รางวัล {AchievementManager.RewardText(a)}{(unl.Length > 0 ? "  ·  ปลดล็อก " + unl : "")}</color></size>");
+                sb.AppendLine($"<size=90%><color=#6A607E>{a.desc}  ·  รางวัล {AchievementManager.RewardText(a)}{(unl.Length > 0 ? "  ·  ปลดล็อก " + unl : "")}</color></size>");
             }
             return sb.ToString();
         }
@@ -115,7 +115,7 @@ namespace NisitSimulator.UI
             var canvas = canGo.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 72;
             var scaler = canGo.GetComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080);
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080); NisitSimulator.UI.UIFit.Scaler(scaler);   // Expand: ทั้งหน้าอยู่ในจอทุกสัดส่วน
 
             var dim = new GameObject("Panel", typeof(RectTransform), typeof(Image));
             dim.transform.SetParent(canGo.transform, false);
@@ -132,15 +132,26 @@ namespace NisitSimulator.UI
 
             MakeText(card.transform, "สมุดนิสิต — สถิติ & ความสำเร็จ", new Vector2(0f, 315f), new Vector2(940, 50), 30, new Color(0.42f, 0.26f, 0.58f)).alignment = TextAlignmentOptions.Center;
 
-            statsText = MakeText(card.transform, "", new Vector2(-238f, -14f), new Vector2(420, 540), 22, Color.white);
-            statsText.alignment = TextAlignmentOptions.TopLeft;
-            achText = MakeText(card.transform, "", new Vector2(232f, -14f), new Vector2(460, 540), 21, Color.white);
-            achText.alignment = TextAlignmentOptions.TopLeft;
+            // สองคอลัมน์เลื่อนได้ (ความสำเร็จ 18 รายการ/รายการความสามารถยาวเกินการ์ด → เดิมล้นออกนอกกรอบ)
+            statsText = ScrollText(card.transform, "StatsScroll", new Vector2(-238f, -14f), new Vector2(430, 540), 22);
+            achText = ScrollText(card.transform, "AchScroll", new Vector2(232f, -14f), new Vector2(470, 540), 21);
 
             var close = MakeButton(card.transform, "ปิด (J)", new Vector2(0f, -320f), new Vector2(220f, 50f), new Color(0.86f, 0.80f, 0.88f));
             close.onClick.AddListener(Close);
 
             panel.SetActive(false);
+        }
+
+        TMP_Text ScrollText(Transform parent, string name, Vector2 pos, Vector2 size, float fs)
+        {
+            var sr = UIFit.VerticalScroll(parent, name, out var content, 0f, new RectOffset(0, 12, 0, 8));
+            var rt = (RectTransform)sr.transform;
+            rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.anchoredPosition = pos; rt.sizeDelta = size;
+            var t = MakeText(content, "", Vector2.zero, new Vector2(size.x, 10f), fs, GrowthUI.Ink);
+            t.alignment = TextAlignmentOptions.TopLeft;
+            t.textWrappingMode = TextWrappingModes.Normal;
+            return t;
         }
 
         Button MakeButton(Transform parent, string label, Vector2 pos, Vector2 size, Color col)
@@ -164,6 +175,7 @@ namespace NisitSimulator.UI
             var t = go.AddComponent<TextMeshProUGUI>();
             if (font != null) t.font = font;
             t.text = s; t.fontSize = fs; t.color = col; t.alignment = TextAlignmentOptions.Center;
+            t.fontStyle = FontStyles.Normal; t.raycastTarget = false;
             var rt = (RectTransform)go.transform;
             rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
             rt.anchoredPosition = pos; rt.sizeDelta = size;

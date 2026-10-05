@@ -196,6 +196,7 @@ namespace NisitSimulator.Systems
 
             // ภารกิจ "ไปทำ" — ไม่ซ้ำกิจกรรมกัน
             var pool = Available(ActionQuests());
+            pool.RemoveAll(q => q.actionKey == GameplayEvents.Class && !HasClassesToday());
             pool.RemoveAll(q => active.Exists(a => a.metric == Metric.Action && a.actionKey == q.actionKey));
             for (int i = active.Count; i < dailyCount && pool.Count > 0; i++)
             {
@@ -211,6 +212,24 @@ namespace NisitSimulator.Systems
                 int r = Random.Range(0, fallback.Count);
                 active.Add(fallback[r].Copy()); fallback.RemoveAt(r);
             }
+            Refresh();
+        }
+
+        public static bool HasClassesToday()
+        {
+            var p = Object.FindAnyObjectByType<ProgressionManager>();
+            if (p != null && (AcademicCalendar.IsWeekend(p.DayInYear) || AcademicCalendar.IsExamDay(p.DayInYear))) return false;
+            var r = NisitSimulator.Academics.CourseRegistrar.Instance;
+            if (r == null || !r.IsActive) return true;
+            foreach (var e in r.Service.CurrentEnrollments()) foreach (var s in r.Service.SessionsFor(e)) if (s.day == r.SemDay) return true;
+            return false;
+        }
+
+        public void EnsureArrivalQuest()
+        {
+            if (active.Exists(q => q.actionKey == GameplayEvents.Register)) return;
+            if (active.Count >= dailyCount) active.RemoveAt(active.Count - 1);
+            active.Insert(0, new Quest("ลงทะเบียนวันอาทิตย์ให้เรียบร้อย", GameplayEvents.Register, 1, 40, 25, 5f));
             Refresh();
         }
 

@@ -17,7 +17,7 @@ MonoBehaviour:
   facultyIndices: 00000000
   creditCapPerTerm: 18
   registrationDays: 1
-  autoConfirmAtDeadline: 1
+  autoConfirmAtDeadline: 0
   electivesFromYear: 3
   promotionCredits: 180000003600000054000000
   electivesRequired: 2
@@ -65,53 +65,53 @@ MonoBehaviour:
     prerequisites: []
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 540
       endMinute: 660
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 3
+    - day: 4
       startMinute: 660
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 6
+    - day: 9
       startMinute: 540
       endMinute: 660
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 8
+    - day: 11
       startMinute: 660
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-101
-    - day: 3
+    - day: 4
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-101
-    - day: 6
+    - day: 9
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-101
-    - day: 8
+    - day: 11
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
@@ -127,53 +127,53 @@ MonoBehaviour:
     prerequisites: []
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 660
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 3
+    - day: 4
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 6
+    - day: 9
       startMinute: 660
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 8
+    - day: 11
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-101
-    - day: 4
+    - day: 5
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-101
-    - day: 7
+    - day: 10
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-101
-    - day: 9
+    - day: 12
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
@@ -189,53 +189,53 @@ MonoBehaviour:
     prerequisites: []
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 3
+    - day: 4
       startMinute: 900
       endMinute: 1020
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 6
+    - day: 9
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 8
+    - day: 11
       startMinute: 900
       endMinute: 1020
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-101
-    - day: 3
+    - day: 4
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-101
-    - day: 6
+    - day: 9
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-101
-    - day: 8
+    - day: 11
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
@@ -251,53 +251,53 @@ MonoBehaviour:
     prerequisites: []
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101"
       roomId: IT-101
-    - day: 4
+    - day: 5
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101"
       roomId: IT-101
-    - day: 7
+    - day: 10
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101"
       roomId: IT-101
-    - day: 9
+    - day: 12
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101"
       roomId: IT-101
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-101
-    - day: 4
+    - day: 5
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-101
-    - day: 7
+    - day: 10
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-101
-    - day: 9
+    - day: 12
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
@@ -313,50 +313,50 @@ MonoBehaviour:
     prerequisites: []
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 4
+    - day: 5
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 7
+    - day: 10
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 9
+    - day: 12
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-201
-    - day: 3
+    - day: 4
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-201
-    - day: 6
+    - day: 9
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-201
-    - day: 8
+    - day: 11
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
@@ -371,53 +371,53 @@ MonoBehaviour:
     prerequisites: []
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 4
+    - day: 5
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 7
+    - day: 10
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 9
+    - day: 12
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-102
-    - day: 4
+    - day: 5
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-102
-    - day: 7
+    - day: 10
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-102
-    - day: 9
+    - day: 12
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
@@ -434,53 +434,53 @@ MonoBehaviour:
     - GE102
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 540
       endMinute: 660
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 3
+    - day: 4
       startMinute: 660
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 6
+    - day: 9
       startMinute: 540
       endMinute: 660
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 8
+    - day: 11
       startMinute: 660
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-102
-    - day: 3
+    - day: 4
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-102
-    - day: 6
+    - day: 9
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-102
-    - day: 8
+    - day: 11
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
@@ -496,53 +496,53 @@ MonoBehaviour:
     prerequisites: []
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 660
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 3
+    - day: 4
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 6
+    - day: 9
       startMinute: 660
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 8
+    - day: 11
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-101
-    - day: 4
+    - day: 5
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-101
-    - day: 7
+    - day: 10
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-101
-    - day: 9
+    - day: 12
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
@@ -558,53 +558,53 @@ MonoBehaviour:
     prerequisites: []
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 3
+    - day: 4
       startMinute: 900
       endMinute: 1020
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 6
+    - day: 9
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 8
+    - day: 11
       startMinute: 900
       endMinute: 1020
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-102
-    - day: 3
+    - day: 4
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-102
-    - day: 6
+    - day: 9
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-102
-    - day: 8
+    - day: 11
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
@@ -621,50 +621,50 @@ MonoBehaviour:
     - CS102
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 4
+    - day: 5
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 7
+    - day: 10
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 9
+    - day: 12
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-201
-    - day: 4
+    - day: 5
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-201
-    - day: 7
+    - day: 10
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-201
-    - day: 9
+    - day: 12
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
@@ -680,53 +680,53 @@ MonoBehaviour:
     - CS101
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101"
       roomId: IT-101
-    - day: 4
+    - day: 5
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101"
       roomId: IT-101
-    - day: 7
+    - day: 10
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101"
       roomId: IT-101
-    - day: 9
+    - day: 12
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101"
       roomId: IT-101
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-101
-    - day: 3
+    - day: 4
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-101
-    - day: 6
+    - day: 9
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-101
-    - day: 8
+    - day: 11
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
@@ -743,53 +743,53 @@ MonoBehaviour:
     - MA101
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 4
+    - day: 5
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 7
+    - day: 10
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 9
+    - day: 12
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-102
-    - day: 4
+    - day: 5
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-102
-    - day: 7
+    - day: 10
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-102
-    - day: 9
+    - day: 12
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
@@ -807,50 +807,50 @@ MonoBehaviour:
     - MA102
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 3
+    - day: 4
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 6
+    - day: 9
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 8
+    - day: 11
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-202
-    - day: 3
+    - day: 4
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-202
-    - day: 6
+    - day: 9
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-202
-    - day: 8
+    - day: 11
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
@@ -866,50 +866,50 @@ MonoBehaviour:
     - CS102
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 3
+    - day: 4
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 6
+    - day: 9
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 8
+    - day: 11
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-202
-    - day: 4
+    - day: 5
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-202
-    - day: 7
+    - day: 10
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-202
-    - day: 9
+    - day: 12
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
@@ -925,50 +925,50 @@ MonoBehaviour:
     - CS102
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 3
+    - day: 4
       startMinute: 900
       endMinute: 1020
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 6
+    - day: 9
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 8
+    - day: 11
       startMinute: 900
       endMinute: 1020
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-201
-    - day: 3
+    - day: 4
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-201
-    - day: 6
+    - day: 9
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-201
-    - day: 8
+    - day: 11
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
@@ -984,53 +984,53 @@ MonoBehaviour:
     - CS104
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-102"
       roomId: IT-102
-    - day: 4
+    - day: 5
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-102"
       roomId: IT-102
-    - day: 7
+    - day: 10
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-102"
       roomId: IT-102
-    - day: 9
+    - day: 12
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-102"
       roomId: IT-102
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-102
-    - day: 4
+    - day: 5
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-102
-    - day: 7
+    - day: 10
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-102
-    - day: 9
+    - day: 12
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
@@ -1047,53 +1047,53 @@ MonoBehaviour:
     - MA101
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 660
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 4
+    - day: 5
       startMinute: 660
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 7
+    - day: 10
       startMinute: 660
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 9
+    - day: 12
       startMinute: 660
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-103
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-103
-    - day: 3
+    - day: 4
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-103
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-103
-    - day: 6
+    - day: 9
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-103
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-103
-    - day: 8
+    - day: 11
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
@@ -1109,53 +1109,53 @@ MonoBehaviour:
     prerequisites: []
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102"
       roomId: GE-102
-    - day: 4
+    - day: 5
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102"
       roomId: GE-102
-    - day: 7
+    - day: 10
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102"
       roomId: GE-102
-    - day: 9
+    - day: 12
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102"
       roomId: GE-102
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-103
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-103
-    - day: 4
+    - day: 5
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-103
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-103
-    - day: 7
+    - day: 10
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-103
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-103
-    - day: 9
+    - day: 12
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
@@ -1173,53 +1173,53 @@ MonoBehaviour:
     - CS202
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 3
+    - day: 4
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 6
+    - day: 9
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 8
+    - day: 11
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-301
-    - day: 3
+    - day: 4
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-301
-    - day: 6
+    - day: 9
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-301
-    - day: 8
+    - day: 11
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
@@ -1237,53 +1237,53 @@ MonoBehaviour:
     - CS204
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 3
+    - day: 4
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 6
+    - day: 9
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 8
+    - day: 11
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-301
-    - day: 4
+    - day: 5
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-301
-    - day: 7
+    - day: 10
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-301
-    - day: 9
+    - day: 12
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
@@ -1300,53 +1300,53 @@ MonoBehaviour:
     - CS104
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 3
+    - day: 4
       startMinute: 900
       endMinute: 1020
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 6
+    - day: 9
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 8
+    - day: 11
       startMinute: 900
       endMinute: 1020
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-301
-    - day: 3
+    - day: 4
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-301
-    - day: 6
+    - day: 9
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-301
-    - day: 8
+    - day: 11
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
@@ -1364,50 +1364,50 @@ MonoBehaviour:
     - CS203
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202"
       roomId: IT-202
-    - day: 4
+    - day: 5
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202"
       roomId: IT-202
-    - day: 7
+    - day: 10
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202"
       roomId: IT-202
-    - day: 9
+    - day: 12
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202"
       roomId: IT-202
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-203
-    - day: 4
+    - day: 5
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-203
-    - day: 7
+    - day: 10
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-203
-    - day: 9
+    - day: 12
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
@@ -1423,53 +1423,53 @@ MonoBehaviour:
     - CS203
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-102"
       roomId: IT-102
-    - day: 4
+    - day: 5
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-102"
       roomId: IT-102
-    - day: 7
+    - day: 10
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-102"
       roomId: IT-102
-    - day: 9
+    - day: 12
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-102"
       roomId: IT-102
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-102
-    - day: 3
+    - day: 4
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-102
-    - day: 6
+    - day: 9
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-102
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-102
-    - day: 8
+    - day: 11
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
@@ -1485,53 +1485,53 @@ MonoBehaviour:
     prerequisites: []
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102"
       roomId: GE-102
-    - day: 4
+    - day: 5
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102"
       roomId: GE-102
-    - day: 7
+    - day: 10
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102"
       roomId: GE-102
-    - day: 9
+    - day: 12
       startMinute: 780
       endMinute: 900
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-102"
       roomId: GE-102
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-103
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-103
-    - day: 4
+    - day: 5
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-103
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-103
-    - day: 7
+    - day: 10
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-103
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-103
-    - day: 9
+    - day: 12
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
@@ -1548,53 +1548,53 @@ MonoBehaviour:
     - CS205
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 3
+    - day: 4
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 6
+    - day: 9
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 8
+    - day: 11
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-101
-    - day: 3
+    - day: 4
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-101
-    - day: 6
+    - day: 9
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-101
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-101
-    - day: 8
+    - day: 11
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
@@ -1612,53 +1612,53 @@ MonoBehaviour:
     - MA201
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 3
+    - day: 4
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 6
+    - day: 9
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 8
+    - day: 11
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-301
-    - day: 4
+    - day: 5
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-301
-    - day: 7
+    - day: 10
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-301
-    - day: 9
+    - day: 12
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
@@ -1676,50 +1676,50 @@ MonoBehaviour:
     - CS202
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202"
       roomId: IT-202
-    - day: 3
+    - day: 4
       startMinute: 900
       endMinute: 1020
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202"
       roomId: IT-202
-    - day: 6
+    - day: 9
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202"
       roomId: IT-202
-    - day: 8
+    - day: 11
       startMinute: 900
       endMinute: 1020
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202"
       roomId: IT-202
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-202
-    - day: 3
+    - day: 4
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-202
-    - day: 6
+    - day: 9
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-202
-    - day: 8
+    - day: 11
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
@@ -1736,53 +1736,53 @@ MonoBehaviour:
     - CS207
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 4
+    - day: 5
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 7
+    - day: 10
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
-    - day: 9
+    - day: 12
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-301"
       roomId: IT-301
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-103
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-103
-    - day: 4
+    - day: 5
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-103
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-103
-    - day: 7
+    - day: 10
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-103
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-103
-    - day: 9
+    - day: 12
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
@@ -1799,50 +1799,50 @@ MonoBehaviour:
     - CS301
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 3
+    - day: 4
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 6
+    - day: 9
       startMinute: 540
       endMinute: 660
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 8
+    - day: 11
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-203
-    - day: 3
+    - day: 4
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-203
-    - day: 6
+    - day: 9
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-203
-    - day: 8
+    - day: 11
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
@@ -1859,50 +1859,50 @@ MonoBehaviour:
     - CS207
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 3
+    - day: 4
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 6
+    - day: 9
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
-    - day: 8
+    - day: 11
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-201"
       roomId: IT-201
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-204 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-204
-    - day: 4
+    - day: 5
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-204 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-204
-    - day: 7
+    - day: 10
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-204 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-204
-    - day: 9
+    - day: 12
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
@@ -1919,53 +1919,53 @@ MonoBehaviour:
     - MA201
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-302"
       roomId: IT-302
-    - day: 3
+    - day: 4
       startMinute: 900
       endMinute: 1020
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-302"
       roomId: IT-302
-    - day: 6
+    - day: 9
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-302"
       roomId: IT-302
-    - day: 8
+    - day: 11
       startMinute: 900
       endMinute: 1020
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-302"
       roomId: IT-302
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-302
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-302
-    - day: 3
+    - day: 4
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-302
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-302
-    - day: 6
+    - day: 9
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 IT-302
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-302
-    - day: 8
+    - day: 11
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
@@ -1981,53 +1981,53 @@ MonoBehaviour:
     prerequisites: []
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 540
       endMinute: 660
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 4
+    - day: 5
       startMinute: 540
       endMinute: 660
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 7
+    - day: 10
       startMinute: 540
       endMinute: 660
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
-    - day: 9
+    - day: 12
       startMinute: 540
       endMinute: 660
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-101"
       roomId: GE-101
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-104
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-104
-    - day: 4
+    - day: 5
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-104
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-104
-    - day: 7
+    - day: 10
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E1A\u0E23\u0E23\u0E22\u0E32\u0E22 GE-104
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: GE-104
-    - day: 9
+    - day: 12
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
@@ -2045,53 +2045,53 @@ MonoBehaviour:
     - CS308
     minEarnedCredits: 90
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 540
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E1A\u0E23\u0E34\u0E2B\u0E32\u0E23"
       room: "\u0E2A\u0E33\u0E19\u0E31\u0E01\u0E07\u0E32\u0E19\u0E1D\u0E36\u0E01\u0E07\u0E32\u0E19/\u0E2A\u0E2B\u0E01\u0E34\u0E08"
       roomId: ADM-101
-    - day: 3
+    - day: 4
       startMinute: 540
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E1A\u0E23\u0E34\u0E2B\u0E32\u0E23"
       room: "\u0E2A\u0E33\u0E19\u0E31\u0E01\u0E07\u0E32\u0E19\u0E1D\u0E36\u0E01\u0E07\u0E32\u0E19/\u0E2A\u0E2B\u0E01\u0E34\u0E08"
       roomId: ADM-101
-    - day: 6
+    - day: 9
       startMinute: 540
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E1A\u0E23\u0E34\u0E2B\u0E32\u0E23"
       room: "\u0E2A\u0E33\u0E19\u0E31\u0E01\u0E07\u0E32\u0E19\u0E1D\u0E36\u0E01\u0E07\u0E32\u0E19/\u0E2A\u0E2B\u0E01\u0E34\u0E08"
       roomId: ADM-101
-    - day: 8
+    - day: 11
       startMinute: 540
       endMinute: 780
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E1A\u0E23\u0E34\u0E2B\u0E32\u0E23"
       room: "\u0E2A\u0E33\u0E19\u0E31\u0E01\u0E07\u0E32\u0E19\u0E1D\u0E36\u0E01\u0E07\u0E32\u0E19/\u0E2A\u0E2B\u0E01\u0E34\u0E08"
       roomId: ADM-101
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E1A\u0E23\u0E34\u0E2B\u0E32\u0E23"
       room: "\u0E2A\u0E33\u0E19\u0E31\u0E01\u0E07\u0E32\u0E19\u0E1D\u0E36\u0E01\u0E07\u0E32\u0E19/\u0E2A\u0E2B\u0E01\u0E34\u0E08
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: ADM-101
-    - day: 3
+    - day: 4
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E1A\u0E23\u0E34\u0E2B\u0E32\u0E23"
       room: "\u0E2A\u0E33\u0E19\u0E31\u0E01\u0E07\u0E32\u0E19\u0E1D\u0E36\u0E01\u0E07\u0E32\u0E19/\u0E2A\u0E2B\u0E01\u0E34\u0E08
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: ADM-101
-    - day: 6
+    - day: 9
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E1A\u0E23\u0E34\u0E2B\u0E32\u0E23"
       room: "\u0E2A\u0E33\u0E19\u0E31\u0E01\u0E07\u0E32\u0E19\u0E1D\u0E36\u0E01\u0E07\u0E32\u0E19/\u0E2A\u0E2B\u0E01\u0E34\u0E08
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: ADM-101
-    - day: 8
+    - day: 11
       startMinute: 1080
       endMinute: 1200
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E1A\u0E23\u0E34\u0E2B\u0E32\u0E23"
@@ -2109,50 +2109,50 @@ MonoBehaviour:
     - CS307
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203"
       roomId: IT-203
-    - day: 3
+    - day: 4
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203"
       roomId: IT-203
-    - day: 6
+    - day: 9
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203"
       roomId: IT-203
-    - day: 8
+    - day: 11
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203"
       roomId: IT-203
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-205 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-205
-    - day: 4
+    - day: 5
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-205 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-205
-    - day: 7
+    - day: 10
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-205 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-205
-    - day: 9
+    - day: 12
       startMinute: 1080
       endMinute: 1200
       building: "\u0E04\u0E13\u0E30 IT"
@@ -2169,50 +2169,50 @@ MonoBehaviour:
     - CS402
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 780
       endMinute: 1020
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203"
       roomId: IT-203
-    - day: 3
+    - day: 4
       startMinute: 780
       endMinute: 1020
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203"
       roomId: IT-203
-    - day: 6
+    - day: 9
       startMinute: 780
       endMinute: 1020
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203"
       roomId: IT-203
-    - day: 8
+    - day: 11
       startMinute: 780
       endMinute: 1020
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203"
       roomId: IT-203
     retakeSessions:
-    - day: 1
+    - day: 2
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-203
-    - day: 3
+    - day: 4
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-203
-    - day: 6
+    - day: 9
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203 (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-203
-    - day: 8
+    - day: 11
       startMinute: 1200
       endMinute: 1320
       building: "\u0E04\u0E13\u0E30 IT"
@@ -2228,53 +2228,53 @@ MonoBehaviour:
     - CS401
     minEarnedCredits: 0
     sessions:
-    - day: 1
+    - day: 2
       startMinute: 540
       endMinute: 660
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E2A\u0E31\u0E21\u0E21\u0E19\u0E32 IT-405"
       roomId: IT-405
-    - day: 3
+    - day: 4
       startMinute: 540
       endMinute: 660
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E2A\u0E31\u0E21\u0E21\u0E19\u0E32 IT-405"
       roomId: IT-405
-    - day: 6
+    - day: 9
       startMinute: 540
       endMinute: 660
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E2A\u0E31\u0E21\u0E21\u0E19\u0E32 IT-405"
       roomId: IT-405
-    - day: 8
+    - day: 11
       startMinute: 540
       endMinute: 660
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E2A\u0E31\u0E21\u0E21\u0E19\u0E32 IT-405"
       roomId: IT-405
     retakeSessions:
-    - day: 2
+    - day: 3
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E2A\u0E31\u0E21\u0E21\u0E19\u0E32 IT-405
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-405
-    - day: 4
+    - day: 5
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E2A\u0E31\u0E21\u0E21\u0E19\u0E32 IT-405
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-405
-    - day: 7
+    - day: 10
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
       room: "\u0E2B\u0E49\u0E2D\u0E07\u0E2A\u0E31\u0E21\u0E21\u0E19\u0E32 IT-405
         (\u0E20\u0E32\u0E04\u0E04\u0E48\u0E33)"
       roomId: IT-405
-    - day: 9
+    - day: 12
       startMinute: 1200
       endMinute: 1320
       building: "\u0E2D\u0E32\u0E04\u0E32\u0E23\u0E40\u0E23\u0E35\u0E22\u0E19"
@@ -2293,25 +2293,25 @@ MonoBehaviour:
     - CS201
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202"
       roomId: IT-202
-    - day: 4
+    - day: 5
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202"
       roomId: IT-202
-    - day: 7
+    - day: 10
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202"
       roomId: IT-202
-    - day: 9
+    - day: 12
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
@@ -2329,25 +2329,25 @@ MonoBehaviour:
     - MA101
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202"
       roomId: IT-202
-    - day: 4
+    - day: 5
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202"
       roomId: IT-202
-    - day: 7
+    - day: 10
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-202"
       roomId: IT-202
-    - day: 9
+    - day: 12
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
@@ -2365,25 +2365,25 @@ MonoBehaviour:
     - MA201
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203"
       roomId: IT-203
-    - day: 4
+    - day: 5
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203"
       roomId: IT-203
-    - day: 7
+    - day: 10
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203"
       roomId: IT-203
-    - day: 9
+    - day: 12
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
@@ -2401,25 +2401,25 @@ MonoBehaviour:
     - CS207
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203"
       roomId: IT-203
-    - day: 4
+    - day: 5
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203"
       roomId: IT-203
-    - day: 7
+    - day: 10
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-203"
       roomId: IT-203
-    - day: 9
+    - day: 12
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
@@ -2437,25 +2437,25 @@ MonoBehaviour:
     - CS208
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-204"
       roomId: IT-204
-    - day: 4
+    - day: 5
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-204"
       roomId: IT-204
-    - day: 7
+    - day: 10
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-204"
       roomId: IT-204
-    - day: 9
+    - day: 12
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
@@ -2472,25 +2472,25 @@ MonoBehaviour:
     - CS302
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-204"
       roomId: IT-204
-    - day: 4
+    - day: 5
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-204"
       roomId: IT-204
-    - day: 7
+    - day: 10
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-204"
       roomId: IT-204
-    - day: 9
+    - day: 12
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
@@ -2507,25 +2507,25 @@ MonoBehaviour:
     - EL301
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-205"
       roomId: IT-205
-    - day: 4
+    - day: 5
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-205"
       roomId: IT-205
-    - day: 7
+    - day: 10
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-205"
       roomId: IT-205
-    - day: 9
+    - day: 12
       startMinute: 780
       endMinute: 900
       building: "\u0E04\u0E13\u0E30 IT"
@@ -2542,25 +2542,25 @@ MonoBehaviour:
     - EL302
     minEarnedCredits: 0
     sessions:
-    - day: 2
+    - day: 3
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-205"
       roomId: IT-205
-    - day: 4
+    - day: 5
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-205"
       roomId: IT-205
-    - day: 7
+    - day: 10
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"
       room: "\u0E41\u0E25\u0E47\u0E1A\u0E04\u0E2D\u0E21 IT-205"
       roomId: IT-205
-    - day: 9
+    - day: 12
       startMinute: 660
       endMinute: 780
       building: "\u0E04\u0E13\u0E30 IT"

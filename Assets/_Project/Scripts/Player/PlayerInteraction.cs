@@ -18,6 +18,7 @@ namespace NisitSimulator.Player
 
         void Update()
         {
+            if (NisitSimulator.Systems.ArrivalIntroController.Active) { ClearCurrent(); return; }
             if (GameManager.Instance != null && !GameManager.Instance.IsActive) { ClearCurrent(); return; }
             if (Time.timeScale == 0f) { ClearCurrent(); return; }   // มีหน้าต่างหยุดเวลา (สอบ/เหตุการณ์/คู่มือ) → ไม่รับ E ซ้อน
             if (NisitSimulator.Academics.ExamMinigame.ExamMinigameController.BlocksWorld) { ClearCurrent(); return; }   // อยู่ในห้องสอบมินิเกม → ไม่รับการโต้ตอบในโลก

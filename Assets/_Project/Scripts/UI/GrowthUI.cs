@@ -51,7 +51,7 @@ namespace NisitSimulator.UI
             var c = go.GetComponent<Canvas>();
             c.renderMode = RenderMode.ScreenSpaceOverlay; c.sortingOrder = order;
             var s = go.GetComponent<CanvasScaler>();
-            s.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; s.referenceResolution = new Vector2(1920, 1080); s.matchWidthOrHeight = 0.5f;
+            s.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; s.referenceResolution = new Vector2(1920, 1080); s.matchWidthOrHeight = 0.5f; NisitSimulator.UI.UIFit.Scaler(s);   // Expand: ทั้งหน้าอยู่ในจอทุกสัดส่วน
             return c;
         }
 

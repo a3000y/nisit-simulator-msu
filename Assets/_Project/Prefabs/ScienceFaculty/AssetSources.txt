@@ -1,0 +1,33 @@
+Existing prefab/model instances: 354
+Supplementary parts: 14
+Scene backup: Assets/_Project/Scenes/Backups/ScienceFaculty_20261005_121231.unity
+Original science building retained inactive.
+Retained inactive tree: Zone_East/KR_Tree_03 at (64.45, 0.00, -70.34)
+Retained inactive tree: Zone_East/KR_Tree_02 at (70.34, 0.00, -64.45)
+Retained inactive tree: Zone_East/KR_Tree_01 at (75.69, 0.00, -58.08)
+Retained inactive tree: Zone_East/KR_Tree_03 at (80.46, 0.00, -51.26)
+Retained inactive tree: Zone_East/KR_Tree_03 at (80.00, 0.00, -45.80)
+Retained inactive tree: Zone_East/KR_Tree_02 at (62.38, 0.00, -63.87)
+Retained inactive tree: Zone_Outer/KR_Tree_02 at (86.03, 0.00, -72.19)
+Retained inactive tree: Zone_Outer/KR_Tree_01 at (91.99, 0.00, -64.41)
+2 x Assets/_Project/Art/Models/KayKit_Restaurant/kitchentable_sink_large.fbx
+4 x Assets/_Project/Prefabs/Classroom/StorageCabinet.prefab
+12 x Assets/_Project/Prefabs/Classroom/StudentChair.prefab
+10 x Assets/_Project/Prefabs/Classroom/StudentDesk.prefab
+2 x Assets/_Project/Prefabs/GEBuilding/GE_Bench.prefab
+4 x Assets/_Project/Prefabs/ITBuilding/IT_GroupTable.prefab
+8 x Assets/_Project/Prefabs/ITBuilding/IT_LightPanel.prefab
+1 x Assets/_Project/Prefabs/ITBuilding/IT_ReceptionDesk.prefab
+4 x Assets/_Project/Prefabs/ITBuilding/IT_Whiteboard.prefab
+100 x Assets/_Project/Prefabs/ITBuilding/IT_Window_440x180.prefab
+2 x Assets/_Project/Prefabs/ITBuilding/IT_Workbench.prefab
+26 x Assets/school/Prefabs/props/wall2.prefab
+92 x Assets/school/Prefabs/props/wall4 (1).prefab
+65 x Assets/school/Prefabs/road/floor.prefab
+2 x Assets/Synty/PolygonCity/Prefabs/Environments/SM_Env_Tree_01.prefab
+2 x Assets/Synty/PolygonCity/Prefabs/Props/SM_Prop_ParkBench_01.prefab
+2 x Assets/Synty/PolygonGeneric/Prefabs/Environment/SM_Gen_Env_Bush_01.prefab
+4 x Assets/Synty/PolygonGeneric/Prefabs/Props/SM_Gen_Prop_Bottle_01.prefab
+4 x Assets/Synty/PolygonGeneric/Prefabs/Props/SM_Gen_Prop_Bottle_02.prefab
+4 x Assets/Synty/PolygonGeneric/Prefabs/Props/SM_Gen_Prop_Bottle_03.prefab
+4 x Assets/Synty/PolygonGeneric/Prefabs/Props/SM_Gen_Prop_Bottle_04.prefab

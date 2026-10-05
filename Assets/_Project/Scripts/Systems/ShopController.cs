@@ -57,6 +57,7 @@ namespace NisitSimulator.Systems
             if (stats != null) stats.OnMoneyChanged += OnMoney;
 
             BuildRows();
+            StyleForReadability();
             if (closeButton != null)   closeButton.onClick.AddListener(Close);
             if (confirmButton != null) confirmButton.onClick.AddListener(Confirm);
             if (clearButton != null)   clearButton.onClick.AddListener(ClearCart);
@@ -116,6 +117,130 @@ namespace NisitSimulator.Systems
             }
         }
 
+        // ===== จัดหน้าร้านให้อ่านง่าย (ตอนรัน — ไม่แก้ prefab/ฉาก) =====
+        //   เดิม: ไอคอนทับชื่อ · ตัวอักษรเข้มบนการ์ดเทาเข้ม · "รวม" ทับรายการ · ปุ่มตัวเข้มบนพื้นเข้ม
+        //   ใหม่: การ์ดพื้นสว่าง ไอคอนซ้าย ชื่อ/ผล/ราคาขวา · รายการเลื่อนได้ในกรอบเดิม · ปุ่มตัวขาว
+        public static readonly Color RowCol = new Color(1f, 1f, 1f, 0.96f);
+        public static readonly Color InkCol = new Color(0.27f, 0.22f, 0.42f);
+        public static readonly Color SubCol = new Color(0.45f, 0.41f, 0.58f);
+        public static readonly Color PriceCol = new Color(0.84f, 0.45f, 0.10f);
+        public const float RowH = 128f;
+
+        void StyleForReadability()
+        {
+            foreach (var t in new[] { moneyText, totalText })
+                if (t != null) { t.fontStyle &= ~FontStyles.Italic; UIFit.OneLine(t, t.fontSize, 18f); }
+            if (totalText != null) totalText.color = InkCol;
+            if (moneyText != null) moneyText.color = InkCol;
+            if (panel != null)
+                foreach (var t in panel.GetComponentsInChildren<TMP_Text>(true))
+                    t.fontStyle &= ~FontStyles.Italic;
+            foreach (var b in new[] { closeButton, confirmButton, clearButton })
+            {
+                if (b == null) continue;
+                var t = b.GetComponentInChildren<TMP_Text>(true);
+                if (t == null) continue;
+                t.color = Color.white; t.fontStyle = FontStyles.Bold;
+                UIFit.OneLine(t, Mathf.Max(22f, t.fontSize), 18f);
+                UIFit.Outline(t, new Color(0.16f, 0.13f, 0.26f, 0.6f), 0.15f);
+            }
+            MakeScrollable();
+            foreach (var r in rows) StyleRow(r);
+        }
+
+        // ย้าย content เข้า viewport ขนาดเท่ากรอบเดิม + ScrollRect (รายการเกินกรอบเลื่อนได้ ไม่ทับ "รวม")
+        void MakeScrollable()
+        {
+            var crt = content as RectTransform;
+            if (crt == null || crt.parent == null || crt.GetComponentInParent<ScrollRect>() != null) return;
+            var grid = crt.GetComponent<GridLayoutGroup>();
+            var vp = new GameObject("ItemsViewport", typeof(RectTransform), typeof(RectMask2D), typeof(Image), typeof(ScrollRect));
+            var vrt = (RectTransform)vp.transform;
+            vrt.SetParent(crt.parent, false);
+            vrt.SetSiblingIndex(crt.GetSiblingIndex());
+            vrt.anchorMin = crt.anchorMin; vrt.anchorMax = crt.anchorMax; vrt.pivot = crt.pivot;
+            vrt.anchoredPosition = crt.anchoredPosition; vrt.sizeDelta = crt.sizeDelta;
+            vp.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
+            // เว้นพื้นที่ท้ายร้านให้ยอดรวมและปุ่ม แม้การ์ดสินค้าสูงขึ้น
+            float trim = Mathf.Max(0f, vrt.rect.height - 460f);
+            vrt.sizeDelta -= new Vector2(0f, trim);
+            vrt.anchoredPosition += new Vector2(0f, trim * 0.5f);
+            float width = crt.rect.width > 10f ? crt.rect.width : 600f;
+            crt.SetParent(vrt, false);
+            crt.anchorMin = new Vector2(0f, 1f); crt.anchorMax = new Vector2(1f, 1f); crt.pivot = new Vector2(0.5f, 1f);
+            crt.anchoredPosition = Vector2.zero; crt.sizeDelta = new Vector2(0f, crt.sizeDelta.y);
+            if (grid != null)
+            {
+                grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                grid.constraintCount = 2;
+                float sx = Mathf.Max(6f, grid.spacing.x);
+                grid.spacing = new Vector2(sx, Mathf.Max(8f, grid.spacing.y));
+                grid.cellSize = new Vector2((width - grid.padding.left - grid.padding.right - sx) / 2f, RowH);
+                var fit = crt.GetComponent<ContentSizeFitter>();
+                if (fit == null) fit = crt.gameObject.AddComponent<ContentSizeFitter>();
+                fit.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                fit.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+            }
+            var sr = vp.GetComponent<ScrollRect>();
+            sr.horizontal = false; sr.vertical = true; sr.movementType = ScrollRect.MovementType.Clamped;
+            sr.scrollSensitivity = 40f; sr.viewport = vrt; sr.content = crt;
+        }
+
+        static void Place(RectTransform rt, Vector2 aMin, Vector2 aMax, Vector2 offMin, Vector2 offMax)
+        {
+            if (rt == null) return;
+            rt.anchorMin = aMin; rt.anchorMax = aMax; rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.offsetMin = offMin; rt.offsetMax = offMax;
+        }
+
+        static void StyleRow(ShopRow r)
+        {
+            if (r == null) return;
+            var bg = r.GetComponent<Image>();
+            if (bg != null) bg.color = RowCol;
+            // ไอคอนวงกลมซ้าย 72×72
+            if (r.iconBg != null)
+            {
+                var irt = r.iconBg.rectTransform;
+                irt.anchorMin = irt.anchorMax = new Vector2(0f, 0.5f); irt.pivot = new Vector2(0.5f, 0.5f);
+                irt.anchoredPosition = new Vector2(52f, 0f); irt.sizeDelta = new Vector2(72f, 72f);
+            }
+            if (r.icon != null && r.iconBg != null && r.icon.transform.parent != r.iconBg.transform)
+            {
+                var irt = r.icon.rectTransform;
+                irt.anchorMin = irt.anchorMax = new Vector2(0f, 0.5f); irt.pivot = new Vector2(0.5f, 0.5f);
+                irt.anchoredPosition = new Vector2(52f, 0f); irt.sizeDelta = new Vector2(56f, 56f);
+            }
+            // ชื่อใช้พื้นที่ขวาของไอคอนเต็มบรรทัด · ผลสองบรรทัด · ราคาแยกด้านล่าง
+            if (r.nameText != null)
+            {
+                Place(r.nameText.rectTransform, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(100f, -48f), new Vector2(-14f, -8f));
+                r.nameText.color = InkCol; r.nameText.fontStyle = FontStyles.Bold;
+                r.nameText.alignment = TextAlignmentOptions.BottomLeft;
+                UIFit.OneLine(r.nameText, 24f, 18f);
+            }
+            if (r.effectText != null)
+            {
+                Place(r.effectText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(100f, 36f), new Vector2(-14f, -48f));
+                r.effectText.color = SubCol; r.effectText.fontStyle = FontStyles.Normal;
+                r.effectText.alignment = TextAlignmentOptions.TopLeft;
+                UIFit.Wrap(r.effectText, 18f, 18f);
+            }
+            if (r.priceText != null)
+            {
+                Place(r.priceText.rectTransform, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(100f, 4f), new Vector2(-14f, 38f));
+                r.priceText.color = PriceCol; r.priceText.fontStyle = FontStyles.Bold;
+                r.priceText.alignment = TextAlignmentOptions.MidlineRight;
+                UIFit.OneLine(r.priceText, 22f, 18f);
+            }
+            if (r.qtyBadge != null)
+            {
+                var qrt = r.qtyBadge.GetComponent<RectTransform>();
+                if (qrt != null) { qrt.anchorMin = qrt.anchorMax = new Vector2(0f, 1f); qrt.pivot = new Vector2(0.5f, 0.5f); qrt.anchoredPosition = new Vector2(80f, -14f); }
+            }
+            if (r.qtyText != null) { r.qtyText.fontStyle = FontStyles.Bold; UIFit.OneLine(r.qtyText, Mathf.Max(18f, r.qtyText.fontSize), 18f); }
+        }
+
         // ---------- ตะกร้า ----------
         void AddOne(int i)
         {
@@ -136,8 +261,8 @@ namespace NisitSimulator.Systems
             InventoryManager inv = null;
             if (storeToInventory)
             {
-                inv = InventoryManager.Instance
-                      ?? Object.FindFirstObjectByType<InventoryManager>(FindObjectsInactive.Include);
+                inv = InventoryManager.Instance;
+                if (inv == null) inv = Object.FindFirstObjectByType<InventoryManager>(FindObjectsInactive.Include);
                 if (inv == null)
                 {
                     var gmObj = GameObject.Find("GameManager");
@@ -161,10 +286,20 @@ namespace NisitSimulator.Systems
                         stats.ChangeSatisfaction(it.satisfaction * q);
                     }
                 }
+            // โรงอาหาร (กินทันที) = ได้นั่งกินข้าวพักใจ → คลายเครียดเล็กน้อย ครั้งเดียวต่อการสั่ง
+            if (inv == null && OrderHasFood()) stats.ChangeStress(NisitSimulator.Stats.StressBands.CafeteriaMeal);
             HUDController.Toast(inv != null ? $"ซื้อเข้ากระเป๋าแล้ว!  -{total}฿" : $"ซื้อสำเร็จ!  -{total}฿");
             GameplayEvents.Raise(inv != null ? GameplayEvents.Buy : GameplayEvents.Eat);
             if (inv == null) NisitSimulator.Core.SFXManager.Eat();   // โรงอาหาร = กินทันที → เสียงกิน
             ClearCart();
+        }
+
+        bool OrderHasFood()
+        {
+            if (qty == null) return false;
+            for (int i = 0; i < catalog.Count && i < qty.Length; i++)
+                if (qty[i] > 0 && catalog[i].hunger > 0) return true;
+            return false;
         }
 
         public void ClearCart()
@@ -211,7 +346,7 @@ namespace NisitSimulator.Systems
             if (it.health != 0)       p.Add($"สุขภาพ {it.health:+0;-0}");
             if (it.knowledge != 0)    p.Add($"ความรู้ {it.knowledge:+0;-0}");
             if (it.satisfaction != 0) p.Add($"พอใจ {it.satisfaction:+0;-0}");
-            return string.Join("  ", p);
+            return string.Join("  ", p.ConvertAll(part => "<nobr>" + part + "</nobr>"));
         }
 
         void FillDefaults() { catalog = DefaultCatalog(); }

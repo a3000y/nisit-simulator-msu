@@ -33,6 +33,7 @@ namespace NisitSimulator.SaveLoad
             var prog = Object.FindFirstObjectByType<ProgressionManager>();
             if (prog != null) { data.currentYear = prog.CurrentYear; data.dayInYear = prog.DayInYear; data.calendarYear = prog.CalendarYear; }
             data.calendarVersion = AcademicCalendar.Version;
+            ArrivalIntroController.CollectSave(data);
 
             // ระบบลงทะเบียนเรียน (ชั้นปี ภาค รายวิชา ความคืบหน้า ผลสอบ ประวัติเรียนซ้ำ)
             var registrar = NisitSimulator.Academics.CourseRegistrar.Instance;
@@ -89,6 +90,7 @@ namespace NisitSimulator.SaveLoad
             foreach (var cs in Object.FindObjectsByType<ClassStation>(FindObjectsSortMode.None))
                 cs.CollectAttendance(data.classAttendance);
 
+            NisitSimulator.Characters.CharacterRegistryRuntime.EnsureExists().CollectSave(data);
             SaveSystem.Save(data);
         }
 

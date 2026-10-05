@@ -28,6 +28,7 @@ namespace NisitSimulator.UI
         float kGain; int moneyIn, moneyOut, xpGain; int classBase;
         float lastK; int lastM, lastX;
         int levelAtStart;
+        int summaryDayInYear = 1;
 
         GameObject root;
         TMP_Text title, labels, values, questList;
@@ -69,6 +70,8 @@ namespace NisitSimulator.UI
 
         void ResetDay()
         {
+            var p = Object.FindAnyObjectByType<ProgressionManager>();
+            if (p != null) summaryDayInYear = p.DayInYear;
             kGain = 0; moneyIn = moneyOut = xpGain = 0;
             if (stats != null) { lastK = stats.Knowledge; lastM = stats.Money; lastX = stats.Exp; }
             classBase = StatsTracker.Instance.GetInt("classes");
@@ -95,7 +98,7 @@ namespace NisitSimulator.UI
             int classes = StatsTracker.Instance.GetInt("classes") - classBase;
             var lv = LevelSystem.Instance;
 
-            title.text = $"สรุปวันที่ {Mathf.Max(1, newDay - 1)}";
+            title.text = "สรุป " + AcademicCalendar.DateText(summaryDayInYear);
 
             var L = new System.Text.StringBuilder();
             var V = new System.Text.StringBuilder();

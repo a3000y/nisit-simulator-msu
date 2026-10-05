@@ -219,7 +219,9 @@ namespace NisitSimulator.Interaction
 
             Unlock();
             yield return Fade(1f, 0f);
-            HUDController.Toast($"หลับสบาย! ตื่น {station.wakeHour:00}:00 น. พลังงานเต็ม ความเครียดลด (แต่หิวแล้ว)");
+            HUDController.Toast(SleepStation.LastSleepRestless
+                ? $"นอนกระสับกระส่าย… เครียดจนหลับไม่สนิท ตื่น {station.wakeHour:00}:00 น. พลังงานฟื้นแค่ {NisitSimulator.Stats.StressBands.InsomniaEnergyFraction * 100f:0}%"
+                : $"หลับสบาย! ตื่น {station.wakeHour:00}:00 น. พลังงานเต็ม ความเครียดลด (แต่หิวแล้ว)");
             state = SleepState.Idle;
         }
 
@@ -276,7 +278,7 @@ namespace NisitSimulator.Interaction
             var canvas = canGo.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 940;
             var scaler = canGo.GetComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080); scaler.matchWidthOrHeight = 0.5f;
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080); scaler.matchWidthOrHeight = 0.5f; NisitSimulator.UI.UIFit.Scaler(scaler);   // Expand: ทั้งหน้าอยู่ในจอทุกสัดส่วน
 
             // ---- หน้ายืนยัน ----
             dialog = Panel(canGo.transform, "SleepDialog", new Color(0f, 0f, 0f, 0.45f), Vector2.zero, Vector2.one);

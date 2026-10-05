@@ -27,7 +27,10 @@ namespace NisitSimulator.TimeSystem
 
         // หยุดนาฬิกาของ "เครื่องนี้" ชั่วคราวโดยไม่แตะ Time.timeScale — ใช้ตอนผู้เล่นอยู่ในห้องสอบมินิเกม
         //   (ตัวจับเวลาสอบใช้ unscaled time จึงยังเดิน · เครื่องอื่นใน Multiplayer ไม่ถูกกระทบ)
-        public static bool Suspended;
+        static bool suspended;
+        // Independent owner: the exam controller may release its lock every frame.
+        public static bool ArrivalSuspended { get; set; }
+        public static bool Suspended { get => suspended || ArrivalSuspended; set => suspended = value; }
 
         // ===== Multiplayer (ตั้งโดย WorldTimeSync เท่านั้น — เล่นคนเดียวเป็น false ทั้งคู่ = พฤติกรรมเดิม) =====
         //   NetworkFollower     = เครื่องนี้เป็น client: เดินเวลาเองเพื่อความลื่น แต่ "ไม่ข้ามเที่ยงคืนเอง" · วัน/เวลาจริงมาจาก Host (ApplyAuthoritativeTime)
@@ -42,7 +45,7 @@ namespace NisitSimulator.TimeSystem
         public float EffectiveMinutesPerSecond => gameMinutesPerRealSecond * Mathf.Max(1f, WarpMultiplier);
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        static void ResetStatics() { WarpMultiplier = 1f; }
+        static void ResetStatics() { WarpMultiplier = 1f; ArrivalSuspended = false; }
 
         private int lastMinute = -1;
         private int currentDay;

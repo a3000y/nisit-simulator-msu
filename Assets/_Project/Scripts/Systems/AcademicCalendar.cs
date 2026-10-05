@@ -3,16 +3,14 @@ using UnityEngine;
 namespace NisitSimulator.Systems
 {
     // ปฏิทินการศึกษา: แปลง "วันในปี" → ภาคเรียน / ฤดู / โทนสี (ใช้ร่วมกันทั้งระบบสอบและฤดูกาล)
-    // ปีหนึ่ง = 3 ภาคเรียน (12 วัน = 12 เดือน มิ.ย.→พ.ค.):
-    //   ภาคต้น(ฝน) 5 [มิ.ย.-ต.ค.] → ภาคปลาย(หนาว) 5 [พ.ย.-มี.ค.] → ภาคฤดูร้อน(ร้อน) 2 [เม.ย.-พ.ค.]
+    // Calendar V3: 14 / 14 / 3 days; each term starts on Sunday.
     public static class AcademicCalendar
     {
-        // ปฏิทินรุ่น 2 (ยืดเวลาเล่น ~14 ชม./4 ปี): ภาคต้น 10 · ภาคปลาย 10 · ฤดูร้อน 3 = ปีละ 23 วัน
-        //   ภาคต้น/ปลาย: วันที่ 1–4 เรียน · 5 สอบกลางภาค · 6–9 เรียน · 10 สอบปลายภาค (ExamController.MidtermDay/FinalDay)
-        //   รุ่นก่อน (รุ่น 1) = 3/3/2 — เซฟเก่าแปลงวันด้วย CalendarMigration ตอนโหลด
-        public const int Version = 2;
+        // Regular terms: registration 1, classes 2–5 / 9–12, exams 6 / 13.
+        // Legacy 3/3/2 and 10/10/3 saves are upgraded by CalendarMigration.
+        public const int Version = 3;
         public static readonly int[] LegacyTermDays = { 3, 3, 2 };
-        static readonly int[]    TermDays  = { 10, 10, 3 };
+        static readonly int[]    TermDays  = { 14, 14, 3 };
         static readonly string[] TermNames = { "ภาคต้น", "ภาคปลาย", "ภาคฤดูร้อน" };
         static readonly string[] Seasons   = { "ฤดูฝน", "ฤดูหนาว", "ฤดูร้อน" };
 
@@ -27,6 +25,21 @@ namespace NisitSimulator.Systems
             new Color(0.60f, 0.68f, 0.95f, 0.11f),  // หนาว: ฟ้าอมม่วง เย็น
             new Color(1.00f, 0.78f, 0.42f, 0.12f),  // ร้อน: เหลืองส้ม อบอุ่น
         };
+
+        // Option B: each term starts on Sunday, including the three-day summer break.
+        static readonly string[] Weekdays = { "อา.", "จ.", "อ.", "พ.", "พฤ.", "ศ.", "ส." };
+        public static System.DayOfWeek WeekdayOf(int dayInYear) => WeekdayOfSemesterDay(SemesterDay(dayInYear));
+        public static System.DayOfWeek WeekdayOfSemesterDay(int day) => (System.DayOfWeek)((Mathf.Max(1, day) - 1) % 7);
+        public static bool IsWeekend(int dayInYear) => IsWeekendSemesterDay(SemesterDay(dayInYear));
+        public static bool IsWeekendSemesterDay(int day) => WeekdayOfSemesterDay(day) == System.DayOfWeek.Sunday || WeekdayOfSemesterDay(day) == System.DayOfWeek.Saturday;
+        public static bool IsRegistrationDay(int dayInYear) => SemesterIndex(dayInYear) < 2 && SemesterDay(dayInYear) == 1;
+        public static string ShortTermDayText(int day) => $"{Weekdays[(int)WeekdayOfSemesterDay(day)]} {Mathf.Max(1, day)}";
+        public static string TermDayText(int day) => $"{Weekdays[(int)WeekdayOfSemesterDay(day)]} วันที่ {Mathf.Max(1, day)} ของภาค";
+        public static string DateText(int dayInYear) => TermDayText(SemesterDay(dayInYear));
+        public static int MidtermDay(int sem) => HasMidterm(sem) ? 6 : 0;
+        public static int FinalDay(int sem) => sem < 2 ? 13 : SemesterLen(sem);
+        public static bool IsExamDay(int dayInYear) => SemesterDay(dayInYear) == FinalDay(SemesterIndex(dayInYear)) ||
+            (HasMidterm(SemesterIndex(dayInYear)) && SemesterDay(dayInYear) == MidtermDay(SemesterIndex(dayInYear)));
 
         // จำนวนวันรวมต่อปี (ต้องตรงกับ ProgressionManager.daysPerYear)
         public static int TotalDays { get { int s = 0; foreach (var d in TermDays) s += d; return s; } }

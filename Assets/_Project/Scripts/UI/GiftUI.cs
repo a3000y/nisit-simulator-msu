@@ -34,7 +34,7 @@ namespace NisitSimulator.UI
         {
             if (_i != null && _i != this) { Destroy(gameObject); return; }
             _i = this;
-            font = Object.FindFirstObjectByType<TMP_Text>()?.font;   // ใช้ฟอนต์ไทยเดียวกับในเกม
+            font = GrowthUI.Font;   // ใช้ฟอนต์ไทยเดียวกับในเกม
             Build();
         }
 
@@ -95,7 +95,12 @@ namespace NisitSimulator.UI
         void Populate()
         {
             if (titleText != null) titleText.text = $"ให้ของขวัญกับ {target.NpcName}";
-            for (int i = listRoot.childCount - 1; i >= 0; i--) Destroy(listRoot.GetChild(i).gameObject);
+            for (int i = listRoot.childCount - 1; i >= 0; i--)
+            {
+                var oldRow = listRoot.GetChild(i).gameObject;
+                oldRow.SetActive(false);
+                Destroy(oldRow);
+            }
 
             var inv = InventoryManager.Instance;
             float y = -6f;
@@ -104,7 +109,7 @@ namespace NisitSimulator.UI
                 if (s == null || s.item == null) continue;
                 string itemName = s.item.name;
                 int friendship = Mathf.Clamp(8 + Mathf.RoundToInt(s.item.satisfaction), 5, 20);
-                var btn = MakeRow($"{itemName}  x{s.count}   <color=#FF7BA6>+{friendship} สนิท</color>", y);
+                var btn = MakeRow($"{itemName}  x{s.count}   <color=#A4406B>+{friendship} สนิท</color>", y);
                 y -= 48f;
                 btn.onClick.AddListener(() => Give(itemName, friendship));
             }
@@ -133,7 +138,7 @@ namespace NisitSimulator.UI
             var canvas = canGo.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 70;
             var scaler = canGo.GetComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080);
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080); NisitSimulator.UI.UIFit.Scaler(scaler);   // Expand: ทั้งหน้าอยู่ในจอทุกสัดส่วน
 
             var dim = new GameObject("Panel", typeof(RectTransform), typeof(Image));
             dim.transform.SetParent(canGo.transform, false);
@@ -150,13 +155,26 @@ namespace NisitSimulator.UI
 
             titleText = MakeText(card.transform, "ให้ของขวัญ", new Vector2(0f, 300f), new Vector2(520, 50), 30, new Color(0.42f, 0.26f, 0.58f));
             titleText.alignment = TextAlignmentOptions.Center;
-            MakeText(card.transform, "เลือกไอเทมเพื่อให้ (กด H หรือ Esc เพื่อปิด)", new Vector2(0f, 262f), new Vector2(520, 30), 18, new Color(0.75f, 0.8f, 0.9f)).alignment = TextAlignmentOptions.Center;
+            MakeText(card.transform, "เลือกไอเทมเพื่อให้ (กด H หรือ Esc เพื่อปิด)", new Vector2(0f, 262f), new Vector2(520, 30), 18, GrowthUI.Soft).alignment = TextAlignmentOptions.Center;
 
-            var listGo = new GameObject("List", typeof(RectTransform));
+            var listGo = new GameObject("List", typeof(RectTransform), typeof(Image), typeof(RectMask2D), typeof(ScrollRect));
             listGo.transform.SetParent(card.transform, false);
-            listRoot = (RectTransform)listGo.transform;
-            listRoot.anchorMin = new Vector2(0f, 1f); listRoot.anchorMax = new Vector2(1f, 1f); listRoot.pivot = new Vector2(0.5f, 1f);
-            listRoot.anchoredPosition = new Vector2(0f, -100f); listRoot.sizeDelta = new Vector2(-40f, 430f);
+            var listViewport = (RectTransform)listGo.transform;
+            listViewport.anchorMin = new Vector2(0f, 1f); listViewport.anchorMax = new Vector2(1f, 1f); listViewport.pivot = new Vector2(0.5f, 1f);
+            listViewport.anchoredPosition = new Vector2(0f, -100f); listViewport.sizeDelta = new Vector2(-40f, 430f);
+            listGo.GetComponent<Image>().color = Color.clear;
+            var contentGo = new GameObject("Content", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
+            contentGo.transform.SetParent(listGo.transform, false);
+            listRoot = (RectTransform)contentGo.transform;
+            listRoot.anchorMin = new Vector2(0f, 1f); listRoot.anchorMax = Vector2.one; listRoot.pivot = new Vector2(0.5f, 1f);
+            listRoot.anchoredPosition = Vector2.zero; listRoot.sizeDelta = Vector2.zero;
+            var layout = contentGo.GetComponent<VerticalLayoutGroup>();
+            layout.spacing = 6f; layout.childControlWidth = true; layout.childControlHeight = true;
+            layout.childForceExpandWidth = true; layout.childForceExpandHeight = false;
+            contentGo.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            var scroll = listGo.GetComponent<ScrollRect>();
+            scroll.content = listRoot; scroll.viewport = listViewport; scroll.horizontal = false;
+            scroll.movementType = ScrollRect.MovementType.Clamped; scroll.scrollSensitivity = 40f;
 
             var close = MakeButton(card.transform, "ปิด", new Vector2(0f, -312f), new Vector2(200f, 50f), new Color(0.86f, 0.80f, 0.88f));
             close.onClick.AddListener(Close);
@@ -166,15 +184,17 @@ namespace NisitSimulator.UI
 
         Button MakeRow(string label, float y)
         {
-            var go = new GameObject("Row", typeof(RectTransform), typeof(Image), typeof(Button));
+            var go = new GameObject("Row", typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement));
             go.transform.SetParent(listRoot, false);
             var rt = (RectTransform)go.transform;
             rt.anchorMin = new Vector2(0f, 1f); rt.anchorMax = new Vector2(1f, 1f); rt.pivot = new Vector2(0.5f, 1f);
             rt.anchoredPosition = new Vector2(0f, y); rt.sizeDelta = new Vector2(0f, 42f);
-            go.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.10f);
-            var t = MakeText(go.transform, label, Vector2.zero, Vector2.zero, 22, Color.white);
+            go.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.8f);
+            go.GetComponent<LayoutElement>().preferredHeight = 50f;
+            var t = MakeText(go.transform, label, Vector2.zero, Vector2.zero, 22, GrowthUI.Ink);
             var trt = t.rectTransform; trt.anchorMin = Vector2.zero; trt.anchorMax = Vector2.one; trt.offsetMin = new Vector2(16, 0); trt.offsetMax = new Vector2(-12, 0);
             t.alignment = TextAlignmentOptions.Left;
+            UIFit.OneLine(t, 22f, 18f);
             return go.GetComponent<Button>();
         }
 

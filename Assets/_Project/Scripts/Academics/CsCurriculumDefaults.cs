@@ -20,7 +20,7 @@ namespace NisitSimulator.Academics
         const string OfficeRoom = "สำนักงานฝึกงาน/สหกิจ";
 
         // ช่องเวลาครึ่งแรกของภาค (วัน, เริ่ม, จบ) ×2 คาบ — ครึ่งหลังซ้ำ +HalfOffset วัน (วิชาละ 4 ครั้ง)
-        public const int HalfOffset = 5;
+        public const int HalfOffset = 7;
         static readonly int[][] Slot =
         {
             new[] { 1,  9, 11,  3, 11, 13 },   // c1
@@ -44,8 +44,8 @@ namespace NisitSimulator.Academics
         {
             return new List<ClassSession>
             {
-                make(dA, sA, eA), make(dB, sB, eB),
-                make(dA + HalfOffset, sA, eA), make(dB + HalfOffset, sB, eB),
+                make(dA + 1, sA, eA), make(dB + 1, sB, eB),
+                make(dA + 1 + HalfOffset, sA, eA), make(dB + 1 + HalfOffset, sB, eB),
             };
         }
 
@@ -63,7 +63,7 @@ namespace NisitSimulator.Academics
             c.facultyIndices = new[] { 0 };
             c.creditCapPerTerm = 18;
             c.registrationDays = 1;
-            c.autoConfirmAtDeadline = true;
+            c.autoConfirmAtDeadline = false;
             c.electivesFromYear = 3;
             c.promotionCredits = new[] { 24, 54, 84 };
             c.electivesRequired = 2;

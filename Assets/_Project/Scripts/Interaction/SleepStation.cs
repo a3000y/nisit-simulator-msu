@@ -37,7 +37,7 @@ namespace NisitSimulator.Interaction
         public float healthRestore = 12f;
         public float hungerChange = -25f;        // ตื่นมาหิว → ต้องไปกินข้าว
         public float satisfactionChange = 5f;
-        public float stressChange = -35f;        // นอนคือทางคลายเครียดหลักของเกม
+        public float stressChange = -25f;        // นอนคือทางคลายเครียดหลักของเกม (เดิม -35 → -25 ให้ความเครียดสะสมข้ามวันได้)
 
         private GameClock _clock;
         private GameClock Clock => _clock != null ? _clock : (_clock = Object.FindFirstObjectByType<GameClock>());
@@ -77,16 +77,33 @@ namespace NisitSimulator.Interaction
             }
         }
 
+        // ผลการนอนครั้งล่าสุด (ใช้เลือกข้อความตอนตื่น)
+        public static bool LastSleepRestless { get; private set; }
+
+        public static bool IsRestless(float stress) => stress > StressBands.InsomniaAbove;
+
+        // พลังงานที่เพิ่มจริงตอนตื่น: ปกติ = restore (999 = เต็ม) · นอนไม่หลับ = ฟื้นได้ถึง 75% ของค่าสูงสุดเท่านั้น (มีมากกว่านั้นอยู่แล้ว = ไม่ลด)
+        public static float EnergyRestoreFor(float current, float max, float restore, bool restless)
+        {
+            if (!restless) return restore;
+            float cap = max * StressBands.InsomniaEnergyFraction;
+            return Mathf.Clamp(cap - current, 0f, Mathf.Max(0f, restore));
+        }
+
         // ฟื้นสถานะตามกติกาการนอน — เรียกโดย SleepController ครั้งเดียวต่อการนอนหนึ่งครั้ง
         public void ApplyWakeEffects(GameObject interactor)
         {
+            LastSleepRestless = false;
             if (interactor != null && interactor.TryGetComponent<PlayerStats>(out var s))
             {
-                s.ChangeEnergy(energyRestore);
+                // นอนไม่หลับ: เข้านอนตอนเครียดเกิน 70 → พลังงานฟื้นได้แค่ 75% · ความเครียดลดน้อยลง
+                bool restless = IsRestless(s.Stress);
+                LastSleepRestless = restless;
+                s.ChangeEnergy(EnergyRestoreFor(s.Energy, s.maxEnergy, energyRestore, restless));
                 s.ChangeHealth(healthRestore);
                 s.ChangeHunger(hungerChange);
                 s.ChangeSatisfaction(satisfactionChange);
-                s.ChangeStress(stressChange);
+                s.ChangeStress(restless ? StressBands.InsomniaStressChange : stressChange);
             }
             NisitSimulator.Systems.GameplayEvents.Raise(NisitSimulator.Systems.GameplayEvents.Sleep);
         }

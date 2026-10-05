@@ -11,11 +11,11 @@ using NisitSimulator.Player;
 namespace NisitSimulator.UI
 {
     // 📱 โทรศัพท์นิสิต — กด TAB เปิด/ปิด · หน้าโฮมมีหลายแอป (ตามตาราง 3.2 + storyboard PDF)
-    //   แอป: สถานะ / ปฏิทิน / ภารกิจ / เกรด / แผนที่
+    //   แอป: สถานะ / ปฏิทิน / ภารกิจ / แผนที่ / เพื่อน / MSG REG (RegistrationUI — รวมแอปเกรดเดิมไว้แล้ว ปุ่มเกรดถูกซ่อน)
     // UI ถูกสร้าง+ต่อโดย Editor tool (Nisit -> Build Phone (TAB))
     public class PhoneController : MonoBehaviour
     {
-        public enum App { Status = 0, Calendar = 1, Quests = 2, Grades = 3, Map = 4, Friends = 5 }
+        public enum App { Status = 0, Calendar = 1, Quests = 2, Grades = 3, Map = 4, Friends = 5, StudentCard = 6 }
 
         [Header("UI (เซ็ตโดย Editor)")]
         public GameObject panel;        // ราก (dim + ตัวเครื่อง)
@@ -74,15 +74,45 @@ namespace NisitSimulator.UI
             if (appView != null) appBase = appView.transform.localPosition;
 
             if (panel != null) panel.SetActive(false);
+            StyleForReadability();
+            StudentIdentityPhone.EnsureOn(this);
+        }
+
+        // อ่านง่าย: หัวเครื่อง "โทรศัพท์นิสิต" ตัวขาวบนแถบสีน้ำเงิน · เนื้อหาแอปย่อเองเมื่อยาวเกินการ์ด (ไม่ล้นออกนอกกรอบ)
+        void StyleForReadability()
+        {
+            if (panel != null)
+                foreach (var t in panel.GetComponentsInChildren<TMP_Text>(true))
+                    if (t.text == "โทรศัพท์นิสิต" || t.text == "กด TAB เพื่อปิด")
+                    {
+                        t.color = Color.white; t.fontStyle &= ~FontStyles.Italic;
+                        UIFit.OneLine(t, Mathf.Max(18f, t.fontSize), 18f);
+                    }
+            if (clockBar != null) UIFit.OneLine(clockBar, Mathf.Max(18f, clockBar.fontSize), 18f);
+            if (appTitle != null)
+            {
+                appTitle.color = Color.white;
+                UIFit.OneLine(appTitle, appTitle.fontSize, 18f);
+                UIFit.Outline(appTitle, new Color(0.16f, 0.13f, 0.26f, 0.7f), 0.12f);
+            }
+            if (appBody != null)
+            {
+                appBody.textWrappingMode = TextWrappingModes.Normal;
+                appBody.enableAutoSizing = true;
+                appBody.fontSizeMax = appBody.fontSize;
+                appBody.fontSizeMin = 18f;
+                appBody.fontSizeMax = Mathf.Max(18f, appBody.fontSizeMax);
+            }
         }
 
         void Update()
         {
+            if (NisitSimulator.Systems.ArrivalIntroController.BlocksPhone) return;
             if (Input.GetKeyDown(toggleKey)) Toggle();
 
             if (IsOpen)
             {
-                if (clockBar != null) clockBar.text = clock != null ? clock.GetTimeString() : "";
+                if (clockBar != null) clockBar.text = AcademicCalendar.ShortTermDayText(AcademicCalendar.SemesterDay(prog != null ? prog.DayInYear : 1)) + " · " + (clock != null ? clock.GetTimeString() : "");
                 if (appView != null && appView.activeSelf) RefreshBody();
             }
         }
@@ -121,6 +151,7 @@ namespace NisitSimulator.UI
         public void OpenApp(int appIndex)
         {
             current = (App)appIndex;
+            StudentIdentityPhone.EnsureOn(this).Configure(current);
             if (homeView != null) homeView.SetActive(false);
             if (appView == null) return;
 
@@ -146,6 +177,7 @@ namespace NisitSimulator.UI
                 case App.Grades: return "ผลการเรียน";
                 case App.Map: return "แผนที่มหาลัย";
                 case App.Friends: return "รายชื่อเพื่อน";
+                case App.StudentCard: return "บัตรนิสิต";
             }
             return "แอป";
         }
@@ -186,33 +218,12 @@ namespace NisitSimulator.UI
                 case App.Quests:   appTitle.text = "ภารกิจวันนี้";    appBody.text = quests != null ? quests.SummaryText() : "-"; break;
                 case App.Grades:   appTitle.text = "ผลการเรียน";     appBody.text = GradesText();   break;
                 case App.Friends:  appTitle.text = "รายชื่อเพื่อน";   appBody.text = FriendsText();  break;
+                case App.StudentCard: appTitle.text = "บัตรนิสิต"; appBody.text = StudentIdentityPhone.EnsureOn(this).CardText(); break;
             }
         }
 
         // รายชื่อ NPC ที่รู้จัก + ระดับความสนิท (เรียงจากสนิทมากไปน้อย)
-        string FriendsText()
-        {
-            var rel = RelationshipManager.Instance;
-            var ids = rel.AllIds;
-            if (ids == null || ids.Count == 0)
-                return "ยังไม่รู้จักใครเลย\nลองเดินไปทักทาย NPC (กด E) ดูสิ!";
-
-            var list = new System.Collections.Generic.List<string>(ids);
-            list.Sort((a, b) => rel.GetPoints(b).CompareTo(rel.GetPoints(a)));   // สนิทมากขึ้นก่อน
-
-            int friends = rel.FriendCount;
-            var sb = new System.Text.StringBuilder();
-            sb.AppendLine($"<size=80%><color=#B9C2D6>รู้จัก {ids.Count} คน · เพื่อน {friends} คน</color></size>\n");
-            foreach (var id in list)
-            {
-                int p = rel.GetPoints(id);
-                int lvl = RelationshipManager.LevelOf(p);
-                string hearts = RelationshipManager.Hearts(lvl);
-                string h = string.IsNullOrEmpty(hearts) ? "" : $"  <color=#FF7BA6>{hearts}</color>";
-                sb.AppendLine($"{rel.DisplayName(id)}{h}\n<size=72%><color=#9AA6BF>{RelationshipManager.NameOfLevel(lvl)} ({p})</color></size>");
-            }
-            return sb.ToString();
-        }
+        string FriendsText() => StudentIdentityPhone.EnsureOn(this).FriendsText();
 
         string StatusText()
         {
@@ -222,12 +233,18 @@ namespace NisitSimulator.UI
             float kn = stats != null ? stats.Knowledge : 0;
             float sa = stats != null ? stats.Satisfaction : 0;
             float target = prog != null ? prog.CurrentTarget : 0;
+            float st = stats != null ? stats.Stress : 0;
+            int mo = stats != null ? stats.Money : 0;
+            // คอลัมน์ตัวเลขชิดตำแหน่งเดียวกัน (<pos>) — เดิมใช้ \t ทำให้ "ความอิ่ม96" ติดกัน
+            const string c = "<pos=48%>";
             return
-                $"พลังงาน\t<b>{en:0}</b> / 100\n" +
-                $"สุขภาพ\t<b>{he:0}</b> / 100\n" +
-                $"ความอิ่ม\t<b>{hu:0}</b> / 100\n" +
-                $"EXP\t<b>{kn:0}</b>  (เป้า {target:0})\n" +
-                $"ความพอใจ\t<b>{sa:0}</b>";
+                $"พลังงาน{c}<b>{en:0}</b> / 100\n" +
+                $"สุขภาพ{c}<b>{he:0}</b> / 100\n" +
+                $"ความอิ่ม{c}<b>{hu:0}</b> / 100\n" +
+                $"ความเครียด{c}<b>{st:0}</b> / 100\n" +
+                $"ความพอใจ{c}<b>{sa:0}</b>\n" +
+                $"EXP{c}<b>{kn:0}</b> <size=80%>(เป้า {target:0})</size>\n" +
+                $"เงิน{c}<b>{mo}</b> บาท";
         }
 
         string CalendarText()
@@ -246,7 +263,7 @@ namespace NisitSimulator.UI
                 : "";
 
             return
-                $"<b>วันที่ {day}</b>\n" +
+                $"<b>{AcademicCalendar.DateText(diy)}</b>\n" +
                 $"{month}\n" +
                 $"{semName}  |  ฤดู{season}\n" +
                 $"ชั้นปีที่ {year}\n" +
@@ -283,7 +300,7 @@ string GradesText()
                     $"<size=140%><b>GPA {(svc.HasGpa ? svc.Gpa().ToString("0.00") : "–")}</b></size>\n" +
                     $"{reg.ShortSummary()}\n" +
                     $"วิชาเลือกผ่าน {svc.PassedElectiveCount()}/{svc.Curriculum.electivesRequired}\n" +
-                    "<size=80%>ดูเกรดรายวิชา: แอป \"ลงทะเบียนเรียน\" ▸ ผลการเรียน</size>\n" +
+                    $"<size=80%>ดูเกรดรายวิชา: แอป \"{RegistrationUI.AppName}\" → ผลการเรียน</size>\n" +
                     "<color=#556>----------------------</color>\n" +
                     $"เงิน\t<b>{mo}</b> บาท\n" +
                     $"EXP\t<b>{xp}</b>";

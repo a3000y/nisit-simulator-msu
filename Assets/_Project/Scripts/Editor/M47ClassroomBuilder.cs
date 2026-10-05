@@ -192,11 +192,11 @@ namespace NisitSimulator.EditorTools
             switch (data.type)
             {
                 case ClassroomType.ComputerLab:
-                    spot.activityName = "เรียนคอมพิวเตอร์"; spot.knowledgeChange = 9f; spot.energyChange = -4f; spot.stressChange = 3f; spot.satisfactionChange = 2f; spot.expReward = 6; break;
+                    spot.activityName = "เรียนคอมพิวเตอร์"; spot.knowledgeChange = 9f; spot.energyChange = -4f; spot.stressChange = 4f; spot.satisfactionChange = 2f; spot.expReward = 6; break;
                 case ClassroomType.Seminar:
-                    spot.activityName = "เรียนสัมมนา"; spot.knowledgeChange = 8f; spot.energyChange = -4f; spot.stressChange = 3f; spot.satisfactionChange = 1f; spot.expReward = 5; break;
+                    spot.activityName = "เรียนสัมมนา"; spot.knowledgeChange = 8f; spot.energyChange = -4f; spot.stressChange = 4f; spot.satisfactionChange = 1f; spot.expReward = 5; break;
                 default:
-                    spot.activityName = "เรียน"; spot.knowledgeChange = 8f; spot.energyChange = -4f; spot.stressChange = 3f; spot.satisfactionChange = 1f; spot.expReward = 5; break;
+                    spot.activityName = "เรียน"; spot.knowledgeChange = 8f; spot.energyChange = -4f; spot.stressChange = 4f; spot.satisfactionChange = 1f; spot.expReward = 5; break;
             }
         }
 

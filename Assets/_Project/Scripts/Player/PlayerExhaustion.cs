@@ -453,7 +453,7 @@ namespace NisitSimulator.Player
             var canvas = canvasGo.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 930;   // ใต้หน้านอน (940/950)
             var scaler = canvasGo.GetComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080); scaler.matchWidthOrHeight = 0.5f;
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080); scaler.matchWidthOrHeight = 0.5f; NisitSimulator.UI.UIFit.Scaler(scaler);   // Expand: ทั้งหน้าอยู่ในจอทุกสัดส่วน
 
             chip = Panel(canvasGo.transform, "ExhaustedChip", ChipCol, new Vector2(0.5f, 0.9f), new Vector2(0.5f, 0.9f));
             ((RectTransform)chip.transform).sizeDelta = new Vector2(820, 64);

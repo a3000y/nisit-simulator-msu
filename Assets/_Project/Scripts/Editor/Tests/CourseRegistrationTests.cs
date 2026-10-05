@@ -94,7 +94,7 @@ namespace NisitSimulator.Tests
             Assert.AreEqual(6, ens.Count);
             foreach (var e in ens) Assert.AreEqual(4, svc.SessionsFor(e).Count, e.code);   // ปฏิทินรุ่น 2: วิชาละ 4 ครั้ง/ภาค
             Assert.IsTrue(svc.HasActiveEnrollments);
-            Assert.IsFalse(svc.Remove("GE101", out _));             // ล็อกหลังยืนยัน
+            Assert.IsTrue(svc.RegistrationWindowOpen(1));           // ยังเพิ่ม/ถอนได้ก่อนหมดวันลงทะเบียน
         }
 
         [Test]
@@ -149,19 +149,209 @@ namespace NisitSimulator.Tests
         }
 
         [Test]
-        public void Deadline_AutoConfirms_Or_Closes()
+        public void Deadline_RequiresExplicitSundayConfirmation()
         {
             svc.OpenTerm(1, 0);
             svc.Add("GE101", out _);
             Assert.IsFalse(svc.CheckRegistrationDeadline(1, out _));  // ยังอยู่ในช่วง
             Assert.IsTrue(svc.CheckRegistrationDeadline(2, out var m));
-            Assert.IsTrue(svc.Term.confirmed, m);
+            Assert.IsFalse(svc.Term.confirmed, m);
+            Assert.IsFalse(svc.Term.registrationOpen);
+            Assert.IsFalse(svc.Confirm(out _));
 
             var svc2 = new RegistrationService(cur, new AcademicRecord());
             svc2.OpenTerm(1, 0);
             Assert.IsTrue(svc2.CheckRegistrationDeadline(2, out _));
             Assert.IsFalse(svc2.Term.registrationOpen);
             Assert.IsNotNull(svc2.ExplainNoOptions(2));               // มีคำอธิบาย ไม่ปล่อยว่าง
+        }
+
+        [Test]
+        public void AfterTutorialConfirmation_CanAddMore_AndReconfirm()
+        {
+            svc.OpenTerm(1, 0);
+            Assert.IsTrue(svc.Add("GE101", out _));
+            Assert.IsTrue(svc.Confirm(out _));
+            Assert.IsTrue(svc.RegistrationWindowOpen(1));
+            Assert.IsTrue(svc.Add("GE102", out var add), add);
+            Assert.IsTrue(svc.HasRegistrationChanges);
+            Assert.AreEqual(1, svc.CurrentEnrollments().Count);       // ตารางจริงคงเดิมจนกดยืนยัน
+            Assert.IsTrue(svc.Confirm(out var confirm), confirm);
+            Assert.AreEqual(2, svc.CurrentEnrollments().Count);
+            Assert.IsFalse(svc.HasRegistrationChanges);
+            Assert.IsFalse(svc.Confirm(out _));
+            Assert.AreEqual(2, svc.Record.enrollments.Count);
+        }
+
+        [Test]
+        public void Reconfirmation_RemovesWithdrawnCourses_AndPreservesRetainedProgress()
+        {
+            var previous = Graded("GE101", 0, 0f, "F");
+            var transfer = new Enrollment { code = "OLD", termSerial = 1, transfer = true, graded = true };
+            svc.Record.enrollments.Add(previous);
+            svc.Record.enrollments.Add(transfer);
+            svc.OpenTerm(1, 0);
+            svc.Add("GE101", out _); svc.Add("GE102", out _); svc.Confirm(out _);
+            var retained = svc.CurrentEnrollments().Find(e => e.code == "GE102");
+            retained.progress = 2.5f; retained.selfStudy = 1.25f; retained.midterm = 0.7f;
+            retained.meetingKeys.Add("2:0"); retained.meetingTicks.Add(1);
+            retained.classBonusFinal = 0.05f; retained.classEventKeys.Add("2:0=done");
+
+            Assert.IsTrue(svc.Remove("GE101", out _));
+            Assert.AreEqual(CourseStatus.CanRegister, svc.StatusOf(svc.FindOffered("GE101"), out _));
+            Assert.IsTrue(svc.Add("GE103", out _));
+            Assert.AreEqual(2, svc.CurrentEnrollments().Count);
+            Assert.IsTrue(svc.IsEnrolledThisTerm("GE101"));
+            Assert.IsTrue(svc.Confirm(out var message), message);
+
+            Assert.IsFalse(svc.IsEnrolledThisTerm("GE101"));
+            Assert.IsTrue(svc.IsEnrolledThisTerm("GE103"));
+            Assert.AreSame(retained, svc.CurrentEnrollments().Find(e => e.code == "GE102"));
+            Assert.AreEqual(2.5f, retained.progress);
+            Assert.AreEqual(1.25f, retained.selfStudy);
+            Assert.AreEqual(0.7f, retained.midterm);
+            Assert.AreEqual(1, retained.TicksFor("2:0"));
+            Assert.AreEqual(0.05f, retained.classBonusFinal);
+            CollectionAssert.Contains(retained.classEventKeys, "2:0=done");
+            CollectionAssert.Contains(svc.Record.enrollments, previous);
+            CollectionAssert.Contains(svc.Record.enrollments, transfer);
+            Assert.AreEqual(1, svc.Attempts("GE101").Count);          // ไม่สร้างประวัติ F ให้รายการที่ถอน
+        }
+
+        [Test]
+        public void RemoveThenAddSameCourse_CancelsDraft_WithoutDuplicateOrReset()
+        {
+            svc.OpenTerm(1, 0); svc.Add("GE101", out _); svc.Confirm(out _);
+            var original = svc.CurrentEnrollments()[0]; original.progress = 3f;
+            Assert.IsTrue(svc.Remove("GE101", out _));
+            Assert.IsTrue(svc.HasRegistrationChanges);
+            Assert.IsTrue(svc.Add("GE101", out _));
+            Assert.IsFalse(svc.HasRegistrationChanges);
+            Assert.IsFalse(svc.Confirm(out _));
+            Assert.AreSame(original, svc.CurrentEnrollments()[0]);
+            Assert.AreEqual(3f, original.progress);
+            Assert.AreEqual(1, svc.Record.enrollments.Count);
+        }
+
+        [Test]
+        public void ConfirmedOldSave_WithClosedRegistrationFlag_CanStillEditOnSunday()
+        {
+            svc.OpenTerm(1, 0); svc.Add("GE101", out _); svc.Confirm(out _);
+            svc.Term.registrationOpen = false;                      // รูปแบบเซฟก่อนแก้บัค
+            var back = JsonUtility.FromJson<AcademicRecord>(JsonUtility.ToJson(svc.Record));
+            var loaded = new RegistrationService(cur, back);
+            Assert.IsTrue(loaded.RegistrationWindowOpen(1));
+            Assert.IsTrue(loaded.Add("GE102", out var add), add);
+            Assert.IsTrue(loaded.Remove("GE101", out var remove), remove);
+            Assert.IsTrue(loaded.Confirm(out var confirm), confirm);
+            Assert.AreEqual(1, loaded.CurrentEnrollments().Count);
+            Assert.AreEqual("GE102", loaded.CurrentEnrollments()[0].code);
+        }
+
+        [Test]
+        public void PendingEdit_SaveRoundtrip_KeepsLastConfirmedSchedule_UntilReconfirmed()
+        {
+            svc.OpenTerm(1, 0); svc.Add("GE101", out _); svc.Confirm(out _);
+            svc.Remove("GE101", out _); svc.Add("GE102", out _);
+            var back = JsonUtility.FromJson<AcademicRecord>(JsonUtility.ToJson(svc.Record));
+            var loaded = new RegistrationService(cur, back);
+            Assert.IsTrue(loaded.HasRegistrationChanges);
+            CollectionAssert.AreEqual(new[] { "GE102" }, loaded.Term.selected);
+            Assert.AreEqual("GE101", loaded.CurrentEnrollments()[0].code);
+            Assert.IsTrue(loaded.Confirm(out var reason), reason);
+            Assert.AreEqual("GE102", loaded.CurrentEnrollments()[0].code);
+            Assert.IsFalse(loaded.HasRegistrationChanges);
+        }
+
+        [Test]
+        public void PendingEdit_DeadlineDiscardsDraft_AndKeepsConfirmedRegistration()
+        {
+            svc.OpenTerm(1, 0); svc.Add("GE101", out _); svc.Confirm(out _);
+            svc.Remove("GE101", out _); svc.Add("GE102", out _);
+            Assert.IsTrue(svc.CheckRegistrationDeadline(2, out var message));
+            StringAssert.Contains("ยืนยันล่าสุด", message);
+            Assert.IsTrue(svc.Term.confirmed);
+            Assert.IsFalse(svc.Term.registrationOpen);
+            Assert.IsFalse(svc.HasRegistrationChanges);
+            CollectionAssert.AreEqual(new[] { "GE101" }, svc.Term.selected);
+            Assert.AreEqual("GE101", svc.CurrentEnrollments()[0].code);
+            Assert.IsFalse(svc.Add("GE103", out _));
+            Assert.IsFalse(svc.Remove("GE101", out _));
+            Assert.IsFalse(svc.CheckRegistrationDeadline(3, out _));
+        }
+
+        [Test]
+        public void ConfirmedRegistration_DayTwoBlocksAllEdits_EvenBeforeDeadlineCheck()
+        {
+            svc.OpenTerm(1, 0); svc.Add("GE101", out _); svc.Confirm(out _);
+            svc.Add("GE102", out _);
+            svc.CurrentSemesterDay = 2;
+            Assert.IsFalse(svc.RegistrationWindowOpen(2));
+            Assert.IsFalse(svc.Add("GE103", out _));
+            Assert.IsFalse(svc.Remove("GE101", out _));
+            Assert.IsFalse(svc.Confirm(out _));
+            Assert.AreEqual(1, svc.CurrentEnrollments().Count);
+        }
+
+        [Test]
+        public void ConfirmedRegistration_CanWithdrawAll_ThenRegisterAgainBeforeDeadline()
+        {
+            svc.OpenTerm(1, 0); svc.Add("GE101", out _); svc.Confirm(out _);
+            Assert.IsTrue(svc.Remove("GE101", out _));
+            Assert.IsTrue(svc.Confirm(out var withdrawn), withdrawn);
+            Assert.IsTrue(svc.Term.confirmed);
+            Assert.AreEqual(0, svc.CurrentEnrollments().Count);
+            Assert.IsTrue(svc.Add("GE102", out _));
+            Assert.IsTrue(svc.Confirm(out var added), added);
+            Assert.AreEqual(1, svc.CurrentEnrollments().Count);
+            Assert.AreEqual("GE102", svc.CurrentEnrollments()[0].code);
+        }
+
+        [Test]
+        public void EditingConfirmedRegistration_StillChecksCapConflictsAndPrerequisites()
+        {
+            svc.OpenTerm(1, 0); svc.Add("GE101", out _); svc.Confirm(out _);
+            svc.CreditCapOverride = 3;
+            Assert.IsFalse(svc.Add("GE102", out var cap));
+            StringAssert.Contains("เพดาน", cap);
+            svc.CreditCapOverride = 18;
+            cur.Get("GE102").sessions = new List<ClassSession>(cur.Get("GE101").sessions);
+            Assert.IsFalse(svc.Add("GE102", out var clash));
+            StringAssert.Contains("ชนเวลา", clash);
+            cur.Get("GE103").prerequisites.Add("CS102");
+            Assert.IsFalse(svc.Add("GE103", out var prereq));
+            StringAssert.Contains("CS102", prereq);
+            Assert.AreEqual(1, svc.CurrentEnrollments().Count);
+            Assert.IsFalse(svc.HasRegistrationChanges);
+        }
+
+        [Test]
+        public void InvalidDraft_CannotReplaceConfirmedRegistration()
+        {
+            svc.OpenTerm(1, 0); svc.Add("GE101", out _); svc.Confirm(out _);
+            svc.Add("GE102", out _);
+            svc.CreditCapOverride = 3;
+            Assert.IsFalse(svc.Confirm(out var reason));
+            StringAssert.Contains("เพดาน", reason);
+            Assert.AreEqual("GE101", svc.CurrentEnrollments()[0].code);
+            Assert.IsTrue(svc.HasRegistrationChanges);
+        }
+
+        [Test]
+        public void LateRegistration_EditWindowClosesWhenTermCloses_AndDraftIsDiscarded()
+        {
+            svc.OpenTerm(1, 0, lateRegistration: true);
+            svc.CurrentSemesterDay = 3;
+            svc.Add("GE101", out _); svc.Confirm(out _);
+            Assert.IsTrue(svc.Add("GE102", out _));
+            Assert.IsFalse(svc.CheckRegistrationDeadline(3, out _));
+            svc.CloseCurrentTerm();
+            Assert.IsFalse(svc.HasRegistrationChanges);
+            CollectionAssert.AreEqual(new[] { "GE101" }, svc.Term.selected);
+            Assert.IsFalse(svc.RegistrationWindowOpen(1));
+            Assert.IsFalse(svc.Add("GE103", out _));
+            Assert.IsFalse(svc.Remove("GE101", out _));
+            Assert.AreEqual(1, svc.Record.enrollments.Count);
         }
 
         [Test]
@@ -400,7 +590,7 @@ namespace NisitSimulator.Tests
 
             // ปฏิทินรุ่น 2: เซฟเก่า (ปีละ 8 วัน) แปลงวันก่อน — วันที่ 5 เดิม = ภาคปลายวันที่ 2 (สอบกลางภาค) → วันที่ 15 (ภาคปลายวันที่ 5)
             Assert.IsTrue(CalendarMigration.Upgrade(d));
-            Assert.AreEqual(15, d.dayInYear);
+            Assert.AreEqual(20, d.dayInYear);
             int sem = AcademicCalendar.SemesterIndex(d.dayInYear);   // ภาคปลาย
             Assert.AreEqual(1, sem);
             var rec = RegistrationService.MigrateLegacy(cur, d.currentYear, sem);

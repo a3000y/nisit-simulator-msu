@@ -125,8 +125,9 @@ namespace NisitSimulator.UI
             t.color = Color.white;
             t.enableWordWrapping = false;
             t.enableAutoSizing = true;
-            t.fontSizeMin = 10f;
-            t.fontSizeMax = 18f;
+            t.fontSizeMin = 18f;
+            t.fontSizeMax = 21f;
+            t.fontStyle &= ~FontStyles.Italic;
             t.alignment = TextAlignmentOptions.Center;
         }
 

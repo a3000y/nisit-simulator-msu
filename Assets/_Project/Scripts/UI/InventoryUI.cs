@@ -25,7 +25,8 @@ namespace NisitSimulator.UI
 
         void Start()
         {
-            inv = InventoryManager.Instance ?? Object.FindFirstObjectByType<InventoryManager>();
+            inv = InventoryManager.Instance;
+            if (inv == null) inv = Object.FindFirstObjectByType<InventoryManager>();
             var player = GameObject.Find("Player");
             if (player != null) move = player.GetComponent<PlayerMovement>();
 
@@ -79,6 +80,8 @@ namespace NisitSimulator.UI
                 var go = Object.Instantiate(slotTemplate, grid);
                 go.SetActive(true);
                 spawned.Add(go);
+                var slotImage = go.GetComponent<Image>();
+                if (slotImage != null) slotImage.color = new Color(1f, 1f, 1f, 0.96f);
 
                 var icon = go.transform.Find("Icon")?.GetComponent<Image>();
                 if (icon != null)
@@ -88,10 +91,21 @@ namespace NisitSimulator.UI
                 }
 
                 var nameT = go.transform.Find("Name")?.GetComponent<TMP_Text>();
-                if (nameT != null) nameT.text = s.item.name;
+                if (nameT != null)
+                {
+                    nameT.text = s.item.name; nameT.color = GrowthUI.Ink;
+                    var rt = nameT.rectTransform;
+                    rt.anchorMin = new Vector2(0f, 0f); rt.anchorMax = new Vector2(1f, 0f); rt.pivot = new Vector2(0.5f, 0f);
+                    rt.offsetMin = new Vector2(6f, 4f); rt.offsetMax = new Vector2(-6f, 52f);
+                    UIFit.OneLine(nameT, 20f, 18f);
+                }   // ชื่อยาวย่อเอง ไม่ล้นช่อง
 
                 var countT = go.transform.Find("Count")?.GetComponent<TMP_Text>();
-                if (countT != null) countT.text = s.count > 1 ? "x" + s.count : "";
+                if (countT != null)
+                {
+                    countT.text = s.count > 1 ? "x" + s.count : ""; countT.color = GrowthUI.Ink;
+                    UIFit.OneLine(countT, 20f, 18f);
+                }
 
                 int idx = i;
                 var btn = go.GetComponent<Button>();

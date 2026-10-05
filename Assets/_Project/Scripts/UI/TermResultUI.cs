@@ -28,6 +28,7 @@ namespace NisitSimulator.UI
 
         GameObject root;
         TMP_Text title, subtitle, table, summary, status, advice;
+        ScrollRect tableScroll;
 
         static readonly string[] SemNames = { "ภาคต้น", "ภาคปลาย", "ภาคฤดูร้อน" };
 
@@ -128,22 +129,26 @@ namespace NisitSimulator.UI
             return "#E0843A";
         }
 
+        public const int NameChars = 60, NameCharsWithTag = 48;
+
         public static string TableText(TermReport r)
         {
             var sb = new StringBuilder();
             sb.Append("<b><color=#7A7394>วิชา<pos=47%>นก.<pos=53%>เข้าเรียน<pos=63%>กลาง<pos=70%>ปลาย<pos=77%>พิเศษ<pos=84%>รวม<pos=92%>เกรด</color></b>\n");
             foreach (var row in r.rows)
             {
-                string name = row.title.Length > 26 ? row.title.Substring(0, 25) + "…" : row.title;
+                // แยกชื่อวิชาเป็นบรรทัดถัดไป ใช้ความกว้างทั้งตารางโดยไม่ทับตัวเลขคะแนน
+                bool hasTag = row.retakeSection || row.attempt > 1;
+                string name = UIFit.Ellipsize(row.title ?? "", hasTag ? NameCharsWithTag : NameChars);
                 string mid = row.missedMidterm ? "<color=#D14D5C>ขาด</color>" : Pct(row.midterm);
                 string fin = row.missedFinal ? "<color=#D14D5C>ขาด</color>" : Pct(row.final);
                 float bonus = (row.bonusMid + row.bonusFinal) * 100f;
                 string bon = bonus > 0.05f ? $"<color=#389966>+{bonus:0}</color>" : "–";
                 string col = GradeColor(row.letter ?? "", row.passed);
-                string tag = row.retakeSection ? " <size=75%><color=#E0843A>(ภาคค่ำ)</color></size>" : row.attempt > 1 ? $" <size=75%><color=#E0843A>(ครั้งที่ {row.attempt})</color></size>" : "";
-                sb.Append($"<b>{row.code}</b> {name}{tag}<pos=47%>{row.credits}<pos=53%>{Pct(row.attendance)}%<pos=63%>{mid}<pos=70%>{fin}<pos=77%>{bon}<pos=84%>{row.score:0}<pos=92%><b><color={col}>{row.letter}</color></b>");
-                if (!row.passed) sb.Append(" <size=80%><color=#D14D5C>ตก</color></size>");
-                sb.Append('\n');
+                string tag = row.retakeSection ? " <size=18><color=#E0843A>(ภาคค่ำ)</color></size>" : row.attempt > 1 ? $" <size=18><color=#E0843A>(ครั้งที่ {row.attempt})</color></size>" : "";
+                sb.Append($"<b>{row.code}</b><pos=47%>{row.credits}<pos=53%>{Pct(row.attendance)}%<pos=63%>{mid}<pos=70%>{fin}<pos=77%>{bon}<pos=84%>{row.score:0}<pos=92%><b><color={col}>{row.letter}</color></b>");
+                if (!row.passed) sb.Append(" <size=18><color=#D14D5C>ตก</color></size>");
+                sb.Append($"\n<size=90%>{name}{tag}</size>\n");
             }
             return sb.ToString();
         }
@@ -167,6 +172,7 @@ namespace NisitSimulator.UI
             title.text = $"ผลการเรียน {sem}";
             subtitle.text = $"ปีการศึกษาที่ {Mathf.Max(1, r.calendarYear)} · ชั้นปี {Mathf.Max(1, r.classYear)}";
             table.text = TableText(r);
+            if (tableScroll != null) tableScroll.verticalNormalizedPosition = 1f;
             int pass = 0; foreach (var row in r.rows) if (row.passed) pass++;
             summary.text = $"ผ่าน <b>{pass}/{r.rows.Count}</b> วิชา   ·   GPA ภาค <b>{r.termGpa:0.00}</b>   ·   GPA สะสม <b>{(r.hasGpa ? r.cumulativeGpa.ToString("0.00") : "–")}</b>\n" +
                            $"หน่วยกิตภาคนี้ <b>{r.creditsEarnedTerm}/{r.creditsAttempted}</b>   ·   สะสม <b>{r.creditsEarnedTotal}</b>/{r.graduationCredits} (ที่ต้องใช้จบ)";
@@ -185,15 +191,21 @@ namespace NisitSimulator.UI
             subtitle = GrowthUI.Text(card.transform, "", new Vector2(0f, 322f), new Vector2(1200f, 40f), 24, GrowthUI.Soft);
 
             var tbox = GrowthUI.Box(card.transform, "Table", new Vector2(0.5f, 0.5f), new Vector2(0f, 90f), new Vector2(1240f, 410f), new Color(1f, 1f, 1f, 0.75f), false);
-            table = GrowthUI.Text(tbox.transform, "", Vector2.zero, new Vector2(1200f, 390f), 22, GrowthUI.Ink, TextAlignmentOptions.TopLeft);
+            // ตารางเลื่อนได้ (ลงเกิน ~9 วิชาไม่ถูกตัดทิ้ง)
+            var sr = UIFit.VerticalScroll(tbox.transform, "TableScroll", out var tcontent, 0f, new RectOffset(20, 20, 10, 10));
+            UIFit.Stretch((RectTransform)sr.transform, Vector2.zero, Vector2.zero);
+            tableScroll = sr;
+            table = GrowthUI.Text(tcontent, "", Vector2.zero, new Vector2(1200f, 10f), 22, GrowthUI.Ink, TextAlignmentOptions.TopLeft);
             table.lineSpacing = 8f;
             table.textWrappingMode = TextWrappingModes.NoWrap;
-            table.overflowMode = TextOverflowModes.Ellipsis;
+            table.overflowMode = TextOverflowModes.Overflow;
 
             summary = GrowthUI.Text(card.transform, "", new Vector2(0f, -170f), new Vector2(1240f, 80f), 24, GrowthUI.Ink);
             status = GrowthUI.Text(card.transform, "", new Vector2(0f, -232f), new Vector2(1240f, 40f), 24, GrowthUI.Ink);
             advice = GrowthUI.Text(card.transform, "", new Vector2(0f, -280f), new Vector2(1240f, 50f), 20, GrowthUI.Soft);
-            advice.textWrappingMode = TextWrappingModes.Normal;
+            UIFit.Wrap(advice, 20f, 18f);
+            UIFit.Wrap(summary, 24f, 18f);
+            UIFit.OneLine(status, 24f, 18f);
 
             var all = GrowthUI.Button(card.transform, "ดูผลการเรียนทั้งหมด", new Vector2(-170f, -370f), new Vector2(300f, 60f), new Color(0.82f, 0.78f, 0.94f), 24);
             all.onClick.AddListener(OpenTranscript);

@@ -60,7 +60,8 @@ namespace NisitSimulator.Player
                 leftFoot = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
                 rightFoot = animator.GetBoneTransform(HumanBodyBones.RightFoot);
             }
-            effects = GetComponent<PlayerEffects>() ?? gameObject.AddComponent<PlayerEffects>();
+            effects = GetComponent<PlayerEffects>();
+            if (effects == null) effects = gameObject.AddComponent<PlayerEffects>();
             if (cameraTransform == null && Camera.main != null)
                 cameraTransform = Camera.main.transform;
         }
@@ -79,6 +80,7 @@ namespace NisitSimulator.Player
 
         void Update()
         {
+            if (controller == null || !controller.enabled || !controller.gameObject.activeInHierarchy || NisitSimulator.Systems.ArrivalIntroController.BlocksMovement) return;
             // หยุดขยับเมื่อเกม pause หรือจบ
             if (GameManager.Instance != null && !GameManager.Instance.IsActive) return;
 

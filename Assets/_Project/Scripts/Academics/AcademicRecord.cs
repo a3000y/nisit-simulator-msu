@@ -105,6 +105,9 @@ namespace NisitSimulator.Academics
         public bool pendingReportPromoted;      // เลื่อนชั้นตอนปิดภาคนั้น
         public bool pendingReportExhausted;     // พ้นสภาพ (เรียนเกินจำนวนภาค)
         public bool pendingReportExtra;         // เป็นภาคเรียนเพิ่มเติม
+        // ===== กังวลก่อนสอบ (ExamStress) — คีย์กันคิดซ้ำเมื่อโหลดเซฟวันเดียวกัน · เซฟเก่าไม่มี = ว่าง =====
+        public List<string> stressKeys = new List<string>();
+
         public bool HasPendingReport => pendingReportSerial > 0 && pendingReportSerial > lastReportedSerial;
 
         public TermState Current => hasCurrent ? current : null;

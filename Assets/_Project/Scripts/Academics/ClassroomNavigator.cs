@@ -121,7 +121,7 @@ namespace NisitSimulator.Academics
             }
             SetBeacon(target);
             navRoom = s.roomId;
-            string when = day == reg.SemDay ? "วันนี้" : $"วันที่ {day} ของภาค";
+            string when = day == reg.SemDay ? "วันนี้" : $"{AcademicCalendar.TermDayText(day)}";
             string text = $"ไปห้อง {s.roomId} ({e.code} {when} {s.TimeText.Substring(0, 5)})";
             var hud = Object.FindFirstObjectByType<ObjectiveHUD>(FindObjectsInactive.Include);
             var ev = Object.FindFirstObjectByType<EventManager>();
@@ -154,12 +154,24 @@ namespace NisitSimulator.Academics
             else if (beacon == null) ClearNavigation();
         }
 
+        public static void NavigateToPoint(Vector3 target, string text)
+        {
+            if (!ClassroomRules.IsSinglePlayer) return;
+            ClearNavigation(); SetBeacon(target);
+            var hud = Object.FindAnyObjectByType<ObjectiveHUD>(FindObjectsInactive.Include);
+            var ev = Object.FindAnyObjectByType<EventManager>();
+            usedObjectiveHud = hud != null && (ev == null || !ev.HasObjective);
+            if (usedObjectiveHud) hud.Set(target, text);
+        }
+
         static void SetBeacon(Vector3 pos)
         {
             if (beacon != null) Object.Destroy(beacon);
             beacon = new GameObject("ClassNavBeacon");
             beacon.transform.position = pos;
-            var mat = new Material(Shader.Find("Universal Render Pipeline/Unlit") ?? Shader.Find("Unlit/Color"));
+            var shader = Shader.Find("Universal Render Pipeline/Unlit");
+            if (shader == null) shader = Shader.Find("Unlit/Color");
+            var mat = new Material(shader);
             mat.color = new Color(0.55f, 0.85f, 1f, 1f);
             var beam = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             Object.Destroy(beam.GetComponent<Collider>());

@@ -78,7 +78,7 @@ namespace NisitSimulator.EditorTools
             System.IO.File.Copy(gameplay,"TutorialBackups/20261002/01_Gameplay.unity",true);
             string tutorialPath="Assets/_Project/Scenes/00_Tutorial.unity";
             if(System.IO.File.Exists(tutorialPath)) System.IO.File.Copy(tutorialPath,"TutorialBackups/20261002/00_Tutorial.previous.unity",true);
-            font=GameObject.Find("HUD Canvas").GetComponent<HUDController>().moneyText.font;
+            font=GameObject.Find("HUD Canvas").GetComponent<HUDController>().clockText.font;
             cream=Mat("Tutorial_Cream",new Color(.85f,.84f,.76f)); stone=Mat("Tutorial_Walkway",new Color(.61f,.65f,.65f));
             green=Mat("Tutorial_Grass",new Color(.29f,.46f,.29f)); gold=Mat("Tutorial_Gold",new Color(.95f,.69f,.24f)); dark=Mat("Tutorial_Teal",new Color(.10f,.25f,.27f));
             string[] names={"Player","Main Camera","Directional Light","EventSystem","HUD Canvas","Phone Canvas","Pause Canvas","MinimapCamera","Minimap Canvas","PortraitCamera","AudioManager","Quest Canvas"};
@@ -100,7 +100,7 @@ namespace NisitSimulator.EditorTools
             if(mini.targetTexture!=null) { var rt=AssetDatabase.LoadAssetAtPath<RenderTexture>(Folder+"/TutorialMapRT.renderTexture"); if(rt==null) { rt=new RenderTexture(512,512,24); rt.name="TutorialMapRT"; AssetDatabase.CreateAsset(rt,Folder+"/TutorialMapRT.renderTexture"); } mini.targetTexture=rt; phone.mapImage.texture=rt; foreach(var im in clones["Minimap Canvas"].GetComponentsInChildren<RawImage>(true)) im.texture=rt; }
             var portrait=clones["PortraitCamera"].GetComponent<NisitSimulator.UI.PortraitCam>();
             portrait.display=clones["HUD Canvas"].GetComponentInChildren<RawImage>(true); var soPortrait=new SerializedObject(portrait); var targetProp=soPortrait.FindProperty("target"); if(targetProp!=null) {targetProp.objectReferenceValue=player.transform; soPortrait.ApplyModifiedPropertiesWithoutUndo();}
-            var practiceHUD=clones["HUD Canvas"].GetComponent<HUDController>(); practiceHUD.dayText.text="วันที่ 1 · ฝึก"; practiceHUD.yearText.text="ปี 1 · ฝึก";
+            // Keep the cloned gameplay HUD unchanged; its controller initializes the practice values.
             var gm=new GameObject("GameManager"); gm.AddComponent<GameManager>();
             var clock=gm.AddComponent<GameClock>(); clock.gameMinutesPerRealSecond=0;
             var world=new GameObject("Tutorial_Campus");

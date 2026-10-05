@@ -7,6 +7,15 @@ namespace NisitSimulator.SaveLoad
     [Serializable]
     public class SaveData
     {
+        // Version zero means a save predating the arrival sequence.
+        public int arrivalVersion;
+        public bool arrivalIntroDone;
+        public int tourStep;
+        public bool arrivalQuestRewarded;
+
+        // Permanent identities and the student-number ledger (null/version 0 in legacy saves).
+        public NisitSimulator.Characters.StudentRegistrySave studentRegistry;
+
         // สถานะตัวละคร
         public float energy;
         public float health;

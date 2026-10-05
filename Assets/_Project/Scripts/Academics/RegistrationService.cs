@@ -117,6 +117,7 @@ namespace NisitSimulator.Academics
     {
         public readonly CurriculumDefinition Curriculum;
         public readonly AcademicRecord Record;
+        public int CurrentSemesterDay = 1;
         public int CreditCapOverride;   // > 0 = ใช้แทนค่าในหลักสูตร (ตั้งจาก Inspector ของ CourseRegistrar)
 
         public RegistrationService(CurriculumDefinition curriculum, AcademicRecord record)
@@ -263,6 +264,7 @@ namespace NisitSimulator.Academics
         // ============================================================
         public TermState OpenTerm(int calendarYear, int semIndex, bool lateRegistration = false)
         {
+            CurrentSemesterDay = 1;
             bool isBreak = semIndex >= 2;
             if (!isBreak) Record.regularTermsStarted++;
             var t = new TermState
@@ -287,6 +289,7 @@ namespace NisitSimulator.Academics
         {
             var t = Term;
             if (t == null || t.closed) return null;
+            if (t.confirmed) RestoreConfirmedSelection();
             t.closed = true;
             t.registrationOpen = false;
             var res = new TermCloseResult { term = t, newClassYear = Record.classYear };
@@ -329,17 +332,50 @@ namespace NisitSimulator.Academics
         public bool RegistrationWindowOpen(int semDay)
         {
             var t = Term;
-            if (t == null || t.isBreak || t.closed || t.confirmed || !t.registrationOpen) return false;
-            return t.lateRegistration || semDay <= Mathf.Max(1, Curriculum.registrationDays);
+            if (t == null || t.isBreak || t.closed || Record.graduated) return false;
+            // เซฟเดิมปิด registrationOpen ทันทีที่ยืนยัน: ยังแก้ไขได้ถ้าไม่พ้นกำหนด
+            if (!t.registrationOpen && !t.confirmed) return false;
+            return t.lateRegistration || semDay == 1;
+        }
+
+        // selected เป็นฉบับร่าง; enrollments เป็นรายการที่ยืนยันล่าสุดและใช้เรียนจริง
+        public bool HasRegistrationChanges
+        {
+            get
+            {
+                var t = Term;
+                if (t == null || !t.confirmed) return false;
+                var registered = new HashSet<string>();
+                foreach (var e in CurrentEnrollments()) registered.Add(e.code);
+                return !registered.SetEquals(t.selected);
+            }
+        }
+
+        void RestoreConfirmedSelection()
+        {
+            Term.selected.Clear();
+            foreach (var e in CurrentEnrollments()) Term.selected.Add(e.code);
         }
 
         // หมดช่วงลงทะเบียน → ยืนยันอัตโนมัติ (ถ้าเลือกไว้และผ่านเงื่อนไข) หรือปิด · คืน true ถ้ามีการเปลี่ยนแปลง
         public bool CheckRegistrationDeadline(int semDay, out string message)
         {
             message = null;
+            CurrentSemesterDay = semDay;
             var t = Term;
-            if (t == null || t.isBreak || t.closed || t.confirmed || !t.registrationOpen || t.lateRegistration) return false;
-            if (semDay <= Mathf.Max(1, Curriculum.registrationDays)) return false;
+            if (t == null || t.isBreak || t.closed || t.lateRegistration) return false;
+            if (semDay == 1) return false;
+
+            if (t.confirmed)
+            {
+                bool pending = HasRegistrationChanges;
+                bool wasOpen = t.registrationOpen;
+                RestoreConfirmedSelection();
+                t.registrationOpen = false;
+                if (pending) message = "หมดช่วงลงทะเบียน — การแก้ไขที่ยังไม่ยืนยันถูกยกเลิก ใช้รายการที่ยืนยันล่าสุด";
+                return pending || wasOpen;
+            }
+            if (!t.registrationOpen) return false;
 
             if (Curriculum.autoConfirmAtDeadline && t.selected.Count > 0 && ValidateSelection(out _))
             {
@@ -349,7 +385,7 @@ namespace NisitSimulator.Academics
             }
             t.registrationOpen = false;
             t.selected.Clear();
-            message = "หมดช่วงลงทะเบียนแล้ว — ภาคนี้ไม่ได้ลงทะเบียนเรียน (รอภาคถัดไป)";
+            message = "พ้นวันอาทิตย์แล้ว — ภาคนี้ยังไม่ได้ยืนยันลงทะเบียน รอลงทะเบียนวันอาทิตย์แรกของภาคถัดไป";
             return true;
         }
 
@@ -404,7 +440,7 @@ namespace NisitSimulator.Academics
             {
                 sb.Append("ต้องผ่าน ").Append(string.Join(", ", missing)).Append(" ก่อน");
                 var t = Term;
-                if (t != null && !t.confirmed)
+                if (t != null)
                     foreach (var m in missing)
                         if (t.selected.Contains(m)) { sb.Append(" (กำลังลง ").Append(m).Append(" อยู่ ยังไม่นับว่าผ่าน)"); break; }
             }
@@ -423,7 +459,8 @@ namespace NisitSimulator.Academics
             reason = null;
             if (IsPassed(oc.def.code)) { reason = "ผ่านแล้ว ลงซ้ำไม่ได้"; return CourseStatus.Passed; }
             var t = Term;
-            if (t != null && (t.selected.Contains(oc.def.code) || IsEnrolledThisTerm(oc.def.code)))
+            if (t != null && (t.selected.Contains(oc.def.code) ||
+                (!RegistrationWindowOpen(CurrentSemesterDay) && IsEnrolledThisTerm(oc.def.code))))
                 return CourseStatus.Selected;
             if (!PrerequisitesMet(oc.def, out reason)) return CourseStatus.MissingPrerequisite;
             if (BlockedCodes.Contains(oc.def.code)) { reason = BlockedReason(oc.def.code); return CourseStatus.MissingPrerequisite; }
@@ -434,7 +471,7 @@ namespace NisitSimulator.Academics
             return CourseStatus.CanRegister;
         }
 
-        bool IsEnrolledThisTerm(string code)
+        public bool IsEnrolledThisTerm(string code)
         {
             var t = Term; if (t == null) return false;
             foreach (var e in Record.enrollments) if (e.termSerial == t.serial && e.code == code && !e.transfer) return true;
@@ -470,8 +507,7 @@ namespace NisitSimulator.Academics
             var t = Term;
             if (t == null || t.isBreak) { reason = "ตอนนี้เป็นช่วงปิดภาค ยังไม่เปิดลงทะเบียน"; return false; }
             if (Record.graduated) { reason = "จบการศึกษาแล้ว"; return false; }
-            if (t.confirmed) { reason = "ยืนยันการลงทะเบียนภาคนี้ไปแล้ว (ล็อกรายการ)"; return false; }
-            if (!t.registrationOpen) { reason = "หมดช่วงลงทะเบียนของภาคนี้แล้ว"; return false; }
+            if (!RegistrationWindowOpen(CurrentSemesterDay)) { reason = "ปิดลงทะเบียนแล้ว ต้องยืนยันภายในวันอาทิตย์แรกของภาค"; return false; }
             var oc = FindOffered(code);
             if (oc == null) { reason = $"{code} ไม่เปิดให้ลงในภาคนี้"; return false; }
             if (t.selected.Contains(code)) { reason = $"เลือก {code} ไว้แล้ว (ห้ามเลือกรหัสซ้ำ)"; return false; }
@@ -499,8 +535,7 @@ namespace NisitSimulator.Academics
         {
             var t = Term;
             if (t == null || !t.selected.Contains(code)) { reason = $"ไม่มี {code} ในรายการที่เลือก"; return false; }
-            if (t.confirmed) { reason = "ยืนยันแล้ว ถอนรายการไม่ได้"; return false; }
-            if (!t.registrationOpen) { reason = "หมดช่วงลงทะเบียนแล้ว"; return false; }
+            if (!RegistrationWindowOpen(CurrentSemesterDay)) { reason = "หมดช่วงลงทะเบียนแล้ว"; return false; }
             t.selected.Remove(code);
             reason = $"ถอน {code} แล้ว ({SelectedCredits()}/{CreditCap} หน่วยกิต)";
             return true;
@@ -512,7 +547,7 @@ namespace NisitSimulator.Academics
             reason = null;
             var t = Term;
             if (t == null || t.isBreak) { reason = "ยังไม่เปิดภาคเรียน"; return false; }
-            if (t.selected.Count == 0) { reason = "ยังไม่ได้เลือกรายวิชา"; return false; }
+            if (t.selected.Count == 0 && !t.confirmed) { reason = "ยังไม่ได้เลือกรายวิชา"; return false; }
             var seen = new HashSet<string>();
             var offered = new List<OfferedCourse>();
             foreach (var code in t.selected)
@@ -536,17 +571,20 @@ namespace NisitSimulator.Academics
         public bool Confirm(out string reason)
         {
             var t = Term;
-            if (t != null && t.confirmed) { reason = "ยืนยันไปแล้ว — ไม่สร้างรายการซ้ำ"; return false; }
-            if (t == null || !t.registrationOpen) { reason = "หมดช่วงลงทะเบียนแล้ว"; return false; }
+            if (t != null && t.confirmed && !HasRegistrationChanges) { reason = "ยืนยันไปแล้ว — ไม่สร้างรายการซ้ำ"; return false; }
+            if (!RegistrationWindowOpen(CurrentSemesterDay)) { reason = "ปิดลงทะเบียนแล้ว ต้องยืนยันภายในวันอาทิตย์แรกของภาค"; return false; }
             if (!ValidateSelection(out reason)) return false;
+            bool editing = t.confirmed;
             ConfirmInternal();
-            reason = $"ยืนยันลงทะเบียน {t.selected.Count} วิชา {SelectedCredits()} หน่วยกิต เรียบร้อย";
+            reason = $"{(editing ? "ยืนยันการแก้ไข" : "ยืนยันลงทะเบียน")} {t.selected.Count} วิชา {SelectedCredits()} หน่วยกิต เรียบร้อย";
             return true;
         }
 
         void ConfirmInternal()
         {
             var t = Term;
+            // ถอนเฉพาะรายการของภาคนี้; วิชาที่คงไว้ใช้ Enrollment เดิมเพื่อรักษาความคืบหน้า
+            Record.enrollments.RemoveAll(e => e.termSerial == t.serial && !e.transfer && !t.selected.Contains(e.code));
             foreach (var code in t.selected)
             {
                 if (IsEnrolledThisTerm(code)) continue;   // กันซ้ำ
@@ -559,7 +597,7 @@ namespace NisitSimulator.Academics
                 });
             }
             t.confirmed = true;
-            t.registrationOpen = false;
+            t.registrationOpen = RegistrationWindowOpen(CurrentSemesterDay);
         }
 
         // อธิบายว่าทำไมไม่มีวิชาให้ลง + ทางแก้ (ห้ามปล่อยหน้าว่าง) · null = มีวิชาให้ลง
@@ -568,10 +606,10 @@ namespace NisitSimulator.Academics
             var t = Term;
             if (Record.graduated) return "คุณผ่านเงื่อนไขจบการศึกษาครบแล้ว";
             if (t == null) return "ยังไม่เริ่มภาคเรียน";
-            if (t.isBreak) return "ภาคฤดูร้อนไม่เปิดสอนในหลักสูตรนี้ — รอเปิดลงทะเบียนวันแรกของภาคต้นปีการศึกษาถัดไป";
+            if (t.isBreak) return "ภาคฤดูร้อนไม่เปิดสอนในหลักสูตรนี้ — รอเปิดลงทะเบียนวันอาทิตย์แรกของภาคต้นปีการศึกษาถัดไป";
             if (t.confirmed) return null;
             if (!t.registrationOpen || !RegistrationWindowOpen(semDay))
-                return "หมดช่วงลงทะเบียนของภาคนี้แล้ว — ใช้เวลานี้อ่านหนังสือ/ทำงาน แล้วลงทะเบียนวันแรกของภาคถัดไป";
+                return "หมดช่วงลงทะเบียนของภาคนี้แล้ว — ใช้เวลานี้อ่านหนังสือ/ทำงาน แล้วลงทะเบียนวันอาทิตย์แรกของภาคถัดไป";
             var offered = Offered();
             int can = 0; var blocked = new List<string>();
             foreach (var o in offered)
@@ -891,8 +929,8 @@ namespace NisitSimulator.Academics
             else
             {
                 string next = rep.planSemester == 1
-                    ? "ภาคปลายเปิดลงทะเบียนวันที่ 1 ของภาค (ภายในวันนั้นเท่านั้น)"
-                    : "ต่อด้วยปิดภาคฤดูร้อน — ลงทะเบียนภาคต้นปีการศึกษาถัดไปวันที่ 1 ของภาค";
+                    ? "ภาคปลายเปิดลงทะเบียนวันอาทิตย์แรกของภาคในแอป MSG REG (ภายในวันนั้นเท่านั้น)"
+                    : "ต่อด้วยปิดภาคฤดูร้อน — ลงทะเบียนภาคต้นปีการศึกษาถัดไปวันอาทิตย์แรกของภาคในแอป MSG REG";
                 if (rep.retakeCodes.Count > 0) next = $"ลงเรียนซ้ำ {string.Join(", ", rep.retakeCodes)} (ตอนภาคค่ำ เปิดทุกภาค) · " + next;
                 rep.nextStep = next;
             }

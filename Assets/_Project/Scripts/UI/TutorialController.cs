@@ -19,11 +19,12 @@ namespace NisitSimulator.UI
             if (closeButton != null) closeButton.onClick.AddListener(Hide);
             if (panel != null) panel.SetActive(false);
 
-            if (PlayerPrefs.GetInt("tut_seen", 0) == 0) Show();   // ครั้งแรกที่เล่น
+            if (!NisitSimulator.Systems.ArrivalIntroController.Active && PlayerPrefs.GetInt("tut_seen", 0) == 0) Show();   // ครั้งแรกที่เล่น
         }
 
         void Update()
         {
+            if (NisitSimulator.Systems.ArrivalIntroController.Active) return;
             if (Input.GetKeyDown(KeyCode.F1)) Toggle();           // เปิดคู่มืออีกครั้งได้ทุกเมื่อ
         }
 

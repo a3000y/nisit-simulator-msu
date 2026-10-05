@@ -10,7 +10,7 @@ using NisitSimulator.SaveLoad;
 
 namespace NisitSimulator.UI
 {
-    // 📱 แอป "ลงทะเบียนเรียน" ในโทรศัพท์ — สร้าง UI เองตอนรัน (แบบเดียวกับ AchievementsUI) ไม่ต้อง bake ฉาก
+    // 📱 แอป "MSG REG" (ระบบลงทะเบียนเรียน + ผลการเรียน/เกรด) ในโทรศัพท์ — สร้าง UI เองตอนรัน (แบบเดียวกับ AchievementsUI) ไม่ต้อง bake ฉาก
     //   • เพิ่มปุ่มแอปที่หน้าโฮมโทรศัพท์อัตโนมัติ (โคลนปุ่มเดิม → ได้สไตล์/เอฟเฟกต์เดียวกัน)
     //   • 3 แท็บ: ลงทะเบียน / ตารางเรียน / ผลการเรียน · ฟอนต์ไทยเดียวกับโทรศัพท์
     //   GameplayBootstrap เรียก EnsureExists() ตอนเข้าเกม
@@ -38,7 +38,8 @@ namespace NisitSimulator.UI
         static readonly Color RowBg = new Color(1f, 1f, 1f, 0.92f);
         static readonly Color PanelBg = new Color(0.90f, 0.87f, 0.96f, 1f);
 
-        public const string PhoneButtonName = "ลงทะเบียนApp";
+        public const string PhoneButtonName = "ลงทะเบียนApp";   // ชื่อ GameObject ที่สร้างตอนรัน (คงเดิม)
+        public const string AppName = "MSG REG";                  // ชื่อแอปที่ผู้เล่นเห็น
 
         TMP_FontAsset font;
         PhoneController phone;
@@ -52,7 +53,7 @@ namespace NisitSimulator.UI
         GameObject root, regPage, textPage;
         CanvasScaler scaler;
         TMP_Text summaryText, programText, messageText, creditText, pageText, selTitle;
-        RectTransform listContent, selContent;
+        RectTransform listContent, selContent, guideCard;
         ScrollRect listScroll, textScroll;
         Button confirmBtn; TMP_Text confirmLabel;
         Button navBtn;
@@ -100,14 +101,36 @@ namespace NisitSimulator.UI
                 for (int i = phone.appButtons.Length - 1; i >= 0 && template == null; i--) template = phone.appButtons[i];
             if (template == null) return;
 
+            // จำตำแหน่งช่องเดิม 6 ช่อง (2 คอลัมน์ × 3 แถว) ก่อนจัดใหม่
+            var slots = new List<Vector2>();
+            foreach (var b in phone.appButtons) if (b != null) slots.Add(((RectTransform)b.transform).anchoredPosition);
+
             var go = Instantiate(template.gameObject, template.transform.parent);
             go.name = PhoneButtonName;
             var rt = (RectTransform)go.transform;
-            rt.anchoredPosition = new Vector2(0f, -256f);   // แถวที่ 4 กึ่งกลาง (ใต้ แผนที่/เพื่อน)
+            rt.anchoredPosition = new Vector2(0f, -256f);   // สำรอง: ปุ่มเดิมไม่ครบ 6 ช่อง → แถวที่ 4 กึ่งกลาง
+
+            // แอป "เกรด" รวมเข้า MSG REG แล้ว → ซ่อนปุ่ม (ไม่ลบ) แล้วเลื่อนแผนที่/เพื่อนขึ้น ให้ MSG REG เข้าช่องสุดท้ายพอดี 2×3
+            //   สถานะ | ปฏิทิน / ภารกิจ | แผนที่ / เพื่อน | MSG REG
+            int gi = (int)PhoneController.App.Grades, mi = (int)PhoneController.App.Map, fi = (int)PhoneController.App.Friends;
+            if (slots.Count == 6 && phone.appButtons.Length == 6 && phone.appButtons[gi] != null)
+            {
+                phone.appButtons[gi].gameObject.SetActive(false);
+                if (phone.appButtons[mi] != null) ((RectTransform)phone.appButtons[mi].transform).anchoredPosition = slots[3];
+                if (phone.appButtons[fi] != null) ((RectTransform)phone.appButtons[fi].transform).anchoredPosition = slots[4];
+                rt.anchoredPosition = slots[5];
+            }
+            // ชื่อแอปทุกปุ่ม: บรรทัดเดียว ย่อเองถ้ายาว (ไม่ตัดบรรทัดจนตัวอักษรหล่นใต้ปุ่ม)
+            foreach (var b in phone.appButtons)
+            {
+                if (b == null) continue;
+                var l = b.transform.Find("Label");
+                if (l != null && l.TryGetComponent<TMP_Text>(out var t)) UIFit.OneLine(t, Mathf.Max(18f, t.fontSize), 18f);
+            }
             var img = go.GetComponent<Image>();
             if (img != null) img.color = new Color(0.98f, 0.46f, 0.40f);
             var label = go.transform.Find("Label");
-            if (label != null && label.TryGetComponent<TMP_Text>(out var lt)) lt.text = "ลงทะเบียนเรียน";
+            if (label != null && label.TryGetComponent<TMP_Text>(out var lt)) { lt.text = AppName; UIFit.OneLine(lt, Mathf.Max(18f, lt.fontSize), 18f); }
             // ไอคอน: ยืมจากแอปภารกิจ (เช็กถูก) ถ้ามี
             var icon = go.transform.Find("Icon");
             if (icon != null && phone.appButtons.Length > 2 && phone.appButtons[2] != null)
@@ -151,6 +174,12 @@ namespace NisitSimulator.UI
         {
             if (!open) return;
             FitToScreen();
+            if (guideCard != null)
+            {
+                bool guided = ArrivalIntroController.Active;
+                guideCard.sizeDelta = new Vector2(1600, guided ? 770 : 940);
+                guideCard.anchoredPosition = new Vector2(0, guided ? 135 : 0);
+            }
             if (Input.GetKeyDown(KeyCode.Escape)) { Close(); return; }
             if (phone != null && !phone.IsOpen) { Close(); return; }   // กด TAB ปิดโทรศัพท์ = ปิดแอปด้วย
             refreshTimer -= Time.unscaledDeltaTime;
@@ -200,14 +229,16 @@ namespace NisitSimulator.UI
             string time = clock != null ? clock.GetTimeString() : "";
             string status;
             if (t == null || t.isBreak) status = "ปิดภาค — ยังไม่เปิดลงทะเบียน";
-            else if (t.confirmed) status = "<color=#389966>ลงทะเบียนแล้ว (ล็อกรายการ)</color>";
+            else if (t.confirmed) status = svc.RegistrationWindowOpen(reg.SemDay)
+                ? (svc.HasRegistrationChanges ? "<color=#E0843A>มีการแก้ไข — รอยืนยัน</color>" : "<color=#389966>ลงทะเบียนแล้ว (เพิ่ม/ถอนได้)</color>")
+                : "<color=#389966>ลงทะเบียนแล้ว (หมดช่วงแก้ไข)</color>";
             else if (svc.RegistrationWindowOpen(reg.SemDay))
                 status = t.lateRegistration ? "<color=#E0843A>เปิดลงทะเบียน (ย้ายเซฟเก่า: ได้ถึงสิ้นภาค)</color>"
-                                            : $"<color=#E0843A>เปิดลงทะเบียน ถึงสิ้นวันที่ {svc.Curriculum.registrationDays} ของภาค</color>";
+                                            : $"<color=#E0843A>เปิดลงทะเบียนถึงสิ้นวันอาทิตย์แรกของภาค</color>";
             else status = "<color=#D14D5C>หมดช่วงลงทะเบียน</color>";
             string gpa = svc.HasGpa ? svc.Gpa().ToString("0.00") : "–";
             summaryText.text =
-                $"ชั้นปี <b>{reg.ClassYear}</b>  ·  {term}  ·  ปีการศึกษาที่ {(t != null ? t.calendarYear : 1)}  ·  วันนี้: วันที่ {reg.SemDay} ของภาค {time}\n" +
+                $"ชั้นปี <b>{reg.ClassYear}</b>  ·  {term}  ·  ปีการศึกษาที่ {(t != null ? t.calendarYear : 1)}  ·  วันนี้: {AcademicCalendar.TermDayText(reg.SemDay)} {time}\n" +
                 $"GPA <b>{gpa}</b>  ·  หน่วยกิตสะสม <b>{svc.EarnedCredits()}</b>/{svc.Curriculum.GraduationCredits}  ·  {status}";
         }
 
@@ -238,26 +269,34 @@ namespace NisitSimulator.UI
 
             // รายการที่เลือก
             bool confirmed = t != null && t.confirmed;
-            selTitle.text = confirmed ? "ลงทะเบียนแล้ว" : "รายการที่เลือก";
+            bool windowOpen = svc.RegistrationWindowOpen(reg.SemDay);
+            bool changed = svc.HasRegistrationChanges;
+            selTitle.text = changed ? "รายการรอยืนยัน" : confirmed ? "ลงทะเบียนแล้ว" : "รายการที่เลือก";
             var codes = new List<string>();
-            if (confirmed) foreach (var e in svc.CurrentEnrollments()) codes.Add(e.code);
+            if (confirmed && !windowOpen) foreach (var e in svc.CurrentEnrollments()) codes.Add(e.code);
             else if (t != null) codes.AddRange(t.selected);
-            foreach (var code in codes) BuildSelectedRow(code, !confirmed && t.registrationOpen);
+            foreach (var code in codes) BuildSelectedRow(code, windowOpen);
             if (codes.Count == 0) AddNote(selContent, "ยังไม่มีรายวิชา — กด \"+ เพิ่ม\" ที่รายวิชาด้านซ้าย", Sub);
 
-            int sel = confirmed ? CreditsOf(codes) : svc.SelectedCredits();
+            int sel = CreditsOf(codes);
             creditText.text = $"รวม <b>{sel}</b> / {svc.CreditCap} หน่วยกิต";
             creditText.color = sel > svc.CreditCap ? Bad : Ink;
 
             if (lastMessage != null) SetMessage(lastMessage, lastMessageColor);
             else if (explain != null) SetMessage(explain, Warn);
-            else SetMessage(confirmed ? "ลงทะเบียนเรียบร้อย — ดูแท็บ \"ตารางเรียน\" แล้วไปนั่งเรียนที่ตึกตามเวลา" : "เลือกรายวิชาให้ครบแล้วกดยืนยัน (ยืนยันแล้วแก้ไม่ได้)", Sub);
+            else SetMessage(changed ? "กดยืนยันการแก้ไขเพื่อใช้รายการใหม่ ตารางเรียนยังใช้รายการที่ยืนยันล่าสุด"
+                : confirmed && windowOpen ? "เพิ่มหรือถอนวิชาได้ แล้วกดยืนยันการแก้ไขให้ทันก่อนปิดลงทะเบียน"
+                : confirmed ? "ลงทะเบียนเรียบร้อย — ดูแท็บ \"ตารางเรียน\" แล้วไปนั่งเรียนที่ตึกตามเวลา"
+                : "เลือกรายวิชาแล้วกดยืนยัน แก้ไขได้จนถึงสิ้นวันอาทิตย์แรกของภาค", Sub);
 
-            bool windowOpen = svc.RegistrationWindowOpen(reg.SemDay);
-            bool canConfirm = t != null && !t.confirmed && windowOpen && t.selected.Count > 0;
-            string label = t == null || t.isBreak ? "ปิดภาค" : t.confirmed ? "ยืนยันแล้ว" : !windowOpen ? "หมดช่วงลงทะเบียน" : "ยืนยันลงทะเบียน";
+            bool canConfirm = t != null && windowOpen && (confirmed ? changed : t.selected.Count > 0);
+            string label = t == null || t.isBreak ? "ปิดภาค" : !windowOpen ? "หมดช่วงลงทะเบียน"
+                : changed ? "ยืนยันการแก้ไข" : confirmed ? "ยืนยันแล้ว" : "ยืนยันลงทะเบียน";
             SetConfirm(canConfirm, label);
         }
+
+        // ความกว้างพื้นที่รายวิชา (ก่อน layout คำนวณเสร็จ ใช้ค่าตามแบบ 1000)
+        float listContentWidth => listContent != null && listContent.rect.width > 10f ? listContent.rect.width : 1000f;
 
         int CreditsOf(List<string> codes)
         {
@@ -298,20 +337,27 @@ namespace NisitSimulator.UI
             if (oc.retakeSection) sb.Append(" · ตอนเรียนซ้ำ (ภาคค่ำ)");
             sb.Append('\n');
             var parts = new List<string>();
-            foreach (var s in oc.Sessions) parts.Add($"ว.{s.day} {s.TimeText} {(s.HasRoom ? s.roomId : s.building)}");
-            sb.Append(string.Join("  |  ", parts)).Append('\n');
+            foreach (var s in oc.Sessions) parts.Add($"{AcademicCalendar.ShortTermDayText(s.day)} {s.TimeText} {(s.HasRoom ? s.roomId : s.building)}");
+            // คาบละช่อง 2 คาบต่อบรรทัด (4 คาบ = 2 บรรทัดพอดี ไม่ตัดกลางคาบ)
+            for (int i = 0; i < parts.Count; i++) sb.Append(parts[i]).Append(i == parts.Count - 1 ? "\n" : i % 2 == 1 ? "\n" : "   |   ");
             sb.Append("วิชาบังคับก่อน: ").Append(d.prerequisites.Count > 0 ? string.Join(", ", d.prerequisites) : "—");
             if (d.minEarnedCredits > 0) sb.Append($" + หน่วยกิตสะสม ≥ {d.minEarnedCredits}");
-            var info = Text(row.transform, sb.ToString(), 16, Sub, TextAlignmentOptions.TopLeft);
-            Stretch(info.rectTransform, new Vector2(0, 0), new Vector2(1, 1), new Vector2(24, 2), new Vector2(-250, -42));
-            info.lineSpacing = 4f;
+            var info = Text(row.transform, sb.ToString(), 18, Sub, TextAlignmentOptions.TopLeft);
+            Stretch(info.rectTransform, new Vector2(0, 0), new Vector2(1, 1), new Vector2(24, 8), new Vector2(-250, -46));
+            info.lineSpacing = 2f;
+            // แถวสูงตามข้อความจริง (เดิมสูงคงที่ 118 → ตารางคาบ 4 ครั้งถูกตัด/ทับปุ่ม)
+            float infoW = Mathf.Max(300f, listContentWidth - 24f - 250f);
+            float infoH = info.GetPreferredValues(info.text, infoW, 0f).y;
+            var le = row.GetComponent<LayoutElement>();
+            float rowH = Mathf.Max(118f, 46f + infoH + 12f);
+            le.minHeight = rowH; le.preferredHeight = rowH;
 
             // ป้ายสถานะ
             string stText; Color stCol;
             switch (st)
             {
                 case CourseStatus.Passed: stText = "ผ่านแล้ว"; stCol = Muted; break;
-                case CourseStatus.Selected: stText = confirmed ? "ลงทะเบียนแล้ว" : "เลือกแล้ว"; stCol = Accent; break;
+                case CourseStatus.Selected: stText = confirmed && svc.IsEnrolledThisTerm(d.code) ? "ลงทะเบียนแล้ว" : "เลือกแล้ว"; stCol = Accent; break;
                 case CourseStatus.MissingPrerequisite: stText = "ขาดเงื่อนไข"; stCol = Bad; break;
                 default: stText = "ลงได้"; stCol = Ok; break;
             }
@@ -322,15 +368,16 @@ namespace NisitSimulator.UI
 
             if (!string.IsNullOrEmpty(reason) && st != CourseStatus.Passed)
             {
-                var rt = Text(row.transform, reason, 14, st == CourseStatus.MissingPrerequisite ? Bad : Warn, TextAlignmentOptions.TopRight);
+                var rt = Text(row.transform, reason, 18, st == CourseStatus.MissingPrerequisite ? Bad : Warn, TextAlignmentOptions.TopRight);
+                UIFit.Wrap(rt, 18f, 18f);
                 Stretch(rt.rectTransform, new Vector2(1, 0), new Vector2(1, 1), new Vector2(-240, 50), new Vector2(-14, -44));
             }
 
             // ปุ่ม
             string code = d.code;
-            if (st == CourseStatus.Selected && !confirmed && t.registrationOpen)
+            if (st == CourseStatus.Selected && svc.RegistrationWindowOpen(reg.SemDay))
                 RowButton(row.transform, "ถอน", Warn, () => DoRemove(code));
-            else if (st == CourseStatus.CanRegister && t != null && !confirmed && svc.RegistrationWindowOpen(reg.SemDay))
+            else if (st == CourseStatus.CanRegister && svc.RegistrationWindowOpen(reg.SemDay))
                 RowButton(row.transform, "+ เพิ่ม", Ok, () => DoAdd(code));
         }
 
@@ -345,10 +392,10 @@ namespace NisitSimulator.UI
         {
             var d = Svc.Curriculum.Get(code); if (d == null) return;
             var oc = Svc.FindOffered(code);
-            var row = Panel(selContent, "Sel_" + code, RowBg, 64f);
+            var row = Panel(selContent, "Sel_" + code, RowBg, 96f);
             string when = "";
-            if (oc != null) { var p = new List<string>(); foreach (var s in oc.Sessions) p.Add($"ว.{s.day} {s.TimeText}"); when = string.Join(" · ", p); }
-            var tx = Text(row.transform, $"<b>{code}</b> {d.credits} นก.  <size=80%>{when}</size>\n<size=80%>{d.title}</size>", 18, Ink, TextAlignmentOptions.MidlineLeft);
+            if (oc != null) { var p = new List<string>(); foreach (var s in oc.Sessions) p.Add($"{AcademicCalendar.ShortTermDayText(s.day)} {s.TimeText}"); when = string.Join(" · ", p); }
+            var tx = Text(row.transform, $"<b>{code}</b> {d.credits} นก.  <size=90%>{when}</size>\n<size=90%>{d.title}</size>", 20, Ink, TextAlignmentOptions.MidlineLeft);
             Stretch(tx.rectTransform, Vector2.zero, Vector2.one, new Vector2(14, 2), new Vector2(canRemove ? -104 : -10, -2));
             tx.textWrappingMode = TextWrappingModes.NoWrap; tx.overflowMode = TextOverflowModes.Ellipsis;
             if (canRemove)
@@ -364,6 +411,7 @@ namespace NisitSimulator.UI
         {
             if (!Usable) return;
             bool ok = Svc.Add(code, out var msg);
+            if (ok && Svc.HasRegistrationChanges) msg += " — กดยืนยันการแก้ไขเพื่อบันทึก";
             Feedback(ok, msg);
         }
 
@@ -371,6 +419,7 @@ namespace NisitSimulator.UI
         {
             if (!Usable) return;
             bool ok = Svc.Remove(code, out var msg);
+            if (ok && Svc.HasRegistrationChanges) msg += " — กดยืนยันการแก้ไขเพื่อบันทึก";
             Feedback(ok, msg);
         }
 
@@ -379,6 +428,7 @@ namespace NisitSimulator.UI
         {
             string msg = ClassroomNavigator.NavigateToNextClass();
             HUDController.Toast(msg);
+            if (ArrivalIntroController.Active) { ArrivalIntroController.Instance.NavigationDemonstrated(); return; }
             Close();
             if (phone != null && phone.IsOpen) phone.Toggle();
         }
@@ -387,9 +437,12 @@ namespace NisitSimulator.UI
         {
             if (!Usable) return;
             if (confirmBtn != null) confirmBtn.interactable = false;   // กันกดรัว — ปุ่มจะกลับมาเองถ้ายืนยันไม่ผ่าน
+            Svc.CheckRegistrationDeadline(reg.SemDay, out _);
+            bool editing = Svc.Term != null && Svc.Term.confirmed;
             bool ok = Svc.Confirm(out var msg);
             Feedback(ok, msg);
-            if (ok) HUDController.Toast("ลงทะเบียนสำเร็จ! ดูตารางเรียนในแอป แล้วไปนั่งเรียนที่ตึกตามเวลา");
+            if (ok) HUDController.Toast(editing ? "แก้ไขการลงทะเบียนสำเร็จ! ตารางเรียนอัปเดตแล้ว"
+                : "ลงทะเบียนสำเร็จ! ดูตารางเรียนในแอป แล้วไปนั่งเรียนที่ตึกตามเวลา");
         }
 
         void Feedback(bool ok, string msg)
@@ -422,15 +475,21 @@ namespace NisitSimulator.UI
         void RefreshTextPage()
         {
             if (!built) return;
-            if (!Usable) { pageText.text = "หลักสูตรลงทะเบียนนี้ใช้กับคณะสายคอมพิวเตอร์เท่านั้น"; return; }
-            pageText.text = tab == 1 ? ScheduleText() : TranscriptText();
+            if (!Usable)
+            {
+                // คณะที่ใช้ระบบเกรดแบบเดิม: แท็บผลการเรียนแสดงเกรดแบบเดิม (เดิมอยู่ในแอป "เกรด" ที่รวมเข้ามาแล้ว)
+                pageText.text = tab == 2 ? LegacyGradesText()
+                    : "คณะของคุณไม่ใช้ระบบลงทะเบียนรายวิชา — ไม่มีตารางเรียนรายวิชา\nเข้าเรียน/สอบตามปฏิทินของคณะ · ดูเกรดได้ที่แท็บ \"ผลการเรียน\"";
+                return;
+            }
+            pageText.text = tab == 1 ? ScheduleText() : GradeSummaryText() + TranscriptText();
         }
 
         public string ScheduleText()
         {
             var svc = Svc; var t = svc.Record.Current;
             var sb = new StringBuilder();
-            if (t == null || t.isBreak) return "ปิดภาคฤดูร้อน — ไม่มีตารางเรียน\nรอเปิดลงทะเบียนวันแรกของภาคต้นปีการศึกษาถัดไป";
+            if (t == null || t.isBreak) return "ปิดภาคฤดูร้อน — ไม่มีตารางเรียน\nรอเปิดลงทะเบียนวันอาทิตย์แรกของภาคต้นปีการศึกษาถัดไป";
 
             var items = new List<KeyValuePair<Enrollment, ClassSession>>();
             var idx = new Dictionary<ClassSession, int>();
@@ -460,7 +519,7 @@ namespace NisitSimulator.UI
             int days = Mathf.Max(3, AcademicCalendar.SemesterLen(t.semIndex));
             for (int d = 1; d <= days; d++)
             {
-                sb.Append($"<b>วันที่ {d} ของภาค</b>");
+                sb.Append($"<b>{AcademicCalendar.TermDayText(d)}</b>");
                 if (d == today) sb.Append("  <color=#8A5CD6>(วันนี้)</color>");
                 // วันสอบตามปฏิทิน (กลางภาค = ครึ่งภาค, ปลายภาค = วันสุดท้าย) — ไม่เขียนตายตัว
                 if (AcademicCalendar.HasMidterm(t.semIndex) && d == ExamController.MidtermDay(t.semIndex)) sb.Append("  <size=85%><color=#D14D5C>สอบกลางภาค</color></size>");
@@ -503,6 +562,35 @@ namespace NisitSimulator.UI
                 sb.Append(ClassroomRules.IsSinglePlayer
                     ? "\n<size=85%><color=#7A7394>เข้าเรียน = นั่งโต๊ะเรียนในห้องที่กำหนด (อาคาร · ชั้น · เลขห้อง) ระหว่างเวลาคาบ — เวลาจะเร่งจนเลิกคาบ (นับทุก 1 ชม. เกม) · ตู้เข้าเรียนในโถงพาไปห้องให้ · อ่านหนังสือนอกคาบช่วยชดเชยได้บางส่วน · สอบที่ห้องสอบคณะ</color></size>"
                     : "\n<size=85%><color=#7A7394>เข้าเรียน = นั่งโต๊ะเรียนในตึกที่กำหนดระหว่างเวลาคาบ (นับทุก 1 ชม. เกม) · อ่านหนังสือนอกคาบช่วยชดเชยได้บางส่วน · สอบที่ห้องสอบคณะ</color></size>");
+            }
+            return sb.ToString();
+        }
+
+        // กล่องสรุปบนแท็บผลการเรียน (แทนแอป "เกรด" เดิม)
+        public string GradeSummaryText()
+        {
+            var svc = Svc;
+            var cur = svc.Curriculum;
+            string gpa = svc.HasGpa ? svc.Gpa().ToString("0.00") : "–";
+            return $"<size=150%><b>GPA {gpa}</b></size>   <color=#7A7394>{reg.ShortSummary()}</color>\n" +
+                   $"หน่วยกิตสะสม <b>{svc.EarnedCredits()}</b>/{cur.GraduationCredits}  ·  วิชาเลือกผ่าน <b>{svc.PassedElectiveCount()}</b>/{cur.electivesRequired}\n" +
+                   "<color=#C9C2DD>----------------------------</color>\n\n";
+        }
+
+        // คณะที่ไม่ใช้หลักสูตรลงทะเบียน: GPA/จำนวนครั้งที่สอบจากระบบสอบแบบเดิม
+        public static string LegacyGradesText()
+        {
+            var exam = Object.FindFirstObjectByType<ExamController>();
+            float gpa = exam != null ? exam.GPA : 0f;
+            int taken = exam != null ? exam.ExamsTaken : 0;
+            var sb = new StringBuilder();
+            sb.Append($"<size=150%><b>GPA {(taken > 0 ? gpa.ToString("0.00") : "–")}</b></size>\n");
+            sb.Append($"สอบไปแล้ว <b>{taken}</b> ครั้ง  <size=85%><color=#7A7394>(สอบกลางภาค/ปลายภาคตามปฏิทิน ที่ห้องสอบของคณะ)</color></size>\n");
+            if (exam != null && taken > 0)
+            {
+                var gps = exam.GetGradePoints();
+                sb.Append("\n<b>เกรดแต่ละครั้ง</b>\n");
+                for (int i = 0; i < gps.Count; i++) sb.Append($"   ครั้งที่ {i + 1}: <b>{gps[i]:0.0}</b>\n");
             }
             return sb.ToString();
         }
@@ -562,7 +650,7 @@ namespace NisitSimulator.UI
             var canvas = canGo.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 78;
             scaler = canGo.GetComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080);
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080); NisitSimulator.UI.UIFit.Scaler(scaler);   // Expand: ทั้งหน้าอยู่ในจอทุกสัดส่วน
             FitToScreen();
 
             root = new GameObject("Root", typeof(RectTransform), typeof(Image));
@@ -575,11 +663,14 @@ namespace NisitSimulator.UI
             var crt = (RectTransform)card.transform;
             crt.anchorMin = crt.anchorMax = crt.pivot = new Vector2(0.5f, 0.5f);
             crt.sizeDelta = new Vector2(1600f, 940f);
+            guideCard = crt;
             UIStyle.Card(card, CardCol);
 
-            var title = Text(card.transform, "ลงทะเบียนเรียน", 36, Accent, TextAlignmentOptions.TopLeft); title.fontStyle = FontStyles.Bold;
+            var title = Text(card.transform, AppName + "  <size=55%><color=#7A7394>ลงทะเบียนเรียน · ตารางเรียน · ผลการเรียน/เกรด</color></size>", 36, Accent, TextAlignmentOptions.TopLeft); title.fontStyle = FontStyles.Bold;
+            UIFit.OneLine(title, 36f, 24f);
             Stretch(title.rectTransform, new Vector2(0, 1), new Vector2(1, 1), new Vector2(30, -66), new Vector2(-420, -16));
             programText = Text(card.transform, "", 20, Sub, TextAlignmentOptions.TopRight);
+            UIFit.OneLine(programText, 20f, 18f);
             Stretch(programText.rectTransform, new Vector2(0, 1), new Vector2(1, 1), new Vector2(600, -54), new Vector2(-130, -22));
             summaryText = Text(card.transform, "", 21, Ink, TextAlignmentOptions.TopLeft);
             Stretch(summaryText.rectTransform, new Vector2(0, 1), new Vector2(1, 1), new Vector2(30, -140), new Vector2(-30, -70));
@@ -641,6 +732,18 @@ namespace NisitSimulator.UI
             navBtn.gameObject.SetActive(false);
 
             root.SetActive(false);
+        }
+
+        public RectTransform GuideTarget(string key)
+        {
+            if (key == "app") return phone != null && phone.homeView != null ? phone.homeView.transform.Find(PhoneButtonName) as RectTransform : null;
+            if (!built) return null;
+            if (key == "confirm") return confirmBtn != null ? (RectTransform)confirmBtn.transform : null;
+            if (key == "navigate") return navBtn != null ? (RectTransform)navBtn.transform : null;
+            if (key == "schedule" || key == "grades") return (RectTransform)tabBtns[key == "schedule" ? 1 : 2].transform;
+            if (key == "add" && listContent != null)
+                foreach (var b in listContent.GetComponentsInChildren<Button>()) if (b.interactable) return (RectTransform)b.transform;
+            return null;
         }
 
         // ---------- helpers ----------

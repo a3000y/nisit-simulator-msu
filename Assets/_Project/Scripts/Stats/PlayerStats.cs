@@ -128,17 +128,10 @@ public void AddExp(int amount)
         public float Satisfaction => satisfaction;
         public float Stress => stress;
 
-        // ตัวคูณความรู้ตามระดับความเครียด
-        // ต่ำกว่า stressNoPenaltyBelow = เต็ม 1.0 จากนั้นลดเป็นเส้นตรงจนถึงค่าต่ำสุดที่ 100
-        public float KnowledgeMultiplier
-        {
-            get
-            {
-                if (stress <= stressNoPenaltyBelow) return 1f;
-                float t = Mathf.InverseLerp(stressNoPenaltyBelow, maxStress, stress);
-                return Mathf.Lerp(1f, minKnowledgeMultAtMaxStress, t);
-            }
-        }
+        // ตัวคูณความรู้ตามช่วงความเครียด 4 ช่วง (StressBands): สบาย 1.0 · ตึงตัว 1.05 · เครียด 0.9 · เครียดจัด 0.8 → minKnowledgeMultAtMaxStress
+        //   stressNoPenaltyBelow เก็บไว้ให้ฉาก/เซฟเดิมไม่พัง (ไม่ได้ใช้แล้ว — เส้นแบ่งช่วงอยู่ใน StressBands)
+        public float KnowledgeMultiplier => StressBands.KnowledgeMult(stress, maxStress, minKnowledgeMultAtMaxStress);
+        public StressBand StressBand => StressBands.BandOf(stress);
         public int Money => money;
         public int Exp => exp;
 

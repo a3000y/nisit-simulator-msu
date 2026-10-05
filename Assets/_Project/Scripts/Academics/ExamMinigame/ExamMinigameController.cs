@@ -368,6 +368,7 @@ namespace NisitSimulator.Academics.ExamMinigame
 #endif
 
             GiveRewards(examScore, s.isFinal);
+            ExamStress.OnCourseExamDone(s.courseCode, examScore);   // ส่งข้อสอบแล้ว → คลายความกังวลก่อนสอบบางส่วน
             GameplayEvents.Raise(GameplayEvents.Exam);
             if (examScore >= 0.55f) SFXManager.Success(); else SFXManager.Error();
             var exam = Exam;

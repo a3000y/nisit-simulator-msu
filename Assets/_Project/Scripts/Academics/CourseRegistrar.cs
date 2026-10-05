@@ -173,6 +173,7 @@ namespace NisitSimulator.Academics
             {
                 if (announce && msg != null) HUDController.Toast(msg);
             }
+            Service.CurrentSemesterDay = semDay;
             prog.SetClassYear(Record.classYear);
             OnChanged?.Invoke();
         }
@@ -181,7 +182,7 @@ namespace NisitSimulator.Academics
         {
             if (t.isBreak) { HUDController.Toast("ปิดภาคฤดูร้อน — ไม่มีการเรียนการสอน พักผ่อน/ทำงานได้เต็มที่"); return; }
             string kind = t.isExtra ? "ภาคเรียนเพิ่มเติม" : $"ชั้นปี {t.classYear} ภาค {t.planSemester}";
-            HUDController.Toast($"เปิดลงทะเบียน {kind} — กด TAB ▸ ลงทะเบียนเรียน (ภายในวันแรกของภาค)");
+            HUDController.Toast($"เปิดลงทะเบียน {kind} — กด TAB → {RegistrationUI.AppName} (ยืนยันภายในวันอาทิตย์แรกของภาค)");
         }
 
         void AnnounceClose(TermCloseResult r)
@@ -213,7 +214,7 @@ namespace NisitSimulator.Academics
                 StartCoroutine(EndAfter(EndReason.Flunked, $"เรียนครบ {curriculum.maxRegularTerms} ภาคแล้วยังไม่จบ — พ้นสภาพนิสิต"));
             }
             else if (r.term.classYear >= 4 && r.term.planSemester == 2 && Record.finishedPlan)
-                StartCoroutine(DelayedToast("ยังไม่ครบเงื่อนไขจบ — เปิดภาคเรียนเพิ่มเติมให้เก็บวิชาค้าง (ดูแอปลงทะเบียน ▸ ผลการเรียน)", 5f));
+                StartCoroutine(DelayedToast("ยังไม่ครบเงื่อนไขจบ — เปิดภาคเรียนเพิ่มเติมให้เก็บวิชาค้าง (ดูแอป " + RegistrationUI.AppName + " → ผลการเรียน)", 5f));
         }
 
         IEnumerator DelayedToast(string msg, float delay)

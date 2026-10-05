@@ -110,13 +110,13 @@ private void HandleDayInYear(int dayInYear, int daysPerYear)
             int sem = AcademicCalendar.SemesterIndex(dayInYear);
             int len = AcademicCalendar.SemesterLen(sem);
             int semDay = AcademicCalendar.SemesterDay(dayInYear);
-            int mid = Mathf.Max(1, Mathf.CeilToInt(len / 2f));
+            int mid = MidtermDay(sem);
 
             // หลักสูตรลงทะเบียน: สอบได้เฉพาะภาคที่ลงทะเบียนแล้ว · ภาคฤดูร้อนไม่เปิดสอน
             var reg = NisitSimulator.Academics.CourseRegistrar.Instance;
             if (reg != null && reg.IsActive && (sem >= 2 || !reg.HasExamEligibleCourses)) return;
 
-            if (semDay == len && !Completed(sem, "final"))
+            if (semDay == FinalDay(sem) && !Completed(sem, "final"))
                 SetPending(true, sem);
             else if (AcademicCalendar.HasMidterm(sem) && semDay == mid && !Completed(sem, "mid"))
                 SetPending(false, sem);
@@ -127,12 +127,13 @@ private void HandleDayInYear(int dayInYear, int daysPerYear)
             pendingExam = true; pendingFinal = final; pendingSem = sem;
             // โหมดหลักสูตร: ถ้าทุกวิชาของรอบนี้มีคะแนนแล้ว (เช่น โหลดเซฟหลังสอบครบ) ไม่ต้องเตือนซ้ำ
             if (RefreshCourseRoundCompletion()) return;
+            NisitSimulator.Academics.ExamStress.OnExamDay(final);   // กังวลก่อนสอบตามการเตรียมตัว (ครั้งเดียวต่อวัน)
             HUDController.Toast($"วันนี้มี{(final ? "สอบปลายภาค" : "สอบกลางภาค")} {AcademicCalendar.SemesterName(sem)}! ไปที่ห้องสอบ (กด E)");
         }
 
         // วันสอบของภาค (ใช้แสดงเหตุผลตอนสอบไม่ได้) — กลางภาค = วันกลางภาค · ปลายภาค = วันสุดท้ายของภาค
-        public static int MidtermDay(int sem) => Mathf.Max(1, Mathf.CeilToInt(AcademicCalendar.SemesterLen(sem) / 2f));
-        public static int FinalDay(int sem) => AcademicCalendar.SemesterLen(sem);
+        public static int MidtermDay(int sem) => AcademicCalendar.MidtermDay(sem);
+        public static int FinalDay(int sem) => AcademicCalendar.FinalDay(sem);
 
         // โหมดหลักสูตร: ทุกวิชาที่ลงของภาคนี้มีคะแนนรอบนี้แล้ว → ปิดรอบสอบ (กันเตือน/บันทึกขาดสอบผิด) · คืน true ถ้าปิดรอบแล้ว
         public bool RefreshCourseRoundCompletion()
@@ -340,6 +341,13 @@ private void RecalcGpa()
             }
 
             if (!courseMode) gradePoints.Add(gp);
+            // สอบเสร็จ → คลายความกังวลก่อนสอบบางส่วน
+            if (courseMode)
+            {
+                if (legacySubset != null) foreach (var code in legacySubset) NisitSimulator.Academics.ExamStress.OnCourseExamDone(code, score);
+                else foreach (var e in reg.Service.CurrentEnrollments()) NisitSimulator.Academics.ExamStress.OnCourseExamDone(e.code, score);
+            }
+            else NisitSimulator.Academics.ExamStress.OnLegacyExamDone();
             GameplayEvents.Raise(GameplayEvents.Exam);
             if (legacySubset == null) done.Add(Key(examSem, isFinal ? "final" : "mid"));   // ทำเสร็จแล้ว → กันสอบซ้ำ (แม้โหลดเซฟ)
             else RefreshCourseRoundCompletion();

@@ -1,0 +1,31 @@
+Source prefab instances: 186
+Supplementary decorative shapes: 302
+Scene backup: Assets/_Project/Scenes/Backups/RetailArcade_20261005_104732.unity
+1 x Assets/CoffeeShopStarterPack/Prefabs/PW_cupboard01.prefab
+2 x Assets/CoffeeShopStarterPack/Prefabs/PW_fridge.prefab
+4 x Assets/LowPolyFoodLite/Prefabs/Apple.prefab
+4 x Assets/LowPolyFoodLite/Prefabs/Banana.prefab
+4 x Assets/LowPolyFoodLite/Prefabs/Bread.prefab
+4 x Assets/LowPolyFoodLite/Prefabs/CoffeCup.prefab
+4 x Assets/LowPolyFoodLite/Prefabs/Soda.prefab
+2 x Assets/school/Prefabs/props/book1.prefab
+1 x Assets/school/Prefabs/props/book2.prefab
+1 x Assets/school/Prefabs/props/book3.prefab
+1 x Assets/school/Prefabs/props/book4.prefab
+1 x Assets/school/Prefabs/props/book5.prefab
+1 x Assets/school/Prefabs/props/book6.prefab
+1 x Assets/school/Prefabs/props/book7.prefab
+1 x Assets/school/Prefabs/props/book8.prefab
+3 x Assets/school/Prefabs/props/computer1.prefab
+4 x Assets/school/Prefabs/props/rack.prefab
+3 x Assets/school/Prefabs/props/showcase.prefab
+89 x Assets/school/Prefabs/props/wall.prefab
+8 x Assets/school/Prefabs/props/wall2.prefab
+24 x Assets/school/Prefabs/road/floor.prefab
+2 x Assets/Synty/PolygonCity/Prefabs/Environments/SM_Env_Tree_01.prefab
+3 x Assets/Synty/PolygonCity/Prefabs/Props/SM_Prop_ShopInterior_Desk_01.prefab
+8 x Assets/Synty/PolygonCity/Prefabs/Props/SM_Prop_ShopInterior_Shelf_01.prefab
+8 x Assets/Synty/PolygonCity/Prefabs/Props/SM_Prop_ShopInterior_Shelf_02.prefab
+2 x Assets/Synty/PolygonGeneric/Prefabs/Environment/SM_Gen_Env_Bush_01.prefab
+Visual verification: 89 wall meshes replaced with School wall4 (1) solid panel; 4 Standard materials copied and converted to existing URP shader. Source assets unchanged.
+Filled 32 missing material slots on School props using this building's copied materials; shelves face shop entrances; signs placed on canopy fascia.

@@ -64,6 +64,9 @@ namespace NisitSimulator.Interaction
 
         public void Interact(GameObject interactor)
         {
+            var calendar = Object.FindAnyObjectByType<ProgressionManager>();
+            if (!OnboardingFlow.IsPractice && calendar != null && (AcademicCalendar.IsWeekend(calendar.DayInYear) || AcademicCalendar.IsExamDay(calendar.DayInYear)))
+            { HUDController.Toast("วันนี้ไม่มีคาบเรียน ดูตารางใน MSG REG ได้เลย"); return; }
             // หลักสูตรลงทะเบียน: เข้าเรียนได้เฉพาะช่วงคาบของวิชาที่ลงทะเบียนไว้
             var reg = NisitSimulator.Academics.CourseRegistrar.Instance;
             // เล่นคนเดียว: ตู้เข้าเรียนพาไปห้องของคาบปัจจุบัน + นั่งให้ (เร่งเวลาจนเลิกคาบ) แทนการเรียนทันที 2.5 วินาที
@@ -87,8 +90,8 @@ namespace NisitSimulator.Interaction
                 return;
             }
 
-            var action = interactor.GetComponent<PlayerActionController>()
-                         ?? interactor.AddComponent<PlayerActionController>();
+            var action = interactor.GetComponent<PlayerActionController>();
+            if (action == null) action = interactor.AddComponent<PlayerActionController>();
             if (action.IsBusy) { HUDController.Toast("กำลังทำกิจกรรมอยู่"); return; }
             // ตรวจพลังงานก่อนนับเข้าเรียน (ไม่เสียสิทธิ์คาบนี้ถ้าถูกปฏิเสธ) · หักพลังงานตอนเรียนจบ → ได้ผลครั้งเดียวแล้วค่อยหมดแรงถ้าเหลือ 0
             if (!PlayerExhaustion.CanStartEnergyActivity(interactor, energyCost, "เข้าเรียน", out var why)) { HUDController.Toast(why); return; }

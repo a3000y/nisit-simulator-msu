@@ -145,8 +145,7 @@ namespace NisitSimulator.Systems
             int sem = AcademicCalendar.SemesterIndex(dayInYear);
             int len = AcademicCalendar.SemesterLen(sem);
             int semDay = AcademicCalendar.SemesterDay(dayInYear);
-            int mid = Mathf.Max(1, Mathf.CeilToInt(len / 2f));
-            bool examDay = semDay == len || (AcademicCalendar.HasMidterm(sem) && semDay == mid);
+            bool examDay = AcademicCalendar.IsExamDay(dayInYear);
             if (examDay) return;   // เว้นวันสอบ
 
             if (Random.value <= eventChance) Trigger();
@@ -154,6 +153,7 @@ namespace NisitSimulator.Systems
 
         public void Trigger()
         {
+            if (ArrivalIntroController.Active) return;
             // ผู้เล่นกำลังอยู่ในหน้าต่าง/ทำกิจกรรม (movement ถูกปิด) → เลื่อนเหตุการณ์ไปก่อน (กันป็อปอัพซ้อน)
             if (move != null && !move.enabled) return;
 

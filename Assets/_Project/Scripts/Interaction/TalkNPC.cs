@@ -16,6 +16,7 @@ namespace NisitSimulator.Interaction
     {
         [Header("ตัวตน")]
         public string npcName = "รุ่นพี่";
+        public string stableRelationshipId = "";
         [TextArea] public string[] lines;          // สุ่มบทพูดตอนคุย
 
         [Header("รางวัลเมื่อคุย")]
@@ -65,11 +66,13 @@ namespace NisitSimulator.Interaction
             if (isQuestGiver) em = Object.FindFirstObjectByType<EventManager>();
             clock = Object.FindFirstObjectByType<GameClock>();
             // คีย์คงที่ (จากตำแหน่งเริ่ม — คนเดินก็ยังคงคีย์เดิม)
-            relId = $"{npcName}_{Mathf.RoundToInt(transform.position.x)}_{Mathf.RoundToInt(transform.position.z)}";
+            var profile = NisitSimulator.Characters.CharacterRegistryRuntime.EnsureExists().RegisterNpc(this);
+            relId = profile.relationshipId;
             if (!isVendor) RelationshipManager.Instance.Register(relId, npcName);   // ลงทะเบียนในรายชื่อเพื่อน
             GiftUI.EnsureExists();   // ระบบให้ของขวัญ (กด H ใกล้ NPC)
         }
 
+        public NisitSimulator.Characters.CharacterProfile Identity => GetComponent<NisitSimulator.Characters.CharacterIdentity>()?.Profile;
         public string RelId => relId;
         public string NpcName => npcName;
         public bool CanBefriend => !isVendor;
@@ -183,15 +186,23 @@ namespace NisitSimulator.Interaction
             // ปกติ → คุย (สุ่มบทพูด) + พอใจ + เพิ่มความสนิท
             int lvl = RelationshipManager.Instance.GetLevel(relId);
             string line = (lines != null && lines.Length > 0) ? lines[Random.Range(0, lines.Length)] : "สวัสดี!";
+            var advisor = GetComponent<SeniorAdvisor>();
+            if (advisor != null) line = advisor.Advice();
             HUDController.Toast($"{npcName}: {line}");    // Toast มีเสียงแจ้งเตือนในตัว
             NisitSimulator.Systems.GameplayEvents.Raise(NisitSimulator.Systems.GameplayEvents.Talk);
 
-            if (satisfactionReward != 0f && Time.time - lastReward >= rewardCooldown)
+            // ความพอใจ + คลายเครียด (คุยกับเพื่อน -3 · เพื่อนสนิทขึ้นไป -6) — คูลดาวน์เดียวกัน กันกด E รัว
+            bool relieves = !isVendor;
+            if ((satisfactionReward != 0f || relieves) && Time.time - lastReward >= rewardCooldown)
             {
                 lastReward = Time.time;
-                var st = (who != null ? who.GetComponent<PlayerStats>() : null)
-                         ?? Object.FindFirstObjectByType<PlayerStats>();
-                if (st != null) st.ChangeSatisfaction(satisfactionReward * (1f + 0.25f * lvl));   // สนิทมาก = คุยแล้วสุขใจกว่า
+                PlayerStats st = who != null ? who.GetComponent<PlayerStats>() : null;
+                if (st == null) st = Object.FindFirstObjectByType<PlayerStats>();
+                if (st != null)
+                {
+                    if (satisfactionReward != 0f) st.ChangeSatisfaction(satisfactionReward * (1f + 0.25f * lvl));   // สนิทมาก = คุยแล้วสุขใจกว่า
+                    if (relieves) st.ChangeStress(TalkStressRelief(lvl));
+                }
             }
 
             // ความสนิท: ได้จากการคุย "ครั้งแรกของแต่ละวัน" (สไตล์ life-sim — แวะหาเพื่อนทุกวัน)
@@ -202,6 +213,9 @@ namespace NisitSimulator.Interaction
                 RelationshipManager.Instance.AddPoints(relId, npcName, friendshipPerDay);
             }
         }
+
+        public static float TalkStressRelief(int friendLevel) =>
+            friendLevel >= StressBands.CloseFriendLevel ? StressBands.TalkCloseFriend : StressBands.TalkFriend;
 
         // หา ShopController ที่ต้องการ (shop=เก็บกระเป๋า / cafeteria=กินทันที) แม้ตอนปิดอยู่
         static ShopController FindShop(bool wantShop)

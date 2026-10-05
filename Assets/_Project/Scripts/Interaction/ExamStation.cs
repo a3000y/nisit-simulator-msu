@@ -37,7 +37,7 @@ namespace NisitSimulator.Interaction
             }
             if (exam == null) exam = Object.FindFirstObjectByType<ExamController>();
             if (exam != null) exam.TryTakeExam(interactor);
-            else HUDController.Toast("ยังไม่มีระบบสอบ (กด Nisit ▸ Build Exam System)");
+            else HUDController.Toast("ยังไม่มีระบบสอบ (เมนู Nisit → Build Exam System)");
         }
     }
 }

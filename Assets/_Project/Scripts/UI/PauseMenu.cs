@@ -35,6 +35,7 @@ namespace NisitSimulator.UI
 
         void Update()
         {
+            if (NisitSimulator.Systems.ArrivalIntroController.IsCinematic) return;
             if (!Input.GetKeyDown(KeyCode.Escape)) return;
             // ถ้าแผงตั้งค่าเปิดอยู่ → Esc ปิดแค่แผงตั้งค่า (กลับไปหน้า Pause) ไม่ออกจาก Pause
             if (settingsPanel != null && settingsPanel.activeSelf) { settingsPanel.SetActive(false); return; }

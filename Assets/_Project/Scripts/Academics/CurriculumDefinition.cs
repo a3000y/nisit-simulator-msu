@@ -41,7 +41,7 @@ namespace NisitSimulator.Academics
         public bool Overlaps(ClassSession o) =>
             o != null && day == o.day && startMinute < o.endMinute && o.startMinute < endMinute;
         public string TimeText => $"{startMinute / 60:00}:{startMinute % 60:00}–{endMinute / 60:00}:{endMinute % 60:00}";
-        public string ShortText => $"ว.{day} {TimeText} {(HasRoom ? roomId : building)}";
+        public string ShortText => $"{NisitSimulator.Systems.AcademicCalendar.ShortTermDayText(day)} {TimeText} {(HasRoom ? roomId : building)}";
     }
 
     [Serializable]
@@ -97,7 +97,7 @@ namespace NisitSimulator.Academics
         [Tooltip("เปิดลงทะเบียน/เพิ่ม-ถอนได้กี่วันแรกของภาค")]
         public int registrationDays = 1;
         [Tooltip("หมดช่วงลงทะเบียนแล้วยังไม่กดยืนยัน → ยืนยันรายการที่เลือกไว้ให้อัตโนมัติ (ถ้าผ่านทุกเงื่อนไข)")]
-        public bool autoConfirmAtDeadline = true;
+        public bool autoConfirmAtDeadline = false;
         [Tooltip("วิชาเลือกเปิดตั้งแต่ชั้นปีนี้")]
         public int electivesFromYear = 3;
 
